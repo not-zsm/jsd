@@ -1,0 +1,1 @@
+script.Parent.Text = "\u{E002}" .. script.Parent.Text

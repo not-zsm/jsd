@@ -1,0 +1,3 @@
+local PrivateServerBanList = {}
+
+return PrivateServerBanList

@@ -1,0 +1,83 @@
+local RockHandler = require( game.ReplicatedStorage.Modules.Player.Replication.Global.RockHandler )
+
+return {
+	["Purple"] = function(Origin : Vector3, Direction : Vector3)
+		local CF = CFrame.lookAlong(Origin, Direction)
+		
+		local Purple = script.Purple:Clone()
+		Purple.CFrame = CF
+		Purple.Parent = workspace.Visuals
+		
+		Purple.Sound:Play()
+		
+		local Thread = coroutine.create(function()
+			while Purple.Parent ~= nil do
+				RockHandler.Rocks("Purple", Purple)
+				RockHandler.Rockst(Purple.Position, Vector3.yAxis * -35, {Count = 1, Size = {1.25, 1.75}, Velocity = 50})
+				
+				task.wait(0.01)
+			end
+		end)
+		
+		coroutine.resume(Thread)
+		
+		Purple.Destroying:Connect(function()
+			coroutine.close(Thread)
+		end)
+		
+		return Purple, CF
+	end,
+	
+	["Obsidian"] = function(Origin : Vector3, Direction : Vector3)
+		local CF = CFrame.lookAlong(Origin, Direction)
+
+		local Obsidian = script.Obsidian:Clone()
+		Obsidian.CFrame = CF
+		Obsidian.Parent = workspace.Visuals
+
+		return Obsidian, CF
+	end,
+	
+	["Plasma"] = function(Origin : Vector3, Direction : Vector3)
+		local CF = CFrame.lookAlong(Origin, Direction)
+
+	
+		local Plasma = script.Plasma:Clone()
+		Plasma.CFrame = CF
+		Plasma.Parent = workspace.Visuals
+		
+		Plasma.Ambient:Play()
+
+		return Plasma, CF
+	end,
+	
+	["Raygun"] = function(Origin : Vector3, Direction : Vector3, Upgraded : Bolean)
+		local CF = CFrame.lookAlong(Origin, Direction)
+
+		local Bullet = if not Upgraded then script.GreenBullet:Clone() else script.RedBullet:Clone()
+		Bullet.CFrame = CF
+		Bullet.Parent = workspace.Visuals
+
+		return Bullet, CF
+	end,
+	
+	["AnubisSlash 1"] = function(Origin : Vector3, Direction : Vector3)
+		local CF = CFrame.lookAlong(Origin, Direction)
+
+		local Slash = script["AnubisSlash 1"]:Clone()
+		Slash.CFrame = CF
+		Slash.Parent = workspace.Visuals
+
+		return Slash, CF
+	end,
+	
+	["AnubisSlash 2"] = function(Origin : Vector3, Direction : Vector3)
+		local CF = CFrame.lookAlong(Origin, Direction)
+
+		local Slash = script["AnubisSlash 2"]:Clone()
+		Slash.CFrame = CF
+		Slash.Parent = workspace.Visuals
+
+		return Slash, CF
+	end,
+}

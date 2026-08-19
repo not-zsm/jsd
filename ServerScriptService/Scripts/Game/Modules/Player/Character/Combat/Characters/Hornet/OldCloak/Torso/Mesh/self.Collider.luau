@@ -1,0 +1,1 @@
+return [[ [{"ScaleY":1.0299993753433228,"Type":"Box","OffsetZ":0,"RotationY":0,"ScaleX":0.7099997401237488,"OffsetX":0,"RotationX":0,"RotationZ":0,"OffsetY":-0.18000002205371858,"ScaleZ":0.729999840259552,"Selected":false}] ]]

@@ -1,0 +1,111 @@
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui", 1e9)
+
+local function GetFrames(Folder : Folder) : {number}
+	local Frames = {}
+
+	for _, Frame in Folder:GetChildren() do
+		local FrameTime = tonumber(Frame.Name)
+
+		if not FrameTime then 
+			continue
+		end
+
+		table.insert(Frames, FrameTime)
+	end
+
+	table.sort(Frames)
+
+	return Frames
+end
+
+local function GetValue(Folder : Folder, Frame : number)
+	local Exsits = Folder:FindFirstChild(`{Frame}`)
+	return if Exsits then Exsits.Value else nil
+end
+
+local function GetSurrounding(Frames : {number}, CurrentFrame : number)
+	local Lower, Upper
+
+	for Index = 1, #Frames do
+		if Frames[Index] <= CurrentFrame then
+			Lower = Frames[Index]
+		elseif Frames[Index] >= CurrentFrame then
+			Upper = Frames[Index]
+			break
+		end
+	end
+
+	return Lower, Upper
+end
+
+local function Interpolate(Folder : Folder, Frames : {number}, CurrentFrame : number)
+	local LowerFrame, UpperFrame = GetSurrounding(Frames, CurrentFrame)
+
+	if not (LowerFrame and UpperFrame) then 
+		return
+	elseif LowerFrame and not UpperFrame then
+		return GetValue(Folder, LowerFrame)
+	elseif UpperFrame and not LowerFrame then
+		return GetValue(Folder, UpperFrame)
+	elseif LowerFrame == UpperFrame then 
+		return GetValue(Folder, LowerFrame) 
+	end
+
+	local CurrentValue = GetValue(Folder, LowerFrame)
+	local TargetValue = GetValue(Folder, UpperFrame)
+	local Alpha = (CurrentFrame - LowerFrame) / (UpperFrame - LowerFrame)
+
+	if typeof(CurrentValue) == "CFrame" then
+		return CurrentValue:Lerp(TargetValue, Alpha)
+	elseif typeof(CurrentValue) == "Vector3" then
+		return CurrentValue:Lerp(TargetValue, Alpha)
+	elseif typeof(CurrentValue) == "number" then
+		return CurrentValue + ((TargetValue - CurrentValue) * Alpha)
+	end
+end
+
+local ImageTransparencyFolder = script.Parent.Settings:FindFirstChild("ImageTransparency")
+
+local ImageTransparencyFrames = if ImageTransparencyFolder then GetFrames(ImageTransparencyFolder) else {}
+
+local MinimumFrame = math.huge
+local MaxFrame = -math.huge
+
+for _, Frame in {ImageTransparencyFrames} do
+	if #Frame <= 0 then
+		continue
+	end
+
+	MinimumFrame = math.min(MinimumFrame, Frame[1])
+	MaxFrame = math.max(MaxFrame, Frame[#Frame])
+end
+
+return function()
+	local Vignette = script.Parent.Instance:Clone()
+	Vignette.Parent = PlayerGui
+	
+	local StartTime = os.clock()
+	
+	local Connection
+	
+	Connection = RunService.PreRender:Connect(function()
+		local Elapsed = (os.clock() - StartTime) * 60
+		local CurrentFrame = MinimumFrame + Elapsed
+
+		if CurrentFrame > MaxFrame then 
+			return Connection:Disconnect()
+		end
+
+		local NewImageTransparency = Interpolate(ImageTransparencyFolder, ImageTransparencyFrames, CurrentFrame)
+		
+		if NewImageTransparency then 
+			Vignette.Image.ImageTransparency = NewImageTransparency
+		end
+	end)
+	
+	return Vignette, Connection
+end
