@@ -1,6 +1,0 @@
-return {
-	119987926, 7207821215, 1862053911, 462646322, 242509995, 289049081, 699372072, 3655105803, 45223419, 2231186395, 141123572, 1242679803, 149836059, 7832903582, 593367639, 141123572, 123188555
-}
-
--- rod, will, arc, ziptune, binx, solid, dante, puppet, pilot, boknero, mjjba, 2 azure latch devs, heartsformelusine, mxitz
--- (in order)
