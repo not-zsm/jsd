@@ -21,11 +21,6 @@ local AnnouncementHandler = require( ServerScriptService.Scripts.Game.Modules.An
 local RemoteRateLimiter = require( ServerScriptService.Scripts.Game.Modules.Utility.RemoteRateLimiter )
 local LuaPlayerList = require( ServerScriptService.Scripts.Game.Modules.LuaPlayerList )
 
-local CharaSpawner = require( ServerScriptService.Scripts.Game.Modules.CharaSpawner )
-
-local BuildHandler = require( ServerScriptService.Scripts.BuildHandler )
-local HostHandler = require( ServerScriptService.Scripts.HostHandler )
-
 --local Whitelist = require( ServerScriptService.Scripts.Game.Modules.Whitelist )
 local Whitelist = require( ReplicatedStorage.Modules.Shared.Game.Whitelist )
 
@@ -93,20 +88,6 @@ function CommandHandler:PrepareToUseCommand(Player): boolean
 
 	local Role: UserRole = self:GetRole(Player)
 	local Level = Role.Permission;
-
-	if Level == "PS" or Level == "PS+" then
-		if CharaSpawner.Spawned then
-			SendNotification(Player, "Error", "You cannot use commands because a boss is currently spawned.");
-			return false;
-		end
-
-		task.defer(CharaSpawner.StopTimer)
-
-		if not Player:GetAttribute("UsedCommands") then
-			Player:SetAttribute("UsedCommands", true)
-			SendNotification(Player, "Warning", "Due to that you have used a command, bosses can no longer spawn.");
-		end;
-	end;
 
 	if not Role.BypassBosses then
 		workspace:SetAttribute("DisableBosses", true)
@@ -328,7 +309,7 @@ function CommandHandler:GetPermission(Player : Player) : string
 	if (Player.UserId == 2496412033) then
 		return "GOB"
 	end
-	
+
 	local LuaPlayer = LuaPlayerList.Get(Player);
 
 	--if Player.Name == "swrerm" then
@@ -347,7 +328,7 @@ function CommandHandler:GetPermission(Player : Player) : string
 		return "Owner"
 	end
 
-	if (game.PrivateServerOwnerId == Player.UserId or HostHandler.server.owner_id == Player.UserId) then
+	if (game.PrivateServerOwnerId == Player.UserId) then
 		if LuaPlayer.Data:HasGamepass("Private Server+") or shared.IsTestPlace then
 			return "PS+"
 		else
@@ -564,18 +545,7 @@ function CommandHandler._new()
 		if Value then
 			self:UpdatePanelPermission(LuaPlayer.Player);
 
-		elseif BuildHandler.is_initialised and not Value then
-			BuildHandler:remove_builder(LuaPlayer.Player);
 		end
-	end)
-
-	HostHandler.server.on_custom_status_ready:Connect(function()
-		local Player = Players:GetPlayerByUserId(HostHandler.server.owner_id)
-
-		if Player then
-			self:UpdatePanelPermission(Player);
-		end
-
 	end)
 
 	for _, Player in Players:GetPlayers() do
@@ -715,24 +685,6 @@ function CommandHandler:InitSlashCommands()
 	end)
 
 	local TestPlacePermissionType = (shared.IsTestPlace and {"None", "PS", "PS+", "Owner"} or {"Owner"})
-
-	self.SlashCommands:Create("spawn_chara", TestPlacePermissionType, false, function(Player : Player)
-		if self:PlayerUsedCommands(Player) then
-			SendNotification(Player, "Error", `You cannot use this command because you have used commands.`, nil, 3);
-			return
-		end
-
-		local CharaSpawner = require( ServerScriptService.Scripts.Game.Modules.CharaSpawner )
-		CharaSpawner.Spawn(Player.Character:GetPivot() * CFrame.new(0, 0, -10))
-	end)
-
-	self.SlashCommands:Create("remove_chara", TestPlacePermissionType, false, function(Player : Player)
-		local CharaSpawner = require( ServerScriptService.Scripts.Game.Modules.CharaSpawner )
-
-		if CharaSpawner.Spawned then
-			CharaSpawner.Despawn()
-		end
-	end)
 
 	self.SlashCommands:Create("toggle_hitbox", {"PS+", "Owner"}, false, function(Player : Player)
 		workspace:SetAttribute("HitboxVisible", not workspace:GetAttribute("HitboxVisible"))

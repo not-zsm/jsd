@@ -1,21 +1,3 @@
---[[
-    © 2025 swrerm. All Rights Reserved.
-    Author: swrerm
-    Created: July 16, 2024
-    Developed under the group: Jimpee's Cabin
-
-    Licensed for use by Jimpee's Cabin only.
-    Redistribution, resale, or unauthorized use of this code, 
-    in whole or in part, without express permission from the author
-    is strictly prohibited.
-
-    This script is the original work of the author listed above.
-
-    Contacts:
-      wboyd4029@gmail.com
-      jimpeeisbusiness@gmail.com
---]]
-
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -67,7 +49,6 @@ local Velocity = require( Shared.Game.Velocity )
 local EffectUtility = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility )
 
 local Whitelist = require( ReplicatedStorage.Modules.Shared.Game.Whitelist )
-local AdaptBlacklist = require( script.Attacks.List.Anubis.Adapt.UnaddaptibleMoves )
 local AnimationProxy = require( script.AnimationProxy )
 
 ----------------------------------------------------------------------------------
@@ -76,8 +57,6 @@ local MovementReplicator = require( ServerScriptService.Scripts.MovementReplicat
 local MovementReplicatorSettings = require( ReplicatedStorage.MovementReplicator.Settings )
 
 ----------------------------------------------------------------------------------
-
-local HostHandler = require( ServerScriptService.Scripts.HostHandler )
 
 local LuaPlayerList = require( ServerScriptService.Scripts.Game.Modules.LuaPlayerList )
 local CommandHandler = require( ServerScriptService.Scripts.Game.Modules.CommandHandler )
@@ -120,13 +99,9 @@ function Combat:Destroy()
 	StudioPrint("removed combat", self.LuaPlayer.PlayerName)
 	task.spawn(Preloading.Remove, self.LuaPlayer.Player, ReplicatedStorage.Animations.Global)
 
-	if self.IsChara then
+	if not self.LuaPlayer.IsNPC then
 		task.spawn(self.AwardKillToHighestDamager, self, "Left")
-	else
-		if not self.LuaPlayer.IsNPC then
-			task.spawn(self.AwardKillToHighestDamager, self, "Left")
-		end
-	end;
+	end
 
 	self.Job:Destroy()
 
@@ -210,7 +185,7 @@ function Combat:_Init()
 			if (RemoteRateLimiter.Check(CombatRemotes.SwitchCharacter, self.LuaPlayer.Player, 10) == false) then
 				return
 			end
-			
+
 			if shared.IsRankedPlace and IconId then
 				self.LuaPlayer.PendingCharacterName = Character
 
@@ -347,23 +322,14 @@ function Combat:_Init()
 			--local Was_Intruder = self:ResetCurrentCharacterIfNotAllowed()
 
 			if not self:CanUseCharacter(self.CurrentCharacter.Name) and not self.IsInvincibleFromWorldEvent and not self.IsMeatyMichaelFromWorldEvent then
-				
+
 				if self.LuaPlayer.Data and self.LuaPlayer.Data.Profile then
-					self.LuaPlayer.Data.Profile.Data.CurrentCharacter = "Gojo"
+					self.LuaPlayer.Data.Profile.Data.CurrentCharacter = "Chara"
 				end
-			
-				self:SetCharacter("Gojo")
+
+				self:SetCharacter("Chara")
 			end;
 		end))
-
-		local function CheckForChara()
-			if self:IsOwner() or self.LuaPlayer:HasAccessToBossDrop("Chara")then
-				self.LuaPlayer.Player:AddTag("CharaAccess", true)
-			end
-		end
-
-		self.LuaPlayer.OnGroupRankFetched:Connect(CheckForChara)
-		CheckForChara()
 	end
 end
 
@@ -417,14 +383,14 @@ function Combat:CanUseCharacter(Name: string, Settings): (boolean, FailToUseChar
 	if Settings.RespectSkillBuilder and CharacterInfo.DisableInSkillBuilder then
 		return false, "Skill Builder";
 	end;
-	
+
 	local Level = CommandHandler:GetPermission(self.LuaPlayer.Player)
 
 	if Level == "GOB" then
 		print("GOB!")
 		return true
 	end
-	
+
 	if CharacterInfo.EarlyAccess then
 		local OwnsEarlyAccess = self.LuaPlayer.Data:HasGamepass("Early Access") or self:OwnsEarlyAccess()
 
@@ -472,13 +438,6 @@ function Combat:CanUseCharacter(Name: string, Settings): (boolean, FailToUseChar
 		end;
 
 		return false, "Whitelist";
-		
-	elseif CharacterInfo.BossDrop then
-		if self:IsOwner() or self.LuaPlayer:HasAccessToBossDrop(CharacterInfo.BossDrop) then
-			return true;
-		end;
-
-		return false, "Boss Drop";
 
 	else
 		return true;
@@ -512,7 +471,7 @@ function Combat:GetListOfAccessibleAttacks(Settings): {string}
 		if Settings.RespectSkillBuilder and CharacterInfo.DisableInSkillBuilder then
 			continue;
 		end;
-		
+
 		if Settings.IncludeUsing and CharacterInfo.UsingAttacks then
 			for _, Name in CharacterInfo.UsingAttacks do
 				AttacksToAdd[Name] = true;
@@ -627,7 +586,7 @@ end
 --	local Intruder = false
 
 --	local function Was_Intruding()
---		DataHandler.Profile.Data.CurrentCharacter = "Gojo"
+--		DataHandler.Profile.Data.CurrentCharacter = "Chara"
 --		Intruder = true
 --	end
 
@@ -674,7 +633,7 @@ end
 function Combat:ConnectHumanoidAvailability()
 	local function Load(Value : boolean)
 		if Value then
-			
+
 			if not shared.IsRankedPlace then
 				self.Actions:SetEnabled(false)
 
@@ -682,7 +641,7 @@ function Combat:ConnectHumanoidAvailability()
 					self.Actions:SetEnabled(true)
 				end)
 			end
-		
+
 			table.clear(self.StunnedBy)
 			table.clear(self.TotalBeenDamaged)
 
@@ -733,12 +692,12 @@ function Combat:ConnectHumanoidAvailability()
 			if DataHandler and DataHandler.Profile then
 
 				if not self:CanUseCharacter(DataHandler.Profile.Data.CurrentCharacter) then
-					DataHandler.Profile.Data.CurrentCharacter = "Gojo"
+					DataHandler.Profile.Data.CurrentCharacter = "Chara"
 				end
 
-				self:SetCharacter(DataHandler.Profile.Data.CurrentCharacter or "Gojo")
+				self:SetCharacter(DataHandler.Profile.Data.CurrentCharacter or "Chara")
 			else
-				self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character") or "Gojo")
+				self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character") or "Chara")
 			end
 
 			if not self.LuaPlayer.IsNPC then
@@ -938,12 +897,12 @@ function Combat:IterateThroughAnimationFolder(AnimationTable : {}, StartFolder :
 				if WordsThatWontLoad[Item.Name] and string.find(Item.Name, WordsThatWontLoad[Item.Name]) then 
 					continue;
 				end;
-				
+
 				if Item.AnimationId == "" then
 					warn(`Animation {Item:GetFullName()} has asset id empty`);
 					continue;
 				end;
-				
+
 				AddAnimation(CurrentTable, Item, Animator:LoadAnimation(Item))
 
 			elseif Item:IsA("Folder") then
@@ -1010,7 +969,7 @@ function Combat:SetCharacter(Name : string, ...)
 
 	if not self.LuaPlayer.IsNPC and Info.RestrictSetCharacter and not IsStudio then
 		local Level = CommandHandler:GetPermission(self.LuaPlayer.Player)
-		
+
 		if (Level ~= "GOB") then
 			local ID : number = self.LuaPlayer.UserId
 
@@ -1246,7 +1205,7 @@ function Combat:GetFirstAttackUsingKey(Key: Enum.KeyCode): boolean
 			return Attack;
 		end;
 	end;
-	
+
 	return false;
 end
 
@@ -1393,18 +1352,6 @@ function Combat:Afflict(VictimLuaPlayer, Arguments : {}) : (boolean, string)
 				MoveName = Arguments.SourceAttack.Name;
 			else
 				MoveName = debug.info(2, "s"):match("([^%.]+)$");
-			end;
-			
-			if MoveName and not Arguments.CannotBeAdapted and not table.find(AdaptBlacklist, MoveName) then
-				local Adapt = VictimCombat.Attacks["Adapt"]
-
-				if Adapt then
-					local Adapted = Adapt:OnHit(MoveName)
-
-					if Adapted then
-						return false, "Adapted"
-					end
-				end
 			end
 		end;
 
@@ -1442,12 +1389,12 @@ function Combat:Afflict(VictimLuaPlayer, Arguments : {}) : (boolean, string)
 				return false, "Grounded"
 			end
 		end
-		
+
 		if not Arguments.DontRestartRespawnTimer then
 			VictimLuaCharacter:RestartRespawnTimer()
 		end
-		
-		if not VictimLuaPlayer.IsNPC and not VictimCombat.IsChara then
+
+		if not VictimLuaPlayer.IsNPC then
 			self:CombatTag()
 		end
 
@@ -1456,7 +1403,7 @@ function Combat:Afflict(VictimLuaPlayer, Arguments : {}) : (boolean, string)
 		if not self.LuaPlayer.IsNPC then
 			CombatRemotes.ResetJumpFatigue:FireClient(self.LuaPlayer.Player)
 		end
-		
+
 		if (VictimLuaCharacter.Humanoid.Sit == true) then
 			VictimLuaCharacter.Humanoid.Sit = false
 		end
@@ -1470,7 +1417,7 @@ function Combat:Afflict(VictimLuaPlayer, Arguments : {}) : (boolean, string)
 
 	if Arguments.FinisherKill then
 
-		if VictimLuaPlayer.IsNPC or VictimCombat:IsWorldBoss() then
+		if VictimLuaPlayer.IsNPC then
 			if VictimLuaCharacter.HumanoidAlive then
 				VictimLuaCharacter.Humanoid:TakeDamage(100)
 			end
@@ -1483,7 +1430,7 @@ function Combat:Afflict(VictimLuaPlayer, Arguments : {}) : (boolean, string)
 		else
 			VictimLuaPlayer.Character:Die()
 			VictimCombat:SetFinisherKillIFrames()
-			
+
 			self.OnFinisherKill:Fire(VictimLuaPlayer)
 		end
 	else
@@ -1491,7 +1438,7 @@ function Combat:Afflict(VictimLuaPlayer, Arguments : {}) : (boolean, string)
 			self:AfflictDamage(VictimLuaPlayer, Arguments.Damage)
 		end
 	end
-	
+
 	if Arguments.PlayRandomHitReaction then
 		VictimCombat:PlayRandomHitReaction()
 	end
@@ -1687,7 +1634,7 @@ function Combat:ValidateBlock(VictimLuaPlayer, Arguments : {}) : string
 	else
 		local Ultimate = VictimCombat:GetFirstAttack("Ultimate");
 		local PlayUltimateBlock = (Ultimate and Ultimate.InUltimate and BlockAnimationDirectory.Ult)
-		
+
 		if PlayUltimateBlock then
 			local Reactions = BlockAnimationDirectory.Ult.Reactions
 
@@ -1744,32 +1691,32 @@ function Combat:AfflictDamage(VictimLuaPlayer, Value : (number | table))
 
 	elseif (typeof(Value) == "table" and Value.Amount ~= nil) then
 		--if (Value.DontKill) then
-			--local VictimLuaCharacter = VictimLuaPlayer.Character
-			--local VictimCombat = VictimLuaCharacter.Combat
+		--local VictimLuaCharacter = VictimLuaPlayer.Character
+		--local VictimCombat = VictimLuaCharacter.Combat
 
-			--local Health : number = VictimLuaCharacter.Humanoid.Health
+		--local Health : number = VictimLuaCharacter.Humanoid.Health
 
-			--self:DealDamage(VictimLuaPlayer, Damage, Value.DontCountToUltimate)
-			
-			--if Health > Damage then
-			--	self:DealDamage(VictimLuaPlayer, Damage, Value.DontCountToUltimate)
-			--else
-			--	local NewHealth = math.max(0.1, Health - Damage)
-				
-			--	self:DealDamage(VictimLuaPlayer, 
-			--		--(Health - (Damage - (Damage - 0.1))), 
-			--		NewHealth,
-			--		Value.DontCountToUltimate, true
-			--	)
-			--end
+		--self:DealDamage(VictimLuaPlayer, Damage, Value.DontCountToUltimate)
 
-			--local DontKillDamage = (Health > Damage and Damage or Health - (Damage - (Damage - 0.1)))
-
-			--self:DealDamage(VictimLuaPlayer, DontKillDamage, Value.DontCountToUltimate)
+		--if Health > Damage then
+		--	self:DealDamage(VictimLuaPlayer, Damage, Value.DontCountToUltimate)
 		--else
-		
+		--	local NewHealth = math.max(0.1, Health - Damage)
+
+		--	self:DealDamage(VictimLuaPlayer, 
+		--		--(Health - (Damage - (Damage - 0.1))), 
+		--		NewHealth,
+		--		Value.DontCountToUltimate, true
+		--	)
+		--end
+
+		--local DontKillDamage = (Health > Damage and Damage or Health - (Damage - (Damage - 0.1)))
+
+		--self:DealDamage(VictimLuaPlayer, DontKillDamage, Value.DontCountToUltimate)
+		--else
+
 		self:DealDamage(VictimLuaPlayer, Value.Amount, Value.DontCountToUltimate, Value.DontKill)
-			
+
 		--end
 	end
 end
@@ -1788,7 +1735,7 @@ function Combat:DealDamage(VictimLuaPlayer, Value : number, DontCountToUltimate 
 			if HasUltimate and not Ultimate.InUltimate and not self:GetState("CannotGainMeter") then
 				local Amount = (IsStudio and (Value * 10) or (Value / 2))
 
-				if VictimLuaPlayer.IsNPC and not VictimCombat.IsChara then
+				if VictimLuaPlayer.IsNPC then
 					Amount /= 3
 				end
 
@@ -1800,23 +1747,23 @@ function Combat:DealDamage(VictimLuaPlayer, Value : number, DontCountToUltimate 
 		local DefenseMultiplier : number = math.max(0.01, VictimCombat.DefenseMultiplier)
 
 		local Health : number = VictimLuaCharacter.Humanoid.Health;
-		
+
 		local ActualValue = math.max(0, (Value / DefenseMultiplier) * DamageMultiplier)
 		local KeptAlive = false
-		
+
 		if DontKill then
 			local MinimumHP = 0.1;
-			
+
 			ActualValue = math.min(Health - MinimumHP, ActualValue);
 			KeptAlive = ActualValue <= MinimumHP;
-			
+
 			if (ActualValue > 0) then
 				VictimLuaCharacter.Humanoid:TakeDamage(ActualValue)
 			end;
 		else
 			VictimLuaCharacter.Humanoid:TakeDamage(ActualValue)
 		end;
-		
+
 		if self:HasACharacter() and self.CurrentCharacter.Name == "Chara" then
 			self.LuaPlayer.Replication:FireReliableVFX("Chara/Damage Indicator", "Value", VictimLuaCharacter.RootPart, if KeptAlive then 9999 else ActualValue)
 		end
@@ -1847,31 +1794,23 @@ end
 function Combat:CanAwardKills()
 	if shared.IsTestPlace then
 		return (self.AwardedToSomeoneAsKill == false)
-	else
-		if self.IsChara then
-			return (self.AwardedToSomeoneAsKill == false)
-		else
-			return (self.AwardedToSomeoneAsKill == false and not self.LuaPlayer.IsNPC)
-		end
 	end
+
+	return (self.AwardedToSomeoneAsKill == false and not self.LuaPlayer.IsNPC)
 end
 
 function Combat:CanDamageAI()
 	local CurrentCharacter = self.CurrentCharacter.Name;
-	
+
 	if self:IsOwner() then
 		return true;
 	end;
-	
+
 	if (CurrentCharacter == "Invincible" or CurrentCharacter == "Meaty Michael" or CurrentCharacter == "Walter" or CurrentCharacter == "Gebura Red Mist") then
 		return false;
 	end;
 
 	return true;
-end
-
-function Combat:IsWorldBoss(): boolean
-	return self.IsInvincibleFromWorldEvent or self.IsMeatyMichaelFromWorldEvent;
 end
 
 function Combat:CanGainKills()
@@ -1880,15 +1819,15 @@ function Combat:CanGainKills()
 	if self:IsOwner() then
 		return true;
 	end;
-	
+
 	if (not self.IsInvincibleFromWorldEvent and CurrentCharacter == "Invincible") then
 		return false;
 	end;
-	
+
 	if (not self.IsMeatyMichaelFromWorldEvent and CurrentCharacter == "Meaty Micheal") then
 		return false;
 	end;
-	
+
 	if (CurrentCharacter == "Walter" or CurrentCharacter == "Gebura Red Mist") then
 		return false;
 	end;
@@ -1923,7 +1862,7 @@ function Combat:AwardKillToHighestDamager(Type : string)
 		local AwardedCombat = AwardedLuaCharacter.Combat
 
 		if not AwardedLuaPlayer.IsNPC then
-			if game.PrivateServerId == "" and not HostHandler.server.is_custom_server then
+			if game.PrivateServerId == "" then
 				AwardedLuaPlayer.Data:AddKill(self.LuaPlayer.Player, Type)
 			end
 
@@ -1971,110 +1910,13 @@ function Combat:AwardKillToHighestDamager(Type : string)
 		end)
 	end
 
-	local function CharaAward(AwardedLuaPlayer, Place : number)
-		local AwardedLuaCharacter = AwardedLuaPlayer.Character
-		local AwardedCombat = AwardedLuaCharacter.Combat
-
-		local AwardedProfile = AwardedLuaPlayer.Data.Profile
-
-		StudioPrint(`{AwardedLuaPlayer.Player.Name} killed the boss, place: {Place}`)
-
-		local FirstPlace = (Place == 1)
-		local SecondPlace = (Place == 2)
-		local ThirdPlace = (Place == 3)
-
-		local PlaceText = "1ST"
-
-		if SecondPlace then
-			PlaceText = "2ND"
-
-		elseif ThirdPlace then
-			PlaceText = "3RD"
-		end
-
-		if not AwardedLuaPlayer.IsNPC then
-
-			local KillText = "THE CURSED CHILD HAS BEEN KILLED."
-			local EmoteCount = ThirdPlace and 1 or 2
-
-			if not AwardedLuaPlayer:HasAccessToBossDrop("Chara") then
-				AwardedProfile.Data.Bosses.Chara.AwardPityCount += 1
-
-				local MinChance = 25 / math.max(1, Place / 1.5)
-				local MaxChance = 65 / math.max(1, Place / 1.5)
-
-				local Pity = Utility.cmap(AwardedProfile.Data.Bosses.Chara.AwardPityCount, 0, 5, MinChance, MaxChance)
-
-				local function RandomChance(Chance : number)
-					return Random.new():NextNumber(0, 100) <= Chance
-				end
-
-				StudioPrint("pity:", Pity, MinChance, MaxChance)
-
-				if RandomChance(Pity) then
-					AwardedProfile.Data.Bosses.Chara.Awarded = true
-					AwardedLuaPlayer.Player:AddTag("CharaAccess", true)
-
-					StudioPrint("u got chara congrats")
-
-					Remotes.Combat.PlayerKilled:FireClient(AwardedLuaPlayer.Player, self.LuaPlayer.Player, AwardedProfile.Data.Kills, "CharaKill", {
-						Text = `{KillText} YOU REACHED {PlaceText} PLACE AND OBTAINED "CURSED CHILD" AND {EmoteCount} EMOTES.`
-					})
-
-					--AwardedLuaPlayer.Data:AddKill(self.LuaPlayer.Player, "CharaKill", {
-					--	Text = `{KillText} YOU REACHED {PlaceText} PLACE AND OBTAINED "CURSED CHILD".`
-					--})
-				else
-					local Text = `{KillText} YOU REACHED {PlaceText} PLACE AND OBTAINED {EmoteCount} EMOTES. CHANCE TO GET "CURSED CHILD": {Pity}%`
-
-					if (Pity == MaxChance) then
-						Text = `{Text} (CAPPED)`
-					end
-
-					Remotes.Combat.PlayerKilled:FireClient(AwardedLuaPlayer.Player, self.LuaPlayer.Player, AwardedProfile.Data.Kills, "CharaKill", {
-						Text = Text
-					})
-
-					--AwardedLuaPlayer.Data:AddKill(self.LuaPlayer.Player, "CharaKill", {
-					--	Text = Text
-					--})
-				end
-
-				--AwardedLuaPlayer.Data:AddKill(self.LuaPlayer.Player, "CharaKill", AwardedProfile.Data.Bosses.Chara, Pity)
-			else
-				Remotes.Combat.PlayerKilled:FireClient(AwardedLuaPlayer.Player, self.LuaPlayer.Player, AwardedProfile.Data.Kills, "CharaKill", {
-					Text = `{KillText} YOU REACHED {PlaceText} PLACE AND OBTAINED {EmoteCount} EMOTES.`
-				})
-
-				--AwardedLuaPlayer.Data:AddKill(self.LuaPlayer.Player, "CharaKill", {
-				--	Text = `{KillText} YOU REACHED {Place}ST PLACE.`
-				--})
-
-				--AwardedProfile.Data.Bosses.Chara)
-			end
-
-			AwardedLuaCharacter.Emotes:AddEmoteClaims(EmoteCount)
-
-			AwardedProfile.Data.Bosses.Chara.PreviousPlace = Place
-			AwardedProfile.Data.Bosses.Chara.Killed += 1
-
-			if AwardedCombat:HasACharacter() then
-				if Passives.Kills[AwardedCombat.CurrentCharacter.Name] then
-					task.spawn(Passives.Kills[AwardedCombat.CurrentCharacter.Name], AwardedCombat)
-				end
-			end
-		end
-	end
-
-	for Place, Entry in ipairs(SortedDamagers) do
+	for _, Entry in ipairs(SortedDamagers) do
 		local Player = Entry.Player
 		local Damage = Entry.Damage
 
-		if not self.IsChara then
-			if (Type == "Left" and Damage < 50) then
-				StudioPrint("left", Player, Damage)
-				continue
-			end
+		if (Type == "Left" and Damage < 50) then
+			StudioPrint("left", Player, Damage)
+			continue
 		end
 
 		local AwardedLuaPlayer = LuaPlayerList.LuaPlayers[Player]
@@ -2086,16 +1928,8 @@ function Combat:AwardKillToHighestDamager(Type : string)
 
 			self.AwardedToSomeoneAsKill = true
 
-			if self.IsChara then
-				CharaAward(AwardedLuaPlayer, Place)
-
-				if (Place == 3) then
-					break
-				end
-			else
-				NormalAward(AwardedLuaPlayer)
-				break
-			end
+			NormalAward(AwardedLuaPlayer)
+			break
 		end
 	end
 
@@ -2338,7 +2172,7 @@ function Combat:GiveOneTriggerMove(Name : string, Key : Enum.KeyCode, Duration :
 		Attack.OnCooldown = true;
 		NewJob:Destroy()
 	end))
-	
+
 	Attack.CooldownEnabled = false;
 end
 
@@ -2588,7 +2422,6 @@ function Combat:TriggerAntiTeam()
 
 		local Validated = self:Afflict(VictimLuaPlayer, {
 			TriggerActiveCounterOverOrEqualLevel = -1,
-			CannotBeAdapted = true,
 			DontCheckBlock = true
 		})
 
@@ -3666,62 +3499,6 @@ function Combat:CreateMoveSFX(Character : string, MoveName : string, Name : stri
 		end
 	end
 end
-
--- compatability for the builder
-
-function Combat:get_root_attachment()
-	return self.LuaCharacter.RootAttachment;
-end
-
-function Combat:get_character()
-	return self.LuaCharacter.Model;
-end
-
-function Combat:get_humanoid()
-	return self.LuaCharacter.Humanoid;
-end
-
-function Combat:get_player()
-	return self.LuaPlayer.Player;
-end
-
--- Oh my goodness !!!! genius !!!
-function Combat:get_builder()
-	local BuildHandler = require(ServerScriptService.Scripts.BuildHandler);
-	
-	return BuildHandler:get(self.LuaPlayer.Player);
-end;
-
-function Combat:notify_builder(...)
-	local builder = self:get_builder();
-	
-	if builder then
-		return builder:push_notification(...);
-	end;
-end
-
-function Combat:damage_by_builder(value: number)
-	local hum : Humanoid? = self:get_humanoid()
-
-	if hum then
-		hum:TakeDamage(value);
-	end
-end
-
--- Oh my goodness !!!! genius !!!
-function Combat:spawn_effects_by_builder(source, parameters)
-	local BuildHandler = require(ServerScriptService.Scripts.BuildHandler);
-
-	BuildHandler:spawn_effects(source, self:get_root_attachment(), parameters);
-end
-
-Combat.stun_by_builder = Combat.Stun
-
-function Combat:heal_by_builder(value : number)
-	self.LuaCharacter:Heal(value)
-end
-
-----------------------------------------------------------------------------------
 
 function Combat.new(LuaCharacter)
 	local self = setmetatable({}, Combat)

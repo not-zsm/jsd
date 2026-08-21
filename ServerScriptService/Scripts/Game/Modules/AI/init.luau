@@ -1,22 +1,6 @@
 --!native
 
---[[
-    © 2025 swrerm. All Rights Reserved.
-    Author: swrerm
-    Created: July 16, 2024
-    Developed under the group: Jimpee's Cabin
 
-    Licensed for use by Jimpee's Cabin only.
-    Redistribution, resale, or unauthorized use of this code, 
-    in whole or in part, without express permission from the author
-    is strictly prohibited.
-
-    This script is the original work of the author listed above.
-
-    Contacts:
-      wboyd4029@gmail.com
-      jimpeeisbusiness@gmail.com
---]]
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")

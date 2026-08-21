@@ -20,7 +20,7 @@ local Products = require( script.Products )
 
 Products[Gamepasses["Early Access"].GiftID] = {
 	Name = "Early Access Gift",
-	
+
 	Function = function(PlayerGifting : Player)
 		return Gift(PlayerGifting, "Early Access")
 	end
@@ -28,7 +28,7 @@ Products[Gamepasses["Early Access"].GiftID] = {
 
 Products[Gamepasses["Extra Emote Slots"].GiftID] = {
 	Name = "Extra Emote Slots Gift",
-	
+
 	Function = function(PlayerGifting : Player)
 		return Gift(PlayerGifting, "Extra Emote Slots")
 	end
@@ -36,7 +36,7 @@ Products[Gamepasses["Extra Emote Slots"].GiftID] = {
 
 Products[Gamepasses["Private Server+"].GiftID] = {
 	Name = "Private Server+ Gift",
-	
+
 	Function = function(PlayerGifting : Player)
 		return Gift(PlayerGifting, "Private Server+")
 	end
@@ -44,7 +44,7 @@ Products[Gamepasses["Private Server+"].GiftID] = {
 
 Products[Gamepasses["Kill Sounds"].GiftID] = {
 	Name = "Kill Sounds Gift",
-	
+
 	Function = function(PlayerGifting : Player)
 		return Gift(PlayerGifting, "Kill Sounds")
 	end
@@ -111,14 +111,9 @@ local function FunctionErrored(Player : Player, Handler)
 		Text = `Purchasing {Handler.Name} has unexpectedly errored. Rejoining will make it try again. Roblox will automatically refund you if this issue is recurring.`,
 		Duration = 7
 	})
-	
+
 	return Enum.ProductPurchaseDecision.NotProcessedYet
 end
-
-local BuildHandler = require( ServerScriptService.Scripts.BuildHandler )
-local TransactionHandler = BuildHandler.transaction_handler
-
-local Unpacker = require( ServerScriptService.Scripts.BuildHandler.Unpacker )
 
 MarketplaceService.PromptProductPurchaseFinished:Connect(function(UserId, ProductId, Purchased)
 	if ProductId == 3348046631 then
@@ -140,47 +135,6 @@ MarketplaceService.ProcessReceipt = function(Info)
 	if (Player == nil or Player.Parent == nil) then 
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
-
-	local build_product = TransactionHandler:get_shop_product(Info.ProductId)
-	
-	if build_product then
-		local LuaPlayer = LuaPlayerList.WaitFor(Player)
-		local Profile = LuaPlayer.Data.Profile
-		
-		if (Profile == nil) then
-			return Enum.ProductPurchaseDecision.NotProcessedYet;
-		end
-		
-		local purchases = Profile.Data.Builds.Purchases;
-		local product_id_str = tostring(Info.ProductId);
-		
-		local builder = BuildHandler:get_by_userid(Info.PlayerId);
-		local purchase_info = { Spent = Info.CurrencySpent, Id = Info.PurchaseId };
-
-		local callback_success, purchase_success;
-		
-		if build_product.purchase_callback then
-			callback_success, purchase_success = pcall(function()
-				return build_product.purchase_callback(Profile, builder) 
-			end)
-		else
-			callback_success, purchase_success = true, true;
-		end
-		
-		if callback_success and purchase_success then
-			if builder then
-				builder.stream:insert({"Purchases", product_id_str}, purchase_info);
-			else
-				table.insert(purchases[product_id_str], purchase_info)
-			end;
-			
-			Unpacker.Remotes.Transactions.SaleGranted:FireClient(Player, 1, Info.ProductId);
-			
-			return Enum.ProductPurchaseDecision.PurchaseGranted;
-		else
-			return Enum.ProductPurchaseDecision.NotProcessedYet;
-		end
-	end;
 
 	local Handler = Products[Info.ProductId]
 

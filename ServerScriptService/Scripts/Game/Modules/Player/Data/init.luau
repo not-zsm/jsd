@@ -1,21 +1,3 @@
---[[
-    © 2025 swrerm. All Rights Reserved.
-    Author: swrerm
-    Created: July 16, 2024
-    Developed under the group: Jimpee's Cabin
-
-    Licensed for use by Jimpee's Cabin only.
-    Redistribution, resale, or unauthorized use of this code, 
-    in whole or in part, without express permission from the author
-    is strictly prohibited.
-
-    This script is the original work of the author listed above.
-
-    Contacts:
-      wboyd4029@gmail.com
-      jimpeeisbusiness@gmail.com
---]]
-
 local DataStoreService = game:GetService("DataStoreService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -144,11 +126,6 @@ end
 ----------------------------------------------------------------------------------
 
 function Data:Destroy()
-	task.spawn(function()
-		local HostHandler = require(ServerScriptService.Scripts.HostHandler)
-		HostHandler:remove_player(self.LuaPlayer.Player)
-	end)
-
 	self.Job:Destroy()
 
 	if (self.Profile ~= nil) then
@@ -195,24 +172,6 @@ function Data:_Init()
 end
 
 function Data:DataLoaded()
-	task.spawn(function()
-		if shared.IsRankedPlace or shared.IsRankedLobby then
-			return
-		end
-
-		local HostHandler = require(ServerScriptService.Scripts.HostHandler)
-		HostHandler:add_player(self.LuaPlayer.Player, self.Profile)
-	end);
-
-	task.spawn(function()
-		if shared.IsRankedPlace or shared.IsRankedLobby then
-			return
-		end
-
-		local BuildHandler = require( ServerScriptService.Scripts.BuildHandler )
-		BuildHandler.skill_builder:add_player_editor(self.LuaPlayer.Player, self.Profile);
-	end);
-
 	--if self.LuaPlayer.Player.Name == "swrerm" then
 	--	table.clear(self.Profile.Data.Emotes)
 	--	table.clear(self.Profile.Data.BoughtEmotes)

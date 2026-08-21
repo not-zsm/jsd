@@ -89,12 +89,12 @@ TitleSystem.CustomTitles = {
 	
 	["YEEYEEJUICEMAN"] = {access = {"sk3tchyt"}, color = Color3.fromRGB(255, 200, 0)},
 	
-	["cat 🐱🐱"] = {access = {"Programer12123456"}, color = ColorSequence.new({
+	["ccum man"] = {access = {"CarefulsmilePC", "Bigman47620"}, color = ColorSequence.new({
 		ColorSequenceKeypoint.new(0, Color3.fromRGB(178, 218, 255)),
 		ColorSequenceKeypoint.new(0.3333333333333333, Color3.fromRGB(224, 241, 255)),
 		ColorSequenceKeypoint.new(0.6666666666666666, Color3.fromRGB(224, 241, 255)),
 		ColorSequenceKeypoint.new(1, Color3.fromRGB(178, 218, 255)),
-	}), gradient = {offsetTime = 2}, chatPrefix = false},
+	}), gradient = {offsetTime = 2}, chatPrefix = true},
 
 	["SOLID"] = {access = {"SolidSounds"}, chatPrefix = true, font = {FontFace = 12187368843, FontWeight = Enum.FontWeight.Heavy, StrokeColor = Color3.fromRGB(255, 255, 255), StrokeSize = 3}, --FontFace = Enum.Font.Fantasy, FontWeight = Enum.FontWeight.Heavy
 		color = ColorSequence.new({

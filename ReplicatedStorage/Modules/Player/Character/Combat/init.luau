@@ -61,19 +61,19 @@ end
 
 function Combat:Connect()
 	local EquippedMove = nil
-	
+
 	-- ButtonA always returns Typing as true no matter what, use ContextActionService to resolve
 	local function ConsoleJumpHold(_, input_state, input)
 		if (input_state == Enum.UserInputState.Begin) then
 			self:StartHoldingJump(false);
-			
+
 		elseif (input_state == Enum.UserInputState.End) then
 			self:StartNotHoldingJump();
 		end
-		
+
 		return Enum.ContextActionResult.Pass;
 	end
-	
+
 	ContextActionService:BindActionAtPriority("ConsoleJumpCapture", ConsoleJumpHold, false, 2500, Enum.KeyCode.ButtonA);
 
 	UserInputService.InputBegan:Connect(function(Input, Typing)
@@ -174,7 +174,7 @@ function Combat:Connect()
 	CombatRemotes.UpdatePivotRealtime.OnClientEvent:Connect(function(player)
 		local ClientReplicator = require( ReplicatedStorage.MovementReplicator.ClientReplicator )
 		local replicant = ClientReplicator.other_replicators[player];
-		
+
 		if replicant and replicant.character then
 			replicant.character:PivotTo( replicant.target_cframe );
 		end;
@@ -238,21 +238,6 @@ function Combat:Connect()
 
 	CombatRemotes.ResetJumpFatigue.OnClientEvent:Connect(function()
 		self:ResetJumpFatigue()
-	end)
-
-	task.spawn(function()
-		local BuildPersistent = require( ReplicatedStorage.BuildTools.Build )
-
-		BuildPersistent.OnToggled:Connect(function(Value : boolean)
-			if Value then
-				self.EnabledStack:Add()
-			else
-				self.EnabledStack:Subtract()
-			end
-
-			--self.Enabled = not Value
-			self.UI:Toggle(not Value)
-		end)
 	end)
 
 	self.LuaPlayer.Remotes.Combat.Velocity.OnClientEvent:Connect(function(Settings : {})
@@ -341,7 +326,7 @@ function Combat:Connect()
 	self.AttributeValues:GetAttributeChangedSignal("InCombat"):Connect(function()
 		Stack(self.AttributeValues:GetAttribute("InCombat"))
 	end)
-	
+
 	self.CurrentCharacterChanged:Connect(function(Name : string)
 		if (Name == "Anubis" and not self.LuaPlayer.Player:GetAttribute("AnubisInfoNotified")) then
 			self.LuaPlayer.Player:SetAttribute("AnubisInfoNotified", true)

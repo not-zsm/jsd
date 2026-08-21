@@ -35,8 +35,5 @@ local Passives = {
 };
 
 return {
-	[85042395] = {Passives.Bugo};
-	[2603413653] = {Passives.Bugo};
-	[7207821215] = {Passives.Bugo};
-	[141227572] = {Passives.Bugo};
+	--[1371497771] = {Passives.Bugo()};
 }

@@ -15,16 +15,15 @@ shared.PlaceIds = {
 	MainVC = 131330652857284,
 	Test = 95576587700882,
 	TestVC = 82685679507656,
-	Ranked = 0, -- CHANGE THIS!!!
-	RankedLobby = 0, -- THIS TOO
-	TestRanked = 120735443646303,
-	TestRankedLobby = 122394296123463,
 }
 
 shared.IsTestPlace = (game.PlaceId == shared.PlaceIds.Test or game.PlaceId == shared.PlaceIds.TestVC)
 shared.IsVCPlace = (game.PlaceId == shared.PlaceIds.TestVC or game.PlaceId == shared.PlaceIds.MainVC)
-shared.IsRankedPlace = (game.PlaceId == shared.PlaceIds.Ranked or game.PlaceId == shared.PlaceIds.TestRanked)
-shared.IsRankedLobby = (game.PlaceId == shared.PlaceIds.RankedLobby or game.PlaceId == shared.PlaceIds.TestRankedLobby)
+
+-- Ranked was removed along with matchmaking. These stay defined because combat
+-- and movement code still guards on them; both now read false everywhere.
+shared.IsRankedPlace = false
+shared.IsRankedLobby = false
 
 task.spawn(function()
 	workspace:SetAttribute("IsTestPlace", shared.IsTestPlace)
@@ -33,90 +32,16 @@ task.spawn(function()
 	workspace:SetAttribute("IsRankedPlace", shared.IsRankedPlace)
 end)
 
-task.spawn(function()
-	if not shared.IsTestPlace then
-		local TesterPlate = workspace:FindFirstChild("TesterPlate")
-		
-		if TesterPlate then
-			TesterPlate:Destroy()
-		end
-	end
-	
-	if shared.IsRankedLobby then
-		local Map = workspace:FindFirstChild("Map")
-		
-		if Map then
-			Map.Model:ClearAllChildren();
-		end;
-		
-		local NewMap = ServerStorage.RankedAssets.Lobby.Map:Clone()
-
-		if not Map then
-			NewMap.Parent = workspace;
-		else
-			local LoadInto = {Model = true};
-
-			for _, Folder in NewMap:GetChildren() do
-				if not LoadInto[Folder.Name] then
-					Folder.Parent = Map;
-				end;
-			end;
-
-			for Name, ShouldLoad in pairs(LoadInto) do
-				if ShouldLoad then
-					local Source = NewMap:FindFirstChild(Name)
-					local Descendant = Map:FindFirstChild(Name)
-					
-					if Source and Descendant then
-						for _, Item in ipairs(Source:GetChildren()) do
-							Item.Parent = Descendant 
-						end
-					end
-				end
-			end
-		end
-		
-		print(NewMap)
-		
-		workspace.DefaultAmbience:Destroy()
-		workspace.RankedMusic.Lobby.Music:Play()
-		
-		script.GlobalQueueHandler.Enabled = true
-	end
-	
-	if shared.IsRankedPlace then
-		local Map = workspace:FindFirstChild("Map")
-
-		if Map then
-			Map.Model:ClearAllChildren();
-		end;
-		
-		workspace.DefaultAmbience:Destroy()
-
-		script.MatchManager.Enabled = true
-		
-	elseif not shared.IsRankedPlace then
-		workspace.RankedPlate:Destroy()
-	end
-end)
-
 ----------------------------------------------------------------------------------
 
 local LuaPlayerList = require( script.Modules.LuaPlayerList )
 
 task.spawn(require, ReplicatedStorage.Modules.Shared.Game.Appearances)
 task.spawn(require, ServerScriptService.Scripts.HavocHandler )
-task.spawn(require, script.Modules.CharaSpawner)
 task.spawn(require, script.Modules.CommandHandler)
 task.spawn(require, script.Modules.AnnouncementHandler)
 task.spawn(require, script.Modules.Npcs)
 task.spawn(require, script.Modules.DonationBoardServer)
-task.spawn(require, script.Modules.VCServerTeleporter)
-task.spawn(require, script.Modules.RankedTeleporter)
-task.spawn(require, script.Modules.MainTeleporter)
-task.spawn(require, script.Modules.EventSystemHandler)
-task.spawn(require, script.Modules.ItemSpawnHandler)
-task.spawn(require, script.Modules.Arcade)
 
 task.spawn(function()
 	local function Update(Sound : Sound)
@@ -130,9 +55,9 @@ task.spawn(function()
 			end
 		end
 	end
-	
+
 	CollectionService:GetInstanceAddedSignal("UpdateSoundGroup"):Connect(Update)
-	
+
 	for _, Item in CollectionService:GetTagged("UpdateSoundGroup") do
 		Update(Item)
 	end
@@ -162,10 +87,10 @@ local function CheckForTester(Player : Player)
 	local Success, Result = pcall(function()
 		return Player:GetRankInGroup(shared.Group)
 	end)
-	
+
 	if Success then
 		local RequiredRank = AllowContentCreators and 59 or 60
-		
+
 		if Result < RequiredRank then
 			Player:Kick("You are not a tester")
 		end
@@ -173,33 +98,33 @@ local function CheckForTester(Player : Player)
 		warn(Result)
 		Player:Kick(`Error fetching your group rank, try again later. Error: {Result}`)
 	end
-	
+
 	return Success
 end
 
 local function AddLuaPlayer(Player : Player)
 	if Player.UserId == 263484818 then
 		task.wait(Random.new():NextNumber(1.5, 5))
-		
+
 		Player:Kick("There was an error trying to load your data, please try again later.")
-		
+
 		return 
 	end
-	
+
 	if not RunService:IsStudio() then
 		if shared.IsTestPlace then
 			local Success = CheckForTester(Player)
-			
+
 			if not Success then 
 				return 
 			end
 		end
-		
+
 		if Player.AccountAge < 7 then
 			Player:Kick("Account not old enough!")
 		end
 	end
-	
+
 	local LuaPlayer = require(script.Modules.Player).new(Player)
 	LuaPlayerList.Add(LuaPlayer)
 
@@ -223,17 +148,17 @@ Players.PlayerRemoving:Connect(function(Player : Player)
 		LuaPlayerList.Remove(LuaPlayer)
 		LuaPlayer:Destroy()
 	end
-	
+
 	task.delay(3, Player.Destroy, Player)
 end)
 
 task.spawn(function()
 	workspace:SetAttribute("ServerTimeStart", workspace:GetServerTimeNow())
-	
+
 	if RunService:IsStudio() then
 		return warn("didn't show region due to doxxing")
 	end
-	
+
 	local URL = "http://ip-api.com/json/?fields=16394"--"http://ip-api.com/json/"
 	local Success, Result = pcall(HttpService.GetAsync, HttpService, URL, false)
 
@@ -241,10 +166,10 @@ task.spawn(function()
 		if (Result == nil) then
 			return warn("error getting result from http")
 		end
-		
+
 		local Json = HttpService:JSONDecode(Result)
 		print(Json.status)
-		
+
 		if Json.status == "success" then
 			print(Json)
 

@@ -1,40 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local LuaPlayerList = require( ServerScriptService.Scripts.Game.Modules.LuaPlayerList )
 
-local CharaSpawner = require( ServerScriptService.Scripts.Game.Modules.CharaSpawner )
-
 return {
-	[3348046631] = {
-		Name = "Spawn Cursed Child",
-		PurchaseText = "You have spawned the Cursed Child.",
-		
-		Function = function(ReceivingPlayer : Player)
-			local LuaPlayer = LuaPlayerList.WaitFor(ReceivingPlayer)
-
-			if (LuaPlayer == nil) then 
-				return false
-			end
-
-			local Profile = LuaPlayer.Data.Profile
-
-			if (Profile == nil) then
-				LuaPlayer.Data.OnDataLoaded:Wait()
-			end
-			
-			if (Profile == nil) then
-				return false
-			end
-
-			if (CharaSpawner.Spawned or CharaSpawner.TimerThread == nil) then
-				return false
-			end
-			
-			task.defer(CharaSpawner.Spawn, CharaSpawner.SpawnCF)
-
-			return true
-		end
-	},
-	
 	[2657712724] = {
 		Name = "Random Emote",
 		PurchaseText = "You have purchased a Random Emote.",
@@ -64,7 +31,7 @@ return {
 
 			return Success
 		end
-	},
+	},	
 	
 	--[6275120808] = {
 	--	Name = "2 Random Emotes",

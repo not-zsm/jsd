@@ -20,7 +20,7 @@ local Settings = require(Shared.Settings);
 local Table = require( ReplicatedStorage.Packages.Table )
 local BufferUtil = require( ReplicatedStorage.Packages.BufferUtil )
 local DebrisPool = require( ReplicatedStorage.Havoc.DebrisPool )
-local Serialise = require( ServerScriptService.Scripts.BuildHandler.Serialise );
+local Serialise = require( ReplicatedStorage.Packages.Serialise );
 local Module = require( ReplicatedStorage.Modules.Shared.Game.Whitelist );
 
 ---------------------------------------------------------------------

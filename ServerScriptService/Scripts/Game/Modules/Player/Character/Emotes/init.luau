@@ -1,21 +1,3 @@
---[[
-    © 2025 swrerm. All Rights Reserved.
-    Author: swrerm
-    Created: July 16, 2024
-    Developed under the group: Jimpee's Cabin
-
-    Licensed for use by Jimpee's Cabin only.
-    Redistribution, resale, or unauthorized use of this code, 
-    in whole or in part, without express permission from the author
-    is strictly prohibited.
-
-    This script is the original work of the author listed above.
-
-    Contacts:
-      wboyd4029@gmail.com
-      jimpeeisbusiness@gmail.com
---]]
-
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -34,8 +16,6 @@ local RemoteRateLimiter = require( ServerScriptService.Scripts.Game.Modules.Util
 local Limited_Emote_Dates = require( ReplicatedStorage.Modules.Shared.Game["Limited Emote Dates"] )
 local Limited_Products_Ids = require( script["Limited Product Ids"] )
 local Preloading = require( ReplicatedStorage.Modules.Preloading )
-
-local ClientSpirit = require(ReplicatedStorage.Modules.Player.Replication.VFX.Anubis.ClientSpirit)
 
 local Remotes = ReplicatedStorage.Remotes
 
@@ -154,7 +134,7 @@ function Emotes:_Init()
 
 				return
 			end
-			 
+
 			if not RunService:IsStudio() and self.LuaPlayer.Player.Name ~= "swrerm" then
 				if (self.LuaPlayer.PolicyInfo == nil) then 
 					Remotes.Notification:FireClient(self.LuaPlayer.Player,  {
@@ -176,7 +156,7 @@ function Emotes:_Init()
 					return
 				end
 			end
-			
+
 			if not self:HasAll() then
 				MarketplaceService:PromptProductPurchase(self.LuaPlayer.Player, 2657712724)
 			end
@@ -214,7 +194,7 @@ function Emotes:_Init()
 		if os.time() > Date then
 			return
 		end
-		
+
 		local Pass = false
 
 		if Name == "Combat Gods + Isagi" then
@@ -227,17 +207,17 @@ function Emotes:_Init()
 				if CannotHave[Emote] then
 					print("cannot have", Emote)
 					Pass = false
-					
+
 					break
 				end
 			end
-			
+
 		elseif Name == "Love Train" then
 			Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["Love Train"]
-			
+
 		elseif Name == "Final Matchup" then
 			Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["Final Matchup"]
-			
+
 		elseif Name == "The Final Showdown" then
 			Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["The Final Showdown"]
 		end
@@ -273,35 +253,35 @@ function Emotes:PlayEmote(Name : string)
 	if not self:HasAccessTo(Name) then
 		return print("can't use this emote")
 	end
-	
+
 	local EmoteData = Data[Name]
 	if (EmoteData == nil) then return end
-	
+
 	--if self.Combat:GetState("EmoteDebounce") then
-		--local Start = os.clock()
-		
-		--while self.Combat:GetState("EmoteDebounce") and (os.clock() - Start < 0.75) do
-		--	self.Combat:GetStateChanged("EmoteDebounce"):Wait()
-		--end
-		
-		--if self.Combat:GetState("EmoteDebounce") then
-		--	return
-		--end
+	--local Start = os.clock()
+
+	--while self.Combat:GetState("EmoteDebounce") and (os.clock() - Start < 0.75) do
+	--	self.Combat:GetStateChanged("EmoteDebounce"):Wait()
 	--end
-	
+
+	--if self.Combat:GetState("EmoteDebounce") then
+	--	return
+	--end
+	--end
+
 	self.EmoteCooldown = true
 
 	task.delay(0.3, function() 
 		self.EmoteCooldown = false
 	end)
-	
+
 	if self.CurrentEmote then
 		self.CurrentEmote:Destroy()
 		self.CurrentEmote = nil
 	end
 
 	local NewJob = Job.new()
-	
+
 	local Weapon = self.Combat.Attacks["Anubis Weapon"]
 
 	if (Weapon ~= nil) then
@@ -318,7 +298,7 @@ function Emotes:PlayEmote(Name : string)
 	local AnimationTrack : AnimationTrack? = nil
 	local StandTrack : AnimationTrack? = nil
 	local D4CTrack : AnimationTrack?
-	
+
 	if Animation then
 		if (EmoteData.Collab ~= nil) then
 			local CollabData = EmoteData.Collab
@@ -364,7 +344,7 @@ function Emotes:PlayEmote(Name : string)
 
 					if EmoteData.Collab.UsesSigmaFolderMethod then
 						Prompt.Enabled = true
-						
+
 						Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
 					else
 						if (Utility.TableCount(Joined) == 0) then
@@ -377,7 +357,7 @@ function Emotes:PlayEmote(Name : string)
 
 						Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
 					end
-					
+
 					Joined[VictimLuaPlayer] = nil
 				end
 			end
@@ -387,7 +367,7 @@ function Emotes:PlayEmote(Name : string)
 					RemovePlayer(VictimLuaPlayer)
 				end
 			end)
-			
+
 			--local Joined = {}
 			--local JoinedJobs = {}
 
@@ -406,10 +386,10 @@ function Emotes:PlayEmote(Name : string)
 			--		VictimCombat:StackState("Emoting", false)
 
 			--		table.remove(Joined, WasIn)
-					
+
 			--		if EmoteData.Collab.UsesSigmaFolderMethod then
 			--			Prompt.Enabled = true
-						
+
 			--			Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
 			--		else
 			--			if Utility.TableCount(Joined) == 0 then
@@ -422,7 +402,7 @@ function Emotes:PlayEmote(Name : string)
 
 			--			Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
 			--		end
-					
+
 			--	end
 			--end
 
@@ -430,7 +410,7 @@ function Emotes:PlayEmote(Name : string)
 			--	for Index, VictimLuaPlayer in Joined do
 			--		local VictimLuaCharacter = VictimLuaPlayer.Character
 			--		local VictimCombat = VictimLuaCharacter.Combat
-					
+
 			--		if JoinedJobs[VictimLuaPlayer.Player] then
 			--			JoinedJobs[VictimLuaPlayer.Player]:Destroy()
 			--			JoinedJobs[VictimLuaPlayer.Player] = nil
@@ -511,10 +491,10 @@ function Emotes:PlayEmote(Name : string)
 							RemovePlayer(VictimLuaPlayer)
 						end
 					end))
-					
+
 					if (self.CurrentMusic == nil and Music and Music:IsA("Folder")) then
 						local CollabMusic = Music:FindFirstChild("Collab")
-						
+
 						if CollabMusic then
 							local NewMusic : Sound = CollabMusic:Clone()
 							NewMusic.RollOffMaxDistance = 150
@@ -526,7 +506,7 @@ function Emotes:PlayEmote(Name : string)
 								NewMusic:Destroy()
 								self.CurrentMusic = nil
 							end)
-							
+
 							self.CurrentMusic = NewMusic
 						end
 					end
@@ -544,12 +524,12 @@ function Emotes:PlayEmote(Name : string)
 							})
 						end
 					end
-					
+
 					--JoinedJobs[VictimLuaPlayer.Player] = JoinedJob
 					--table.insert(Joined, VictimLuaPlayer)
 
 					Joined[VictimLuaPlayer] = JoinedJob
-					
+
 					local NewCount = Utility.TableCount(Joined)
 
 					--if (CollabData.Limit or 1) ~= -1 and (NewCount >= (CollabData.Limit or 1)) then
@@ -557,7 +537,7 @@ function Emotes:PlayEmote(Name : string)
 					--else
 					--	Prompt.Enabled = true
 					--end
-					
+
 					Prompt.Enabled = not ((CollabData.Limit or 1) ~= -1 and (NewCount >= (CollabData.Limit or 1)))
 					Remotes.Emotes.Collabs.Joined:FireClient(VictimLuaPlayer.Player, Prompt)
 				end
@@ -575,16 +555,16 @@ function Emotes:PlayEmote(Name : string)
 			else
 				AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(Animation)
 				AnimationTrack:Play(0.1, 1, EmoteData.AnimationSpeed or 1)
-			
+
 				if EmoteData.StopAfterAnimationStop then
 					NewJob:Task(AnimationTrack.Stopped:Once(function()
 						NewJob:Destroy()
 					end))
 				end
-				
+
 				local Stand : Model = self.LuaCharacter.Model:FindFirstChild("Stand")
 				local D4C : Model = self.LuaCharacter.Model:FindFirstChild("D4C")
-				
+
 				if not EmoteData.NoStand and D4C then
 					local StandMover = D4C.HumanoidRootPart:FindFirstChild("StandWeld")
 
@@ -596,33 +576,13 @@ function Emotes:PlayEmote(Name : string)
 							StandMover.C0 = Pre
 						end)
 					end
-					
+
 					D4CTrack = D4C:FindFirstChild("Animator", true):LoadAnimation(Animation)
 					D4CTrack:Play(0.1, 1, EmoteData.AnimationSpeed or 1)
 				end
-				
+
 				if not EmoteData.NoStand and Stand then
-					local StarPlatinum = self.Combat.Attacks["Star Platinum"]
-					
-					if StarPlatinum then
-						StarPlatinum:MoveStand(CFrame.new(4, 0, 0))
-						
-						NewJob:Task(function()
-							StarPlatinum:MoveStandByAction("Idle")
-						end)
-					end
-					
 					StandTrack = Stand:FindFirstChild("Animator", true):LoadAnimation(Animation)
-					StandTrack:Play(0.1, 1, EmoteData.AnimationSpeed or 1)
-				end
-				
-				if (not EmoteData.NoStand) and (self.Combat.Attacks["Anubis Weapon"]) and StandTrack == nil then
-					local AnubisModel = ClientSpirit.RigSpirit(self.LuaCharacter.Model)
-					NewJob:Task(AnubisModel)
-					
-					AnubisModel.Join.C0 = CFrame.new(-4, 0, 0)
-					
-					StandTrack = AnubisModel:FindFirstChild("Animator", true):LoadAnimation(Animation)
 					StandTrack:Play(0.1, 1, EmoteData.AnimationSpeed or 1)
 				end
 			end
@@ -635,16 +595,16 @@ function Emotes:PlayEmote(Name : string)
 		if (self.CurrentMusic == nil) then
 			local NewMusic : Sound = Music:Clone()
 			NewMusic.RollOffMaxDistance = 150
-			
+
 			OriginalMusicVolume = NewMusic.Volume
 			NewMusic.Volume = 0
-			
+
 			NewMusic.Parent = self.LuaCharacter.Torso
 			NewMusic:Play()
-			
+
 			NewJob:Task(NewMusic)
 			self.CurrentMusic = NewMusic
-			
+
 			if EmoteData.SyncMusicWithAnimationLoop and AnimationTrack.Looped then
 				--NewJob:Task(AnimationTrack.Stopped:Connect(function()
 				--	if NewMusic.IsPlaying then
@@ -654,17 +614,17 @@ function Emotes:PlayEmote(Name : string)
 				--	NewMusic:Play()
 				--	AnimationTrack:Play()
 				--end))
-				
+
 				local CurrentTime = 0
-				
+
 				NewJob:Task(RunService.PreAnimation:Connect(function()
 					local LastTime = CurrentTime;
-					
+
 					CurrentTime = AnimationTrack.TimePosition;
-					
+
 					if (CurrentTime - LastTime) < 0 then
 						CurrentTime = 0;
-						
+
 						if NewMusic.IsPlaying then
 							NewMusic:Stop()
 						end
@@ -673,7 +633,7 @@ function Emotes:PlayEmote(Name : string)
 						AnimationTrack:Play()
 					end
 				end))
-				
+
 				--NewJob:Task(AnimationTrack.DidLoop:Connect(function()
 				--	if NewMusic.IsPlaying then
 				--		NewMusic:Stop()
@@ -698,7 +658,7 @@ function Emotes:PlayEmote(Name : string)
 			if EmoteData.Music.PlaybackRegion then
 				NewMusic.PlaybackRegion = EmoteData.Music.PlaybackRegion
 			end
-			
+
 			OriginalMusicVolume = NewMusic.Volume
 			NewMusic.Volume = 0
 
@@ -706,11 +666,11 @@ function Emotes:PlayEmote(Name : string)
 			NewMusic:Play()
 
 			NewJob:Task(NewMusic)
-			
+
 			self.CurrentMusic = NewMusic
 		end
 	end
-	
+
 	if self.CurrentMusic then
 		TweenService:Create(self.CurrentMusic, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
 			{Volume = OriginalMusicVolume}
@@ -734,9 +694,9 @@ function Emotes:PlayEmote(Name : string)
 	NewJob:Task(function()
 		self.CurrentEmote = nil
 		self.CurrentMusic = nil
-		
+
 		self.Combat:StackState("EmoteDebounce", true)
-		
+
 		self.Combat.Job:Task(task.delay(1, function()
 			self.Combat:StackState("EmoteDebounce", false)
 		end))
@@ -748,11 +708,11 @@ function Emotes:PlayEmote(Name : string)
 		if AnimationTrack then
 			AnimationTrack:Stop()
 		end
-		
+
 		if StandTrack then
 			StandTrack:Stop()
 		end
-		
+
 		if D4CTrack then
 			D4CTrack:Stop()
 		end
@@ -816,18 +776,18 @@ end
 --	end
 
 --	self.LuaPlayer.Data.Profile.Data.Emotes[Name] = true
-	
+
 --	if Claim then
 --		self.LuaPlayer.Data.Profile.Data.ClaimedEmotes += 1
 --		print("actually claimed 1")
-		
+
 --	elseif Purchase then
 --		self.LuaPlayer.Data.Profile.Data.BoughtEmotes[Name] = true
 --	end
 
 --	self.LuaPlayer.Remotes.Emote.Get:FireClient(self.LuaPlayer.Player, Name, Claim, Purchase, Given)
 --	self:UpdateEmoteKillClaim()
-	
+
 --	return true
 --end
 
@@ -835,7 +795,7 @@ function Emotes:Claim(Name : string)
 	if not self:HasAccessTo(Name) then
 		return false
 	end
-	
+
 	if self.LuaPlayer.IsNPC or self.LuaPlayer.Data.Profile.Data.Emotes[Name] then 
 		return false
 	end
@@ -859,7 +819,7 @@ function Emotes:ClaimByExtra(Name : string)
 	if not self:HasAccessTo(Name) then
 		return false
 	end
-	
+
 	if self.LuaPlayer.IsNPC or self.LuaPlayer.Data.Profile.Data.Emotes[Name] then 
 		return false
 	end
@@ -882,7 +842,7 @@ function Emotes:Purchase(Name : string)
 	if not self:HasAccessTo(Name) then
 		return false
 	end
-	
+
 	if self.LuaPlayer.IsNPC or self.LuaPlayer.Data.Profile.Data.Emotes[Name] then 
 		return false
 	end
@@ -906,7 +866,7 @@ function Emotes:Give(Name : string)
 	if not self:HasAccessTo(Name) then
 		return false
 	end
-	
+
 	if self.LuaPlayer.IsNPC or self.LuaPlayer.Data.Profile.Data.Emotes[Name] then 
 		return false
 	end
@@ -932,7 +892,7 @@ end
 
 function Emotes:CalculateKillsCanClaim()
 	local Profile = self.LuaPlayer.Data.Profile
-	
+
 	if Profile and Profile:IsActive() then
 		local Calculation = ((Profile.Data.Kills - self.KillsUntilEmote*Profile.Data.ClaimedEmotes) // self.KillsUntilEmote) + Profile.Data.ExtraEmoteClaims
 
@@ -979,12 +939,12 @@ function Emotes:HasAll()
 end
 
 function Emotes:GetAll(IncludeLimited : boolean)
-	
+
 	local function EditedGive(Name : string)
 		if not self:HasAccessTo(Name) then
 			return
 		end
-			
+
 		local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 		if Animation then
@@ -994,11 +954,11 @@ function Emotes:GetAll(IncludeLimited : boolean)
 		self.LuaPlayer.Data.Profile.Data.Emotes[Name] = true
 		self.LuaPlayer.Remotes.Emote.Get:FireClient(self.LuaPlayer.Player, Name, "Give")
 	end
-	
+
 	for Index, Name : string in IndexTable do
 		EditedGive(Name)
 	end
-	
+
 	if IncludeLimited then
 		for Index, Name : string in LimitedTable do
 			EditedGive(Name)
@@ -1015,7 +975,7 @@ function Emotes:GetRandom(Type : string)
 	end
 
 	local Profile = self.LuaPlayer.Data.Profile
-	
+
 	local Emote = Utility.PickRandom(IndexTable, function(Emote)
 		return (Profile.Data.Emotes[Emote] == nil)
 	end)

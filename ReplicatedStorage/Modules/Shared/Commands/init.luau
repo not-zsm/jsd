@@ -18,15 +18,13 @@ local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
 
 local Weather
 local LuaPlayerList
-local BuildHandler
 
 if RunService:IsServer() then
 	local ServerScriptService = game:GetService("ServerScriptService")
-	
+
 	Weather = require(ServerScriptService.Scripts.Game.Modules.Weather)
 	LuaPlayerList = require(ServerScriptService.Scripts.Game.Modules.LuaPlayerList)
-	BuildHandler = require(ServerScriptService.Scripts.BuildHandler)
-	
+
 	-- On Click Strike
 	ReplicatedStorage.Remotes.Commands.ClickStrike.OnServerEvent:Connect(function(Player, MousePosition)
 		if Player:GetAttribute("ClickStrike") == true then
@@ -56,8 +54,6 @@ if RunService:IsServer() then
 			Player:Kick("Banned from this server")
 		end
 	end)
-else
-	require( ReplicatedStorage.BuildTools.FlightHandler )
 end
 
 -- Local Functions
@@ -108,30 +104,6 @@ end
 local DummyDisplays = {}
 
 local Commands = {
-	["Toggle Build Mode"] = {
-		Index = -5,
-		
-		Parameters = {"Player", "Value"},
-		--TriggerLevel = 1,
-		PermissionsToTrigger = {"PS", "PS+", "Owner"},
-
-		Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
-			if BuildHandler then
-				if ReceivedParameters.Value then
-					if not BuildHandler.is_initialised then
-						BuildHandler:initialise();
-					end;
-
-					local Builder = BuildHandler:add_builder(TargetLuaPlayer.Player, TargetLuaPlayer.Data.Profile);
-					Builder:give_btools()
-					
-				elseif (not ReceivedParameters.Value and BuildHandler.is_initialised) then
-					BuildHandler:remove_builder(TargetLuaPlayer.Player)
-				end
-			end
-		end
-	},
-	
 	["Give Ultimate"] = {
 		Index = -4,
 
@@ -157,7 +129,7 @@ local Commands = {
 				Attack:RemoveCooldown()
 			end
 		end},
-	
+
 	["Set Client Cooldowns"] = {
 		Parameters = {"Player", "Value"}, 
 		Index = -2.9, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
@@ -182,10 +154,10 @@ local Commands = {
 	["Moveset"] = {
 		Parameters = {"Player", "Move"},
 		PermissionsToTrigger = {"Owner"};
-		
+
 		Callback = function(LuaPlayer, TargetLuaPlayer, Parameters)
 			if not ParametersValid(Parameters, LuaPlayer.Player) then return end
-			
+
 			for name, attack in TargetLuaPlayer.Character.Combat.Attacks do
 				if attack.DirectoryParent == "Global" then
 					continue;
@@ -198,20 +170,14 @@ local Commands = {
 				local skill_name = string.gsub(string.gsub(name, "^%s*", ""), "%s*$", "");
 
 				local success, result = pcall(function()
-					local sequence = BuildHandler.skill_builder:get_skill_sequence(LuaPlayer.Player.UserId, skill_name);
+					local keybind = TargetLuaPlayer.Character.Combat:GetNextAttackKey();
+					local found_move = GetValueFromPartialString(Parameters.Move, Moves);
 
-					if sequence then
-						sequence:create_attack_for( TargetLuaPlayer.Character.Combat );
-					else
-						local keybind = TargetLuaPlayer.Character.Combat:GetNextAttackKey();
-						local found_move = GetValueFromPartialString(Parameters.Move, Moves);
-						
-						if found_move then
-							TargetLuaPlayer.Character.Combat:CreateAttack(found_move, keybind)
-						end;
+					if found_move then
+						TargetLuaPlayer.Character.Combat:CreateAttack(found_move, keybind)
 					end;
 				end);
-				
+
 				if not success then
 					warn(`Unable to give move: {result}`);
 				end;
@@ -225,7 +191,7 @@ local Commands = {
 		Parameters = {"Player", "Move", "Keybind"}, 
 		--TriggerLevel = 1,
 		PermissionsToTrigger = {"Owner", "GOB"},
-		
+
 		Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			if not ParametersValid(ReceivedParameters, LuaPlayer.Player) then return end
 
@@ -235,13 +201,13 @@ local Commands = {
 			if Keybind == "" then
 				Keybind = TargetLuaPlayer.Character.Combat:GetNextAttackKey().Name;
 			end;
-			
+
 			if string.len(Keybind) > 1 then
 				return SendNotification(LuaPlayer.Player, "Invalid Keybind", `Keybind {Keybind} can't be more than one character.`);
 			end;
-			
+
 			local IsNumber = table.find(AllowedKeys, tonumber(Keybind))
-			
+
 			if Keybind:match("[^a-zA-Z]+") and not (IsNumber or Enum.KeyCode:FromName(Keybind)) then
 				return SendNotification(LuaPlayer.Player, "Invalid Keybind", `{Keybind} is not a valid keybind.`);
 			end
@@ -254,14 +220,14 @@ local Commands = {
 				else
 					Keybind = Enum.KeyCode:FromName(Keybind);
 				end;
-				
+
 				TargetLuaPlayer.Character.Combat:CreateAttack(FoundMove, Keybind)
 			else
 				print("Error, move not found")
 			end;
 		end;
 	},
-	
+
 	["Give Item"] = {
 		Index = 0,
 
@@ -295,7 +261,7 @@ local Commands = {
 		--TriggerLevel = 1,
 		PermissionsToTrigger = {"Owner"},
 		CanMacro = false;
-		
+
 		Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			TargetLuaPlayer.Character.Emotes:Give(ReceivedParameters.EmoteName)
 		end
@@ -307,7 +273,7 @@ local Commands = {
 		PermissionsToTrigger = {"PS+", "Developer", "GOB", "Owner"},
 
 		Parameters = {"Player", "Value"},
-		
+
 		Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			local Ultimate = TargetLuaPlayer.Character.Combat:MatchAttack("Ultimate", Enum.KeyCode.G)
 
@@ -346,19 +312,19 @@ local Commands = {
 
 		Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			local Success = TargetLuaPlayer.Character.Combat:SetCharacter(ReceivedParameters.CharacterName)
-			
+
 			if not Success then
 				SendNotification(TargetLuaPlayer.Player, "Invalid Character", `{ReceivedParameters.CharacterName} is not a valid character.`)
 			end
 		end
 	},
-	
+
 	["Disguise"] = {
 		--TriggerLevel = 1,
 		PermissionsToTrigger = {"Owner"},
 		Parameters = {"Player", "String"}, 
 		CanMacro = false;
-		
+
 		Index = 7, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			if ReceivedParameters.String == nil or ReceivedParameters.String == "" then
 				if (TargetLuaPlayer.Data and TargetLuaPlayer.Data.Profile) then
@@ -390,7 +356,7 @@ local Commands = {
 				end
 			end
 		end},
-	
+
 	["Damage Multiplier"] = {
 		--TriggerLevel = 1,
 		PermissionsToTrigger = {"PS+", "GOB", "Owner"},
@@ -402,7 +368,7 @@ local Commands = {
 				TargetLuaPlayer.Character.Combat.DamageMultiplier = math.max(0, Number)
 			end
 		end},
-	
+
 	["Attack Speed Multiplier"] = {
 		--TriggerLevel = 1,
 		PermissionsToTrigger = {"PS+", "GOB", "Owner"},
@@ -414,7 +380,7 @@ local Commands = {
 				TargetLuaPlayer.Character.Combat:SetSpeedMultiplier( math.max(0, Number) );
 			end
 		end},
-	
+
 	["Heal"] = {
 		--TriggerLevel = 2,
 		PermissionsToTrigger = {"PS+", "Developer", "GOB", "Owner"},
@@ -422,7 +388,7 @@ local Commands = {
 		Index = 7.1, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			TargetLuaPlayer.Character:HealFull()
 		end},
-	
+
 	["Set Health"] = {
 		--TriggerLevel = 2,
 		PermissionsToTrigger = {"PS+", "Developer", "GOB", "Owner"},
@@ -468,14 +434,14 @@ local Commands = {
 				Weather.Smite(TargetLuaPlayer.Character.RootPart.Position)
 			end
 		end},
-	
+
 	["Dummy Display"] = {
 		--TriggerLevel = 2,
 		PermissionsToTrigger = {"PS+", "Developer", "GOB", "Owner"},
 		Parameters = {"Player", "Value"},
 		Index = 13, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			local TargetLuaCharacter = TargetLuaPlayer.Character
-			
+
 			if (ReceivedParameters.Value == true) then
 				local Health = Assets.Health:Clone()
 				Health.Parent = TargetLuaCharacter.Head
@@ -509,9 +475,9 @@ local Commands = {
 					DummyDisplays[TargetLuaCharacter.Head] = nil
 				end
 			end
-			
+
 		end},
-	
+
 	["Flight"] = {
 		--TriggerLevel = 2,
 		PermissionsToTrigger = {"PS+", "Developer", "GOB", "Owner"},
@@ -519,7 +485,7 @@ local Commands = {
 		Index = 13.1, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			TargetLuaPlayer.Player:SetAttribute("HasFlight", ReceivedParameters.Value)
 		end},
-	
+
 
 	["Bring"] = {
 		--TriggerLevel = 2,
@@ -535,11 +501,11 @@ local Commands = {
 		Parameters = {"Player"},
 		IgnoreSelfRestriction = true,
 		--UnrestrictedTarget = true,
-		
+
 		Index = 14, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			LuaPlayer.Character.Model:PivotTo(TargetLuaPlayer.Character.RootPart.CFrame * CFrame.new(0, 0, -3) * CFrame.Angles(0, math.pi, 0))
 		end},
-		
+
 	["Respawn"] = {
 		--TriggerLevel = 2,
 		PermissionsToTrigger = {"PS+", "Developer", "GOB", "Owner", "Staff"},
@@ -555,39 +521,39 @@ local Commands = {
 		PermissionsToTrigger = {"PS+", "Owner"},
 		Parameters = {"Player", "Dummy Type"},
 		CanMacro = false;
-		
+
 		Index = 16, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			local Dummy = Assets.Dummy:Clone()
 			Dummy:PivotTo(TargetLuaPlayer.Character.RootPart.CFrame * CFrame.new(0, 1, -5))
 			Dummy.Parent = workspace
-			
+
 			local Type = ReceivedParameters["Dummy Type"]
-			
+
 			if Type == "Low HP Dummy" then
 				Dummy.Humanoid.Health = 10
 			else
 				local Handlr = DummyHandlers:FindFirstChild(Type)
-				
+
 				if Handlr then
 					local Handler = Handlr:Clone()
 					Handler.Name = "NpcHandler"
 					Handler.Parent = Dummy
 				end
 			end
-			
+
 			task.wait(1 / 60)
 
 			Dummy:AddTag("Random_Developer_Outfit")
 			Dummy:AddTag("NPC")
 			Dummy:AddTag("SpawnedNPC")
 		end},
-	
+
 	["Spawn Ball"] = {
 		--TriggerLevel = 1,
 		PermissionsToTrigger = {"Owner"},
 		Parameters = {"Player"},
 		CanMacro = false;
-		
+
 		Index = 18, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			local ball = Assets.Ball:Clone()
 			ball:PivotTo(TargetLuaPlayer.Character.RootPart.CFrame * CFrame.new(0, 10, -10))
@@ -612,7 +578,7 @@ local Commands = {
 		PermissionsToTrigger = {"PS+", "Developer", "GOB", "Owner", "Staff"},
 		Parameters = {"Player", "Confirm"},
 		CanMacro = false;
-		
+
 		Index = 20, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			if (ReceivedParameters.Confirm == true) then
 				if LuaPlayer.Player == TargetLuaPlayer.Player then return end
@@ -626,23 +592,23 @@ local Commands = {
 		PermissionsToTrigger = {"PS+", "Developer", "GOB", "Owner", "Staff"},
 		Parameters = {"Player"},
 		CanMacro = false;
-		
+
 		Index = 21, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			if LuaPlayer.Player == TargetLuaPlayer.Player then return end
 
 			table.insert(BanList, TargetLuaPlayer.Player.Name)
 			TargetLuaPlayer.Player:Kick(`You have been banned from this server by {LuaPlayer.Player:GetAttribute("Name")}`)
 		end},
-	
+
 	["Jimper"] = {
 		--TriggerLevel = 1,
 		PermissionsToTrigger = {"Owner", "GOB"},
 		Parameters = {"Player"},
-		
+
 		Index = 22, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			local ui = Assets.Jimper.ui:Clone()
 			ui.Parent = TargetLuaPlayer.Player.PlayerGui
-			
+
 			for _, item in ipairs(ui:GetChildren()) do
 				if item:IsA("Sound") then
 					item:Play()
@@ -657,11 +623,11 @@ local Commands = {
 
 for Name, Command in Commands do
 	Command.Name = Name; -- For Convienence
-	
+
 	if Command.PermissionsToTrigger == nil then
 		Command.PermissionsToTrigger = {"PS", "PS+", "Developer", "GOB", "Owner"};
 	end;
-	
+
 	if Command.CanMacro == nil then
 		Command.CanMacro = true;
 	end;

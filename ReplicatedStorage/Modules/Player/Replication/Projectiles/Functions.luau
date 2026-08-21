@@ -28,29 +28,6 @@ return {
 		return Purple, CF
 	end,
 	
-	["Obsidian"] = function(Origin : Vector3, Direction : Vector3)
-		local CF = CFrame.lookAlong(Origin, Direction)
-
-		local Obsidian = script.Obsidian:Clone()
-		Obsidian.CFrame = CF
-		Obsidian.Parent = workspace.Visuals
-
-		return Obsidian, CF
-	end,
-	
-	["Plasma"] = function(Origin : Vector3, Direction : Vector3)
-		local CF = CFrame.lookAlong(Origin, Direction)
-
-	
-		local Plasma = script.Plasma:Clone()
-		Plasma.CFrame = CF
-		Plasma.Parent = workspace.Visuals
-		
-		Plasma.Ambient:Play()
-
-		return Plasma, CF
-	end,
-	
 	["Raygun"] = function(Origin : Vector3, Direction : Vector3, Upgraded : Bolean)
 		local CF = CFrame.lookAlong(Origin, Direction)
 
@@ -59,25 +36,5 @@ return {
 		Bullet.Parent = workspace.Visuals
 
 		return Bullet, CF
-	end,
-	
-	["AnubisSlash 1"] = function(Origin : Vector3, Direction : Vector3)
-		local CF = CFrame.lookAlong(Origin, Direction)
-
-		local Slash = script["AnubisSlash 1"]:Clone()
-		Slash.CFrame = CF
-		Slash.Parent = workspace.Visuals
-
-		return Slash, CF
-	end,
-	
-	["AnubisSlash 2"] = function(Origin : Vector3, Direction : Vector3)
-		local CF = CFrame.lookAlong(Origin, Direction)
-
-		local Slash = script["AnubisSlash 2"]:Clone()
-		Slash.CFrame = CF
-		Slash.Parent = workspace.Visuals
-
-		return Slash, CF
 	end,
 }
