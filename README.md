@@ -61,9 +61,11 @@ deletes the instances it removed.
 
 ## Cleanup in progress
 
-`docs/module-inventory.md` is the current audit: which modules are genuinely
-duplicated, which only look duplicated because of the client/server split, what
-is dead, and a sketch for the centralised `Info` module.
+`docs/module-inventory.md` — which modules are genuinely duplicated, which only
+look duplicated because of the client/server split, and what is dead.
+
+`docs/organisation-sketches.md` — three ways to lay the tree out, with what each
+costs, and the measurements behind them.
 
 ## Checking the tree
 
@@ -82,3 +84,11 @@ tools/module_inventory.py [keyword]
 Lists modules with their line count and how many files require them. Note that
 attacks and VFX show zero users because the engine resolves them by name rather
 than by `require`.
+
+```sh
+tools/reachability.py ["both"|"client only"|"server only"|"neither"]
+```
+
+Classifies every ReplicatedStorage module by which side's require graph reaches
+it, seeded from each side's entry points. Use it to find server-only code that
+is replicating to clients for no reason.
