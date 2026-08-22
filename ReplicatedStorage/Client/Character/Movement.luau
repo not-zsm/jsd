@@ -105,7 +105,6 @@ function MovementHandler:OnHumanoidLoaded()
 		end
 	end)
 
-	local OriginalJointC0 = self.LuaCharacter.RootJoint.C0
 	local UnflungCFrame = CFrame.identity
 
 	local UnflingTime = os.clock()
@@ -113,7 +112,7 @@ function MovementHandler:OnHumanoidLoaded()
 
 	local PreviousPosition = self.LuaCharacter.RootPart.Position
 
-	self.LuaCharacter.HumanoidJob:Task(RunService.PostSimulation:Connect(function(Delta)
+	self.LuaCharacter.HumanoidJob:Task(RunService.PostSimulation:Connect(function()
 		if not self.LuaCharacter.HumanoidAlive then return end
 
 		local Character : Model = self.LuaCharacter.Model
@@ -185,24 +184,6 @@ function MovementHandler:OnHumanoidLoaded()
 		--	DetectFlingTime = os.clock()
 		--end
 
-		if (RootPart.Anchored or self.LuaCharacter:IsFlyingOrSitting()) then 
-
-			if self.LuaCharacter.RootJoint.C0 ~= OriginalJointC0 then
-				self.LuaCharacter.RootJoint.C0 = self.LuaCharacter.RootJoint.C0:Lerp(OriginalJointC0, Delta * self.LeanSettings.Speed)
-			end
-
-			return 
-		end
-
-		local Direction = self.HumanoidDirection
-		local Momentum = RootPart.CFrame:VectorToObjectSpace(Velocity) * 0.008
-
-		Momentum = Vector3.new(
-			math.clamp(math.abs(Momentum.X), self.LeanSettings.MinMomentum, self.LeanSettings.MaxMomentum), 0, 
-			math.clamp(math.abs(Momentum.Z), self.LeanSettings.MinMomentum, self.LeanSettings.MaxMomentum)
-		)
-
-		self.LuaCharacter.RootJoint.C0 = self.LuaCharacter.RootJoint.C0:Lerp(OriginalJointC0 * CFrame.Angles(-(Direction.Z * Momentum.Z), -(Direction.X * Momentum.X), 0), Delta * self.LeanSettings.Speed)
 	end))
 
 	local function AddHandler(Name : string)
@@ -1039,12 +1020,6 @@ function MovementHandler.new(LuaCharacter)
 	self.RunSpeed = 1.05
 	self.HumanoidSpeed = 1
 
-	self.LeanSettings = {
-		MinMomentum = 0,
-		MaxMomentum = 0.1,
-		Speed = 16
-	}
-	
 	self.IdleJob = Job.new()
 
 	self.HumanoidDirection = Vector3.zero

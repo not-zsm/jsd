@@ -51,6 +51,14 @@ local CONFIG = {
 	SpeedForFullLean = nil,
 	AngularSpeedForFullBank = 6,
 
+	-- a standing humanoid never reads exactly zero: the state solver keeps
+	-- nudging it, and in shiftlock every mouse movement spins the root. Below
+	-- DeadZone the pose is off entirely, and it ramps in over the next
+	-- DeadZoneRamp studs/s so there is no step at the boundary.
+	DeadZone = 1.5,
+	DeadZoneRamp = 2,
+	AngularDeadZone = 0.15,
+
 	-- how much of the torso lean the neck cancels out. 1 = head stays
 	-- level and world-stable, 0 = head rides with the torso.
 	HeadStabilise = 0.85,
@@ -65,8 +73,15 @@ local CONFIG = {
 	-- skip work for characters far from the camera
 	MaxRenderDistance = 300,
 
-	-- update cap. 0 = every frame.
-	TickRate = 1 / 120,
+	-- update cap for everyone else's characters. Your own runs every frame:
+	-- capping it makes the pose land on some frames and not others, which
+	-- reads as jitter on anything above 120Hz.
+	RemoteTickRate = 1 / 30,
+
+	-- radians. Under this the pose is indistinguishable from neutral, so we
+	-- write the base C0 once and stop touching the joints until there is
+	-- something to say again.
+	SettleEpsilon = 1e-4,
 
 	-- flip if your rig's lean comes out backwards
 	Invert = false,
@@ -76,8 +91,6 @@ local CONFIG = {
 -- state
 ---------------------------------------------------------------------
 
-local Yourself = Players.LocalPlayer.Character == Character
-
 -- smoothed scalars, in radians. Cheaper and safer than lerping CFrames,
 -- and it can't produce a NaN quaternion if a velocity spikes.
 local sTorsoYaw, sHeadYaw, sArmYaw = 0, 0, 0
@@ -86,6 +99,7 @@ local sPitch, sRoll = 0, 0
 local sGrounded = 1
 
 local accumulated = 0
+local posed = false
 
 local function attribute(name: string, default: number): number
 	local value = script:GetAttribute(name)
@@ -100,25 +114,62 @@ local function approach(current: number, target: number, alpha: number): number
 	return current + (target - current) * alpha
 end
 
+local function deadZone(value: number, zone: number): number
+	return math.abs(value) < zone and 0 or value
+end
+
+-- anything that means the joints belong to somebody else: a cutscene
+-- anchoring or CFraming the character, a seat, a ragdoll swapping the motors
+-- out. Suspended does not mean "stop updating" — the pose still eases back to
+-- neutral, then hands the joints over.
+local function suspended(): boolean
+	if not RootJoint.Parent or not Neck.Parent then
+		return true
+	end
+	if not RootJoint.Enabled or not Neck.Enabled then
+		return true
+	end
+	if Humanoid.Health <= 0 or Humanoid.Sit or Humanoid.PlatformStand then
+		return true
+	end
+	if HumanoidRootPart.Anchored then
+		return true
+	end
+
+	local camera = workspace.CurrentCamera
+	if camera and (camera.CFrame.Position - HumanoidRootPart.Position).Magnitude > CONFIG.MaxRenderDistance then
+		return true
+	end
+
+	return false
+end
+
+local function settled(): boolean
+	return math.max(
+		math.abs(sTorsoYaw), math.abs(sHeadYaw), math.abs(sArmYaw),
+		math.abs(sRightHipYaw), math.abs(sLeftHipYaw),
+		math.abs(sPitch), math.abs(sRoll)
+	) < CONFIG.SettleEpsilon
+end
+
 ---------------------------------------------------------------------
 -- update
 ---------------------------------------------------------------------
 
 local function UpdateDirectionalMovement(DeltaTime: number)
-	accumulated += DeltaTime
-	if accumulated < CONFIG.TickRate then
-		return
+	local Yourself = Players.LocalPlayer.Character == Character
+	local step = DeltaTime
+
+	if not Yourself then
+		accumulated += DeltaTime
+		if accumulated < CONFIG.RemoteTickRate then
+			return
+		end
+		step = accumulated
+		accumulated = 0
 	end
 
-	-- use the ACCUMULATED time, not the frame delta, or the smoothing
-	-- runs slow whenever the tick cap actually skips a frame
-	local step = math.min(accumulated, 0.25)
-	accumulated = 0
-
-	local camera = workspace.CurrentCamera
-	if camera and (camera.CFrame.Position - HumanoidRootPart.Position).Magnitude > CONFIG.MaxRenderDistance then
-		return
-	end
+	step = math.min(step, 0.25)
 
 	local alpha = 1 - math.exp(-CONFIG.Smoothing * step)
 
@@ -128,6 +179,7 @@ local function UpdateDirectionalMovement(DeltaTime: number)
 	local LegMulti = attribute("LegMultiplier", 1)
 
 	local rootCFrame = HumanoidRootPart.CFrame
+	local off = suspended()
 
 	----------------------------------------------------------------
 	-- signal 1: intent (drives yaw)
@@ -153,7 +205,7 @@ local function UpdateDirectionalMovement(DeltaTime: number)
 		end
 	end
 
-	if not isFinite(moveDirection) or moveDirection.Magnitude < 0.01 or Humanoid.WalkSpeed < info.walkSpeed then
+	if off or not isFinite(moveDirection) or moveDirection.Magnitude < 0.01 or Humanoid.WalkSpeed < info.walkSpeed then
 		moveDirection = Vector3.zero
 	end
 
@@ -168,19 +220,30 @@ local function UpdateDirectionalMovement(DeltaTime: number)
 	----------------------------------------------------------------
 
 	local velocity = rootCFrame:VectorToObjectSpace(HumanoidRootPart.AssemblyLinearVelocity)
-	if not isFinite(velocity) then
+	if off or not isFinite(velocity) then
 		velocity = Vector3.zero
 	end
 
-	local reference = CONFIG.SpeedForFullLean or math.max(Humanoid.WalkSpeed, 1)
-	local forward = math.clamp(-velocity.Z / reference, -1, 1) -- + running forward
-	local strafe = math.clamp(velocity.X / reference, -1, 1) -- + moving right
+	-- never divide by a slowed WalkSpeed: a stun that drops it to 1 would
+	-- turn any leftover drift into a full-tilt lean
+	local reference = CONFIG.SpeedForFullLean or math.max(Humanoid.WalkSpeed, info.walkSpeed)
+
+	local planarSpeed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+	local intensity = math.clamp((planarSpeed - CONFIG.DeadZone) / CONFIG.DeadZoneRamp, 0, 1)
+
+	local forward = math.clamp(-velocity.Z / reference, -1, 1) * intensity -- + running forward
+	local strafe = math.clamp(velocity.X / reference, -1, 1) * intensity -- + moving right
 
 	local angular = HumanoidRootPart.AssemblyAngularVelocity.Y
-	if angular ~= angular then
+	if off or angular ~= angular then
 		angular = 0
 	end
-	local spin = math.clamp(angular / CONFIG.AngularSpeedForFullBank, -1, 1) -- + turning left
+	angular = deadZone(angular, CONFIG.AngularDeadZone)
+
+	-- banking is a running move. Standing still and looking around in
+	-- shiftlock spins the root every frame the mouse moves, and without
+	-- this the torso rocks along with it.
+	local spin = math.clamp(angular / CONFIG.AngularSpeedForFullBank, -1, 1) * intensity -- + turning left
 
 	----------------------------------------------------------------
 	-- targets
@@ -216,12 +279,35 @@ local function UpdateDirectionalMovement(DeltaTime: number)
 	-- apply
 	----------------------------------------------------------------
 
+	-- the exponential never actually reaches zero, so without this the
+	-- script would hold the joints at a fraction of a degree forever and
+	-- keep overwriting them every frame
+	if settled() then
+		if not posed then
+			return
+		end
+
+		sTorsoYaw, sHeadYaw, sArmYaw = 0, 0, 0
+		sRightHipYaw, sLeftHipYaw = 0, 0
+		sPitch, sRoll = 0, 0
+		posed = false
+
+		RootJoint.C0 = RootJointC0
+		Neck.C0 = NeckC0
+		RightShoulder.C0 = RightShoulderC0
+		LeftShoulder.C0 = LeftShoulderC0
+		RightHip.C0 = RightHipC0
+		LeftHip.C0 = LeftHipC0
+
+		return
+	end
+
+	posed = true
+
 	-- the neck shares the RootJoint's rotated basis, so negating the same
 	-- three components is an exact inverse: the head stays level and
 	-- pointed forward while the torso does whatever it likes
 	local stabilise = CONFIG.HeadStabilise * HeadMulti
-
-	task.synchronize()
 
 	RootJoint.C0 = RootJointC0 * CFrame.Angles(sPitch, sRoll, sTorsoYaw)
 	Neck.C0 = NeckC0 * CFrame.Angles(-sPitch * stabilise, -sRoll * stabilise, sHeadYaw)
@@ -231,4 +317,4 @@ local function UpdateDirectionalMovement(DeltaTime: number)
 	LeftHip.C0 = LeftHipC0 * CFrame.Angles(0, sLeftHipYaw, 0)
 end
 
-RunService.PreRender:ConnectParallel(UpdateDirectionalMovement)
+RunService.PreRender:Connect(UpdateDirectionalMovement)

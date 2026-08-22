@@ -6,26 +6,11 @@ data) by md5. Those entries live outside the subtree, so a graft that copies
 only instances produces dangling references and Studio refuses to open the
 file: "Unknown referenced shared string md5 ...".
 """
-import argparse, copy, os, sys, uuid
+import argparse, copy, json, os, sys, uuid
 import lxml.etree as ET
 
 SCRIPTS = {"Script", "LocalScript", "ModuleScript"}
 SKIP_DIRS = (".git", "tools", "studio", "docs")
-
-GRAFTS = [
- (("ReplicatedStorage","Modules","Player","Replication","VFX","Invincible"),
-  ("ReplicatedStorage","Client","Replication","VFX")),
- (("ServerScriptService","Scripts","Game","Modules","Player","Character","Combat","Attacks","List","Invincible"),
-  ("ServerStorage","serverCombat","Attacks","List")),
- (("ServerScriptService","Scripts","Game","Modules","Player","Character","Combat","Characters","Invincible"),
-  ("ServerStorage","serverCombat","Characters")),
- (("ReplicatedStorage","Animations","Attacks","Invincible"),
-  ("ReplicatedStorage","Animations","Attacks")),
- (("ReplicatedStorage","Animations","Attacks","Global","Ultimate","Invincible"),
-  ("ReplicatedStorage","Animations","Attacks","Global","Ultimate")),
- (("ReplicatedStorage","Animations","Attacks","Global","Dash","WallCombo","Invincible"),
-  ("ReplicatedStorage","Animations","Attacks","Global","Dash","WallCombo")),
-]
 
 
 def name_of(item):
@@ -120,28 +105,50 @@ def validate(root, label):
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--old", required=True, help="place to graft subtrees from")
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--source", action="append", default=[], metavar="NAME=PATH",
+                    help="a place to graft subtrees out of; repeatable")
+    ap.add_argument("--grafts", required=True,
+                    help="JSON list of {from, src, dst}, paths as dotted strings")
     ap.add_argument("--new", required=True, help="place to graft into")
     ap.add_argument("--out", required=True)
     ap.add_argument("--repo", default="/home/user/jsd")
     args = ap.parse_args()
 
+    manifest = json.load(open(args.grafts, encoding="utf-8"))
+    wanted = {entry["from"] for entry in manifest}
+
     parser = ET.XMLParser(strip_cdata=False, huge_tree=True)
-    old_root = ET.parse(args.old, parser).getroot()
     new_tree = ET.parse(args.new, parser)
     new_root = new_tree.getroot()
-
-    old_shared, _ = shared_table(old_root)
     new_shared, new_shared_el = shared_table(new_root)
-    old_index, new_index = index(old_root), index(new_root)
+    new_index = index(new_root)
 
-    print("grafting:")
+    sources = {}
+    for spec in args.source:
+        name, _, path = spec.partition("=")
+        if name not in wanted:
+            continue                      # don't parse a place nothing needs
+        root = ET.parse(path, parser).getroot()
+        shared, _ = shared_table(root)
+        sources[name] = (index(root), shared)
+        print(f"loaded source {name} from {path}")
+
+    missing = wanted - set(sources)
+    if missing:
+        sys.exit(f"no --source given for: {', '.join(sorted(missing))}")
+
+    print("\ngrafting:")
     grafted = copied_blobs = 0
-    for src, dst in GRAFTS:
+    for entry in manifest:
+        src = tuple(entry["src"].split("."))
+        dst = tuple(entry["dst"].split("."))
+        old_index, old_shared = sources[entry["from"]]
+
         node, parent = old_index.get(src), new_index.get(dst)
         if node is None:
-            print(f"  [missing in old] {'.'.join(src)}"); continue
+            print(f"  [missing in {entry['from']}] {'.'.join(src)}"); continue
         if parent is None:
             print(f"  [no destination] {'.'.join(dst)}"); continue
         if new_index.get(dst + (src[-1],)) is not None:
@@ -152,15 +159,16 @@ def main():
         for key in referenced_md5s(clone):
             if key in new_shared:
                 continue
-            entry = old_shared.get(key)
-            if entry is None:
-                print(f"  [!] {'.'.join(src)} references md5 {key}, absent from old table")
+            blob = old_shared.get(key)
+            if blob is None:
+                print(f"  [!] {'.'.join(src)} references md5 {key}, absent from its table")
                 continue
-            carried = copy.deepcopy(entry)
+            carried = copy.deepcopy(blob)
             new_shared_el.append(carried)
             new_shared[key] = carried
             copied_blobs += 1
         parent.append(clone)
+        new_index = index(new_root)       # a later graft may target this subtree
         size = len(clone.findall(".//Item")) + 1
         print(f"  grafted {size:>5} instances -> {'.'.join(dst + (src[-1],))}")
         grafted += 1
