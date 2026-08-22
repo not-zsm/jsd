@@ -27,7 +27,7 @@ local CurrentCamera = workspace.CurrentCamera
 ----------------------------------------------------------------------------------
 
 function LuaCharacter:_Init()
-	self.Combat = require( script.Combat ).new(self)
+	self.Combat = require( ReplicatedStorage.clientCombat ).new(self)
 	self.Combat:_Init()
 	
 	self.Movement = require( script.Movement ).new(self)

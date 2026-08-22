@@ -1,5 +1,6 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
+local ServerStorage = game:GetService("ServerStorage")
+local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 return {
 	Template = nil;

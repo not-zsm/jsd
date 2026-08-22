@@ -1,10 +1,11 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
-local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
+local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 local Minigame = require( script.Minigame )
 local NPCSupport = require( script.NPCSupport )

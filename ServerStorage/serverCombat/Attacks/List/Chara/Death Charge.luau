@@ -2,10 +2,11 @@
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
-local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
+local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 local Attack = {}
 Attack.__index = Attack

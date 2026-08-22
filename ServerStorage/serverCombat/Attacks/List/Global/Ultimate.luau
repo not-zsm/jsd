@@ -2,6 +2,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
+local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
@@ -18,7 +19,7 @@ local NumberStack = require( ReplicatedStorage.Shared.Utilities.NumberStack )
 local Attack = {}
 Attack.__index = Attack
 
-local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
+local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 setmetatable(Attack, BaseAttack)
 

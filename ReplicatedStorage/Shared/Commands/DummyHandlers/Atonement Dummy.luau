@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService = game:GetService("RunService")
+local ServerStorage = game:GetService("ServerStorage")
 
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 local AI = require( ServerScriptService.Modules.AI )
@@ -11,7 +12,7 @@ return function(LuaPlayer, NPCJob)
 	local LuaCharacter = LuaPlayer.Character
 	local Combat = LuaCharacter.Combat
 	
-	local Knife = LuaCharacter.Job:Task(ServerScriptService.Modules.Player.Character.Combat.Characters.Chara.Knife:Clone())
+	local Knife = LuaCharacter.Job:Task(ServerStorage.serverCombat.Characters.Chara.Knife:Clone())
 	Knife.Parent = LuaCharacter.Model
 	Knife.Weld.Part0 = LuaCharacter.RightArm
 

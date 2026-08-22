@@ -35,7 +35,7 @@ if RunService:IsServer() then
 	end)
 
 	-- Fetch Moves
-	local CharacterList = ServerScriptService.Modules.Player.Character.Combat.Attacks.List
+	local CharacterList = ServerStorage.serverCombat.Attacks.List
 
 	for _, Character in pairs(CharacterList:GetChildren()) do
 		if Character:IsA("Configuration") then

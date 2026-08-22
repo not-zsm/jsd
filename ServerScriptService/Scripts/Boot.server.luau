@@ -7,21 +7,26 @@ local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 
-shared.TesterPlaceId = 95576587700882
-shared.Group = 14636287
+local info = require(ReplicatedStorage.info)
 
+-- shared.* is still read in about twenty places. It mirrors info rather than
+-- holding its own values, so there is one source and the call sites can migrate
+-- to require(info) whenever they are next touched.
+shared.info = info
+
+shared.TesterPlaceId = info.placeIds.test
+shared.Group = info.groupID
 shared.PlaceIds = {
-	Main = 18519254033,
-	MainVC = 131330652857284,
-	Test = 95576587700882,
-	TestVC = 82685679507656,
+	Main = info.placeIds.main,
+	MainVC = info.placeIds.mainVC,
+	Test = info.placeIds.test,
+	TestVC = info.placeIds.testVC,
 }
 
-shared.IsTestPlace = (game.PlaceId == shared.PlaceIds.Test or game.PlaceId == shared.PlaceIds.TestVC)
-shared.IsVCPlace = (game.PlaceId == shared.PlaceIds.TestVC or game.PlaceId == shared.PlaceIds.MainVC)
+shared.IsTestPlace = info.isTestPlace
+shared.IsVCPlace = info.isVCPlace
 
--- Ranked was removed along with matchmaking. These stay defined because combat
--- and movement code still guards on them; both now read false everywhere.
+-- Ranked went with matchmaking; combat and movement still guard on these.
 shared.IsRankedPlace = false
 shared.IsRankedLobby = false
 

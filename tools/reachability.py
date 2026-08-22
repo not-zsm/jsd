@@ -138,8 +138,8 @@ def required_paths(text, here=None):
 DYNAMIC = {
     "ReplicatedStorage/Client/Replication/VFX": "client",
     "ReplicatedStorage/Client/Replication/Maps": "client",
-    "ServerScriptService/Modules/Player/Character/Combat/Attacks/List": "server",
-    "ServerScriptService/Modules/Player/Character/Combat/Characters": "server",
+    "ServerStorage/serverCombat/Attacks/List": "server",
+    "ServerStorage/serverCombat/Characters": "server",
 }
 
 

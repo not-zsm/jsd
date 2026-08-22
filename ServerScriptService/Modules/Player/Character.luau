@@ -29,7 +29,7 @@ local CommandHandler = require( ServerScriptService.Modules.CommandHandler )
 local LuaCharacter = {}
 LuaCharacter.__index = LuaCharacter
 
-local Combat = require( script.Combat )
+local Combat = require( ServerStorage.serverCombat )
 local Emotes = require( script.Emotes )
 local Title = require( script.Title )
 local Items = require( script.Items )

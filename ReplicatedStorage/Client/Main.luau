@@ -21,6 +21,7 @@
 --]]
 
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Job = require(script.Parent.Parent.Shared.Utilities.Job)
 

@@ -10,6 +10,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local DataStoreService = game:GetService("DataStoreService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
+local ServerStorage = game:GetService("ServerStorage")
 
 local AllTimeLeaderboard = DataStoreService:GetOrderedDataStore("AllTimeRobuxLeaderboard")
 local MonthlyLeaderboard = MemoryStoreService:GetSortedMap("MonthlyRobuxLeaderboard")
@@ -22,7 +23,7 @@ local AbbreviateTime = require("./LeaderboardHandler/LeaderboardModule/Abbreviat
 local AbbreviateNumber = require("./LeaderboardHandler/LeaderboardModule/Abbreviate Number")
 local LuaPlayerList = require("./LuaPlayerList")
 
-local CharactersData = ServerScriptService.Modules.Player.Character.Combat
+local CharactersData = ServerStorage.serverCombat
 
 local DonationRemote = ReplicatedStorage.Remotes.RequestDonation
 

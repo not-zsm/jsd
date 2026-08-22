@@ -1,7 +1,8 @@
 local TextChatService = game:GetService("TextChatService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
-local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
+local ServerStorage = game:GetService("ServerStorage")
+local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 local Settings = {
 	SpeedDecrease = 10

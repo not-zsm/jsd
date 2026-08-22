@@ -2,6 +2,7 @@
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 
 local Remotes = ReplicatedStorage.Remotes
 local UIRemotes = Remotes.Combat.UI
@@ -9,7 +10,7 @@ local UIRemotes = Remotes.Combat.UI
 ----------------------------------------------------------------------------------
 
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
+local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 local Attack = {}
 Attack.__index = Attack
