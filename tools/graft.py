@@ -6,7 +6,7 @@ data) by md5. Those entries live outside the subtree, so a graft that copies
 only instances produces dangling references and Studio refuses to open the
 file: "Unknown referenced shared string md5 ...".
 """
-import argparse, copy, json, os, sys, uuid
+import argparse, collections, copy, json, os, sys, uuid
 import lxml.etree as ET
 
 SCRIPTS = {"Script", "LocalScript", "ModuleScript"}
@@ -60,8 +60,36 @@ def referenced_md5s(node):
 
 
 def refresh_referents(item):
+    """Give every instance in the subtree a fresh referent, and repoint the
+    <Ref> properties that named the old ones.
+
+    Referents have to be unique within a place, so a graft has to regenerate
+    them -- but PrimaryPart, Part0/Part1, Attachment0/Attachment1 and every
+    ObjectValue name an instance by its referent. Renumbering without rewriting
+    those leaves a Motor6D joined to nothing and a camera rig with no attach
+    part, silently: Studio opens the place and the effect just does not work.
+    """
+    mapping = {}
     for node in item.iter("Item"):
-        node.set("referent", "RBX" + uuid.uuid4().hex)
+        old = node.get("referent")
+        new = "RBX" + uuid.uuid4().hex
+        if old:
+            mapping[old] = new
+        node.set("referent", new)
+
+    outside = []
+    for el in item.iter("Ref"):
+        value = (el.text or "").strip()
+        if not value or value == "null":
+            continue
+        if value in mapping:
+            el.text = mapping[value]
+        else:
+            # names something the graft is not copying; nothing in the
+            # destination can satisfy it
+            outside.append(el.get("name"))
+            el.text = "null"
+    return outside
 
 
 def repo_tree(repo):
@@ -86,22 +114,52 @@ def repo_tree(repo):
 
 
 def validate(root, label):
+    ok = True
+
     table, _ = shared_table(root)
-    missing = {}
+    missing = collections.Counter()
     for item in root.findall("Item"):
         for el in item.iter("SharedString"):
             if el.get("name") is None or not el.text:
                 continue
             key = el.text.strip()
             if key not in table:
-                missing[key] = missing.get(key, 0) + 1
+                missing[key] += 1
     if missing:
+        ok = False
         print(f"  {label}: {len(missing)} dangling shared strings")
-        for key, count in sorted(missing.items(), key=lambda kv: -kv[1])[:10]:
+        for key, count in missing.most_common(10):
             print(f"    {key}  x{count}")
-        return False
-    print(f"  {label}: all shared-string references resolve ({len(table)} entries)")
-    return True
+    else:
+        print(f"  {label}: all shared-string references resolve ({len(table)} entries)")
+
+    referents = {i.get("referent") for i in root.iter("Item")}
+    dangling = collections.Counter()
+    total = 0
+    for el in root.iter("Ref"):
+        value = (el.text or "").strip()
+        if not value or value == "null":
+            continue
+        total += 1
+        if value not in referents:
+            dangling[el.get("name")] += 1
+    if dangling:
+        ok = False
+        print(f"  {label}: {sum(dangling.values())} dangling instance refs")
+        for name, count in dangling.most_common(10):
+            print(f"    {name}  x{count}")
+    else:
+        print(f"  {label}: all {total} instance refs resolve")
+
+    duplicates = collections.Counter(i.get("referent") for i in root.iter("Item"))
+    clashes = [r for r, n in duplicates.items() if n > 1]
+    if clashes:
+        ok = False
+        print(f"  {label}: {len(clashes)} duplicate referents")
+    else:
+        print(f"  {label}: all {len(duplicates)} referents unique")
+
+    return ok
 
 
 def main():
@@ -155,7 +213,11 @@ def main():
             print(f"  [already present] {'.'.join(dst + (src[-1],))}"); continue
 
         clone = copy.deepcopy(node)
-        refresh_referents(clone)          # referents must be unique within a place
+        outside = refresh_referents(clone)
+        if outside:
+            counts = collections.Counter(outside)
+            print(f"  [!] {'.'.join(src)}: {len(outside)} refs point outside the "
+                  f"subtree and were cleared ({dict(counts)})")
         for key in referenced_md5s(clone):
             if key in new_shared:
                 continue

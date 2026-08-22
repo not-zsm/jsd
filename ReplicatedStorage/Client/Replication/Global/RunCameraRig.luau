@@ -127,8 +127,12 @@ return function(BoundTo : BasePart, Rig : Model, Offset : CFrame, Settings : {},
 				return Clean()
 			end
 			
+			-- the camera is already Scriptable here, so falling through to
+			-- Attach.CFrame throws every frame and leaves the player stuck
+			-- looking at nothing
 			if (Attach == nil) then
-				warn("BOI THERES NO ATTACH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				warn(`RunCameraRig: {Rig:GetFullName()} has no AttachTo value and no part named "camera"`)
+				return Clean()
 			end
 			
 			if BoundTo then
