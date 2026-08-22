@@ -1,3 +1,5 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local RockHandler = require( ReplicatedStorage.Client.Replication.Global.RockHandler )
 
 return {

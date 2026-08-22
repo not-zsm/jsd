@@ -34,6 +34,8 @@ local Passives = {
 	end
 };
 
+-- Combat runs these as `task.spawn(fn, self)`, so store the function, not a
+-- call to it. `Passives.Bugo()` runs at require time with no self.
 return {
-	--[1371497771] = {Passives.Bugo()};
+	--[1371497771] = { Passives.Bugo },
 }

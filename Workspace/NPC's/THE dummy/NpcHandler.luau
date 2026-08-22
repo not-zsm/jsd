@@ -50,38 +50,38 @@ local LuaPlayerList = require(ServerScriptService.Modules.LuaPlayerList)
 local JobHandler = require(ReplicatedStorage.Shared.Utilities.Job)
 
 local TextForPeople = {
-	[7207821215] = {
-		"swrerm...",
+	[1371497771] = {
+		"dude go code the game",
+		'fat ahh fingers bro',
+		'ANYTHING but revising',
+		'job?',
+		'son this combo is NOT good',
+		'yeah bro ur NOT good at this game',
 	},
 	
-	[2603403653] = {
-		"Bugo? Pugo? I'm a big fan. but that hurt.",
-		"Ooowwieeeee... Steooppp...."
-	},
-	
-	[141123572] = {
-		"Jimpee, you may be the owner of MY game, but hitting me will not solve anything.",
-		"Jimpee, mlgxpro will come get you next.",
-		"hi jimpee my goat."
-	},
-
-	
-	[341579096] = {
-		"bro tough get off me you faker",
-		"YOU BETRAYED US TOUGH. YOU LOSER.",
-		"How about you go climb a tree instead of hitting me tough. "
-	},
-	
-	[265094988] = {
-		"GET YO HANDS OFF ME THUNDER."
+	[2782522665] = {
+		"your breath GENUINELY reeks",
+		'go animate bro',
+		"bet you're punching me instead of fighting zsm",
+		'you think you the goat huh? you are NOT',
+		'yeah ggs ez dubs ur NOT good',
+		'that DONT work.',
+		'hit me again. See what happens',
+		'shte te nesilya',
+		'im calling dara on you',
 	},
 }
 
 local RandomText = {
-	"I'll tell jimpee on you if you don't stop hitting me.",
-	"That's it, the update is delayed by another month.",
-	".... . / .. ... / .- .-.. .. ...- . --..-- / .... . / .. ... / .- .-- .- -.- .",
-	"I am always watching."
+	'leave me tf alone',
+	'son.',
+	'i WILL counter you',
+	"tch. That DONT hurt",
+	'g-get off me... baka...',
+	'YEEEEOOOWWCH',
+	'that tickles',
+	'GREEN combo btw',
+	'oh... thats me? Tuff.',
 }
 
 return function(LuaPlayer)
@@ -111,8 +111,8 @@ return function(LuaPlayer)
 
 		local VictimCombat = VictimLuaCharacter.Combat
 
-		local UserAnimation : AnimationTrack = LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Assets.Animations.Attacks.Universal.DummyCounter.User)
-		local VictimAnimation : AnimationTrack = VictimLuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Assets.Animations.Attacks.Universal.DummyCounter.Victim)
+		local UserAnimation : AnimationTrack = LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Attacks.Universal.DummyCounter.User)
+		local VictimAnimation : AnimationTrack = VictimLuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Attacks.Universal.DummyCounter.Victim)
 
 		UserAnimation:Play()
 		VictimAnimation:Play()
@@ -169,7 +169,7 @@ return function(LuaPlayer)
 		if (State == "Stunned") and Value then
 			HitCount += 1
 
-			if HitCount >= math.random(10, 25) then
+			if HitCount >= math.random(1, 10) then
 				if Combat.LastHitBy and Combat.LastHitBy.UserId and TextForPeople[Combat.LastHitBy.UserId] then
 					local TextTable = TextForPeople[Combat.LastHitBy.UserId]
 					Chat:Chat(LuaCharacter.Head, TextTable[math.random(1, #TextTable)])
@@ -180,7 +180,7 @@ return function(LuaPlayer)
 				HitCount = 0
 			end
 			
-			if (LuaCharacter.HumanoidAlive and math.random(1, 500) == 1) then
+			if (LuaCharacter.HumanoidAlive and math.random(1, 1000) == 1) then
 				Counter()
 			end
 		end

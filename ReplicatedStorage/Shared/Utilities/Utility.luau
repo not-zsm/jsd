@@ -95,7 +95,7 @@ if Map then
 	local MapModel = Map:FindFirstChild("Model")
 	local Props = MapModel and MapModel:FindFirstChild("Props")
 
-	if Props then
+	if Props and Props.Trees then --TODO: figure out what this is genuinely meant to do, and remove it as trees dont exist rn
 		task.spawn(function()
 			for _, Item in ipairs(Props.Trees:GetChildren()) do
 				if Item.Name == "Tree" then continue end

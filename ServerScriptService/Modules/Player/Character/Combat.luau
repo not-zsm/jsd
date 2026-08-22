@@ -3384,11 +3384,9 @@ function Combat:TeleportForward(DistanceToCover : number,  Callback : () -> ())
 	Params.FilterDescendantsInstances = {}
 
 	local Terrain = MapModel:FindFirstChild("Terrain")
-	local BorderTerrain = MapModel:FindFirstChild("BorderTerrain")
-	local Locations = MapModel:FindFirstChild("Locations")
 	local Props = MapModel:FindFirstChild("Props")
 
-	for _, Item in {Terrain, BorderTerrain, Locations, Props} do
+	for _, Item in {Terrain, Locations, Props} do
 		if Item then
 			Params:AddToFilter(Item)
 		end
