@@ -136,10 +136,10 @@ def required_paths(text, here=None):
 #   Replication:ConnectToVFXRemotes walks VFX by a "Folder/Name" string.
 #   Combat:GetAttackModule / GetCharacterModule scan their folders by name.
 DYNAMIC = {
-    "ReplicatedStorage/Modules/Player/Replication/VFX": "client",
-    "ReplicatedStorage/Modules/Player/Replication/Maps": "client",
-    "ServerScriptService/Scripts/Game/Modules/Player/Character/Combat/Attacks/List": "server",
-    "ServerScriptService/Scripts/Game/Modules/Player/Character/Combat/Characters": "server",
+    "ReplicatedStorage/Client/Replication/VFX": "client",
+    "ReplicatedStorage/Client/Replication/Maps": "client",
+    "ServerScriptService/Modules/Player/Character/Combat/Attacks/List": "server",
+    "ServerScriptService/Modules/Player/Character/Combat/Characters": "server",
 }
 
 
