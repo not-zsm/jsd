@@ -60,16 +60,16 @@ BaseAttack dispatches, not a config addition.
 | From jjk | Lines | Effort | Notes |
 | --- | --- | --- | --- |
 | `footsteps.client` | 261 | low | self-contained, reads surface material |
-| `stuff/lean.client` | — | low | leans the rig into movement direction |
+| `stuff/lean.client` | 233 | low | leans the rig into movement direction |
 | `settingsHelper/default/cameraFollowHead` | — | low | jsd has its own; replace |
 | `settingsHelper/default/shiftlockSettings` | — | low | as above |
-| `effect/tekrinnDialogue` | 534 | medium | jsd has a TekrinnDialogue already; compare before replacing |
+| `effect/tekrinnDialogue` | 534 | medium | jsd's own is 263 lines; compare before replacing |
 | `info/` + `movesetInfo` | 246 | medium | the shape is easy, deciding what moves into it is not |
 | `mainClient` | 1325 | high | jsd's MainClient is a system runner; jjk's owns menus and UI too |
 | `charSelectHelper` | — | medium | wants the Icon/DisplayName work above first |
 
 Lean and footsteps replace the directional animation-based movement, which means
-touching `Client/Character/Movement` — the largest client module. Do them
+touching `Client/Character/Movement`, at 1,058 lines the largest client module. Do them
 together, not separately.
 
 ## Re-adding Invincible and Kratos
@@ -128,8 +128,8 @@ jsd is PascalCase throughout — every module, method and field. jjk is camelCas
 Mixing them is worse than either.
 
 A rename is mechanical for locals and module names but not for the public
-surface: `Combat:Afflict`, `Attack:Activate`, `self.LuaPlayer`, every field the
-character definitions and 138 attack modules read. That is a whole-tree rewrite
+surface: `Combat:Afflict`, `Attack:Activate`, `self.LuaPlayer`, and every field
+the character definitions and the 20 attack modules read. That is a whole-tree rewrite
 with the same tooling as the restructure, verified the same way.
 
 Worth doing as its own pass, once the structure has stopped moving. Doing it
