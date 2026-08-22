@@ -4,7 +4,7 @@ local Players           = game:GetService("Players")
 
 local Session  = require(script.Session)
 local Event    = ReplicatedStorage.PlayerRemotes.Atonement:WaitForChild("Main")
-local EventService = require(ReplicatedStorage.Modules.Shared.Utilities.EventService)
+local EventService = require(ReplicatedStorage.Shared.Utilities.EventService)
 
 --== Module ==--
 local Module = {}

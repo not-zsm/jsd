@@ -12,8 +12,8 @@ local Webhook = require( script.Webhook )
 local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
 local Data = require( ServerScriptService.Modules.Player.Character.Emotes.Data )
 
-local Gamepasses = require( ReplicatedStorage.Modules.Shared.Game.Gamepasses )
-local HasGamepassOffline = require( ReplicatedStorage.Modules.Shared.Game.Gamepasses.HasGamepassOffline )
+local Gamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses )
+local HasGamepassOffline = require( ReplicatedStorage.Shared.Game.Gamepasses.HasGamepassOffline )
 local RemoteAntiSpam = require( ServerScriptService.Modules.Utility.RemoteRateLimiter )
 
 local Products = require( script.Products )

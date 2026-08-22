@@ -6,9 +6,9 @@ local Assets = ReplicatedStorage.Projectiles.Assets.Projectiles;
 
 ---------------------------------------------------------
 
-local AenoirEmit = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility.AenoirEmit )
-local AenoirUtil = require( ReplicatedStorage.Modules.Shared.Utilities.Utility.AenoirUtil )
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
+local AenoirEmit = require( ReplicatedStorage.Client.Replication.EffectUtility.AenoirEmit )
+local AenoirUtil = require( ReplicatedStorage.Shared.Utilities.Utility.AenoirUtil )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 local Signal = require( ReplicatedStorage.Packages.Signal )
 
 ---------------------------------------------------------

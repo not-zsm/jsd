@@ -5,7 +5,7 @@ local RunService = game:GetService("RunService")
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 local Minigame = require( script.Minigame )
 local NPCSupport = require( script.NPCSupport )
 local Unstuck = require( script.Unstuck )

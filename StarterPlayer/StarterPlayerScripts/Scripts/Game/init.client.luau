@@ -12,8 +12,7 @@ end
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Modules = ReplicatedStorage:WaitForChild("Modules", 100)
-local Player = Modules:WaitForChild("Player", 100)
+local Player = ReplicatedStorage.Client
 
 local MovementReplicator = ReplicatedStorage:WaitForChild("MovementReplicator", 100)
 local ClientReplicator = MovementReplicator:WaitForChild("ClientReplicator", 100)

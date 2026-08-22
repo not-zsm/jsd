@@ -7,8 +7,7 @@ local Players = game:GetService("Players")
 
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
-local Shared = Modules.Shared
+local Shared = ReplicatedStorage.Shared
 
 local SharedUtilities = Shared.Utilities
 
@@ -19,10 +18,10 @@ local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
 local Destruction = require( ServerScriptService.Modules.Destruction )
 local HavocHandler = require( ServerScriptService.Modules.HavocHandler )
 
-local Box = require( ReplicatedStorage.Modules.Shared.Game.Hitbox.Type.Box )
-local Sphere = require( ReplicatedStorage.Modules.Shared.Game.Hitbox.Type.Sphere )
+local Box = require( ReplicatedStorage.Shared.Game.Hitbox.Type.Box )
+local Sphere = require( ReplicatedStorage.Shared.Game.Hitbox.Type.Sphere )
 
-local EventService = require( ReplicatedStorage.Modules.Shared.Utilities.EventService )
+local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
 
 local Hitbox = {}
 Hitbox.__index = Hitbox

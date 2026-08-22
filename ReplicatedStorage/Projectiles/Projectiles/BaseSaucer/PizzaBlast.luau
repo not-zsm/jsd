@@ -8,8 +8,8 @@ local Assets = ReplicatedStorage.Projectiles.Assets.Projectiles;
 
 ---------------------------------------------------------
 
-local AenoirEmit = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility.AenoirEmit )
-local AenoirUtil = require( ReplicatedStorage.Modules.Shared.Utilities.Utility.AenoirUtil )
+local AenoirEmit = require( ReplicatedStorage.Client.Replication.EffectUtility.AenoirEmit )
+local AenoirUtil = require( ReplicatedStorage.Shared.Utilities.Utility.AenoirUtil )
 local BaseSaucer = require( script.Parent );
 
 ---------------------------------------------------------

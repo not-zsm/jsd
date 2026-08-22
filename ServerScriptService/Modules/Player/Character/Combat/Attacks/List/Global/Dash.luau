@@ -5,12 +5,11 @@ local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
 local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = Modules.Shared
+local Shared = ReplicatedStorage.Shared
 local SharedUtilities = Shared.Utilities
 
 local Utility = require( SharedUtilities.Utility )

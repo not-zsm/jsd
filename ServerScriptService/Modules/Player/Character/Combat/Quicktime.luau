@@ -1,8 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RemoteHandler = ReplicatedStorage.Remotes.CreateQT
 
-local EventService = require(ReplicatedStorage.Modules.Shared.Utilities.EventService)
-local Job = require(ReplicatedStorage.Modules.Shared.Utilities.Job)
+local EventService = require(ReplicatedStorage.Shared.Utilities.EventService)
+local Job = require(ReplicatedStorage.Shared.Utilities.Job)
 
 local QuicktimeHandler = {}
 QuicktimeHandler.__index = QuicktimeHandler

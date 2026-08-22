@@ -4,8 +4,7 @@ local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
-local Shared = Modules.Shared
+local Shared = ReplicatedStorage.Shared
 
 local Utility = require( Shared.Utilities.Utility )
 local EventService = require( Shared.Utilities.EventService )

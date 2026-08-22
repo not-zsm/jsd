@@ -1,13 +1,13 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
-local EffectUtility = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
 
 --local Ids = {
 --	7207821215, 85042395, 150522417, 141123572
 --}
 
-local Whitelist = require( ReplicatedStorage.Modules.Shared.Game.Whitelist )
+local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
 
 local Assets = ReplicatedStorage.Effects["Eye Of Rah"]
 

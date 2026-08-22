@@ -2,7 +2,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Whitelist = require( ReplicatedStorage.Modules.Shared.Game.Whitelist )
+local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
 
 return {
 	UsingAttacks = {

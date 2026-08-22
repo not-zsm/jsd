@@ -2,9 +2,9 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
+local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
 local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
@@ -13,10 +13,10 @@ local HotbarRemotes = Remotes.Combat.UI.Hotbar
 
 local AttackAnimations = ReplicatedStorage.Animations.Attacks
 
-local Shared = Modules.Shared
+local Shared = ReplicatedStorage.Shared
 local SharedUtilities = Shared.Utilities
 
-local Preloading = require( ReplicatedStorage.Modules.Preloading )
+local Preloading = require( ServerStorage.Modules.Preloading )
 local AnimationProxy = require( "../AnimationProxy" );
 
 local EventService = require( SharedUtilities.EventService )

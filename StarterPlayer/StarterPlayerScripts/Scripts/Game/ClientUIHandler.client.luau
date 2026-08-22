@@ -10,8 +10,8 @@ MatchmakingScreen.Enabled = true
 
 local Status = MatchmakingScreen:WaitForChild("Status")
 
-local Functions = require(ReplicatedStorage.Modules:WaitForChild("QueueFunctions"))
-local HitboxBox = require(ReplicatedStorage.Modules.Shared.Game.Hitbox.Type.Box)
+local Functions = require(ReplicatedStorage.Shared.QueueFunctions)
+local HitboxBox = require(ReplicatedStorage.Shared.Game.Hitbox.Type.Box)
 
 local MatchmakingElo = 0
 local ZoneSessionId = 0

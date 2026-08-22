@@ -7,8 +7,8 @@ local RunService = game:GetService("RunService")
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
-local VelocityUtil = require( ReplicatedStorage.Modules.Shared.Game.Velocity.VelocityUtil )
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
+local VelocityUtil = require( ReplicatedStorage.Shared.Game.Velocity.VelocityUtil )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 
 local Attack = {}
 Attack.__index = Attack

@@ -5,15 +5,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
 local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = Modules.Shared
+local Shared = ReplicatedStorage.Shared
 local SharedUtilities = Shared.Utilities
 
-local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
+local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 local MovementReplicatorSettings = require( ReplicatedStorage.MovementReplicator.Settings )
 
 ----------------------------------------------------------------------------------

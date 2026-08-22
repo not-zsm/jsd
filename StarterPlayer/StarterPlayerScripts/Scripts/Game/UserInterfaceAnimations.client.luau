@@ -4,9 +4,9 @@ local TweenService = game:GetService("TweenService")
 
 require( ReplicatedStorage.Packages.UserInterface )
 
-local Observer = require( ReplicatedStorage.Modules.Shared.Utilities.Observer )
-local UserInterfaceAnimations = require( ReplicatedStorage.Modules.Shared.Utilities.UserInterfaceAnimations )
-local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
+local Observer = require( ReplicatedStorage.Shared.Utilities.Observer )
+local UserInterfaceAnimations = require( ReplicatedStorage.Shared.Utilities.UserInterfaceAnimations )
+local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 
 type Button = ImageButton | TextButton
 

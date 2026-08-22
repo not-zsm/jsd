@@ -1,5 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 
 local HavocFolder = workspace:WaitForChild("Havoc", 5);
 assert(HavocFolder, "No Havoc Folder?");

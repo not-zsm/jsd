@@ -4,13 +4,12 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local Modules = ReplicatedStorage.Modules
 local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 local HotbarRemotes = CombatRemotes.UI.Hotbar
 
-local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
+local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 
 local Actions = {}
 Actions.__index = Actions

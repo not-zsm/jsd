@@ -10,14 +10,13 @@ local Players = game:GetService("Players")
 
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
 local Remotes = ReplicatedStorage.Remotes
 
 local PromptPurchaseEvent = Remotes.PromptGamepassPurchase
 
-local EventService = require( Modules.Shared.Utilities.EventService )
-local Gamepasses = require( Modules.Shared.Game.Gamepasses )
-local Job = require( Modules.Shared.Utilities.Job )
+local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
+local Gamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses )
+local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 local Table = require( ReplicatedStorage.Packages.Table )
 
 local RemoteRateLimiter = require( ServerScriptService.Modules.Utility.RemoteRateLimiter )

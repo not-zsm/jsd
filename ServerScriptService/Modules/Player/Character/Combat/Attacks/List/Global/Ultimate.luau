@@ -5,14 +5,13 @@ local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
 local Remotes = ReplicatedStorage.Remotes
 
 local UIRemotes = Remotes.Combat.UI
 
-local EventService = require( Modules.Shared.Utilities.EventService )
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
-local NumberStack = require( ReplicatedStorage.Modules.Shared.Utilities.NumberStack )
+local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local NumberStack = require( ReplicatedStorage.Shared.Utilities.NumberStack )
 
 ----------------------------------------------------------------------------------
 

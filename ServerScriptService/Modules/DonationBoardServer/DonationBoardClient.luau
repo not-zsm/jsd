@@ -2,7 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local DonationRemote = ReplicatedStorage.Remotes.RequestDonation
 
-local Observer = require(ReplicatedStorage.Modules.Shared.Utilities.Observer)
+local Observer = require(ReplicatedStorage.Shared.Utilities.Observer)
 
 local Connections = {}
 

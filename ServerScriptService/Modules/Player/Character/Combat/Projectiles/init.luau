@@ -9,7 +9,7 @@ local RunService = game:GetService("RunService")
 local Remotes = ReplicatedStorage.Remotes
 local FakeMouseRemotes = Remotes.Combat.FakeMouse
 
-local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
+local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 
 local Projectile = require( script.Projectile )
 

@@ -47,7 +47,7 @@ local RunService = game:GetService("RunService")
 local IsStudio = RunService:IsStudio()
 
 local LuaPlayerList = require(ServerScriptService.Modules.LuaPlayerList)
-local JobHandler = require(ReplicatedStorage.Modules.Shared.Utilities.Job)
+local JobHandler = require(ReplicatedStorage.Shared.Utilities.Job)
 
 local TextForPeople = {
 	[7207821215] = {

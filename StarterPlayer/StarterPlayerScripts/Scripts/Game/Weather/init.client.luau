@@ -11,7 +11,7 @@ if workspace:GetAttribute("IsRankedLobby") or workspace:GetAttribute("IsRankedPl
 end
 
 local Player = Players.LocalPlayer
-local Weather = require( ReplicatedStorage.Modules.Weather )
+local Weather = require( ReplicatedStorage.Client.Weather )
 
 local ACTOR_THREADS = 5
 

@@ -1,5 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local EffectUtility = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility )
+local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
 
 return function(Model : Model, DontMakeHighlight : boolean)
 	local Clone = script.Model:Clone()

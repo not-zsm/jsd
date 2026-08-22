@@ -2,9 +2,9 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 
-local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
+local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 
 local Player = require( ServerScriptService.Modules.Player )
 local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )

@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 
 function SlashCommands.new(CommandHandler)
 	local self = setmetatable({}, SlashCommands)

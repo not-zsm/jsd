@@ -11,10 +11,9 @@ local Players = game:GetService("Players")
 
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
 local Remotes = ReplicatedStorage.Remotes
 
-local Shared = Modules.Shared
+local Shared = ReplicatedStorage.Shared
 local SharedUtilities = Shared.Utilities
 
 local NumberStack = require( SharedUtilities.NumberStack )

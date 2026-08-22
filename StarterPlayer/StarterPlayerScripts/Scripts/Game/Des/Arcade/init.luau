@@ -5,7 +5,7 @@ local RunService        = game:GetService("RunService")
 local Workspace         = game:GetService("Workspace")
 local Players           = game:GetService("Players")
 
-local CharacterTransparency = require( ReplicatedStorage.Modules.Player.Replication.Global.CharacterTransparency )
+local CharacterTransparency = require( ReplicatedStorage.Client.Replication.Global.CharacterTransparency )
 
 local Packages = ReplicatedStorage.Packages.Des
 local Event    = ReplicatedStorage.PlayerRemotes.Arcade.Main

@@ -2,15 +2,15 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 
-local LoveTrainStorage = ReplicatedStorage.Modules.Player.Replication.VFX.Emotes["Love Train"]
-local ChainsawStorage = ReplicatedStorage.Modules.Player.Replication.VFX.Emotes["Chainsaw Heart"]
+local LoveTrainStorage = ReplicatedStorage.Client.Replication.VFX.Emotes["Love Train"]
+local ChainsawStorage = ReplicatedStorage.Client.Replication.VFX.Emotes["Chainsaw Heart"]
 
-local EffectUtility = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility )
-local JobApplication = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
+local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
+local JobApplication = require( ReplicatedStorage.Shared.Utilities.Job )
 
 local EyeOfRah_Assets = ReplicatedStorage.Effects["Eye Of Rah"]
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
-local ModelTransparency = require( ReplicatedStorage.Modules.Player.Replication.Global.CharacterTransparency )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local ModelTransparency = require( ReplicatedStorage.Client.Replication.Global.CharacterTransparency )
 
 return {
 	["Combat Gods"] = {
@@ -268,7 +268,7 @@ return {
 	
 	["Final Matchup"] = {
 		CustomFunction = function(self, Job, Animation)
-			local Ball = Job:Task(ReplicatedStorage.Modules.Player.Replication.VFX.Emotes["Final Matchup"].Ball:Clone())
+			local Ball = Job:Task(ReplicatedStorage.Client.Replication.VFX.Emotes["Final Matchup"].Ball:Clone())
 			Ball.Parent = self.LuaCharacter.Model
 			Ball.Motor.Part0 = self.LuaCharacter.RootPart
 		end,
@@ -281,7 +281,7 @@ return {
 			StopAnimationWhenPlayerJoins = true,
 
 			Function = function(self, TargetCombat, MainJob, JoinedJob)
-				local ReplicationModule = ReplicatedStorage.Modules.Player.Replication.VFX.Emotes["Final Matchup"]
+				local ReplicationModule = ReplicatedStorage.Client.Replication.VFX.Emotes["Final Matchup"]
 				local Animations = ReplicatedStorage.Animations.Emotes["Final Matchup"]
 				
 				local KeyframelessTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(Animations.Keyframeless)

@@ -2,7 +2,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local EventService = require( ReplicatedStorage.Modules.Shared.Utilities.EventService )
+local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
 
 local LuaPlayerList = {}
 LuaPlayerList.LuaPlayers = {}

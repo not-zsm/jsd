@@ -1,5 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local StandJoint = ReplicatedStorage:WaitForChild("Modules"):WaitForChild("StandJoint")
+local StandJoint = ReplicatedStorage.Client.StandJoint
 
 require(StandJoint)

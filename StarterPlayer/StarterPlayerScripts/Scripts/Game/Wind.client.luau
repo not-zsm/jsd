@@ -2,7 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
-local WindShake = require( ReplicatedStorage.Modules.Shared.Utilities.WindShake )
+local WindShake = require( ReplicatedStorage.Shared.Utilities.WindShake )
 
 WindShake:Init({
 	MatchWorkspaceWind = true

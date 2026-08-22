@@ -5,7 +5,7 @@ local TextChatService = game:GetService("TextChatService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
-local TitleData = require(ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Shared"):WaitForChild("Game"):WaitForChild("TitleData"))
+local TitleData = require(ReplicatedStorage.Shared.Game.TitleData)
 
 local LocalPlayer = Players.LocalPlayer
 

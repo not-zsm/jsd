@@ -17,7 +17,7 @@ local Player = Players.LocalPlayer;
 ---------------------------------------------------------------------
 
 local BufferUtil = require( ReplicatedStorage.Packages.BufferUtil )
-local AenoirEmit = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility.AenoirEmit )
+local AenoirEmit = require( ReplicatedStorage.Client.Replication.EffectUtility.AenoirEmit )
 local Effects = require( script.Effects );
 local PartCache = require("./PartCache");
 local Presets = require("./Presets");

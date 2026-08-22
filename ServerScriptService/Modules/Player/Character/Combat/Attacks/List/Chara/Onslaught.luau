@@ -8,7 +8,7 @@ local UIRemotes = Remotes.Combat.UI
 
 ----------------------------------------------------------------------------------
 
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 local BaseAttack = require( ServerScriptService.Modules.Player.Character.Combat.Attacks.BaseAttack )
 
 local Attack = {}

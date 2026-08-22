@@ -127,7 +127,7 @@ def rewrite(text, mover):
         if new is None:
             out.append(text[m.start():end])
         else:
-            out.append(".".join(new))
+            out.append(render(new))
             changes += 1
 
         pos = end
@@ -154,6 +154,22 @@ def resolve(expr, aliases):
         else:
             path.append(seg)
     return tuple(path)
+
+
+IDENTIFIER = re.compile(r"^[A-Za-z_]\w*$")
+
+
+def render(path):
+    """Instance path as Luau source.
+
+    A segment that is not a valid identifier -- "Limited Emote Dates",
+    "Gebura Red Mist" -- has to keep bracket syntax or the result is a syntax
+    error rather than a wrong path, which is at least loud.
+    """
+    out = path[0]
+    for segment in path[1:]:
+        out += f".{segment}" if IDENTIFIER.match(segment) else f'["{segment}"]'
+    return out
 
 
 def instance_to_fs(path):
@@ -196,6 +212,21 @@ def main():
             if os.path.exists(s + suffix):
                 os.makedirs(os.path.dirname(d + suffix) or ".", exist_ok=True)
                 subprocess.run(["git", "mv", s + suffix, d + suffix], check=True)
+    # A move across services leaves files naming a service they never declared,
+    # which is nil at runtime rather than a syntax error -- so check for it.
+    services_used = re.compile(r'(?<![.\w])(' + "|".join(SERVICES) + r')\s*\.')
+    missing = []
+    for path in luau_files():
+        text = open(path, encoding="utf-8", errors="replace").read()
+        for service in set(m.group(1) for m in services_used.finditer(text)):
+            if not re.search(rf'local\s+{service}\s*=', text):
+                missing.append((path, service))
+
+    if missing:
+        print("\n=== services referenced but not declared ===")
+        for path, service in missing:
+            print(f"  {path}  needs  local {service} = game:GetService(\"{service}\")")
+
     print("\nApplied.")
 
 

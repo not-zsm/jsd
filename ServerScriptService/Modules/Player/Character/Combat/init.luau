@@ -6,6 +6,7 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+local ServerStorage = game:GetService("ServerStorage")
 local IsStudio = RunService:IsStudio()
 print("is studio:", IsStudio)
 
@@ -17,7 +18,6 @@ end
 
 ----------------------------------------------------------------------------------
 
-local Modules = ReplicatedStorage.Modules
 local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
@@ -25,7 +25,7 @@ local GrabRemotes = Remotes.Grab
 
 local UIRemotes = CombatRemotes.UI
 
-local Shared = Modules.Shared
+local Shared = ReplicatedStorage.Shared
 local SharedUtilities = Shared.Utilities
 
 ----------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ local Passives = require( script.Passives )
 
 ----------------------------------------------------------------------------------
 
-local Preloading = require( Modules.Preloading )
+local Preloading = require( ServerStorage.Modules.Preloading )
 
 local Job = require( SharedUtilities.Job )
 local EventService = require( SharedUtilities.EventService )
@@ -46,9 +46,9 @@ local NumberStack = require( SharedUtilities.NumberStack )
 local Gamepasses = require( Shared.Game.Gamepasses )
 local Velocity = require( Shared.Game.Velocity )
 
-local EffectUtility = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility )
+local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
 
-local Whitelist = require( ReplicatedStorage.Modules.Shared.Game.Whitelist )
+local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
 local AnimationProxy = require( script.AnimationProxy )
 
 ----------------------------------------------------------------------------------
@@ -3448,7 +3448,7 @@ function Combat:GetRandomFriend(UseCache: boolean?) -- yields btw so task.spawn 
 end
 
 function Combat:CreateMoveSFX(Character : string, MoveName : string, Name : string?)
-	local Module = Modules.Player.Replication.VFX:FindFirstChild(Character)
+	local Module = ReplicatedStorage.Client.Replication.VFX:FindFirstChild(Character)
 
 	if Module then
 		local Move = Module:FindFirstChild(MoveName)

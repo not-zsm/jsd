@@ -9,10 +9,10 @@ local RunService = game:GetService("RunService")
 local Remotes = ReplicatedStorage.Remotes
 local ProjectileRemotes = Remotes.Projectile
 
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 
-local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
-local EventService = require( ReplicatedStorage.Modules.Shared.Utilities.EventService )
+local Job = require( ReplicatedStorage.Shared.Utilities.Job )
+local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
 
 local Destruction = require( ServerScriptService.Modules.Destruction )
 

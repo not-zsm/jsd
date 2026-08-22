@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local UIStrokeAdjuster = require( ReplicatedStorage.Modules.Shared.Utilities.UIStrokeAdjuster )
+local UIStrokeAdjuster = require( ReplicatedStorage.Shared.Utilities.UIStrokeAdjuster )
 
 local Player = Players.LocalPlayer
 local PlayerGui = Player.PlayerGui

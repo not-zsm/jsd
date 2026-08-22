@@ -8,8 +8,8 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
-local EffectUtility = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility )
-local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
+local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
+local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 
 prompt.Triggered:Connect(function(player_who_triggered)
 	if main:GetAttribute("Destructed") or not prompt.Enabled then return end

@@ -1,9 +1,10 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
+local ServerStorage = game:GetService("ServerStorage")
 local BaseAttack = require( "./BaseAttack" );
-local Utility = require( ReplicatedStorage.Modules.Shared.Utilities.Utility )
-local Preloading = require( ReplicatedStorage.Modules.Preloading )
+local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Preloading = require( ServerStorage.Modules.Preloading )
 
 -- I usually avoid using multi-inheritance but whatever
 local BaseStand = setmetatable({}, BaseAttack);
