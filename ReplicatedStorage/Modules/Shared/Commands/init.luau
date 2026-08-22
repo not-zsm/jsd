@@ -22,8 +22,8 @@ local LuaPlayerList
 if RunService:IsServer() then
 	local ServerScriptService = game:GetService("ServerScriptService")
 
-	Weather = require(ServerScriptService.Scripts.Game.Modules.Weather)
-	LuaPlayerList = require(ServerScriptService.Scripts.Game.Modules.LuaPlayerList)
+	Weather = require(ServerScriptService.Modules.Weather)
+	LuaPlayerList = require(ServerScriptService.Modules.LuaPlayerList)
 
 	-- On Click Strike
 	ReplicatedStorage.Remotes.Commands.ClickStrike.OnServerEvent:Connect(function(Player, MousePosition)
@@ -35,7 +35,7 @@ if RunService:IsServer() then
 	end)
 
 	-- Fetch Moves
-	local CharacterList = ServerScriptService.Scripts.Game.Modules.Player.Character.Combat.Attacks.List
+	local CharacterList = ServerScriptService.Modules.Player.Character.Combat.Attacks.List
 
 	for _, Character in pairs(CharacterList:GetChildren()) do
 		if Character:IsA("Configuration") then

@@ -22,7 +22,7 @@ local DataConfiguration = script:WaitForChild("Data");
 local DEFAULT_SETTINGS: Types.PermissionSettings;
 
 if RunService:IsServer() then
-	DEFAULT_SETTINGS = require(ServerScriptService.Scripts.Game.Modules.Whitelist_Settings);
+	DEFAULT_SETTINGS = require(ServerScriptService.Modules.Whitelist_Settings);
 else
 	DEFAULT_SETTINGS = {
 		mode = "Web"; -- "Web" or "Product"

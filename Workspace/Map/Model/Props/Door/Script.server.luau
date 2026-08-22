@@ -7,7 +7,7 @@ local prompt = hitbox:WaitForChild("prompt")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local LuaPlayerList = require( ServerScriptService.Scripts.Game.Modules.LuaPlayerList )
+local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
 local EffectUtility = require( ReplicatedStorage.Modules.Player.Replication.EffectUtility )
 local Job = require( ReplicatedStorage.Modules.Shared.Utilities.Job )
 
