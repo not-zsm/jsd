@@ -1,3 +1,5 @@
 tests/
 __pycache__/
 *.pyc
+jumpin.rbxlx
+jumpin.restructured.rbxlx
