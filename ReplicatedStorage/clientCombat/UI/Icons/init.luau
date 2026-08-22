@@ -8,6 +8,8 @@ Icons.__index = Icons
 function Icons:_Init() 
 	-- in order
 
+	self.CharacterIcon = require(script.Characters)(self.LuaPlayer.Player)
+
 
 	self.InformationIcon = self.IconModule.new()
 		:setLeft()

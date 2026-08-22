@@ -49,6 +49,7 @@ local Velocity = require( Shared.Game.Velocity )
 local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
 
 local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
+local info = require( ReplicatedStorage.info )
 local AnimationProxy = require( script.AnimationProxy )
 
 ----------------------------------------------------------------------------------
@@ -348,8 +349,11 @@ function Combat:SendCharacterInformation()
 		for _, Item in CharacterList:GetChildren() do
 			local Character = require(Item);
 			local Info = {
+				DisplayName = Character.DisplayName or Item.Name,
+				Icon = Character.Icon,
 				StandName = Character.StandName,
 				PrivateServerPlusOnly = Character.PrivateServerPlusOnly,
+				DevOnly = Character.DevOnly,
 				Attacks = Character.Attacks;
 			};
 
@@ -365,7 +369,15 @@ function Combat:SendCharacterInformation()
 		end;
 	end;
 
-	CombatRemotes.SendCharacterInfo:FireClient( self.LuaPlayer.Player, Combat.Info.Characters );
+	local Available = {};
+
+	for Name, Info in Combat.Info.Characters do
+		if self:CanUseCharacter(Name) then
+			Available[Name] = Info;
+		end;
+	end;
+
+	CombatRemotes.SendCharacterInfo:FireClient( self.LuaPlayer.Player, Available );
 end;
 
 type FailToUseCharacterReason = "No Character" | "Early Access" | "Private Servers" | "Owner" | "Whitelist" | "Boss Drop" | "World Event";
@@ -390,6 +402,10 @@ function Combat:CanUseCharacter(Name: string, Settings): (boolean, FailToUseChar
 		print("GOB!")
 		return true
 	end
+
+	if CharacterInfo.DevOnly then
+		return (table.find(info.theBigFour, self.LuaPlayer.UserId) ~= nil), "Dev Only";
+	end;
 
 	if CharacterInfo.EarlyAccess then
 		local OwnsEarlyAccess = self.LuaPlayer.Data:HasGamepass("Early Access") or self:OwnsEarlyAccess()

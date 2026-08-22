@@ -5,6 +5,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
 
 return {
+	DisplayName = "Chara",
+	Icon = "85316557846229",
+
 	UsingAttacks = {
 		"Check",
 		--"Death Charge",
