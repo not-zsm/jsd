@@ -1,9 +1,10 @@
 --== Imports ==--
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local Players           = game:GetService("Players")
 
 local Session  = require(script.Session)
-local Event    = ReplicatedStorage.PlayerRemotes.Atonement:WaitForChild("Main")
 local EventService = require(ReplicatedStorage.modules.shared.Utilities.EventService)
 
 --== Module ==--
@@ -52,13 +53,14 @@ Players.PlayerRemoving:Connect(function(player: Player)
 	end
 end)
 
-Event.OnServerEvent:Connect(function(player: Player, action: string, value: number?)
+network.minigameInput.listen(function(data, player)
 	local s = Module.Sessions[player]
 	if not s then return end
 
-	if action == "Damage" then
-		s:ApplyDamage(value * DamageMultiplier)
-	elseif action == "Complete" then
+	if data.action == "Damage" then
+		if not data.value then return end
+		s:ApplyDamage(data.value * DamageMultiplier)
+	elseif data.action == "Complete" then
 		s:RequestComplete()
 	end
 end)

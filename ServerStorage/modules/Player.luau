@@ -46,10 +46,6 @@ local Data = require( script.Data )
 function LuaPlayer:Destroy()
 	self.OnDestroyed:Fire()
 	
-	if (self.Remotes and self.Remotes.Parent ~= nil) then
-		self.Remotes:Destroy()
-	end
-	
 	self.Job:Destroy()
 	
 	self.Replication:Destroy()
@@ -65,10 +61,6 @@ function LuaPlayer:PlayerExists()
 end
 	
 function LuaPlayer:_Init()
-	self.Remotes = ReplicatedStorage.PlayerRemotes:Clone()
-	self.Remotes.Name = "Remotes"
-	self.Remotes.Parent = self.Player
-	
 	if not self.IsNPC then
 		self.Data = Data.new(self)
 	end
@@ -253,16 +245,6 @@ function LuaPlayer:GetPing()
 	end
 	
 	return (self.Player:GetNetworkPing() * 2)
-end
-
-function LuaPlayer:FireRemote(Name : string, ...)
-	if self.IsNPC then return end
-	
-	local Remote = self.Remotes:FindFirstChild(Name, true)
-	
-	if Remote then
-		Remote:FireClient(self.Player, ...)
-	end
 end
 
 ----------------------------------------------------------------------------------

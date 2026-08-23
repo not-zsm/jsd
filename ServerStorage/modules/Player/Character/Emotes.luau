@@ -64,8 +64,7 @@ function Emotes:_Init()
 	if self.LuaPlayer.IsNPC or not self.LuaPlayer:PlayerExists() then return end
 
 	local HasExtraSlots = self.LuaPlayer.Data:HasGamepass("Extra Emote Slots") -- yields
-	local EmoteEvent = self.LuaPlayer.Remotes:WaitForChild("Emote", 100)
-
+	
 	local LoadSlotsEvent = EmoteEvent:WaitForChild("LoadSlots", 100)
 	local UpdateEvent = EmoteEvent:WaitForChild("Update", 100)
 
@@ -99,155 +98,122 @@ function Emotes:_Init()
 		end
 	end)
 
-	self.Job:Task(self.LuaPlayer.Remotes.Emote.Clicked.OnServerEvent:Connect(function(Player2 : Player, EmoteName : string)
-		if self.LuaPlayer.Player ~= Player2 then return end
-		if typeof(EmoteName) ~= "string" then return end
+end
 
-		if (RemoteRateLimiter.Check(self.LuaPlayer.Remotes.Emote.Clicked, self.LuaPlayer.Player, 15) == false) then
-			return
-		end
+function Emotes:UseEmote(EmoteName : string)
+	if self.LuaPlayer.Data.Profile.Data.Emotes[EmoteName] then
+		self:PlayEmote(EmoteName)
+	end
+end
 
-		if self.LuaPlayer.Data.Profile.Data.Emotes[EmoteName] then
-			self:PlayEmote(EmoteName)
-		end
-	end))
+function Emotes:ClaimEmote()
+	if self:CalculateKillsCanClaim() > 0 then -- very important check
+		self:GetRandom("Claim")
+	end
+end
 
-	self.Job:Task(self.LuaPlayer.Remotes.Emote.Claim.OnServerEvent:Connect(function(Player2 : Player)
-		if self.LuaPlayer.Player ~= Player2 then return end
+function Emotes:BuyRandom()
+	if not RunService:IsStudio() and self.LuaPlayer.Player.Name ~= "swrerm" and shared.IsTestPlace then
+		network.notify.sendTo({
+			Title = "Notification",
+			Text = "Not recommended to buy this in the test place",
+			Duration = 3,
+		}, self.LuaPlayer.Player)
 
-		if (RemoteRateLimiter.Check(self.LuaPlayer.Remotes.Emote.Claim, self.LuaPlayer.Player, 15) == false) then
-			return
-		end
+		return
+	end
 
-		if self:CalculateKillsCanClaim() > 0 then -- very important check
-			self:GetRandom("Claim")
-		end
-	end))
-
-	self.Job:Task(self.LuaPlayer.Remotes.Emote.BuyRandom.OnServerEvent:Connect(function(Player2 : Player)
-		if self.LuaPlayer.Player ~= Player2 then return end
-
-		if (RemoteRateLimiter.Check(self.LuaPlayer.Remotes.Emote.BuyRandom, self.LuaPlayer.Player, 15) == true) then
-			if not RunService:IsStudio() and self.LuaPlayer.Player.Name ~= "swrerm" and shared.IsTestPlace then
-				network.notify.sendTo({
-					Title = "Notification",
-					Text = "Not recommended to buy this in the test place",
-					Duration = 3,
-				}, self.LuaPlayer.Player)
-
-				return
-			end
-
-			if not RunService:IsStudio() and self.LuaPlayer.Player.Name ~= "swrerm" then
-				if (self.LuaPlayer.PolicyInfo == nil) then 
-					network.notify.sendTo({
-						Title = "Notification",
-						Text = "Roblox could not load your policy info, please wait or rejoin if this occurs again.",
-						Duration = 3,
-					}, self.LuaPlayer.Player)
-
-					return
-				end
-
-				if self.LuaPlayer.PolicyInfo.ArePaidRandomItemsRestricted then
-					network.notify.sendTo({
-						Title = "Notification",
-						Text = "You are unable to purchase a random emote due to gambling regulations in your region.",
-						Duration = 4,
-					}, self.LuaPlayer.Player)
-
-					return
-				end
-			end
-
-			if not self:HasAll() then
-				MarketplaceService:PromptProductPurchase(self.LuaPlayer.Player, 2657712724)
-			end
-		end
-	end))
-
-	self.Job:Task(self.LuaPlayer.Remotes.Emote.BuySlots.OnServerEvent:Connect(function(Player2 : Player)
-		if self.LuaPlayer.Player ~= Player2 then return end
-
-		if (RemoteRateLimiter.Check(self.LuaPlayer.Remotes.Emote.BuySlots, self.LuaPlayer.Player, 15) == true) then
-			MarketplaceService:PromptGamePassPurchase(self.LuaPlayer.Player, 966942108)
-		end
-	end))
-
-	self.Job:Task(self.LuaPlayer.Remotes.Emote.BuyLimited.OnServerEvent:Connect(function(Player2 : Player, Name : string)
-		if self.LuaPlayer.Player ~= Player2 then return end
-
-		if (RemoteRateLimiter.Check(self.LuaPlayer.Remotes.Emote.BuyLimited, self.LuaPlayer.Player, 15) == false) then
-			return false
-		end
-
-		if not RunService:IsStudio() and shared.IsTestPlace then
+	if not RunService:IsStudio() and self.LuaPlayer.Player.Name ~= "swrerm" then
+		if (self.LuaPlayer.PolicyInfo == nil) then 
 			network.notify.sendTo({
 				Title = "Notification",
-				Text = "Not recommended to buy this in the test place",
+				Text = "Roblox could not load your policy info, please wait or rejoin if this occurs again.",
 				Duration = 3,
 			}, self.LuaPlayer.Player)
 
 			return
 		end
 
-		local Date : number = Limited_Emote_Dates[Name]
-		if (Date == nil) then return end
+		if self.LuaPlayer.PolicyInfo.ArePaidRandomItemsRestricted then
+			network.notify.sendTo({
+				Title = "Notification",
+				Text = "You are unable to purchase a random emote due to gambling regulations in your region.",
+				Duration = 4,
+			}, self.LuaPlayer.Player)
 
-		if os.time() > Date then
 			return
 		end
-
-		local Pass = false
-
-		if Name == "Combat Gods + Isagi" then
-			local CannotHave = {
-				["Combat Gods"] = true,
-				["Isagi"] = true
-			}
-
-			for Emote in self.LuaPlayer.Data.Profile.Data.Emotes do
-				if CannotHave[Emote] then
-					print("cannot have", Emote)
-					Pass = false
-
-					break
-				end
-			end
-
-		elseif Name == "Love Train" then
-			Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["Love Train"]
-
-		elseif Name == "Final Matchup" then
-			Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["Final Matchup"]
-
-		elseif Name == "The Final Showdown" then
-			Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["The Final Showdown"]
-		end
-
-		if Pass and Limited_Products_Ids[Name] then
-			MarketplaceService:PromptProductPurchase(self.LuaPlayer.Player, Limited_Products_Ids[Name])
-		end
-	end))
-
-	self.LuaPlayer.Remotes.Emote.UpdateSlot.OnServerInvoke = function(Player2 : Player, Slot : string, Name : string)
-		if (self.LuaPlayer.Player ~= Player2 or typeof(Slot) ~= "string" or typeof(Name) ~= "string") then 
-			return false 
-		end
-
-		if (RemoteRateLimiter.Check(self.LuaPlayer.Remotes.Emote.UpdateSlot, self.LuaPlayer.Player, 5) == false) then
-			return false
-		end
-
-		local SlotToNumber = math.floor(Slot)
-
-		if (SlotToNumber >= 1 and SlotToNumber <= 8) then
-			self.LuaPlayer.Data.Profile.Data.CurrentEmoteSlots[Slot] = Name
-			return true
-		end
-
-		return false
 	end
+
+	if not self:HasAll() then
+		MarketplaceService:PromptProductPurchase(self.LuaPlayer.Player, 2657712724)
+	end
+end
+
+function Emotes:BuySlots()
+	MarketplaceService:PromptGamePassPurchase(self.LuaPlayer.Player, 966942108)
+end
+
+function Emotes:BuyLimited(Name : string)
+	if not RunService:IsStudio() and shared.IsTestPlace then
+		network.notify.sendTo({
+			Title = "Notification",
+			Text = "Not recommended to buy this in the test place",
+			Duration = 3,
+		}, self.LuaPlayer.Player)
+
+		return
+	end
+
+	local Date : number = Limited_Emote_Dates[Name]
+	if (Date == nil) then return end
+
+	if os.time() > Date then
+		return
+	end
+
+	local Pass = false
+
+	if Name == "Combat Gods + Isagi" then
+		local CannotHave = {
+			["Combat Gods"] = true,
+			["Isagi"] = true
+		}
+
+		for Emote in self.LuaPlayer.Data.Profile.Data.Emotes do
+			if CannotHave[Emote] then
+				print("cannot have", Emote)
+				Pass = false
+
+				break
+			end
+		end
+
+	elseif Name == "Love Train" then
+		Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["Love Train"]
+
+	elseif Name == "Final Matchup" then
+		Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["Final Matchup"]
+
+	elseif Name == "The Final Showdown" then
+		Pass = not self.LuaPlayer.Data.Profile.Data.Emotes["The Final Showdown"]
+	end
+
+	if Pass and Limited_Products_Ids[Name] then
+		MarketplaceService:PromptProductPurchase(self.LuaPlayer.Player, Limited_Products_Ids[Name])
+	end
+end
+
+--- Writes an emote into a slot, then tells the client what actually landed.
+function Emotes:SetSlot(Slot : string, Name : string)
+	local SlotToNumber = tonumber(Slot)
+
+	if not SlotToNumber or SlotToNumber < 1 or SlotToNumber > 8 then return end
+	if not self:HasAccessTo(Name) then return end
+
+	self.LuaPlayer.Data.Profile.Data.CurrentEmoteSlots[Slot] = Name
+
+	network.emoteSlotSet.sendTo({ slot = Slot, emote = Name }, self.LuaPlayer.Player)
 end
 
 function Emotes:PlayEmote(Name : string)
@@ -766,7 +732,6 @@ function Emotes:HasAccessTo(Name)
 	return true
 end
 
-
 --function Emotes:Get(Name : string, Claim : boolean?, Purchase : boolean?, Given : boolean?)
 --	if self.LuaPlayer.IsNPC or self.LuaPlayer.Data.Profile.Data.Emotes[Name] then 
 --		return false
@@ -812,7 +777,7 @@ function Emotes:Claim(Name : string)
 	self.LuaPlayer.Data.Profile.Data.Emotes[Name] = true
 	self.LuaPlayer.Data.Profile.Data.ClaimedEmotes += 1
 
-	self.LuaPlayer.Remotes.Emote.Get:FireClient(self.LuaPlayer.Player, Name, "Claim")
+	network.emoteGranted.sendTo({ emote = Name, claimType = "Claim" }, self.LuaPlayer.Player)
 	self:UpdateEmoteKillClaim()
 
 	return true
@@ -835,7 +800,7 @@ function Emotes:ClaimByExtra(Name : string)
 
 	self.LuaPlayer.Data.Profile.Data.ExtraEmoteClaims = math.max(0, self.LuaPlayer.Data.Profile.Data.ExtraEmoteClaims - 1)
 	self.LuaPlayer.Data.Profile.Data.Emotes[Name] = true
-	self.LuaPlayer.Remotes.Emote.Get:FireClient(self.LuaPlayer.Player, Name, "Claim")
+	network.emoteGranted.sendTo({ emote = Name, claimType = "Claim" }, self.LuaPlayer.Player)
 	self:UpdateEmoteKillClaim()
 
 	return true
@@ -859,7 +824,7 @@ function Emotes:Purchase(Name : string)
 	self.LuaPlayer.Data.Profile.Data.Emotes[Name] = true
 	self.LuaPlayer.Data.Profile.Data.BoughtEmotes[Name] = true
 
-	self.LuaPlayer.Remotes.Emote.Get:FireClient(self.LuaPlayer.Player, Name, "Purchase")
+	network.emoteGranted.sendTo({ emote = Name, claimType = "Purchase" }, self.LuaPlayer.Player)
 	self:UpdateEmoteKillClaim()
 
 	return true
@@ -882,7 +847,7 @@ function Emotes:Give(Name : string)
 
 	self.LuaPlayer.Data.Profile.Data.Emotes[Name] = true
 
-	self.LuaPlayer.Remotes.Emote.Get:FireClient(self.LuaPlayer.Player, Name, "Give")
+	network.emoteGranted.sendTo({ emote = Name, claimType = "Give" }, self.LuaPlayer.Player)
 	self:UpdateEmoteKillClaim()
 
 	return true
@@ -918,11 +883,11 @@ function Emotes:CalculateKillsToClaim()
 end
 
 function Emotes:UpdateEmoteKillClaim()
-	self.LuaPlayer.Remotes.Emote.UpdateKillClaim:FireClient(self.LuaPlayer.Player, 
-		self:CalculateKillsCanClaim(), 
-		self:CalculateKillsToClaim(), 
-		self:HasAll()
-	)
+	network.emoteKillClaim.sendTo({
+		canClaim = self:CalculateKillsCanClaim(),
+		untilNext = self:CalculateKillsToClaim(),
+		hasAll = self:HasAll(),
+	}, self.LuaPlayer.Player)
 end
 
 function Emotes:HasAll()
@@ -955,7 +920,7 @@ function Emotes:GetAll(IncludeLimited : boolean)
 		end
 
 		self.LuaPlayer.Data.Profile.Data.Emotes[Name] = true
-		self.LuaPlayer.Remotes.Emote.Get:FireClient(self.LuaPlayer.Player, Name, "Give")
+		network.emoteGranted.sendTo({ emote = Name, claimType = "Give" }, self.LuaPlayer.Player)
 	end
 
 	for Index, Name : string in IndexTable do
@@ -973,7 +938,7 @@ function Emotes:GetRandom(Type : string)
 	if self.LuaPlayer.IsNPC then return end
 
 	if self:HasAll() then
-		self.LuaPlayer.Remotes.Emote.ClaimedAll:FireClient(self.LuaPlayer.Player)
+		network.emotesClaimedAll.sendTo(nil, self.LuaPlayer.Player)
 		return false
 	end
 
@@ -1015,7 +980,7 @@ function Emotes:Remove(Name : string)
 
 	if self.LuaPlayer.Data.Profile.Data.Emotes[Name] then
 		self.LuaPlayer.Data.Profile.Data.Emotes[Name] = nil
-		self.LuaPlayer.Remotes.Emote.Removed:FireClient(self.LuaPlayer.Player, Name)
+		network.emoteRemoved.sendTo(Name, self.LuaPlayer.Player)
 	end
 end
 

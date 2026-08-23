@@ -2,6 +2,8 @@
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local ServerStorage = game:GetService("ServerStorage")
 local UserService = game:GetService("UserService")
 local InsertService = game:GetService("InsertService")
@@ -300,7 +302,7 @@ function LuaCharacter:RegisterModel(Model : Model)
 					self:SetHumanoidAvailability(false, false)
 
 					if not self.LuaPlayer.IsNPC then
-						self.LuaPlayer.Remotes.OnHumanoidDied:FireClient(self.LuaPlayer.Player)
+						network.humanoidDied.sendTo(nil, self.LuaPlayer.Player)
 					end
 
 					self.DeathJob:Clean()
@@ -312,12 +314,6 @@ function LuaCharacter:RegisterModel(Model : Model)
 			end
 		end))
 	end)
-
-	self.HumanoidJob:Task(self.LuaPlayer.Remotes.OnPlayerTryReset.OnServerEvent:Connect(function(Player)
-		if Player == self.LuaPlayer.Player and not self.Combat.InCombat then
-			self:Die()
-		end
-	end))
 
 	self.HumanoidJob:Task(self.Humanoid.HealthChanged:Connect(function(NewHealth)
 		if (NewHealth <= 0.01) then
@@ -346,6 +342,13 @@ function LuaCharacter:RegisterModel(Model : Model)
 	end
 end
 
+--- The client asked to reset. Refused mid-fight, as the remote handler was.
+function LuaCharacter:TryReset()
+	if self.Combat.InCombat then return end
+
+	self:Die()
+end
+
 function LuaCharacter:UnregisterModel()
 	if self.Model then
 		self.Model:RemoveTag("Men")
@@ -366,7 +369,7 @@ function LuaCharacter:Die()
 		self.DeathJob:Clean()
 
 		if not self.LuaPlayer.IsNPC then
-			self.LuaPlayer.Remotes.OnHumanoidDied:FireClient(self.LuaPlayer.Player)
+			network.humanoidDied.sendTo(nil, self.LuaPlayer.Player)
 		end
 
 		self.Humanoid.Health = 0
@@ -669,7 +672,7 @@ function LuaCharacter:StandUpright(DownwardY : number?)
 	if not self.LuaPlayer:PlayerExists() then return end
 
 	if not self.LuaPlayer.IsNPC then
-		self.LuaPlayer.Remotes.StandUpright:FireClient(self.LuaPlayer.Player, DownwardY)
+		network.standUpright.sendTo(DownwardY, self.LuaPlayer.Player)
 	else
 		self:StandUprightServer(DownwardY)
 	end
@@ -730,7 +733,7 @@ function LuaCharacter:FixCenter()
 	if not self.LuaPlayer:PlayerExists() then return end
 
 	if not self.LuaPlayer.IsNPC then
-		self.LuaPlayer.Remotes.FixCenter:FireClient(self.LuaPlayer.Player)
+		network.fixCenter.sendTo(nil, self.LuaPlayer.Player)
 	else
 		--self:FixCenterServer()
 	end

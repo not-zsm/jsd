@@ -3,6 +3,8 @@ Title.__index = Title
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 
@@ -23,33 +25,14 @@ end
 function Title:_Init()
 	if not self.LuaPlayer:PlayerExists() then return end
 	
-	local Title = self.LuaPlayer.Remotes:WaitForChild("Title", 5)
-	
 	if (self.LuaPlayer.GroupRank == nil) then
 		self.LuaPlayer.OnGroupRankFetched:Wait()
 	end
 
-	Title.Load:FireClient(self.LuaPlayer.Player, self.LuaPlayer.Data.Profile.Data.Kills, self.LuaPlayer.GroupRank)
-
-	self.LuaCharacter.Job:Task(Title.Equip.OnServerEvent:Connect(function(Player : Player, name : string)
-		if self.LuaPlayer.Player ~= Player then return end
-
-		if (RemoteRateLimiter.Check(Title.Equip, self.LuaPlayer.Player, 5) == false) then
-			return
-		end
-		
-		self:Equip(name)
-	end))
-
-	self.LuaCharacter.Job:Task(Title.Unequip.OnServerEvent:Connect(function(Player : Player)
-		if self.LuaPlayer.Player ~= Player then return end
-
-		if (RemoteRateLimiter.Check(Title.Unequip, self.LuaPlayer.Player, 10) == false) then
-			return
-		end
-		
-		self:Unequip()
-	end))
+	network.loadTitles.sendTo({
+		kills = self.LuaPlayer.Data.Profile.Data.Kills,
+		groupRank = self.LuaPlayer.GroupRank,
+	}, self.LuaPlayer.Player)
 end
 
 local function Find(NameIWANT : string)

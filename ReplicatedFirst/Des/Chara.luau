@@ -1,5 +1,7 @@
 --== Imports ==--
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local TweenService      = game:GetService("TweenService")
 local SoundService      = game:GetService("SoundService")
 local HttpService       = game:GetService("HttpService")
@@ -23,7 +25,6 @@ local Flower     = require("@self/Flower")
 local Helper     = require("@self/Helper")
 local Sequencer  = require("@self/Sequencer")
 
-local Event = ReplicatedStorage.PlayerRemotes.Atonement:WaitForChild("Main")
 
 --== Types ==--
 export type Attack = {
@@ -382,7 +383,7 @@ function Module.new()
 	self.Trove:Connect(self.Signals.onDamage, function(value: number)
 		self.Humanoid.Health = math.clamp(self.Humanoid.Health - value, 1, self.Humanoid.MaxHealth)
 		self.Shake:Shake({ amp = 12, freq = 10, duration = 0.2, falloff = "cubic" })
-		Event:FireServer("Damage", value)
+		network.minigameInput.send({ action = "Damage", value = value })
 		if self.Humanoid.Health <= 1 then
 			self:_breakNow()
 			task.delay(BREAK_DELAY, function()
@@ -641,7 +642,8 @@ function Module:Destroy()
 end
 
 --== Hooks ==--
-Event.OnClientEvent:Connect(function(action: string, payload)
+network.minigame.listen(function(data)
+	local action, payload = data.action, data.payload
 	if action == "Start" then
 		if Current and not Current._Stopped then
 			return

@@ -113,7 +113,7 @@ function Settings:Init()
 	end)
 	
 	-- First Time Joining Blood Warning
-	ReplicatedStorage.PlayerRemotes.PromptBloodWarning.OnClientEvent:Connect(function()
+	network.bloodWarning.listen(function()
 		local ScreenGui = script.Assets.BloodConfirmation:Clone()
 		local Buttons = ScreenGui.Body.Body.Buttons
 		ScreenGui.Parent = LocalPlayer.PlayerGui

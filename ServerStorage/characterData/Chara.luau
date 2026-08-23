@@ -1,5 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local network = require( ReplicatedStorage.modules.network )
+
 local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )
 
 return {
@@ -63,7 +65,7 @@ return {
 					self.LuaCharacter:StopRespawnTimer()
 
 					self.LuaCharacter.HumanoidAlive, self.LuaCharacter.HumanoidExists = true, true 
-					self.LuaPlayer:FireRemote("OnHumanoidRevived")
+					network.humanoidRevived.sendTo(nil, self.LuaPlayer.Player)
 					self.LuaCharacter:StartRegen()
 
 					self.Combat.AwardedToSomeoneAsKill = false

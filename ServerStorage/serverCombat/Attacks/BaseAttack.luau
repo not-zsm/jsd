@@ -1,5 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
@@ -249,7 +251,7 @@ function BaseAttack:AddCooldown(Duration : number, ClientActionLikeIndicator : b
 		HotbarRemotes.AddCooldown:FireClient(self.LuaPlayer.Player, self.Name, Duration)
 		
 		if ClientActionLikeIndicator then
-			self.LuaPlayer:FireRemote("ClientCooldownWithIndicator", self.Name, Duration)
+			network.moveCooldown.sendTo({ move = self.Name, duration = Duration }, self.LuaPlayer.Player)
 		end
 	end
 
@@ -322,7 +324,7 @@ function BaseAttack:AddCertainCooldown(Name : string, Duration : number?, Ended 
 	self:RemoveCertainCooldown(Name)
 
 	if not self.LuaPlayer.IsNPC and ClientActionLikeIndicator then
-		self.LuaPlayer.Remotes.ClientCooldownWithIndicator:FireClient(self.LuaPlayer.Player, Name, Duration)
+		network.moveCooldown.sendTo({ move = Name, duration = Duration }, self.LuaPlayer.Player)
 	end
 	
 	self.CertainCooldowns[Name] = task.delay(Duration, function()

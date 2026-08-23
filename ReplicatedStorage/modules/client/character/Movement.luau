@@ -1,4 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
@@ -858,7 +860,7 @@ function MovementHandler:_Init()
 		end
 	end
 
-	ReplicatedStorage.PlayerRemotes.Items.SetItemAnimations.OnClientEvent:Connect(function(Name : string)
+	network.itemAnimations.listen(function(Name : string)
 		self.CurrentItem = Name
 		Update()
 	end)

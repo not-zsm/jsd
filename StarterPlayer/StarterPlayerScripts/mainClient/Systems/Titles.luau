@@ -13,6 +13,7 @@ return {
 		local RunService = game:GetService("RunService")
 
 		local TitleData = require(ReplicatedStorage.modules.shared.Game.TitleData)
+		local network = require(ReplicatedStorage.modules.network)
 
 		local LocalPlayer = Players.LocalPlayer
 
@@ -31,12 +32,6 @@ return {
 
 		-- Remotes
 		local remotes = ReplicatedStorage.Remotes
-		local titleRemotes = LocalPlayer.Remotes.Title
-
-		local equipTitleEvent = titleRemotes.Equip
-		local unequipTitleEvent = titleRemotes.Unequip 
-		local onLoad = titleRemotes.Load -- Replace
-
 		local onPlayerKillEvent = remotes.Combat.PlayerKilled -- Replace
 		local groupRank = 0
 
@@ -87,9 +82,9 @@ return {
 				-- On Player Click
 				titleButton.MouseButton1Click:Connect(function()
 					if name == "NO TITLE" then -- Player selects NO TITLE button
-						unequipTitleEvent:FireServer()
+						network.unequipTitle.send()
 					else
-						equipTitleEvent:FireServer(name)
+						network.equipTitle.send(name)
 					end
 				end)
 			end
@@ -171,7 +166,8 @@ return {
 			updateTitles(totalKills, groupRank)
 		end)
 
-		onLoad.OnClientEvent:Connect(function(totalKills, servergroupRank)
+		network.loadTitles.listen(function(data)
+			local totalKills, servergroupRank = data.kills, data.groupRank
 			groupRank = servergroupRank
 			updateTitles(totalKills, groupRank)
 		end)

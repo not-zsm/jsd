@@ -2,6 +2,8 @@ local Velocity = {}
 Velocity.__index = Velocity
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local RunService = game:GetService("RunService")
 
 local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
@@ -96,7 +98,7 @@ function Velocity:Fire()
 		if self.LuaPlayer.IsNPC then
 			self:Create()
 		else
-			self.LuaPlayer.Remotes.Combat.Velocity:FireClient(self.LuaPlayer.Player, self.Settings)
+			network.velocitySettings.sendTo(self.Settings, self.LuaPlayer.Player)
 		end
 		
 		self.LuaPlayer.Replication.Attributes:SetAttribute("Velocity", true)

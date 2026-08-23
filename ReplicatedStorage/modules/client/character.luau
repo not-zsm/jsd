@@ -1,6 +1,9 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
+local connect = require( ReplicatedStorage.modules.network.connect )
 local UserInputService = game:GetService("UserInputService")
 
 ----------------------------------------------------------------------------------
@@ -88,32 +91,20 @@ function LuaCharacter.new(LuaPlayer)
 	
 	self.DefaultIcon = UserInputService.MouseIcon
 
-	task.spawn(function()
-		local ToggleHeadMovement : RemoteEvent = self.LuaPlayer.Remotes:WaitForChild("ToggleHeadMovement")
-
-		ToggleHeadMovement.OnClientEvent:Connect(function(Value : boolean)
-			--self.LastHeadPosition = Vector3.zero
-			
-			if (Value ~= nil) then
-				self.HeadMovementEnabled = Value
-			else
-				self.HeadMovementEnabled = not self.HeadMovementEnabled
-			end
-			
-			--self.LastHeadPosition = Vector3.zero
-		end)
+	network.headMovement.listen(function(Value : boolean)
+		if (Value ~= nil) then
+			self.HeadMovementEnabled = Value
+		else
+			self.HeadMovementEnabled = not self.HeadMovementEnabled
+		end
 	end)
-	
-	task.spawn(function()
-		local SetHeadMovementAttach : RemoteEvent = self.LuaPlayer.Remotes:WaitForChild("SetHeadMovementAttach")
 
-		SetHeadMovementAttach.OnClientEvent:Connect(function(NewAttach : BasePart)
-			self.CurrentHeadMovementAttach = NewAttach
+	network.headMovementAttach.listen(function(NewAttach : BasePart)
+		self.CurrentHeadMovementAttach = NewAttach
 
-			if self.FollowHead then
-				self.FollowHead:SetTarget(NewAttach)
-			end
-		end)
+		if self.FollowHead then
+			self.FollowHead:SetTarget(NewAttach)
+		end
 	end)
 	
 	RunService:BindToRenderStep("Shiftlock", Utility.ShiftlockRenderPriority, function()
@@ -284,7 +275,7 @@ function LuaCharacter:RegisterModel(Model : Model)
 			end
 		end))
 		
-		self.HumanoidJob:Task(self.LuaPlayer.Remotes.OnHumanoidDied.OnClientEvent:Connect(function()
+		self.HumanoidJob:Task(connect(network.humanoidDied, function()
 			if self.HumanoidAlive then
 				self:SetHumanoidAvailability(false, true)
 				self.OnHumanoidDied:Fire()
@@ -292,7 +283,7 @@ function LuaCharacter:RegisterModel(Model : Model)
 			end
 		end))
 		
-		self.HumanoidJob:Task(self.LuaPlayer.Remotes.OnHumanoidRevived.OnClientEvent:Connect(function()
+		self.HumanoidJob:Task(connect(network.humanoidRevived, function()
 			if not self.HumanoidAlive then
 				self.HumanoidAlive = true
 				self.HumanoidExists = true

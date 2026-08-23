@@ -1,6 +1,8 @@
 
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -115,7 +117,7 @@ function Hitbox:ClientSidedDestructionLoop(Offset : CFrame, Size : Vector3, Powe
 	end
 
 	if (self.LuaPlayer.Player.Parent ~= nil) then
-		self.LuaPlayer.Remotes.DestructibleDestroyLoop:FireClient(self.LuaPlayer.Player, Offset, Size)
+		network.destructibleLoop.sendTo({ offset = Offset, size = Size }, self.LuaPlayer.Player)
 	end
 
 	return Clean

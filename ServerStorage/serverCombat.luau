@@ -569,7 +569,7 @@ end
 
 function Combat:ToggleHeadMovement(Value : boolean?)
 	if (not self.LuaPlayer.IsNPC and self.LuaPlayer:PlayerExists()) then
-		self.LuaPlayer.Remotes.ToggleHeadMovement:FireClient(self.LuaPlayer.Player, Value)
+		network.headMovement.sendTo(Value, self.LuaPlayer.Player)
 	end
 end
 
@@ -1026,7 +1026,7 @@ function Combat:SetCharacter(Name : string, ...)
 	self.CurrentCharacter.Stats = self.CurrentCharacter.Info.Stats and Utility.DeepCopy(self.CurrentCharacter.Info.Stats) or {}
 
 	if not self.LuaPlayer.IsNPC then
-		self.LuaPlayer.Remotes.Combat.SetCurrentCharacter:FireClient(self.LuaPlayer.Player, Name)
+		network.setCharacter.sendTo(Name, self.LuaPlayer.Player)
 	end
 
 	self.LuaPlayer.Replication.Attributes:SetAttribute("CurrentCharacter", Name)
@@ -2908,7 +2908,7 @@ function Combat:TSBPushVictim(VictimLuaPlayer, Settings : {})
 
 	if not VictimLuaPlayer.IsNPC then
 		VictimLuaPlayer.Replication.Attributes:SetAttribute("DestructibleDestroyLoop", true)
-		VictimLuaPlayer.Remotes.DestructibleDestroyLoop:FireClient(VictimLuaPlayer.Player, CFrame.new(0, 0, -4), Vector3.one * 6)
+		network.destructibleLoop.sendTo({ offset = CFrame.new(0, 0, -4), size = Vector3.one * 6 }, VictimLuaPlayer.Player)
 
 		NewJob:Task(function()
 			VictimLuaPlayer.Replication.Attributes:SetAttribute("DestructibleDestroyLoop", nil)

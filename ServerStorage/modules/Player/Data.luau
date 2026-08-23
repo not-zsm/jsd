@@ -1,6 +1,8 @@
 local DataStoreService = game:GetService("DataStoreService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local MarketplaceService = game:GetService("MarketplaceService")
 local PhysicsService = game:GetService("PhysicsService")
 local Players = game:GetService("Players")
@@ -289,7 +291,7 @@ function Data:DataLoaded()
 
 		if not self.Profile.Data.PromptedBloodWarning and not self.Profile.Data.Settings.Blood then
 			self.Profile.Data.PromptedBloodWarning = true
-			ReplicatedStorage.PlayerRemotes.PromptBloodWarning:FireClient(self.LuaPlayer.Player)
+			network.bloodWarning.sendTo(nil, self.LuaPlayer.Player)
 		end
 	end
 

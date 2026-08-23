@@ -1,5 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
@@ -359,7 +361,7 @@ function Attack:Activate()
 		end))
 
 		self.Thread.OnCancelled:Connect(function()
-			self.LuaPlayer:FireRemote("CancelClientDash")
+			network.cancelDash.sendTo(nil, self.LuaPlayer.Player)
 		end)
 
 		self.Thread.OnClosed:Connect(function()
@@ -391,7 +393,7 @@ function Attack:Activate()
 		end
 
 		self.Thread.OnCancelled:Connect(function()
-			self.LuaPlayer:FireRemote("CancelClientDash")
+			network.cancelDash.sendTo(nil, self.LuaPlayer.Player)
 		end)
 
 		self.Thread.OnClosed:Connect(function()

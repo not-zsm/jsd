@@ -119,3 +119,82 @@ network.useMove.listen(function(data, player)
 
 	Actions:UseMove(data.move, data.state, data.extra)
 end)
+
+network.tryReset.listen(function(_, player)
+	if not rateLimiter.check(player, "tryReset", 5) then return end
+
+	local LuaPlayer = LuaPlayerList.LuaPlayers[player]
+	local LuaCharacter = LuaPlayer and LuaPlayer.Character
+	if not LuaCharacter then return end
+
+	LuaCharacter:TryReset()
+end)
+
+--// titles
+local function getTitle(Player : Player)
+	local LuaPlayer = LuaPlayerList.LuaPlayers[Player]
+	local LuaCharacter = LuaPlayer and LuaPlayer.Character
+
+	return LuaCharacter and LuaCharacter.Title
+end
+
+network.equipTitle.listen(function(name, player)
+	if not rateLimiter.check(player, "equipTitle", 5) then return end
+
+	local Title = getTitle(player)
+	if not Title then return end
+
+	Title:Equip(name)
+end)
+
+network.unequipTitle.listen(function(_, player)
+	if not rateLimiter.check(player, "unequipTitle", 10) then return end
+
+	local Title = getTitle(player)
+	if not Title then return end
+
+	Title:Unequip()
+end)
+
+--// emotes
+local function getEmotes(Player : Player)
+	local LuaPlayer = LuaPlayerList.LuaPlayers[Player]
+	local LuaCharacter = LuaPlayer and LuaPlayer.Character
+
+	return LuaCharacter and LuaCharacter.Emotes
+end
+
+local function onEmotes(key : string, rate : number, apply : (any, any) -> ())
+	return function(data, player)
+		if not rateLimiter.check(player, key, rate) then return end
+
+		local Emotes = getEmotes(player)
+		if not Emotes then return end
+
+		apply(Emotes, data)
+	end
+end
+
+network.useEmote.listen(onEmotes("useEmote", 15, function(Emotes, emote)
+	Emotes:UseEmote(emote)
+end))
+
+network.claimEmote.listen(onEmotes("claimEmote", 15, function(Emotes)
+	Emotes:ClaimEmote()
+end))
+
+network.buyRandomEmote.listen(onEmotes("buyRandomEmote", 15, function(Emotes)
+	Emotes:BuyRandom()
+end))
+
+network.buyEmoteSlots.listen(onEmotes("buyEmoteSlots", 15, function(Emotes)
+	Emotes:BuySlots()
+end))
+
+network.buyLimitedEmote.listen(onEmotes("buyLimitedEmote", 15, function(Emotes, name)
+	Emotes:BuyLimited(name)
+end))
+
+network.setEmoteSlot.listen(onEmotes("setEmoteSlot", 5, function(Emotes, data)
+	Emotes:SetSlot(data.slot, data.emote)
+end))

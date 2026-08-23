@@ -1,11 +1,12 @@
 --== Imports ==--
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local RunService        = game:GetService("RunService")
 
 local Packages = ReplicatedStorage.Packages.Des
 local Trove    = require(Packages.Trove)
 
-local Event = ReplicatedStorage.PlayerRemotes.Atonement.Main
 
 --== Constants ==--
 local SURVIVE_SECONDS     = 9.0
@@ -60,7 +61,7 @@ function Session.new(player: Player, onFinish: ((Player, string, any) -> ())?)
 
 	self.Active = true
 	player:SetAttribute("CharaMinigame", true)
-	Event:FireClient(player, "Start", { duration = SURVIVE_SECONDS })
+	network.minigame.sendTo({ action = "Start", payload = { duration = SURVIVE_SECONDS } }, player)
 
 	return self
 end
@@ -96,7 +97,7 @@ function Session:Finish(reason: string)
 
 	local p = self.Player
 	if p and p.Parent then
-		Event:FireClient(p, "Stop", { reason = reason })
+		network.minigame.sendTo({ action = "Stop", payload = { reason = reason } }, p)
 		p:SetAttribute("CharaMinigame", false)
 	end
 

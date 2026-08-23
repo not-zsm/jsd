@@ -50,12 +50,8 @@ function DashHandler:_Init()
 		self.CannotDash = false
 	end)
 
-	task.spawn(function()
-		local CancelClientDash : RemoteEvent = 	self.LuaPlayer.Remotes:WaitForChild("Combat"):WaitForChild("CancelClientDash")
-		
-		CancelClientDash.OnClientEvent:Connect(function()
-			self.OnServerWantsCancel:Fire()
-		end)
+	network.cancelDash.listen(function()
+		self.OnServerWantsCancel:Fire()
 	end)
 	
 	CombatRemotes.FrontDashOutput.OnClientEvent:Connect(function()

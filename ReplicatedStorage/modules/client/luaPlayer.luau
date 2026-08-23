@@ -32,7 +32,6 @@ function LuaPlayer:_Init()
 	
 	self:EditPlayerModule()
 	
-	self.Remotes = self.Player:WaitForChild("Remotes", 100)
 
 	self.Replication = Replication.new(self)
 	self.Character = Character.new(self)

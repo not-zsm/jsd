@@ -1,4 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -26,7 +28,7 @@ local Emotes = {}
 Emotes.__index = Emotes
 
 function Emotes:Init()
-	self.LuaPlayer.Remotes.Emote.LoadSlots.OnClientEvent:Connect(function(HasGamepass : boolean)
+	network.emoteSlotsLoaded.listen(function(HasGamepass : boolean)
 		if typeof(HasGamepass) ~= "boolean" then return end
 
 		if HasGamepass then
@@ -36,7 +38,8 @@ function Emotes:Init()
 		self:CreateSlotsInCircle(HasGamepass and 8 or 4)
 	end)
 
-	self.LuaPlayer.Remotes.Emote.Update.OnClientEvent:Connect(function(Emotes : {[string] : boolean}, Slots : {[string] : string})
+	network.emotesUpdated.listen(function(data)
+		local Emotes, Slots = data.emotes, data.slots
 		for Name in Emotes do
 			self:Create(Name)
 		end
@@ -54,7 +57,8 @@ function Emotes:Init()
 		self:SortAll()
 	end)
 
-	self.LuaPlayer.Remotes.Emote.Get.OnClientEvent:Connect(function(Name : string, ClaimType : string)
+	network.emoteGranted.listen(function(data)
+		local Name, ClaimType = data.emote, data.claimType
 		if ClaimType == "Claim" then
 			SoundService.GUI.ClaimEmote.PlaybackSpeed = Random.new():NextNumber(0.8, 1.2)
 			SoundService.GUI.ClaimEmote:Play()
@@ -75,7 +79,11 @@ function Emotes:Init()
 		self:Create(Name, ClaimType)
 	end)
 
-	self.LuaPlayer.Remotes.Emote.Removed.OnClientEvent:Connect(function(Name : string)
+	network.emoteSlotSet.listen(function(data)
+		self:ApplySlot(data.slot, data.emote)
+	end)
+
+	network.emoteRemoved.listen(function(Name : string)
 		if self.EmoteData[Name] then
 			self.EmoteData[Name].Job:Destroy()
 			self.EmoteData[Name].Frame:Destroy()
@@ -83,11 +91,12 @@ function Emotes:Init()
 		end
 	end)
 
-	self.LuaPlayer.Remotes.Emote.ClaimedAll.OnClientEvent:Connect(function()
+	network.emotesClaimedAll.listen(function()
 		self:HideClaimUI()
 	end)
 
-	self.LuaPlayer.Remotes.Emote.UpdateKillClaim.OnClientEvent:Connect(function(KillsCanClaim : number, KillsUntilEmote : number, HasAll : boolean)
+	network.emoteKillClaim.listen(function(data)
+		local KillsCanClaim, KillsUntilEmote, HasAll = data.canClaim, data.untilNext, data.hasAll
 		if HasAll then
 			return self:HideClaimUI()
 		end
@@ -106,15 +115,15 @@ function Emotes:Init()
 	end)
 
 	self.TitleHolder.KillsUntilEmote.MouseButton1Click:Connect(function()
-		self.LuaPlayer.Remotes.Emote.Claim:FireServer()
+		network.claimEmote.send()
 	end)
 
 	self.TitleHolder.BuyRandomEmote.MouseButton1Click:Connect(function()
-		self.LuaPlayer.Remotes.Emote.BuyRandom:FireServer()
+		network.buyRandomEmote.send()
 	end)
 
 	self.Holder.SlotsGamepass.Interaction.MouseButton1Click:Connect(function()
-		self.LuaPlayer.Remotes.Emote.BuySlots:FireServer()
+		network.buyEmoteSlots.send()
 	end)
 
 	task.spawn(function()
@@ -131,7 +140,7 @@ function Emotes:Init()
 			if (Timer == nil or Button == nil) then continue end
 
 			Button.MouseButton1Click:Connect(function()
-				self.LuaPlayer.Remotes.Emote.BuyLimited:FireServer(Emote)
+				network.buyLimitedEmote.send(Emote)
 			end)
 
 			UI.Visible = false
@@ -233,7 +242,7 @@ function Emotes:PressedSlotWithEmote(Slot : string)
 	local Emote : string = self.Slots[Slot] 
 	if (Emote == nil) then return end
 
-	self.LuaPlayer.Remotes.Emote.Clicked:FireServer(Emote)
+	network.useEmote.send(Emote)
 	self:Toggle()
 end
 
@@ -398,31 +407,38 @@ function Emotes:MakeViewportOnSlot(Emote : TextButton, Name : string)
 	end
 end
 
+--[[
+	Asks the server to put an emote in the focused slot.
+
+	This was a RemoteFunction the client waited on before repainting. byteNet
+	does not do round trips, so the ask and the answer are two packets and the
+	repaint happens in ApplySlot when the server confirms.
+--]]
 function Emotes:ChangeFocusedEmoteSlot(Name : string)
-	if self.FocusingOnSlot then
-		local UpdateSlotInvoke = self.LuaPlayer.Remotes.Emote:FindFirstChild("UpdateSlot")
+	if not self.FocusingOnSlot then return end
 
-		if UpdateSlotInvoke then
-			local FocusedSlot = self.FocusingOnSlot
-			local Success, Result = pcall(UpdateSlotInvoke.InvokeServer, UpdateSlotInvoke, FocusedSlot, Name)
+	network.setEmoteSlot.send({ slot = self.FocusingOnSlot, emote = Name })
+end
 
-			if (Success and Result and self.FocusingOnSlot and self.FocusingOnSlot == FocusedSlot) then
-				self.Slots[self.FocusingOnSlot] = Name
+--- The server confirmed a slot write. Same repaint the invoke used to gate.
+function Emotes:ApplySlot(Slot : string, Name : string)
+	self.Slots[Slot] = Name
 
-				local Emote : ImageButton = self.Circle[self.FocusingOnSlot]
-				self:MakeViewportOnSlot(Emote, Name)
+	local Emote : ImageButton = self.Circle[Slot]
+	if not Emote then return end
 
-				Emote.EmoteName.Text = Name
+	self:MakeViewportOnSlot(Emote, Name)
 
-				if Colors[Name] then
-					SetColor(Emote.EmoteName, Colors[Name])
-				else
-					Emote.EmoteName.TextColor3 = Color3.fromRGB(255, 255, 255)
-				end
+	Emote.EmoteName.Text = Name
 
-				self:ResetCircle()
-			end
-		end
+	if Colors[Name] then
+		SetColor(Emote.EmoteName, Colors[Name])
+	else
+		Emote.EmoteName.TextColor3 = Color3.fromRGB(255, 255, 255)
+	end
+
+	if self.FocusingOnSlot == Slot then
+		self:ResetCircle()
 	end
 end
 

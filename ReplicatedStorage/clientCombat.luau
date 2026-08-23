@@ -233,30 +233,30 @@ function Combat:Connect()
 		self:ResetJumpFatigue()
 	end)
 
-	self.LuaPlayer.Remotes.Combat.Velocity.OnClientEvent:Connect(function(Settings : {})
+	network.velocitySettings.listen(function(Settings : {})
 		local NewObject = self:Velocity()
 		NewObject.Settings = Settings
 		NewObject:Fire()
 	end)
 
-	self.LuaPlayer.Remotes.Combat.SetCurrentCharacter.OnClientEvent:Connect(function(Name : string)
+	network.setCharacter.listen(function(Name : string)
 		self:SetAsCurrentCharacter(Name);
 	end)
 
-	self.LuaPlayer.Remotes.DestructibleDestroyLoop.OnClientEvent:Connect(function(Offset : CFrame, Size : Vector3)
-		self:DestructibleDestroyLoop(Offset, Size)
+	network.destructibleLoop.listen(function(data)
+		self:DestructibleDestroyLoop(data.offset, data.size)
 	end)
 
-	self.LuaPlayer.Remotes.StandUpright.OnClientEvent:Connect(function(DownwardY : number?)
+	network.standUpright.listen(function(DownwardY : number?)
 		self:StandUpright(DownwardY)
 	end)
 
-	self.LuaPlayer.Remotes.FixCenter.OnClientEvent:Connect(function()
+	network.fixCenter.listen(function()
 		self.LuaCharacter:FixCenter()
 	end)
 
-	self.LuaPlayer.Remotes.ClientCooldownWithIndicator.OnClientEvent:Connect(function(Name : string, Duration : number)
-		self:AddCooldown(Name, Duration)
+	network.moveCooldown.listen(function(data)
+		self:AddCooldown(data.move, data.duration)
 	end)
 
 	self.ResetStack = NumberStack.new()
@@ -265,7 +265,7 @@ function Combat:Connect()
 
 	ResetEvent.Event:Connect(function(...)
 		if self.ResetStack:IsFalse() then
-			self.LuaPlayer.Remotes.OnPlayerTryReset:FireServer()
+			network.tryReset.send()
 		end
 	end)
 
@@ -586,7 +586,7 @@ function Combat:InitializeHumanoidAvailability()
 				--if not self.ConnectedToSetCurrentCharacter then
 				--	self.ConnectedToSetCurrentCharacter = true
 
-				--	self.LuaPlayer.Remotes.Combat.SetCurrentCharacter.OnClientEvent:Connect(function(Name : string)
+				--	network.setCharacter.listen(function(Name : string)
 				--		print("SetCurrentCharacter OnClientEvent")
 				--		self:SetAsCurrentCharacter(Name);
 				--	end)
