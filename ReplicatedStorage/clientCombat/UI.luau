@@ -360,7 +360,7 @@ function UI:SetHUDHidden(Hidden : boolean, Time : number?)
 		Position = UDim2.fromScale(0, Hidden and 0.3 or 0)
 	}):Play()
 
-	self.Hotbar:SetHidden(Hidden, Time)
+	self.Hotbar:SetHidden(Hidden)
 end
 
 function UI:UpdateDeviceSupport(Controller : boolean?, Touch : boolean)

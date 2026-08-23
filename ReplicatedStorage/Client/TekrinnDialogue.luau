@@ -177,9 +177,7 @@ local function retireTexts(parent)
 end
 
 -- Holder drifts to its stack slot rather than snapping, and rides the combat
--- HUD so a subtitle never sits on top of it. The HUD is not a ScreenGui that
--- gets disabled here the way jjk's is: UI:Toggle slides Main.Holder down and
--- marks Main with a Hidden attribute, so that is what we follow.
+-- HUD so a subtitle never sits on top of it.
 local function startFloating(ui, holder)
 	if ui:GetAttribute("IsFloating") then return end
 	ui:SetAttribute("IsFloating", true)
@@ -198,8 +196,8 @@ local function startFloating(ui, holder)
 
 			if not holder.Parent then return end
 
-			local main = LocalPlayer.PlayerGui:FindFirstChild("Main")
-			local shift = (main and main:GetAttribute("Hidden")) and HUD_SHIFT or 0
+			local hud = LocalPlayer.PlayerGui:FindFirstChild("CombatHotbar")
+			local shift = (hud and not hud.Enabled) and HUD_SHIFT or 0
 
 			local targetY = baseY
 				- STACK_SPACING * (ui:GetAttribute("StackCount") or 0)

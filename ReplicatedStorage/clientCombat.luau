@@ -41,10 +41,6 @@ function Combat:_Init()
 	self.LockOn = require(script.LockOn).new(self)
 	self.UI = require(script.UI).new(self)
 
-	self.GUICooldowns = self.UI.Hotbar.ExtraCooldowns
-	self.GUICooldownTemplate = self.UI.Hotbar.CooldownTemplate
-	self.GUICooldownIcons = self.UI.Hotbar.CooldownIcons
-
 	self.FakeMouse = require(script.Mouse).new(self)
 
 	for _, Action in ipairs(ClientHandlers:GetChildren()) do
@@ -411,29 +407,9 @@ function Combat:AddCooldown(Name : string, Duration : number?)
 	end
 
 	local Data = {}
-	local Icon = self.GUICooldownIcons:FindFirstChild(Name)
 
-	if (Icon ~= nil) then
-		local GUI : Frame = self.GUICooldownTemplate:Clone()
-
-		GUI.Icon.Image = Icon.Image
-		GUI.TextLabel.Text = Name
-		GUI.Visible = true
-		GUI.Parent = self.GUICooldowns
-
-		local Tween = TweenService:Create(GUI.cd, TweenInfo.new(Duration, Enum.EasingStyle.Linear), {
-			Size = UDim2.new(0, 0, GUI.cd.Size.Y.Scale, GUI.cd.Size.Y.Offset)
-		})
-
-		Tween:Play()
-
-		Tween.Completed:Once(function(State)
-			if State == Enum.PlaybackState.Completed then
-				GUI:Destroy()
-			end
-		end)
-
-		Data.GUI = GUI
+	if not self.UI.Hotbar:Get(Name) then
+		Data.Cancel = self.UI.Hotbar:AddExtraCooldown(Name, Duration)
 	end
 
 	Data.Thread = task.delay(Duration, self.RemoveCooldown, self, Name)
@@ -448,8 +424,8 @@ function Combat:RemoveCooldown(Name : string)
 		task.cancel(self.Cooldowns[Name].Thread)
 	end
 
-	if self.Cooldowns[Name].GUI then
-		self.Cooldowns[Name].GUI:Destroy()
+	if self.Cooldowns[Name].Cancel then
+		self.Cooldowns[Name].Cancel()
 	end
 
 	self.Cooldowns[Name] = nil

@@ -12,6 +12,8 @@ local LocalPlayer = Players.LocalPlayer
 local FLASH = TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
 local SLIDE = TweenInfo.new(0.5, Enum.EasingStyle.Cubic)
 local USE = TweenInfo.new(0.25)
+local ENTER = TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+local EXIT = TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
 
 local CONTROLLER_NAMES = {
 	[Enum.KeyCode.ButtonA] = "A",
@@ -59,7 +61,9 @@ function Hotbar.new(UI)
 	self.Slots = {}
 
 	local GUI: ScreenGui = script.hotbar:Clone()
-	GUI.Name = "Hotbar"
+	-- not "Hotbar": the tools backpack already clones a ScreenGui by that name
+	-- into PlayerGui, and a FindFirstChild would be a coin flip between them
+	GUI.Name = "CombatHotbar"
 	GUI.Parent = UI.PlayerGui
 
 	self.GUI = GUI
@@ -68,11 +72,9 @@ function Hotbar.new(UI)
 	self.UltBar = GUI:WaitForChild("ultBar")
 	self.ExtraCooldowns = GUI:WaitForChild("extraCD")
 	self.CooldownTemplate = self.ExtraCooldowns:WaitForChild("template")
-	self.CooldownIcons = self.ExtraCooldowns:WaitForChild("CooldownIcons")
 
 	self.Template.Parent = script          -- keep the template out of the layout
-	self.HolderPosition = self.Holder.Position
-	self.UltPosition = self.UltBar.Position
+	self.Color = Color3.new(1, 1, 1)
 
 	return self
 end
@@ -110,6 +112,8 @@ function Hotbar:Add(Name: string, Key)
 		Number = Inner:WaitForChild("Number"),
 		Tip = Inner:WaitForChild("Reuse"),
 		Stroke = Inner:FindFirstChildWhichIsA("UIStroke"),
+		StrokeColor = nil,
+		StrokeTransparency = nil,
 		Cooldown = Root:WaitForChild("Cooldown"),
 		Flash = Root:WaitForChild("Flash"),
 
@@ -126,6 +130,13 @@ function Hotbar:Add(Name: string, Key)
 	}
 
 	self.Slots[Name] = Slot
+
+	if Slot.Stroke then
+		Slot.StrokeColor = Slot.Stroke.Color
+		Slot.StrokeTransparency = Slot.Stroke.Transparency
+	end
+
+	Slot.Cooldown.BackgroundColor3 = self.Color
 
 	Root.Name = Name
 	Root.LayoutOrder = Order
@@ -208,18 +219,14 @@ function Hotbar:SetDisplay(Name: string, Text: string, Tip: string?, FlashColor:
 
 	if not Slot.Stroke then return end
 
+	-- back to the outline the slot is meant to have, not to invisible
 	Slot.Stroke.Color = FlashColor
 	Slot.Stroke.Transparency = 0
-	Slot.Stroke.Enabled = true
 
-	local Tween = TweenService:Create(Slot.Stroke, FLASH, { Transparency = 1 })
-	Tween:Play()
-
-	Tween.Completed:Once(function(State)
-		if State == Enum.PlaybackState.Completed and Slot.Root.Parent then
-			Slot.Stroke.Enabled = false
-		end
-	end)
+	TweenService:Create(Slot.Stroke, FLASH, {
+		Color = Slot.StrokeColor,
+		Transparency = Slot.StrokeTransparency,
+	}):Play()
 end
 
 ----------------------------------------------------------------------------------
@@ -231,6 +238,7 @@ function Hotbar:AddCooldown(Name: string, Duration: number)
 	local Timing = Instance.new("NumberValue")
 	Timing.Value = 1
 
+	Slot.Cooldown.BackgroundColor3 = self.Color
 	Slot.Cooldown.Visible = true
 	Slot.Cooldown.Size = UDim2.fromScale(1, 1)
 
@@ -239,17 +247,26 @@ function Hotbar:AddCooldown(Name: string, Duration: number)
 		Slot.CooldownValue.Visible = true
 	end
 
+	-- the overlay is anchored at its centre, so shrinking width closes it in
+	-- from both edges rather than wiping bottom to top
 	Timing.Changed:Connect(function(Value)
 		if not Slot.Root.Parent then return end
 
-		Slot.Cooldown.Size = UDim2.fromScale(1, Value)
+		Slot.Cooldown.Size = UDim2.fromScale(Value, 1)
 
 		if Slot.CooldownValue then
 			Slot.CooldownValue.Text = tostring(math.round(Value * Duration))
 		end
 	end)
 
-	TweenService:Create(Timing, TweenInfo.new(Duration, Enum.EasingStyle.Linear), { Value = 0 }):Play()
+	local Tween = TweenService:Create(Timing, TweenInfo.new(Duration, Enum.EasingStyle.Linear), { Value = 0 })
+	Tween:Play()
+
+	Tween.Completed:Once(function(State)
+		if State == Enum.PlaybackState.Completed and Slot.Root.Parent then
+			self:Use(Name)
+		end
+	end)
 
 	Slot.RemoveCooldown:Once(function()
 		Timing:Destroy()
@@ -331,17 +348,52 @@ end
 
 ----------------------------------------------------------------------------------
 
-function Hotbar:SetHidden(Hidden: boolean, Time: number?)
-	local Info = TweenInfo.new(Time or 1.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
-	local Drop = Hidden and 0.3 or 0
+-- Moves with no hotbar slot -- dashes, M1, wall run -- get a chip in the extra
+-- cooldown list instead. Returns a canceller: it destroys the chip outright,
+-- while letting the timer run out plays the exit.
+function Hotbar:AddExtraCooldown(Name: string, Duration: number)
+	local Chip: Frame = self.CooldownTemplate:Clone()
+	local Offscreen = UDim2.fromScale(1, 1)
 
-	for _, Frame in { { self.Holder, self.HolderPosition }, { self.UltBar, self.UltPosition } } do
-		local Target, Origin = Frame[1], Frame[2]
+	Chip.Name = Name
+	Chip.TextLabel.Text = Name
+	Chip.cd.BackgroundColor3 = self.Color
+	Chip.Position = Offscreen
+	Chip.Visible = true
+	Chip.Parent = self.ExtraCooldowns
 
-		TweenService:Create(Target, Info, {
-			Position = UDim2.new(Origin.X.Scale, Origin.X.Offset, Origin.Y.Scale + Drop, Origin.Y.Offset)
-		}):Play()
+	TweenService:Create(Chip, ENTER, { Position = UDim2.fromScale(0, 0) }):Play()
+
+	local Resting = Chip.cd.Size
+	local Tween = TweenService:Create(Chip.cd, TweenInfo.new(Duration, Enum.EasingStyle.Linear), {
+		Size = UDim2.new(0, 0, Resting.Y.Scale, Resting.Y.Offset)
+	})
+
+	local Finished = false
+	Tween:Play()
+
+	Tween.Completed:Once(function(State)
+		if State ~= Enum.PlaybackState.Completed or not Chip.Parent then return end
+
+		Finished = true
+		TweenService:Create(Chip, EXIT, { Position = Offscreen }):Play()
+		task.delay(1.5, Chip.Destroy, Chip)
+	end)
+
+	return function()
+		if Finished then return end
+
+		Tween:Cancel()
+		Chip:Destroy()
 	end
+end
+
+----------------------------------------------------------------------------------
+
+-- Toggled, not moved: the sway writes Position every frame, so anything that
+-- slides the HUD away is dragged straight back. TekrinnDialogue watches this.
+function Hotbar:SetHidden(Hidden: boolean)
+	self.GUI.Enabled = not Hidden
 end
 
 function Hotbar:SetUltVisible(Visible: boolean)
@@ -353,13 +405,27 @@ function Hotbar:SetUltName(Text: string)
 end
 
 function Hotbar:SetUltColor(Color)
-	local Mask = self.UltBar.prog.progressContainer.mask
-
 	if typeof(Color) == "ColorSequence" then
-		Mask.ImageColor3 = Color.Keypoints[1].Value
+		self.Color = Color.Keypoints[1].Value
 		self.UltBar.prog.UIGradient.Color = Color
 	elseif typeof(Color) == "Color3" then
-		Mask.ImageColor3 = Color
+		self.Color = Color
+	else
+		return
+	end
+
+	self.UltBar.prog.progressContainer.mask.ImageColor3 = self.Color
+
+	-- cooldowns are the ult colour, so a character switch repaints the ones
+	-- already built as well as the ones still to come
+	for _, Slot in self.Slots do
+		Slot.Cooldown.BackgroundColor3 = self.Color
+	end
+
+	for _, Chip in self.ExtraCooldowns:GetChildren() do
+		if Chip:IsA("GuiObject") and Chip.Name ~= "template" then
+			Chip.cd.BackgroundColor3 = self.Color
+		end
 	end
 end
 

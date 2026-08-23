@@ -38,10 +38,5 @@
     "from": "jjk",
     "src": "StarterPlayer.StarterPlayerScripts.PlayerScriptsLoader.mainClient.UI.hotbar",
     "dst": "ReplicatedStorage.clientCombat.UI.Hotbar"
-  },
-  {
-    "from": "base",
-    "src": "StarterGui.Main.Holder.Ultimate.CooldownIcons",
-    "dst": "ReplicatedStorage.clientCombat.UI.Hotbar.hotbar.extraCD"
   }
 ]
