@@ -12,7 +12,6 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local Remotes = replicatedStorage.Remotes
 
-local UIRemotes = Remotes.Combat.UI
 
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )

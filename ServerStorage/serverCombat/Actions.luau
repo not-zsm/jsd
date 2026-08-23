@@ -6,9 +6,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 local network = require( replicatedStorage.modules.network )
 local RunService = game:GetService("RunService")
 
-local Remotes = replicatedStorage.Remotes
 
-local CombatRemotes = Remotes.Combat
 
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 

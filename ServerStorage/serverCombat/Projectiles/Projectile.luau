@@ -9,7 +9,6 @@ local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 

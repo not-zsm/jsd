@@ -8,7 +8,6 @@ local StarterGui = game:GetService("StarterGui")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
 local network = require( replicatedStorage.modules.network )
 

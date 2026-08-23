@@ -391,5 +391,25 @@ return byteNet.defineNamespace("game", function()
 				extra = byteNet.optional(byteNet.unknown),
 			}),
 		}),
+
+		hideUI = byteNet.definePacket({ value = byteNet.bool }),
+
+		--// the aim mouse. UpdatePosition and UpdateAsRequested reached the same
+		--// handler, so one packet covers both; unreliable because it is a
+		--// per-frame aim stream while a move is charging
+		mouseAim = byteNet.definePacket({
+			reliabilityType = "unreliable",
+			value = byteNet.struct({
+				hit = byteNet.cframe,
+				target = byteNet.optional(byteNet.inst),
+			}),
+		}),
+
+		requestMouseAim = byteNet.definePacket({
+			value = byteNet.struct({
+				active = byteNet.bool,
+				preset = byteNet.optional(byteNet.string),
+			}),
+		}),
 	}
 end)

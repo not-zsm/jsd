@@ -8,7 +8,6 @@ local UserInputService = game:GetService("UserInputService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities

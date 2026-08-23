@@ -1,5 +1,7 @@
 local UserInputService = game:GetService("UserInputService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local CollectionService = game:GetService("CollectionService")
 local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
@@ -8,9 +10,7 @@ local CurrentCamera = workspace.CurrentCamera
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
-local FakeMouseRemotes = Remotes.Combat.FakeMouse
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local AimAssist = require( replicatedStorage.modules.shared.Game.AimAssist )
@@ -96,6 +96,13 @@ function FakeMouse:Check()
 	return self.LuaPlayer.Mouse.Hit, Target_Model
 end
 
+--- Check returns (CFrame, Model?); mouseAim wants them named.
+function FakeMouse:Aim()
+	local Hit, Target = self:Check()
+
+	return { hit = Hit, target = Target }
+end
+
 function FakeMouse:CleanRequestLoop()
 	if (self.UpdateLoop ~= nil and self.UpdateLoop.Connected) then
 		self.UpdateLoop:Disconnect()
@@ -129,7 +136,8 @@ function FakeMouse.new(Combat)
 
 	self.UpdateLoop = nil
 
-	FakeMouseRemotes.RequestUpdate.OnClientEvent:Connect(function(Value : boolean, MouseAimPreset : string?)
+	network.requestMouseAim.listen(function(data)
+		local Value, MouseAimPreset = data.active, data.preset
 		if Value then
 			
 			if (MouseAimPreset ~= nil) then
@@ -145,7 +153,7 @@ function FakeMouse.new(Combat)
 			self:CleanRequestLoop()
 			
 			self.UpdateLoop = RunService.PreRender:Connect(function()
-				FakeMouseRemotes.UpdateAsRequested:FireServer(self:Check())
+				network.mouseAim.send(self:Aim())
 			end)
 		else
 			self:AimTo(false)

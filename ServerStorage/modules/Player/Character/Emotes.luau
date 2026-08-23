@@ -20,7 +20,6 @@ local Limited_Emote_Dates = require( replicatedStorage.modules.shared.Game["Limi
 local Limited_Products_Ids = require( script["Limited Product Ids"] )
 local Preloading = require( ServerStorage.modules.preloading )
 
-local Remotes = replicatedStorage.Remotes
 
 ----------------------------------------------------------------------------------
 

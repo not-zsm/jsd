@@ -11,11 +11,8 @@ local CollectionService = game:GetService("CollectionService")
 
 local network = require( replicatedStorage.modules.network )
 
-local Remotes = replicatedStorage.Remotes
 
-local CombatRemotes = Remotes.Combat
 
-local UIRemotes = CombatRemotes.UI
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
@@ -92,7 +89,7 @@ function UI:Init()
 		self:RemoveCooldown(Name)
 	end)
 
-	UIRemotes.Hide.OnClientEvent:Connect(function(Toggle : boolean)
+	network.hideUI.listen(function(Toggle : boolean)
 		self:Toggle(not Toggle)
 	end)
 

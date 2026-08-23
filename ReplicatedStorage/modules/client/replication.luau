@@ -8,7 +8,6 @@ local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
 
 local VFX = script.VFX

@@ -7,10 +7,7 @@ local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
-local CombatRemotes = Remotes.Combat
-local UIRemotes = CombatRemotes.UI
 
 local AttackAnimations = replicatedStorage.Animations.Attacks
 

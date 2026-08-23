@@ -10,7 +10,6 @@ local SoundService = game:GetService("SoundService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )

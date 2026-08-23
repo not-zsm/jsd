@@ -22,9 +22,7 @@ end
 
 local Remotes = replicatedStorage.Remotes
 
-local CombatRemotes = Remotes.Combat
 
-local UIRemotes = CombatRemotes.UI
 
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
@@ -562,7 +560,7 @@ end
 
 function Combat:HideUI(Value : boolean)
 	if not self.LuaPlayer.IsNPC and self.LuaPlayer:PlayerExists() then
-		UIRemotes.Hide:FireClient(self.LuaPlayer.Player, Value)
+		network.hideUI.sendTo(Value, self.LuaPlayer.Player)
 	end
 end
 

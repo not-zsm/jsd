@@ -6,8 +6,6 @@ local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
-local FakeMouseRemotes = Remotes.Combat.FakeMouse
 
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 

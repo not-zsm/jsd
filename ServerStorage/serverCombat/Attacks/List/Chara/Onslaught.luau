@@ -4,8 +4,6 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
-local Remotes = replicatedStorage.Remotes
-local UIRemotes = Remotes.Combat.UI
 
 ----------------------------------------------------------------------------------
 

@@ -5,8 +5,6 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 
-local Remotes = replicatedStorage.Remotes
-local CombatRemotes = Remotes.Combat
 
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
@@ -727,7 +725,7 @@ end
 function Combat:_AttackInputUpdate(Name : string, State : boolean, Key : (Enum.KeyCode | Enum.UserInputType))
 	if (self.ClientHandlers[Name] == nil) then
 		if (Key ~= Enum.UserInputType.MouseButton1 and Key ~= Enum.UserInputType.MouseButton2) then
-			CombatRemotes.FakeMouse.UpdatePosition:FireServer(self.FakeMouse:Check())
+			network.mouseAim.send(self.FakeMouse:Aim())
 		end
 
 		if self.HoldingJump or self.FreeFalling then

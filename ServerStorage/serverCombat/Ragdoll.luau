@@ -7,9 +7,7 @@ local network = require( replicatedStorage.modules.network )
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
-local CombatRemotes = Remotes.Combat
 
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities

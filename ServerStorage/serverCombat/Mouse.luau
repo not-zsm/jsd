@@ -2,12 +2,13 @@
 
 local UserInputService = game:GetService("UserInputService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
+local connect = require( replicatedStorage.modules.network.connect )
 local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
-local FakeMouseRemotes = Remotes.Combat.FakeMouse
 
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local NumberStack = require( replicatedStorage.modules.shared.Utilities.NumberStack )
@@ -22,16 +23,11 @@ function FakeMouse:Destroy()
 end
 
 function FakeMouse:_Init()
-	local function OnEvent(Player2 : Player, Hit : CFrame, Target : Model?)
+	self.Job:Task(connect(network.mouseAim, function(data, Player2 : Player)
 		if self.LuaPlayer.Player ~= Player2 then return end
-		
-		if typeof(Hit) == "CFrame" then
-			self:Update(Hit, Target)
-		end
-	end
-	
-	self.Job:Task(FakeMouseRemotes.UpdatePosition.OnServerEvent:Connect(OnEvent))
-	self.Job:Task(FakeMouseRemotes.UpdateAsRequested.OnServerEvent:Connect(OnEvent))
+
+		self:Update(data.hit, data.target)
+	end))
 end
 
 function FakeMouse:IsRequesting()
@@ -42,7 +38,7 @@ function FakeMouse:BeginRequesting(Duration : number, MouseAimPreset : string?)
 	if not self:IsRequesting() then
 	
 		if not self.LuaPlayer.IsNPC then
-			FakeMouseRemotes.RequestUpdate:FireClient(self.LuaPlayer.Player, true, MouseAimPreset)
+			network.requestMouseAim.sendTo({ active = true, preset = MouseAimPreset }, self.LuaPlayer.Player)
 		end
 
 		if (Duration) then
@@ -58,7 +54,7 @@ function FakeMouse:EndRequesting(Duration : number)
 		self.RequestStack:Subtract()
 		
 		if not self:IsRequesting() and not self.LuaPlayer.IsNPC then
-			FakeMouseRemotes.RequestUpdate:FireClient(self.LuaPlayer.Player, false)
+			network.requestMouseAim.sendTo({ active = false }, self.LuaPlayer.Player)
 		end
 	end
 end
