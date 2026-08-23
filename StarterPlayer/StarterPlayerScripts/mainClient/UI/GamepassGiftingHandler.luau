@@ -4,6 +4,8 @@ GamepassGiftingHandler.__index = GamepassGiftingHandler
 local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local UserService = game:GetService("UserService")
 
 local Remotes = replicatedStorage:WaitForChild("Remotes")
@@ -77,7 +79,7 @@ function GamepassGiftingHandler:CreateGamepassButtons()
 	-- Setup Selection Button Listeners
 	self.CurrentSelection.PurchaseForSelf.MouseButton1Click:Connect(function()
 		if self.SelectedGamepass then
-			Remotes.PromptGamepassPurchase:FireServer(self.SelectedGamepass.Name)
+			network.promptGamepass.send(self.SelectedGamepass.Name)
 		end
 	end)
 
@@ -315,7 +317,7 @@ function GamepassGiftingHandler:ConfirmSelection(UserId, Username, Displayname, 
 	self.ConfirmationPrompted = true
 	
 	self.ConfirmationConnections[self.Confirmation.Selections.Yes] = self.Confirmation.Selections.Yes.MouseButton1Click:Connect(function()
-		Remotes.GiftGamepass:FireServer(UserId, SelectedGamepassName)
+		network.giftGamepass.send({ userId = UserId, gamepass = SelectedGamepassName })
 		self.Confirmation.Visible = false
 		self.ConfirmationPrompted = false
 		

@@ -1,4 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
 local Lighting = game:GetService("Lighting")
@@ -449,7 +451,7 @@ return {
 								HitFirstQTE = WasInRange
 							end
 
-							return Remote:FireServer(WasInRange, Type)
+							return network.moveInRange.send({ model = Model, inRange = WasInRange, stage = Type })
 						end,
 					})
 

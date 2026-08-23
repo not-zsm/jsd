@@ -10,6 +10,8 @@ return {
 		local SoundService = game:GetService("SoundService")
 		local replicatedStorage = game:GetService("ReplicatedStorage")
 
+local network = require( replicatedStorage.modules.network )
+
 		local function getFunction(str)
 			for i,v in script:GetChildren() do
 				if v.Name:lower() == str:lower() then
@@ -18,11 +20,11 @@ return {
 			end
 		end
 
-		replicatedStorage.Remotes.Commands.Respawn.OnClientEvent:Connect(function()
+		network.respawn.listen(function()
 			SoundService.NPC.Respawn:Play()
 		end)
 
-		replicatedStorage.Remotes.RemoveMicrophone.OnClientEvent:Connect(function(Emitter)
+		network.removeMicrophone.listen(function(Emitter)
 			Emitter:Destroy()
 		end)
 

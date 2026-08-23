@@ -54,7 +54,7 @@ function Settings:Init()
 		end)
 	end
 	
-	replicatedStorage.Remotes.LoadSettings.OnClientEvent:Once(function(Settings : {[string] : boolean})
+	network.loadSettings.listen(function(Settings : {[string] : boolean})
 		self.SettingsData = Settings
 		
 		--self.DeviceKeybinds = DeviceKeybinds

@@ -1,5 +1,7 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
-local RemoteHandler = replicatedStorage.Remotes.CreateQT
+
+local network = require( replicatedStorage.modules.network )
+local connect = require( replicatedStorage.modules.network.connect )
 
 local EventService = require(replicatedStorage.modules.shared.Utilities.EventService)
 local Job = require(replicatedStorage.modules.shared.Utilities.Job)
@@ -71,11 +73,15 @@ function QuicktimeHandler._Init(self : object)
 	end))
 
 	Active[self] = true
-	RemoteHandler:FireClient(self.Owner, self.Key, self.ControllerKey, self.Range)
+	network.quicktime.sendTo({
+		key = self.Key.Name,
+		controllerKey = self.ControllerKey.Name,
+		rangeMin = self.Range.Min,
+		rangeMax = self.Range.Max,
+	}, self.Owner)
 	
-	self.Job:Task(RemoteHandler.OnServerEvent:Connect(function(Player : Player, Success : boolean)
+	self.Job:Task(connect(network.quicktimeInput, function(Success : boolean, Player : Player)
 		if self.Owner ~= Player then return end
-		if typeof(Success) ~= "boolean" then return end
 
 		self.RecievedInput = true
 		self.OnUpdate:Fire(Success)

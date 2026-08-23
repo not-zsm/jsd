@@ -1,4 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local UserInputService = game:GetService("UserInputService")
 local contextActionService = game:GetService("ContextActionService")
 local SoundService = game:GetService("SoundService")
@@ -16,7 +18,6 @@ ScreenGui.Parent = LocalPlayer.PlayerGui
 local EventService = require(replicatedStorage.modules.shared.Utilities.EventService)
 local Job = require(replicatedStorage.modules.shared.Utilities.Job)
 
-local RemoteHandler = replicatedStorage.Remotes.CreateQT
 local SFX = script.SFX
 
 type object = {
@@ -91,7 +92,7 @@ function QuicktimeHandler.new(Key : Enum.KeyCode, ControllerKey : Enum.KeyCode, 
 				self:Fail()
 			end
 
-			RemoteHandler:FireServer(self.IsInRange)
+			network.quicktimeInput.send(self.IsInRange)
 		end
 	end)
 
@@ -244,6 +245,12 @@ function QuicktimeHandler.Destroy(self : object)
 	self.Job:Destroy()
 end
 
-RemoteHandler.OnClientEvent:Connect(QuicktimeHandler.new)
+network.quicktime.listen(function(data)
+	QuicktimeHandler.new(
+		Enum.KeyCode[data.key],
+		Enum.KeyCode[data.controllerKey] or Enum.UserInputType[data.controllerKey],
+		NumberRange.new(data.rangeMin, data.rangeMax)
+	)
+end)
 
 return QuicktimeHandler

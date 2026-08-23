@@ -1,4 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local NewspaperViewer = {}
 NewspaperViewer.__index = NewspaperViewer
 
@@ -52,7 +54,7 @@ function NewspaperViewer:OpenArticle(Article)
 		self.NPC:SetAttribute("Reading", true)
 	end
 	
-	replicatedStorage.Remotes.NPCs.ReadPaper:FireServer(true)
+	network.readPaper.send(true)
 	
 	self.CurrentArticle = Article
 	self.CurrentPage = 1
@@ -97,7 +99,7 @@ function NewspaperViewer:Close()
 		self.NPC:SetAttribute("Reading", false)
 	end
 	
-	replicatedStorage.Remotes.NPCs.ReadPaper:FireServer(false)
+	network.readPaper.send(false)
 end
 
 function NewspaperViewer:GetChoices()

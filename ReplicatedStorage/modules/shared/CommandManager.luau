@@ -2,6 +2,8 @@
 local StarterGui = game:GetService("StarterGui")
 local TextChatService = game:GetService("TextChatService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local GamepadService = game:GetService("GamepadService")
 local Players = game:GetService("Players")
 
@@ -11,8 +13,6 @@ local EventService = require( replicatedStorage.modules.shared.Utilities.EventSe
 local MultipleChoiceList = require( script.MultipleChoiceList )
 local Stylus = require( replicatedStorage.Packages.Stylus )
 
-local Remotes = replicatedStorage.Remotes
-local CommandRemotes = Remotes.Commands
 
 local Macros = replicatedStorage.modules.shared.Commands.Macros;
 local ReferenceTime = DateTime.now().UnixTimestamp;
@@ -256,9 +256,9 @@ function CommandManager:SelectPlayerFrame(Target: Player | string)
 	end;
 	
 	if self:GetPrimaryPage() == "Macro" then
-		CommandRemotes.CreateMacro:FireServer(self.SelectedCommand.Name, Target, self:GetParameters())
+		network.runCommand.send({ command = self.SelectedCommand.Name, target = Target, parameters = self:GetParameters(), macro = true })
 	else
-		CommandRemotes.Send:FireServer(self.SelectedCommand.Name, Target, self:GetParameters())
+		network.runCommand.send({ command = self.SelectedCommand.Name, target = Target, parameters = self:GetParameters(), macro = false })
 	end;
 end
 
@@ -311,7 +311,7 @@ function CommandManager:CreateMacroFrame(MacroConfig: Configuration)
 	end;
 	
 	MacroFrame.Close.MouseButton1Click:Connect(function()
-		CommandRemotes.DeleteMacro:FireServer(MacroConfig);
+		network.deleteMacro.send(MacroConfig);
 		
 		MacroFrame.Close.BackgroundTransparency = 0.75;
 		MacroFrame.Close.TextTransparency = 0.75;
@@ -848,14 +848,14 @@ function CommandManager:SetupCommands()
 		CommandManager:SendSlashCommands()
 	end);
 	
-	CommandRemotes.SendPlayerLogs.OnClientEvent:Connect(function(Logs)
+	network.playerLogs.listen(function(Logs)
 		for _, Log in Logs do
 			Log.Type = "Player";
 			self:CreatePlayerLog(Log);
 		end;
 	end)
 	
-	CommandRemotes.SendCommandLogs.OnClientEvent:Connect(function(Logs)
+	network.commandLogs.listen(function(Logs)
 		for _, Log in Logs do
 			Log.Type = "Command";
 			self:CreateCommandLog(Log);

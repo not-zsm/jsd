@@ -3,6 +3,10 @@
 local MarketplaceService = game:GetService("MarketplaceService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
+local rateLimiter = require( replicatedStorage.modules.shared.Utilities.rateLimiter )
+local connect = require( replicatedStorage.modules.network.connect )
 local PhysicsService = game:GetService("PhysicsService")
 local PolicyService = game:GetService("PolicyService")
 local RunService = game:GetService("RunService")
@@ -13,7 +17,6 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local Remotes = replicatedStorage.Remotes
 
-local PromptPurchaseEvent = Remotes.PromptGamepassPurchase
 
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
@@ -212,7 +215,7 @@ function LuaPlayer:HasAccessToBossDrop(Boss : string)
 end
 
 function LuaPlayer:BindRemotes()
-	self.Job:Task(Remotes.UpdateFriendsList.OnServerEvent:Connect(function(Player, FriendIds: {string})
+	self.Job:Task(connect(network.friendsList, function(FriendIds: {string}, Player: Player)
 		if self.Player ~= Player then return end;
 		
 		table.clear(self.OnlineFriendTable);
@@ -226,14 +229,14 @@ function LuaPlayer:BindRemotes()
 		end;
 	end))
 	
-	self.Job:Task(PromptPurchaseEvent.OnServerEvent:Connect(function(Player, Gamepass)
+	self.Job:Task(connect(network.promptGamepass, function(Gamepass, Player)
 		if self.Player ~= Player then return end;
 		if typeof(Gamepass) ~= "string" then return end
 
 		local GamepassTable : typeof(Gamepasses["Early Access"]) = Gamepasses[Gamepass]
 		if (GamepassTable == nil) then return end
 
-		if (RemoteRateLimiter.Check(PromptPurchaseEvent, Player, 5) == true and not self.Data:HasGamepass(Gamepass)) then
+		if (rateLimiter.check(Player, "promptGamepass", 5) and not self.Data:HasGamepass(Gamepass)) then
 			MarketplaceService:PromptGamePassPurchase(Player, GamepassTable.ID)
 		end
 	end))

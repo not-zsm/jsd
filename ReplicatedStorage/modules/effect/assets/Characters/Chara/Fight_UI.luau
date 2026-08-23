@@ -1,4 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
@@ -13,7 +15,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local Assets = script.Parent
 
-return function(Model : Model, RemoteHandler : RemoteEvent, Key : Enum.KeyCode, MainJob : Job.object, Settings : {})
+return function(Model : Model, Key : Enum.KeyCode, MainJob : Job.object, Settings : {})
 	local Settings = Settings or {}
 
 	local UI = Assets.QTE.UI:Clone()
@@ -105,7 +107,7 @@ return function(Model : Model, RemoteHandler : RemoteEvent, Key : Enum.KeyCode, 
 		if Settings.RemoteFire then
 			task.spawn(Settings.RemoteFire, WasInRange)
 		else
-			RemoteHandler:FireServer(WasInRange)
+			network.moveInRange.send({ model = Model, inRange = WasInRange })
 		end
 	end
 

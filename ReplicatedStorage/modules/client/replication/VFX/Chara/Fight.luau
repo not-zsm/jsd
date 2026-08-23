@@ -58,10 +58,8 @@ local function Hit_VFX(Model : Model, AnimationName : string, Finisher : boolean
 
 	if IsChara then
 		MainJob:Task(Animation:GetMarkerReachedSignal("attack"):Once(function()
-			local FightRemote : RemoteEvent? = Model:FindFirstChild("CharaFightRemote")
-			if (FightRemote == nil) then return end
 			
-			Fight_UI(Model, FightRemote, Enum.KeyCode.Four, MainJob)
+			Fight_UI(Model, Enum.KeyCode.Four, MainJob)
 			
 			--local FightRemote : RemoteEvent? = Model:FindFirstChild("CharaFightRemote")
 			--if (FightRemote == nil) then return end

@@ -7,6 +7,8 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local MemoryStoreService = game:GetService("MemoryStoreService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local DataStoreService = game:GetService("DataStoreService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -166,7 +168,7 @@ for Amount, ProductId in Donations do
 	Clone.Parent = DonationBoard.Donations
 end
 
-DonationRemote.OnServerEvent:Connect(function(Player, Amount : number)
+network.donate.listen(function(Amount : number, Player : Player)
 	if (RemoteRateLimiter.Check(DonationRemote, Player, 10) == false) then
 		return
 	end

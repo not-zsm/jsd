@@ -10,6 +10,7 @@ local CollectionService = game:GetService("CollectionService")
 ----------------------------------------------------------------------------------
 
 local network = require( replicatedStorage.modules.network )
+local connect = require( replicatedStorage.modules.network.connect )
 
 
 
@@ -502,7 +503,7 @@ function UI:SaveMobileButtonPositions()
 		}
 	end
 
-	replicatedStorage.Remotes.SaveMobileUIPosition:FireServer(savedPositions)
+	network.mobileLayout.send(savedPositions)
 end
 
 function UI:SetUpMobile(Value : boolean)
@@ -573,7 +574,7 @@ function UI:SetUpMobile(Value : boolean)
 		--	end
 		--end)
 
-		self.MobileUIJob:Task(replicatedStorage.Remotes.SaveMobileUIPosition.OnClientEvent:Connect(function(Positions)
+		self.MobileUIJob:Task(connect(network.mobileLayout, function(Positions)
 			if (Positions ~= nil) then
 				self:LoadMobileButtonPositions(Positions)
 			else

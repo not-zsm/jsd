@@ -32,7 +32,6 @@ return {
 
 		-- Remotes
 		local remotes = replicatedStorage.Remotes
-		local onPlayerKillEvent = remotes.Combat.PlayerKilled -- Replace
 		local groupRank = 0
 
 		local titlesArray = {}
@@ -156,7 +155,8 @@ return {
 			end
 		end
 
-		onPlayerKillEvent.OnClientEvent:Connect(function(_, totalKills)
+		network.playerKilled.listen(function(data)
+			local totalKills = data.totalKills
 			for _, titleButton in ipairs(titlesList:GetChildren()) do
 				if titleButton:IsA("ImageButton") then
 					titleButton:Destroy()

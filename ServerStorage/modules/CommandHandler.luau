@@ -6,12 +6,12 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local network = require( replicatedStorage.modules.network )
+local rateLimiter = require( replicatedStorage.modules.shared.Utilities.rateLimiter )
 local MessagingService = game:GetService("MessagingService")
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
-local Remotes = replicatedStorage.Remotes
 local Macros = replicatedStorage.modules.shared.Commands.Macros;
 
 local Commands = require( replicatedStorage.modules.shared.Commands )
@@ -365,16 +365,24 @@ function CommandHandler._new()
 	self.DisableBosses = false;
 	self.HasCommandsBeenUsed = false
 
-	local function CommandWrap(Limiter, Callback)
+	--[[
+		CreateMacro and Send were two remotes reaching the same shape, so they
+		share the runCommand packet and split on its macro flag. Wanting is the
+		flag this wrapper answers to; the packet's own typing replaces the
+		hand-written CommandName check.
+	--]]
+	local function CommandWrap(Limiter, Wanting, Callback)
 
-		return function(Player: Player, CommandName: string, Target: Player | string, ...)
+		return function(data, Player: Player)
+			if data.macro ~= Wanting then return end
+
+			local CommandName, Target = data.command, data.target
 			local Role: UserRole = self:GetRole(Player)
 
-			if (Role.RateLimit ~= -1 and RemoteRateLimiter.Check(Remotes.Commands[Limiter], Player, Role.RateLimit or 10) == false) then
+			if (Role.RateLimit ~= -1 and rateLimiter.check(Player, Limiter, Role.RateLimit or 10) == false) then
 				return;
 			end;
 
-			if typeof(CommandName) ~= "string" then return end
 			if not (typeof(Target) == "string" or typeof(Target) == "Instance") then return end
 
 			if (Role.Permission ~= "None") then
@@ -392,7 +400,7 @@ function CommandHandler._new()
 					}, Player);
 				end;
 
-				return Callback(Player, CommandName, Command, Target, ...);
+				return Callback(Player, CommandName, Command, Target, data.parameters);
 			else
 				network.notify.sendTo({
 					Title = "Notification",
@@ -403,7 +411,7 @@ function CommandHandler._new()
 		end;
 	end;
 
-	Remotes.Commands.CreateMacro.OnServerEvent:Connect(CommandWrap("CreateMacro", function(Player, CommandName, Command, Target, Parameters)
+	network.runCommand.listen(CommandWrap("createMacro", true, function(Player, CommandName, Command, Target, Parameters)
 		if table.find(GlobalBlocked, CommandName) then return end;
 		if typeof(Parameters) ~= "table" then return end;
 
@@ -504,7 +512,7 @@ function CommandHandler._new()
 		end;
 	end));
 
-	Remotes.Commands.DeleteMacro.OnServerEvent:Connect(function(Player, Macro: Configuration)
+	network.deleteMacro.listen(function(Macro: Configuration, Player: Player)
 		if typeof(Macro) ~= "Instance" then return end;
 
 		local PlayerRole: UserRole = self:GetRole(Player);
@@ -521,7 +529,7 @@ function CommandHandler._new()
 		end;
 	end);
 
-	Remotes.Commands.Send.OnServerEvent:Connect(CommandWrap("Send", function(Player, CommandName, Command, Target, Parameters)
+	network.runCommand.listen(CommandWrap("sendCommand", false, function(Player, CommandName, Command, Target, Parameters)
 		if typeof(Parameters) ~= "table" then return end
 
 		--local BlockedCommands = GlobalBlocked
@@ -569,13 +577,13 @@ end;
 
 local function SendPlayerLogs(self, Player, Permission, Logs)
 	if Permission and Permission ~= "None" then
-		Remotes.Commands.SendPlayerLogs:FireClient(Player, Logs);
+		network.playerLogs.sendTo(Logs, Player);
 	end
 end
 
 local function SendCommandLogs(self, Player, Permission, Logs)
 	if Permission == "Owner" then
-		Remotes.Commands.SendCommandLogs:FireClient(Player, Logs);
+		network.commandLogs.sendTo(Logs, Player);
 	end
 end
 

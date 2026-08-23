@@ -6,6 +6,8 @@ return {
 
 	Start = function()
 		local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 		local UserInputService = game:GetService("UserInputService")
 		local Players = game:GetService("Players")
 		local Player = Players.LocalPlayer
@@ -15,7 +17,7 @@ return {
 		Player:GetAttributeChangedSignal("ClickStrike"):Once(function()
 			Mouse.Button1Down:Connect(function()
 				if Player:GetAttribute("ClickStrike") == true then
-					replicatedStorage.Remotes.Commands.ClickStrike:FireServer(Mouse.Hit.Position)
+					network.clickStrike.send(Mouse.Hit.Position)
 				end
 			end)
 		end)

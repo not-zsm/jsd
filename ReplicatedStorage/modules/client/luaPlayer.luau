@@ -1,5 +1,7 @@
 local Players = game:GetService("Players")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local StarterGui = game:GetService("StarterGui")
 local ContentProvider = game:GetService("ContentProvider")
 local TweenService = game:GetService("TweenService")
@@ -8,7 +10,6 @@ local RunService = game:GetService("RunService")
 --local Weather = require( replicatedStorage.modules.client.weather )
 
 local Player = Players.LocalPlayer;
-local Remotes = replicatedStorage.Remotes;
 
 ----------------------------------------------------------------------------------
 
@@ -54,7 +55,7 @@ end
 ----------------------------------------------------------------------------------
 
 function LuaPlayer:PromptGamepassPurchase(Gamepass : string)
-	replicatedStorage.Remotes.PromptGamepassPurchase:FireServer(Gamepass)
+	network.promptGamepass.send(Gamepass)
 end
 	
 function LuaPlayer:EditPlayerModule()
@@ -104,7 +105,7 @@ function LuaPlayer:UpdateOnlineFriends()
 			table.insert(SimpleFriends, tostring(Friend.VisitorId));
 		end;
 		
-		Remotes.UpdateFriendsList:FireServer(SimpleFriends);
+		network.friendsList.send(SimpleFriends);
 	end;
 end;
 

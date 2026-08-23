@@ -2,6 +2,9 @@
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
+local connect = require( replicatedStorage.modules.network.connect )
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
@@ -75,15 +78,12 @@ function Attack:Activate()
 			local FirstFought, SecondFought = false, false
 
 			if not self.LuaPlayer.IsNPC then
-				local FightRemote = Instance.new("RemoteEvent")
-				FightRemote.Name = "CharaSevenSoulsRemote"
-				FightRemote.Parent = self.LuaCharacter.Model
+				self.Thread.Job:Task(connect(network.moveInRange, function(data, Player)
+					if (Player ~= self.LuaPlayer.Player) then return end
+					if data.model ~= self.LuaCharacter.Model then return end
 
-				self.Thread.Job:Task(FightRemote)
-
-				self.Thread.Job:Task(FightRemote.OnServerEvent:Connect(function(Player, InRange : boolean, Stage : number)
+					local InRange, Stage = data.inRange, data.stage
 					if typeof(Stage) ~= "number" then return end
-					if (Player ~= self.LuaPlayer.Player) or (typeof(InRange) ~= "boolean") then return end
 
 					if (Stage == 1 and not FirstFought) then
 						FirstFought = true

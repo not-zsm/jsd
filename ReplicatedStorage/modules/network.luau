@@ -411,5 +411,65 @@ return byteNet.defineNamespace("game", function()
 				preset = byteNet.optional(byteNet.string),
 			}),
 		}),
+
+		--// admin commands
+		runCommand = byteNet.definePacket({
+			value = byteNet.struct({
+				command = byteNet.string,
+				target = byteNet.optional(byteNet.unknown),
+				parameters = byteNet.unknown,
+				macro = byteNet.bool,
+			}),
+		}),
+
+		deleteMacro = byteNet.definePacket({ value = byteNet.inst }),
+		commandLogs = byteNet.definePacket({ value = byteNet.unknown }),
+		playerLogs = byteNet.definePacket({ value = byteNet.unknown }),
+		clickStrike = byteNet.definePacket({ value = byteNet.vec3 }),
+		respawn = byteNet.definePacket({ value = byteNet.nothing }),
+		removeMicrophone = byteNet.definePacket({ value = byteNet.inst }),
+
+		--// quicktime prompts. keys cross by Name
+		quicktime = byteNet.definePacket({
+			value = byteNet.struct({
+				key = byteNet.string,
+				controllerKey = byteNet.string,
+				rangeMin = byteNet.float32,
+				rangeMax = byteNet.float32,
+			}),
+		}),
+
+		quicktimeInput = byteNet.definePacket({ value = byteNet.bool }),
+
+		--[[
+			The in-range prompt Chara's Fight and Seven Souls both use.
+
+			Each invocation used to make its own RemoteEvent, parented to the
+			character model, which the client found by name -- the remote was the
+			handle tying the UI to that one cast. The model is that handle now.
+		--]]
+		moveInRange = byteNet.definePacket({
+			value = byteNet.struct({
+				model = byteNet.inst,
+				inRange = byteNet.bool,
+				stage = byteNet.optional(byteNet.unknown),
+			}),
+		}),
+
+		--// misc
+		mobileLayout = byteNet.definePacket({ value = byteNet.unknown }),
+		loadSettings = byteNet.definePacket({ value = byteNet.unknown }),
+		friendsList = byteNet.definePacket({ value = byteNet.unknown }),
+		promptGamepass = byteNet.definePacket({ value = byteNet.string }),
+		readPaper = byteNet.definePacket({ value = byteNet.bool }),
+		spawnCharaBoss = byteNet.definePacket({ value = byteNet.nothing }),
+		donate = byteNet.definePacket({ value = byteNet.uint32 }),
+
+		giftGamepass = byteNet.definePacket({
+			value = byteNet.struct({
+				userId = byteNet.float64,
+				gamepass = byteNet.string,
+			}),
+		}),
 	}
 end)

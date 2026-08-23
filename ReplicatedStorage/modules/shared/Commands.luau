@@ -28,7 +28,7 @@ if RunService:IsServer() then
 	LuaPlayerList = require(ServerStorage.modules.LuaPlayerList)
 
 	-- On Click Strike
-	replicatedStorage.Remotes.Commands.ClickStrike.OnServerEvent:Connect(function(Player, MousePosition)
+	network.clickStrike.listen(function(MousePosition, Player)
 		if Player:GetAttribute("ClickStrike") == true then
 			if Weather then
 				Weather.Smite(MousePosition)
@@ -515,7 +515,7 @@ local Commands = {
 		CanMacro = false;
 		Index = 15, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			TargetLuaPlayer.Character:Respawn()
-			replicatedStorage.Remotes.Commands.Respawn:FireClient(TargetLuaPlayer.Player)
+			network.respawn.sendTo(nil, TargetLuaPlayer.Player)
 		end},
 
 	["Spawn Dummy"] = {

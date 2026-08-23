@@ -3,6 +3,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local network = require( replicatedStorage.modules.network )
+local connect = require( replicatedStorage.modules.network.connect )
 local MarketplaceService = game:GetService("MarketplaceService")
 local PhysicsService = game:GetService("PhysicsService")
 local Players = game:GetService("Players")
@@ -10,7 +11,6 @@ local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
 
 
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
@@ -322,9 +322,9 @@ function Data:DataLoaded()
 end
 
 function Data:InitMobileUI()
-	Remotes.SaveMobileUIPosition:FireClient(self.LuaPlayer.Player, self.Profile.Data.MobileButtonPositions)
+	network.mobileLayout.sendTo(self.Profile.Data.MobileButtonPositions, self.LuaPlayer.Player)
 
-	self.Job:Task(Remotes.SaveMobileUIPosition.OnServerEvent:Connect(function(Player, Positions : {[string]: {x : number, y : number}})
+	self.Job:Task(connect(network.mobileLayout, function(Positions : {[string]: {x : number, y : number}}, Player : Player)
 		if Player ~= self.LuaPlayer.Player or typeof(Positions) ~= "table" then 
 			return 
 		end
@@ -355,7 +355,7 @@ function Data:InitSettings()
 		self.LuaPlayer.Player:SetAttribute(Setting, self.Profile.Data.Settings[Setting])
 	end
 
-	Remotes.LoadSettings:FireClient(self.LuaPlayer.Player, self.Profile.Data.Settings)--, self.Profile.Data.DeviceKeybinds)
+	network.loadSettings.sendTo(self.Profile.Data.Settings, self.LuaPlayer.Player)
 
 end
 

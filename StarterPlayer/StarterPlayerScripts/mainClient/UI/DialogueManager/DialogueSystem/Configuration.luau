@@ -3,6 +3,8 @@ local DialogueConfiguration = {}
 local SoundService = game:GetService("SoundService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
+local network = require( replicatedStorage.modules.network )
+
 local LocalPlayer = game:GetService("Players").LocalPlayer
 
 local NewspaperViewer = require( script.NewspaperViewer )
@@ -192,7 +194,7 @@ DialogueConfiguration.Dialogues = {
 				Text = "Wsg bruzz.. You want me to call up cursed child? it'll cost you tho.",
 				Choices = {
 					{Text = "yes sir", Function = function()
-						replicatedStorage.Remotes.SpawnCharaBoss:FireServer()
+						network.spawnCharaBoss.send()
 					end,
 					EndConversation = true},
 					{Text = "nah srry", EndConversation = true},

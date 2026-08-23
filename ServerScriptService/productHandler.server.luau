@@ -16,7 +16,7 @@ local Data = require( ServerStorage.modules.Player.Character.Emotes.Data )
 
 local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
 local HasGamepassOffline = require( replicatedStorage.modules.shared.Game.Gamepasses.HasGamepassOffline )
-local RemoteAntiSpam = require( ServerStorage.modules.Utility.RemoteRateLimiter )
+local rateLimiter = require( replicatedStorage.modules.shared.Utilities.rateLimiter )
 
 local Products = require( script.Products )
 
@@ -52,12 +52,13 @@ Products[Gamepasses["Kill Sounds"].GiftID] = {
 	end
 }
 
-replicatedStorage.Remotes.GiftGamepass.OnServerEvent:Connect(function(PlayerGifting, ReceiverUserId : UserId, Name : string)
+network.giftGamepass.listen(function(data, PlayerGifting : Player)
+	local ReceiverUserId, Name = data.userId, data.gamepass
 	if (typeof(Name) ~= "string" or Gamepasses[Name] == nil) or typeof(ReceiverUserId) ~= "number" then 
 		return
 	end
 
-	if (RemoteAntiSpam.Check(replicatedStorage.Remotes.GiftGamepass, PlayerGifting, 20) == false) then
+	if (rateLimiter.check(PlayerGifting, "giftGamepass", 20) == false) then
 		return
 	end
 
