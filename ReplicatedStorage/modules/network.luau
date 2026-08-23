@@ -300,5 +300,35 @@ return byteNet.defineNamespace("game", function()
 				args = byteNet.optional(byteNet.unknown),
 			}),
 		}),
+
+		--// announcements
+		announce = byteNet.definePacket({
+			value = byteNet.struct({
+				message = byteNet.string,
+				title = byteNet.optional(byteNet.string),
+				kind = byteNet.optional(byteNet.string),
+			}),
+		}),
+
+		systemMessage = byteNet.definePacket({
+			value = byteNet.struct({
+				name = byteNet.string,
+				activity = byteNet.string,
+			}),
+		}),
+
+		--// collab emotes: the prompt is the shared object both ends key on
+		collabProxy = byteNet.definePacket({
+			value = byteNet.struct({
+				player = byteNet.inst,
+				prompt = byteNet.inst,
+			}),
+		}),
+
+		collabJoined = byteNet.definePacket({ value = byteNet.inst }),
+
+		--// emote input, client -> server
+		finishWriting = byteNet.definePacket({ value = byteNet.string }),
+		chooseDirection = byteNet.definePacket({ value = byteNet.string }),
 	}
 end)

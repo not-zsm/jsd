@@ -1,5 +1,5 @@
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local Camera = require(script.Parent.Camera)
 local InputControls = require(script.Parent.InputControls)

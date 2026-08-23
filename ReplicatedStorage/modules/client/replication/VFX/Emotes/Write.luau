@@ -1,4 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
@@ -25,7 +27,7 @@ return {
 		
 		Job:Task(TextBox.FocusLost:Connect(function(EnterPressed)
 			if EnterPressed then
-				replicatedStorage.Remotes.Emotes.FinishWriting:FireServer(TextBox.Text)
+				network.finishWriting.send(TextBox.Text)
 				
 				TextBox.Text = ""
 				TextBox:ReleaseFocus()

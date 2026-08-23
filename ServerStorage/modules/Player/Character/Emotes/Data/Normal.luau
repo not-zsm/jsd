@@ -1,6 +1,7 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local network = require( replicatedStorage.modules.network )
+local connect = require( replicatedStorage.modules.network.connect )
 local CollectionService = game:GetService("CollectionService")
 local TweenService = game:GetService("TweenService")
 local Chat = game:GetService("Chat")
@@ -1853,7 +1854,7 @@ return {
 
 			--local StrCheck = Type.string():length(0, 128)
 			
-			local Connection; Connection = Job:Task(replicatedStorage.Remotes.Emotes.FinishWriting.OnServerEvent:Connect(function(Player, Text)
+			local Connection; Connection = Job:Task(connect(network.finishWriting, function(Text, Player)
 				--Text = StrCheck:cast(StrCheck);
 
 				if Player == self.LuaPlayer.Player and typeof(Text) == "string" then
@@ -3277,7 +3278,7 @@ return {
 					end
 
 					local ReceiveConnection
-					ReceiveConnection = JoinedJob:Task(replicatedStorage.Remotes.Emotes.ChooseDirection.OnServerEvent:Connect(function(Player, ChosenDirection)
+					ReceiveConnection = JoinedJob:Task(connect(network.chooseDirection, function(ChosenDirection, Player)
 						if not LeaderLuaPlayer.IsNPC and Player == LeaderLuaPlayer.Player then
 							LeaderChoice = ChosenDirection
 							

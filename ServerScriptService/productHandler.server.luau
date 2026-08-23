@@ -1,9 +1,9 @@
 local ServerStorage = game:GetService("ServerStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local MarketplaceService = game:GetService("MarketplaceService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local DataStoreService = game:GetService("DataStoreService")
 local PolicyService = game:GetService("PolicyService")
 local Players = game:GetService("Players")
@@ -14,8 +14,8 @@ local Webhook = require( script.Webhook )
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 local Data = require( ServerStorage.modules.Player.Character.Emotes.Data )
 
-local Gamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses )
-local HasGamepassOffline = require( ReplicatedStorage.modules.shared.Game.Gamepasses.HasGamepassOffline )
+local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
+local HasGamepassOffline = require( replicatedStorage.modules.shared.Game.Gamepasses.HasGamepassOffline )
 local RemoteAntiSpam = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 local Products = require( script.Products )
@@ -52,12 +52,12 @@ Products[Gamepasses["Kill Sounds"].GiftID] = {
 	end
 }
 
-ReplicatedStorage.Remotes.GiftGamepass.OnServerEvent:Connect(function(PlayerGifting, ReceiverUserId : UserId, Name : string)
+replicatedStorage.Remotes.GiftGamepass.OnServerEvent:Connect(function(PlayerGifting, ReceiverUserId : UserId, Name : string)
 	if (typeof(Name) ~= "string" or Gamepasses[Name] == nil) or typeof(ReceiverUserId) ~= "number" then 
 		return
 	end
 
-	if (RemoteAntiSpam.Check(ReplicatedStorage.Remotes.GiftGamepass, PlayerGifting, 20) == false) then
+	if (RemoteAntiSpam.Check(replicatedStorage.Remotes.GiftGamepass, PlayerGifting, 20) == false) then
 		return
 	end
 

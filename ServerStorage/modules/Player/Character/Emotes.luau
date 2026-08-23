@@ -315,7 +315,7 @@ function Emotes:PlayEmote(Name : string)
 					if EmoteData.Collab.UsesSigmaFolderMethod then
 						Prompt.Enabled = true
 
-						Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
+						network.collabProxy.sendToAll({ player = self.LuaPlayer.Player, prompt = Prompt })
 					else
 						if (Utility.TableCount(Joined) == 0) then
 							Prompt.Enabled = true
@@ -325,7 +325,7 @@ function Emotes:PlayEmote(Name : string)
 							end
 						end
 
-						Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
+						network.collabProxy.sendToAll({ player = self.LuaPlayer.Player, prompt = Prompt })
 					end
 
 					Joined[VictimLuaPlayer] = nil
@@ -360,7 +360,7 @@ function Emotes:PlayEmote(Name : string)
 			--		if EmoteData.Collab.UsesSigmaFolderMethod then
 			--			Prompt.Enabled = true
 
-			--			Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
+			--			network.collabProxy.sendToAll({ player = self.LuaPlayer.Player, prompt = Prompt })
 			--		else
 			--			if Utility.TableCount(Joined) == 0 then
 			--				Prompt.Enabled = true
@@ -370,7 +370,7 @@ function Emotes:PlayEmote(Name : string)
 			--				end
 			--			end
 
-			--			Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
+			--			network.collabProxy.sendToAll({ player = self.LuaPlayer.Player, prompt = Prompt })
 			--		end
 
 			--	end
@@ -393,7 +393,7 @@ function Emotes:PlayEmote(Name : string)
 			--		if EmoteData.Collab.UsesSigmaFolderMethod then
 			--			Prompt.Enabled = true
 
-			--			Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
+			--			network.collabProxy.sendToAll({ player = self.LuaPlayer.Player, prompt = Prompt })
 			--		else
 			--			if Utility.TableCount(Joined) == 0 then
 			--				Prompt.Enabled = true
@@ -403,7 +403,7 @@ function Emotes:PlayEmote(Name : string)
 			--				end
 			--			end
 
-			--			Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
+			--			network.collabProxy.sendToAll({ player = self.LuaPlayer.Player, prompt = Prompt })
 			--		end
 			--	end
 			--end)
@@ -509,11 +509,11 @@ function Emotes:PlayEmote(Name : string)
 					--end
 
 					Prompt.Enabled = not ((CollabData.Limit or 1) ~= -1 and (NewCount >= (CollabData.Limit or 1)))
-					Remotes.Emotes.Collabs.Joined:FireClient(VictimLuaPlayer.Player, Prompt)
+					network.collabJoined.sendTo(Prompt, VictimLuaPlayer.Player)
 				end
 			end)
 
-			Remotes.Emotes.Collabs.Proxy:FireAllClients(self.LuaPlayer.Player, Prompt)
+			network.collabProxy.sendToAll({ player = self.LuaPlayer.Player, prompt = Prompt })
 		else
 			if Animation:IsA("Folder") then
 				local StartAnimation = Animation:FindFirstChild("Start")

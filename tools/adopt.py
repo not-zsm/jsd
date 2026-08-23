@@ -38,6 +38,7 @@ if len(sys.argv) > 2 and sys.argv[2] == "--apply":
         rel = os.path.join(*p)
         init = os.path.join(rel, "init" + SUF[cls])
         path = init if os.path.exists(init) else rel + SUF[cls]
+        # .server.luau and .client.luau have the same two spellings as .luau
         os.makedirs(os.path.dirname(path), exist_ok=True)
         open(path, "w", encoding="utf-8").write(src_of(place[p]))
     print(f"\nwrote {len(edited)} edited, {len(added)} added")

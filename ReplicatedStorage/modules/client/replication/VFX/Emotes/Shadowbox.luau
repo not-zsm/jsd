@@ -1,4 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
@@ -36,7 +38,7 @@ return {
 		
 		if not GUI then
 			warn("Shadowbox GUI not found")
-			replicatedStorage.Remotes.Emotes.ChooseDirection:FireServer(AvailableDirections[math.random(1, #AvailableDirections)])
+			network.chooseDirection.send(AvailableDirections[math.random(1, #AvailableDirections)])
 			return
 		end
 		
@@ -55,7 +57,7 @@ return {
 			Connections[Direction] = Button.MouseButton1Click:Connect(function()
 				if table.find(AvailableDirections, Direction) then
 					GUI.Enabled = false
-					replicatedStorage.Remotes.Emotes.ChooseDirection:FireServer(Direction)
+					network.chooseDirection.send(Direction)
 				end
 			end)
 		end

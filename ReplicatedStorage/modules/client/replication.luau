@@ -59,14 +59,12 @@ function Replication:_Init()
 		Projectiles.Update(data.config, data.position, data.direction)
 	end)
 
-	task.spawn(function()
-		Remotes.Emotes.Collabs.Proxy.OnClientEvent:Connect(function(...)
-			self:CollabProxy(...)
-		end)
-		
-		Remotes.Emotes.Collabs.Joined.OnClientEvent:Connect(function(...)
-			self:JoinedCollabEmote(...)
-		end)
+	network.collabProxy.listen(function(data)
+		self:CollabProxy(data.player, data.prompt)
+	end)
+
+	network.collabJoined.listen(function(Prompt)
+		self:JoinedCollabEmote(Prompt)
 	end)
 
 	network.destruction.listen(function(data)

@@ -1,6 +1,8 @@
 local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local DataStoreService = game:GetService("DataStoreService")
 
 local ServerStorage = game:GetService("ServerStorage")
@@ -47,13 +49,14 @@ return function(PlayerGifting : Player, GamepassName : String)
 			if (ReceiverProfile and ReceiverProfile:IsActive()) then
 				ReceiverProfile.Data.OwnedGamepasses[GamepassName] = true
 				
-				replicatedStorage.Remotes.Announcement:FireClient(ReceivingPlayer, 
-					`You have been gifted {GamepassName} by {PlayerGifting.Name}. Make sure to say thank you!`
-				)
+				network.announce.sendTo({
+					message = `You have been gifted {GamepassName} by {PlayerGifting.Name}. Make sure to say thank you!`,
+				}, ReceivingPlayer)
 				
-				replicatedStorage.Remotes.Announcement:FireClient(PlayerGifting, 
-					`You have gifted {GamepassName} to {ReceivingPlayer.Name}.`, "How nice of you!"
-				)
+				network.announce.sendTo({
+					message = `You have gifted {GamepassName} to {ReceivingPlayer.Name}.`,
+					title = "How nice of you!",
+				}, PlayerGifting)
 
 				task.spawn(function()
 					Webhook:Send(
@@ -97,9 +100,10 @@ return function(PlayerGifting : Player, GamepassName : String)
 		local Name = Players:GetNameFromUserIdAsync(ReceiverUserId)
 		
 		if Name then
-			replicatedStorage.Remotes.Announcement:FireClient(PlayerGifting, 
-				`You have gifted {GamepassName} to {Name}.`, "How nice of you! They will receive your gift when they join the game."
-			)
+			network.announce.sendTo({
+				message = `You have gifted {GamepassName} to {Name}.`,
+				title = "How nice of you! They will receive your gift when they join the game.",
+			}, PlayerGifting)
 		end
 	end)
 

@@ -169,13 +169,12 @@ function UI:Init()
 		end
 	end)
 	
-	Remotes.Announcement.OnClientEvent:Connect(function(Message : string, Title : string, Type : String)
-		Title = Title or "Server Announcement"
-		ClientAnnouncementHandler:Announce(Message, Title, Type)
+	network.announce.listen(function(data)
+		ClientAnnouncementHandler:Announce(data.message, data.title or "Server Announcement", data.kind)
 	end)
 
-	Remotes.ReceiveSystemMessage.OnClientEvent:Connect(function(Name : string, Activity : string)
-		TextChatService:WaitForChild("TextChannels").RBXGeneral:DisplaySystemMessage(`{Name}'s Activity: {Activity}`)
+	network.systemMessage.listen(function(data)
+		TextChatService:WaitForChild("TextChannels").RBXGeneral:DisplaySystemMessage(`{data.name}'s Activity: {data.activity}`)
 	end)
 	
 	network.notify.listen(function(Data)

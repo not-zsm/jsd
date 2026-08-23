@@ -13,15 +13,21 @@ local function connect<T>(Packet : any, Callback : (T, Player?) -> ()) : { Destr
 
 	local Listeners = Packet.getListeners()
 
-	return {
-		Destroy = function()
-			local Index = table.find(Listeners, Callback)
+	local Handle = {}
 
-			if Index then
-				table.remove(Listeners, Index)
-			end
-		end,
-	}
+	function Handle.Destroy()
+		local Index = table.find(Listeners, Callback)
+
+		if Index then
+			table.remove(Listeners, Index)
+		end
+	end
+
+	-- so it drops into either idiom at a call site that used to hold a
+	-- RBXScriptConnection
+	Handle.Disconnect = Handle.Destroy
+
+	return Handle
 end
 
 return connect

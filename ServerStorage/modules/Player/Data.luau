@@ -196,9 +196,9 @@ function Data:DataLoaded()
 			if Message.Type == "GamepassGift" and Message.GamepassName then
 				self.Profile.Data.OwnedGamepasses[Message.GamepassName] = true
 
-				replicatedStorage.Remotes.Announcement:FireClient(self.LuaPlayer.Player, 
-					`You have been gifted {Message.GamepassName} by another user.`
-				)
+				network.announce.sendTo({
+					message = `You have been gifted {Message.GamepassName} by another user.`,
+				}, self.LuaPlayer.Player)
 
 				task.spawn(function()
 					local Success, Result = pcall(function()
