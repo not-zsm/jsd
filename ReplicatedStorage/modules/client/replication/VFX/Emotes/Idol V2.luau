@@ -1,5 +1,5 @@
 local SoundService = game:GetService("SoundService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
 local Lighting = game:GetService("Lighting")
@@ -8,17 +8,17 @@ local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local AnimationRetriever = require(ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever)
-local RunCameraRig = require(ReplicatedStorage.modules.client.replication.Global.RunCameraRig)
-local CameraShake = require(ReplicatedStorage.modules.client.replication.Global.CameraShake)
-local RockHandler = require(ReplicatedStorage.modules.client.replication.Global.RockHandler)
-local EffectBlood = require(ReplicatedStorage.modules.client.replication.VFX.Global.Blood)
-local VelocityUtil = require(ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil)
-local EffectUtility = require(ReplicatedStorage.modules.client.replication.EffectUtility)
-local BugoVFX = require(ReplicatedStorage.modules.client.replication.EffectUtility.Bugo)
-local Yuki_FOV = require(ReplicatedStorage.modules.client.replication.Global.Yuki_FOV)
+local AnimationRetriever = require(replicatedStorage.modules.client.replication.VFX.AnimationRetriever)
+local RunCameraRig = require(replicatedStorage.modules.client.replication.Global.RunCameraRig)
+local CameraShake = require(replicatedStorage.modules.client.replication.Global.CameraShake)
+local RockHandler = require(replicatedStorage.modules.client.replication.Global.RockHandler)
+local EffectBlood = require(replicatedStorage.modules.client.replication.VFX.Global.Blood)
+local VelocityUtil = require(replicatedStorage.modules.shared.Game.Velocity.VelocityUtil)
+local EffectUtility = require(replicatedStorage.modules.client.replication.EffectUtility)
+local BugoVFX = require(replicatedStorage.modules.client.replication.EffectUtility.Bugo)
+local Yuki_FOV = require(replicatedStorage.modules.client.replication.Global.Yuki_FOV)
 
-local Animation = ReplicatedStorage.Animations.Emotes["Idol V2"]
+local Animation = replicatedStorage.Animations.Emotes["Idol V2"]
 local Emit = require( script.Emit )
 
 return { 

@@ -1,7 +1,7 @@
 local LockOn = {};
 LockOn.__index = LockOn;
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local CollectionService = game:GetService("CollectionService")
@@ -10,7 +10,7 @@ local MaxYAngle = math.rad(75)
 local YThetaClamp = math.rad(5) --math.rad(5)
 local MinYAngle = math.rad(0)
 
-local AimAssist = require( ReplicatedStorage.modules.shared.Game.AimAssist )
+local AimAssist = require( replicatedStorage.modules.shared.Game.AimAssist )
 local LockOnEffect = require( script.Effect )
 
 function LockOn.new(combat)

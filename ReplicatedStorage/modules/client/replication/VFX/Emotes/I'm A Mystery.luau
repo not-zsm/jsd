@@ -1,12 +1,12 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ReplicatedStorage = game:GetService 'ReplicatedStorage'
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService 'ReplicatedStorage'
 local TweenService = game:GetService 'TweenService'
 local Debris = game:GetService 'Debris'
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animation = ReplicatedStorage.Animations.Emotes["I'm A Mystery"]
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animation = replicatedStorage.Animations.Emotes["I'm A Mystery"]
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
 local FrameMarker = require(script.FrameMarker)
 

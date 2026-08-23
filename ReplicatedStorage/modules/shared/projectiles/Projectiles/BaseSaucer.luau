@@ -1,15 +1,15 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 ---------------------------------------------------------
 
-local Assets = ReplicatedStorage.modules.shared.projectiles.Assets.Projectiles;
+local Assets = replicatedStorage.modules.shared.projectiles.Assets.Projectiles;
 
 ---------------------------------------------------------
 
-local AenoirEmit = require( ReplicatedStorage.modules.client.replication.EffectUtility.AenoirEmit )
-local AenoirUtil = require( ReplicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Signal = require( ReplicatedStorage.Packages.Signal )
+local AenoirEmit = require( replicatedStorage.modules.client.replication.EffectUtility.AenoirEmit )
+local AenoirUtil = require( replicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Signal = require( replicatedStorage.Packages.Signal )
 
 ---------------------------------------------------------
 

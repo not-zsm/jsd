@@ -1,13 +1,13 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 ---------------------------------------------------------
 
-local Remotes = ReplicatedStorage.modules.shared.projectiles.Remotes;
+local Remotes = replicatedStorage.modules.shared.projectiles.Remotes;
 
 ---------------------------------------------------------
 
-local Util = require( ReplicatedStorage.modules.shared.projectiles.Util )
+local Util = require( replicatedStorage.modules.shared.projectiles.Util )
 local Projectile = require( script.Projectile )
 
 ---------------------------------------------------------

@@ -1,6 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local byteNet = require( ReplicatedStorage.modules.shared.forum.byteNet )
+local byteNet = require( replicatedStorage.modules.shared.forum.byteNet )
 
 --// client -> server sends, server -> client sendTo/sendToAll, both listen(data, player)
 --// optional fields are for values that may be absent; unknown cannot carry nil

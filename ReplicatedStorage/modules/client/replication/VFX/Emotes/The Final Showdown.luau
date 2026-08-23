@@ -3,7 +3,7 @@ local Lighting = game:GetService("Lighting")
 type R6 = typeof(script.Rigs.Friend)
 
 local CollectionService = game:GetService("CollectionService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
@@ -11,23 +11,23 @@ local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Afterimage = require( ReplicatedStorage.modules.client.replication.Global.Afterimage )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Afterimage = require( replicatedStorage.modules.client.replication.Global.Afterimage )
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local CharacterTransparency = require( ReplicatedStorage.modules.client.replication.Global.CharacterTransparency )
-local Dialogue = require(ReplicatedStorage.modules.effect.tekrinnDialogue)
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local CharacterTransparency = require( replicatedStorage.modules.client.replication.Global.CharacterTransparency )
+local Dialogue = require(replicatedStorage.modules.effect.tekrinnDialogue)
 
-local Animations = ReplicatedStorage.Animations.Emotes["The Final Showdown"]
+local Animations = replicatedStorage.Animations.Emotes["The Final Showdown"]
 local MeshEmit = require( script.MeshEmit )
 local CFrameData = require( script.CFrameData )
 
@@ -104,7 +104,7 @@ return {
 			Camera:PivotTo(RootPart.CFrame)
 			Camera.Parent = workspace.Visuals
 
-			local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["The Final Showdown"].Camera)
+			local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["The Final Showdown"].Camera)
 			CameraAnimation:Play(0)
 
 			--Job:Task(RunService.PreSimulation:Connect(function()
@@ -302,7 +302,7 @@ return {
 				Lighting.Ambient = Color3.new(0, 0, 0)
 				Lighting.ClockTime = 0
 
-				local GameLighting = require( ReplicatedStorage.modules.shared.Game.GameLighting )
+				local GameLighting = require( replicatedStorage.modules.shared.Game.GameLighting )
 
 				Job:Task(function()
 					Lighting.Brightness = GameLighting.Brightness
@@ -402,7 +402,7 @@ return {
 					CameraAnimation.TimePosition = Animation.TimePosition
 				end))
 
-				local Clean = Job:Task(Yuki_FOV.AnimateWithMoonFile(ReplicatedStorage.FOVFiles["The Final Showdown"]))
+				local Clean = Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["The Final Showdown"]))
 
 				Job:Task(Animation:GetMarkerReachedSignal("StopFOV"):Connect(function()
 					Clean()

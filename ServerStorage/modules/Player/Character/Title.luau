@@ -2,16 +2,16 @@ local Title = {}
 Title.__index = Title
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 
 local ServerStorage = game:GetService("ServerStorage")
 local AllTimeLeaderboard = DataStoreService:GetOrderedDataStore("AllTimeRobuxLeaderboard")
 
-local DataModule = require(ReplicatedStorage.modules.shared.Game.TitleData)
+local DataModule = require(replicatedStorage.modules.shared.Game.TitleData)
 local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 local function GetAllTimeData(UserId : number)

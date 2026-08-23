@@ -1,19 +1,19 @@
 
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local MovementReplicatorSettings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
 ----------------------------------------------------------------------------------
 

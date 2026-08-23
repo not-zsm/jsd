@@ -1,11 +1,11 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local GeometryService = game:GetService("GeometryService")
 local CollectionService = game:GetService("CollectionService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Debris = game:GetService("Debris")
 
-local Instances = require( ReplicatedStorage.Packages.Instances )
+local Instances = require( replicatedStorage.Packages.Instances )
 
 -------------------------------------------------------------------------------------------
 
@@ -53,10 +53,10 @@ local Mesh = require( script.Mesh )
 local Spatial = require( script.Spatial )
 local Types = require( script.Types )
 
-local PartCache = require( ReplicatedStorage.modules.shared.havoc.PartCache );
-local Settings = require( ReplicatedStorage.modules.shared.havoc.Settings );
-local Signal = require( ReplicatedStorage.Packages.Signal );
-local DebrisPool = require( ReplicatedStorage.modules.shared.havoc.DebrisPool )
+local PartCache = require( replicatedStorage.modules.shared.havoc.PartCache );
+local Settings = require( replicatedStorage.modules.shared.havoc.Settings );
+local Signal = require( replicatedStorage.Packages.Signal );
+local DebrisPool = require( replicatedStorage.modules.shared.havoc.DebrisPool )
 
 -------------------------------------------------------------------------------------------
 
@@ -980,7 +980,7 @@ function Destruction.collapse_whole_structure(self: Destruction, weld_assembly: 
 	debug.profileend();
 	
 	if RunService:IsStudio() then
-		ReplicatedStorage.modules.shared.havoc.Remotes.Replicated.CollapseStructure:FireAllClients(weld_assembly[1]);
+		replicatedStorage.modules.shared.havoc.Remotes.Replicated.CollapseStructure:FireAllClients(weld_assembly[1]);
 	end
 	
 	return weld_assembly;

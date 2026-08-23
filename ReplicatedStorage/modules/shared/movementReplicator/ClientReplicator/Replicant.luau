@@ -1,13 +1,13 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer;
-local Shared = ReplicatedStorage.modules.shared.movementReplicator;
+local Shared = replicatedStorage.modules.shared.movementReplicator;
 local Remotes = Shared.Remotes;
 
 ---------------------------------------------------------------------------------
 
-local Packages = ReplicatedStorage.Packages
+local Packages = replicatedStorage.Packages
 
 local Maid = require( Packages.Maid )
 local CFSpring = require( Packages.Spring.CFSpring )
@@ -15,9 +15,9 @@ local Spring = require( Packages.Spring )
 local Signal = require( Packages.Signal )
 local BufferUtil = require( Packages.BufferUtil )
 
-local Util = require( ReplicatedStorage.modules.shared.movementReplicator.Util )
-local Settings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
-local Ragdoll = require( ReplicatedStorage.modules.shared.movementReplicator.Lib.Ragdoll )
+local Util = require( replicatedStorage.modules.shared.movementReplicator.Util )
+local Settings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
+local Ragdoll = require( replicatedStorage.modules.shared.movementReplicator.Lib.Ragdoll )
 
 local Types = require( script.Parent.Types )
 local PusedoRagdoll = require( script.PusedoRagdoll )

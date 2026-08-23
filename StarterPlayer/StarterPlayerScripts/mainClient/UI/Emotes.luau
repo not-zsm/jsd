@@ -1,6 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -10,17 +10,17 @@ local SoundService = game:GetService("SoundService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local NumberStack = require( ReplicatedStorage.modules.shared.Utilities.NumberStack )
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local NumberStack = require( replicatedStorage.modules.shared.Utilities.NumberStack )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 local Colors = require( script.Colors )
 
-local Limited_Emote_Dates = require( ReplicatedStorage.modules.shared.Game["Limited Emote Dates"])
+local Limited_Emote_Dates = require( replicatedStorage.modules.shared.Game["Limited Emote Dates"])
 
 ----------------------------------------------------------------------------------
 
@@ -379,7 +379,7 @@ function Emotes:MakeViewportOnSlot(Emote : TextButton, Name : string)
 	Dummy.Parent = Emote.EmoteViewPort.WorldModel
 
 	task.spawn(function()
-		local Appearances = require( ReplicatedStorage.modules.shared.Game.Appearances )
+		local Appearances = require( replicatedStorage.modules.shared.Game.Appearances )
 		local Developer = Appearances.GetRandomDeveloper()
 
 		if Developer then
@@ -391,7 +391,7 @@ function Emotes:MakeViewportOnSlot(Emote : TextButton, Name : string)
 		end
 	end)
 
-	local AnimationObject = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+	local AnimationObject = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 	if (AnimationObject ~= nil) then
 		AnimationObject = 

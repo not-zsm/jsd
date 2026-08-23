@@ -1,23 +1,23 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
-local connect = require( ReplicatedStorage.modules.network.connect )
+local network = require( replicatedStorage.modules.network )
+local connect = require( replicatedStorage.modules.network.connect )
 local UserInputService = game:GetService("UserInputService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 local EventService = require(SharedUtilities.EventService)
 local Job = require( SharedUtilities.Job )
 local Utility = require( SharedUtilities.Utility )
 local NumberStack = require( SharedUtilities.NumberStack )
-local FollowHead = require( ReplicatedStorage.modules.client.camera.FollowHead )
+local FollowHead = require( replicatedStorage.modules.client.camera.FollowHead )
 
 local MovementDegree = math.sqrt(2) / 2
 
@@ -31,7 +31,7 @@ local CurrentCamera = workspace.CurrentCamera
 ----------------------------------------------------------------------------------
 
 function LuaCharacter:_Init()
-	self.Combat = require( ReplicatedStorage.clientCombat ).new(self)
+	self.Combat = require( replicatedStorage.clientCombat ).new(self)
 	self.Combat:_Init()
 	
 	self.Movement = require( script.Movement ).new(self)

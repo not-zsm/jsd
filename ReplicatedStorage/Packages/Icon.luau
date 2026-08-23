@@ -39,7 +39,7 @@ local UserInputService = game:GetService("UserInputService")
 local ContentProvider = game:GetService("ContentProvider")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local Types = require(script.Types)
 
@@ -73,7 +73,7 @@ local Utility = require(iconModule.Utility)
 local Themes = require(iconModule.Features.Themes)
 local Gamepad = require(iconModule.Features.Gamepad)
 local Overflow = require(iconModule.Features.Overflow)
-local Observer = require( ReplicatedStorage.Packages.Observer )
+local Observer = require( replicatedStorage.Packages.Observer )
 
 local Icon = {}
 Icon.__index = Icon

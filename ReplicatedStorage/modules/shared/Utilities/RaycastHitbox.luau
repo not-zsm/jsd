@@ -1,7 +1,7 @@
 -- @author Swordphin123
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 local RaycastHitbox = {}
 RaycastHitbox.__index = RaycastHitbox

@@ -1,15 +1,15 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local TweenService = game:GetService("TweenService")
 local Chat = game:GetService("Chat")
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
-local CharacterTransparency = require( ReplicatedStorage.modules.client.replication.Global.CharacterTransparency )
+local CharacterTransparency = require( replicatedStorage.modules.client.replication.Global.CharacterTransparency )
 
-local Type = require( ReplicatedStorage.Packages.Type )
+local Type = require( replicatedStorage.Packages.Type )
 
 local function CreateHands(AddRightHand : boolean, AddLeftHand : boolean, LuaCharacter : Model, HandFolder : Folder)
 	HandFolder = HandFolder or script.Natsuki
@@ -672,7 +672,7 @@ return {
 			self:DivideSpeed(10)
 			self:StackState("CannotDrawWeapon", true)
 
-			local assets = ReplicatedStorage.Emotes.Chicken
+			local assets = replicatedStorage.Emotes.Chicken
 
 			local starttrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(assets.Start)
 			starttrack:Play(0,10,1)
@@ -742,7 +742,7 @@ return {
 			self:DivideSpeed(10)
 			self:StackState("CannotDrawWeapon", true)
 
-			local assets = ReplicatedStorage.Emotes.Bnuy
+			local assets = replicatedStorage.Emotes.Bnuy
 
 			local starttrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(assets.Start)
 			starttrack:Play(0,10,1)
@@ -826,8 +826,8 @@ return {
 		CustomFunction = function(self, Job, Animation : AnimationTrack)
 			self:DivideSpeed(20)
 			
-			local Vocal = ReplicatedStorage.Emotes["IT'S YOU!?"].Vocal:Clone()
-			local Cloth = ReplicatedStorage.Emotes["IT'S YOU!?"].Cloth:Clone()
+			local Vocal = replicatedStorage.Emotes["IT'S YOU!?"].Vocal:Clone()
+			local Cloth = replicatedStorage.Emotes["IT'S YOU!?"].Cloth:Clone()
 			
 			Vocal.Parent = self.LuaCharacter.Head
 			Cloth.Parent = self.LuaCharacter.Torso
@@ -881,7 +881,7 @@ return {
 		},
 
 		CustomFunction = function(self, Job, Animation : AnimationTrack)
-			local Assets = ReplicatedStorage.Emotes.Unicorn
+			local Assets = replicatedStorage.Emotes.Unicorn
 
 			local Unicorn = Assets.Unicorn:Clone()
 			Unicorn.Parent = self.LuaCharacter.RootPart
@@ -1047,8 +1047,8 @@ return {
 	
 	["Dance Of Peace"] = {
 		CustomFunction = function(self, Job)
-			local Loop1 : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Dance Of Peace"].Loop1)
-			local Loop2 : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Dance Of Peace"].Loop2)
+			local Loop1 : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Dance Of Peace"].Loop1)
+			local Loop2 : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Dance Of Peace"].Loop2)
 			
 			Loop1:Play()
 			
@@ -1156,7 +1156,7 @@ return {
 				JoinedCombat:DivideSpeed(50)
 
 				local Side = (Utility.TableCount(JoinedTable) == 0 and "Left" or "Right")
-				local Anim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Jersey Joe"][Side])
+				local Anim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Jersey Joe"][Side])
 				
 				if Side == "Left" then
 					JoinedCombat.LuaCharacter.Model:PivotTo(self:GetSimulatedRoot().CFrame * CFrame.new(4.5, 0, 2))
@@ -1211,8 +1211,8 @@ return {
 				self:DivideSpeed(200)
 				JoinedCombat:DivideSpeed(200)
 
-				local GuyAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Stars"].Guy)
-				local GirlAnim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Stars"].Girl)
+				local GuyAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Stars"].Guy)
+				local GirlAnim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Stars"].Girl)
 
 				JoinedCombat.LuaCharacter.Model:PivotTo(self:GetSimulatedRoot().CFrame * CFrame.new(0, 0, -4.175) * CFrame.Angles(0, math.pi, 0))
 
@@ -1274,7 +1274,7 @@ return {
 			
 			local StartedLoop = false
 			
-			local Idle : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Erased.Idle)
+			local Idle : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Erased.Idle)
 			Idle.Priority = Enum.AnimationPriority.Core
 			
 			local Butterfly = script.Erased["Butterfly"]:Clone()
@@ -1544,7 +1544,7 @@ return {
 				TargetCombat:DivideSpeed(1000)
 				TargetCombat.LuaCharacter.RootPart.CFrame = self:GetSimulatedRoot().CFrame
 
-				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Get Jiggy"].Duo)
+				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Get Jiggy"].Duo)
 				Anim:Play()
 				Anim.TimePosition = UserAnimation.TimePosition
 
@@ -1581,7 +1581,7 @@ return {
 			ActionText = "Join",
 
 			Function = function(self, TargetCombat, MainJob, JoinedJob, UserAnimation : AnimationTrack)
-				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Conga)
+				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Conga)
 
 				local VelocityObject = TargetCombat:Velocity()
 				VelocityObject.Settings.MaxForce = Vector3.new(1, 0, 1) * 50000
@@ -1657,7 +1657,7 @@ return {
 				local UserNum = math.random(1, 3)
 				local DuoNum = math.random(1, 3)
 			
-				local UserAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Rock Paper Scissors"][`{UserNum}`])
+				local UserAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Rock Paper Scissors"][`{UserNum}`])
 				UserAnim:Play()
 				
 				local UserSound = JoinedJob:Task(script.RPS.Start:Clone())
@@ -1670,7 +1670,7 @@ return {
 				
 				TargetCombat:DivideSpeed(10)
 				
-				local DuoAnim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Rock Paper Scissors"][`{DuoNum}`])
+				local DuoAnim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Rock Paper Scissors"][`{DuoNum}`])
 				DuoAnim:Play()
 				
 				DuoAnim.TimePosition = UserAnim.TimePosition
@@ -1718,7 +1718,7 @@ return {
 
 			Function = function(self, TargetCombat, MainJob, JoinedJob, UserAnimation : AnimationTrack)
 				TargetCombat:DivideSpeed(10)
-				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Gang Dance"])
+				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Gang Dance"])
 				Anim:Play()
 				Anim.TimePosition = UserAnimation.TimePosition
 
@@ -1832,8 +1832,8 @@ return {
 			Paper.Weld.Part0 = self.LuaCharacter.LeftArm
 			Paper.Parent = self.LuaCharacter.Model
 			
-			local LoopAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Write.Loop)
-			local FinishAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Write.Done)
+			local LoopAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Write.Loop)
+			local FinishAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Write.Done)
 			
 			local LoopSound = Job:Task(script.Write.Sounds.Loop:Clone())
 			LoopSound.Parent = self.LuaCharacter.RootPart
@@ -1851,7 +1851,7 @@ return {
 
 			--local StrCheck = Type.string():length(0, 128)
 			
-			local Connection; Connection = Job:Task(ReplicatedStorage.Remotes.Emotes.FinishWriting.OnServerEvent:Connect(function(Player, Text)
+			local Connection; Connection = Job:Task(replicatedStorage.Remotes.Emotes.FinishWriting.OnServerEvent:Connect(function(Player, Text)
 				--Text = StrCheck:cast(StrCheck);
 
 				if Player == self.LuaPlayer.Player and typeof(Text) == "string" then
@@ -1942,8 +1942,8 @@ return {
 				MainJob:Task(self.LuaCharacter:StopAutoRotate())
 				JoinedJob:Task(JoinedCombat.LuaCharacter:StopAutoRotate())
 
-				local UserAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Handshake"].User)
-				local FriendAnim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Handshake"].Friend)
+				local UserAnim : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Handshake"].User)
+				local FriendAnim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Handshake"].Friend)
 
 				JoinedCombat.LuaCharacter.Model:PivotTo(self:GetSimulatedRoot().CFrame * CFrame.new(0.2, 0, -5.13) * CFrame.Angles(0, math.pi, 0))
 				JoinedCombat:DivideSpeed(200)
@@ -1985,7 +1985,7 @@ return {
 
 			Job:Task(VelocityObject)
 			
-			local SoundFolder = ReplicatedStorage.Emotes["The Cruler"]
+			local SoundFolder = replicatedStorage.Emotes["The Cruler"]
 			local Sound = Job:Task(SoundFolder:FindFirstChild(if self.LuaCharacter.Combat.InCombat then "Combat" else "Passive"):Clone())
 			Sound.Parent = self.LuaCharacter.RootPart
 			Sound:Play()
@@ -2011,7 +2011,7 @@ return {
 			
 			self:DivideSpeed(Speed)
 			
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Believe.Loop)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Believe.Loop)
 			local VFX = script.Believe.Attachment:Clone()
 			local Brightness = VFX.PointLight.Brightness
 			
@@ -2074,7 +2074,7 @@ return {
 				TargetCombat:DivideSpeed(1000)
 				TargetCombat.LuaCharacter.RootPart.CFrame = self:GetSimulatedRoot().CFrame * CFrame.new(-5.445, 0, 0)
 
-				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Jitter Bugging"].Duo)
+				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Jitter Bugging"].Duo)
 				Anim:Play()
 				
 				task.spawn(function()
@@ -2128,7 +2128,7 @@ return {
 				TargetCombat:DivideSpeed(1000)
 				TargetCombat.LuaCharacter.RootPart.CFrame = self:GetSimulatedRoot().CFrame * CFrame.new(-6, 0, 0)
 
-				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Mesmerizer.Duo)
+				local Anim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Mesmerizer.Duo)
 				Anim:Play()
 
 				task.spawn(function()
@@ -2170,7 +2170,7 @@ return {
 
 			self:DivideSpeed(Speed)
 
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Destruction"].Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Destruction"].Idle)
 			
 			Job:Task(task.delay(65/60, function()
 				local Reference = Job:Task(Instance.new("Configuration"))
@@ -2204,7 +2204,7 @@ return {
 
 			self:DivideSpeed(Speed)
 
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Justice.Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Justice.Idle)
 			
 			Job:Task(task.delay(100/60, function()
 				local Reference = Job:Task(Instance.new("Configuration"))
@@ -2236,7 +2236,7 @@ return {
 			
 			self:DivideSpeed(Speed)
 			
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Partnership.Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Partnership.Idle)
 			
 			Job:Task(task.delay(25/60, function()
 				local Reference = Job:Task(Instance.new("Configuration"))
@@ -2285,7 +2285,7 @@ return {
 
 			self:DivideSpeed(Speed)
 
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Thinker.Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Thinker.Idle)
 			
 			Job:Task(self.LuaCharacter:StopAutoRotate())
 			
@@ -2327,7 +2327,7 @@ return {
 		CustomFunction = function(self, Job, Animation : AnimationTrack)
 			self:DivideSpeed(50)
 
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Your Idol"].Loop)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Your Idol"].Loop)
 
 			Job:Task(task.delay((1141/60)-0.15, function()
 				LoopTrack:Play(0.15)
@@ -2514,7 +2514,7 @@ return {
 
 			self:DivideSpeed(Speed)
 
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Crashout.Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Crashout.Idle)
 
 			--Job:Task(self.LuaCharacter:StopAutoRotate())
 			
@@ -2620,7 +2620,7 @@ return {
 	
 	["Metro"] = BasicEmote({
 		Callback = function(self, Job, Animation)
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Metro"].Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Metro"].Idle)
 			--LoopTrack.Looped = false
 			
 			Job:Task(Animation:GetMarkerReachedSignal("End"):Once(function()
@@ -2688,13 +2688,13 @@ return {
 				JoinedJob:Task(JoinedCombat.LuaCharacter:StopAutoRotate())
 				JoinedCombat:DivideSpeed(200)
 				
-				ReplicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
+				replicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
 				
-				local AcceptedUser : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Piggy Back"].AcceptedUser)
-				local AcceptedFriend : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Piggy Back"].AcceptedFriend)
+				local AcceptedUser : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Piggy Back"].AcceptedUser)
+				local AcceptedFriend : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Piggy Back"].AcceptedFriend)
 
-				local UserLoop : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Piggy Back"].LoopUser)
-				local FriendLoop : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Piggy Back"].LoopFriend)
+				local UserLoop : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Piggy Back"].LoopUser)
+				local FriendLoop : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Piggy Back"].LoopFriend)
 				
 				local Thread = task.delay(45/60, function()
 					UserLoop:Play(1/12)
@@ -2736,7 +2736,7 @@ return {
 				JoinedJob:Task(function()
 					if not JoinedCombat:GetState("Grabbed") then
 						JoinedCombat.LuaCharacter:SetCollisionGroup("Player")
-						ReplicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
+						replicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
 					end
 					
 					JoinedCombat:TimesSpeed(200)
@@ -2768,7 +2768,7 @@ return {
 		Speed = 200,
 		
 		Callback = function(self, Job, Animation)
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Just Sit"].Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Just Sit"].Idle)
 			
 			Job:Task(Animation:GetMarkerReachedSignal("End"):Once(function()
 				LoopTrack:Play(0.15)
@@ -2812,7 +2812,7 @@ return {
 				Job:Task(VelocityObject)
 			end))
 			
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["PUT IT ONG"].Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["PUT IT ONG"].Idle)
 
 			Job:Task(Animation:GetMarkerReachedSignal("End"):Once(function()
 				LoopTrack:Play(0.15)
@@ -2828,7 +2828,7 @@ return {
 		Speed = 200,
 
 		Callback = function(self, Job, Animation)
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Starman.Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Starman.Idle)
 
 			Job:Task(Animation:GetMarkerReachedSignal("End"):Once(function()
 				LoopTrack:Play(0.15)
@@ -2839,7 +2839,7 @@ return {
 			end)
 			
 			Job:Task(Animation:GetMarkerReachedSignal("Effect"):Once(function()
-				self.LuaPlayer.Replication:FireReliableVFX("Global/ClientEmit", "At", self.LuaCharacter.RootPart.CFrame, ReplicatedStorage.Emotes._StarmanEffect.Emit)
+				self.LuaPlayer.Replication:FireReliableVFX("Global/ClientEmit", "At", self.LuaCharacter.RootPart.CFrame, replicatedStorage.Emotes._StarmanEffect.Emit)
 				
 				local VFXPart = Job:Task(script.Starman.Toggle:Clone())
 				VFXPart.Join.Part0 = self.LuaCharacter.RootPart
@@ -2876,7 +2876,7 @@ return {
 		Speed = 200,
 
 		Callback = function(self, Job, Animation)
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Criss-Cross Applesauce"].Idle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Criss-Cross Applesauce"].Idle)
 
 			Job:Task(Animation:GetMarkerReachedSignal("End"):Once(function()
 				LoopTrack:Play(0.15)
@@ -2920,7 +2920,7 @@ return {
 				Clone.Parent = workspace.Visuals
 			end
 			
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Sofa.User)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Sofa.User)
 
 			Job:Task(task.delay(100/60, function()
 				LoopTrack:Play(0.15)
@@ -2978,12 +2978,12 @@ return {
 					break
 				end
 				
-				local Anim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Sofa[`Friend{FriendIndex}`])
+				local Anim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Sofa[`Friend{FriendIndex}`])
 
 				JoinedCombat.LuaCharacter:Anchor(true, true)
 				JoinedCombat.LuaCharacter.Model:PivotTo(self.LuaCharacter.RootPart.CFrame)
 				
-				ReplicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
+				replicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
 
 				Anim:Play()
 				Anim.TimePosition = MainAnimation.TimePosition
@@ -2993,7 +2993,7 @@ return {
 					
 					if not JoinedCombat:GetState("Grabbed") then
 						JoinedCombat.LuaCharacter:SetCollisionGroup("Player")
-						ReplicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
+						replicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
 					end
 					
 					JoinedCombat:TimesSpeed(50)
@@ -3011,7 +3011,7 @@ return {
 	
 	["Hug"] = BasicEmote({
 		Callback = function(self, Job, Animation)
-			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Hug.StartIdle)
+			local LoopTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Hug.StartIdle)
 
 			Job:Task(Animation:GetMarkerReachedSignal("End"):Once(function()
 				LoopTrack:Play(0.15)
@@ -3050,13 +3050,13 @@ return {
 				JoinedJob:Task(JoinedCombat.LuaCharacter:StopAutoRotate())
 				JoinedCombat:DivideSpeed(200)
 
-				ReplicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
+				replicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
 
-				local AcceptedUser : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Hug.InitUser)
-				local AcceptedFriend : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Hug.InitTarget)
+				local AcceptedUser : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Hug.InitUser)
+				local AcceptedFriend : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Hug.InitTarget)
 
-				local UserLoop : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Hug.UserLoop)
-				local FriendLoop : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Hug.TargetLoop)
+				local UserLoop : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Hug.UserLoop)
+				local FriendLoop : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Hug.TargetLoop)
 
 				local Thread = task.delay(45/60, function()
 					UserLoop:Play(1/12)
@@ -3086,7 +3086,7 @@ return {
 				JoinedJob:Task(function()
 					if not JoinedCombat:GetState("Grabbed") then
 						JoinedCombat.LuaCharacter:SetCollisionGroup("Player")
-						ReplicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
+						replicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
 					end
 
 					JoinedCombat:TimesSpeed(200)
@@ -3128,7 +3128,7 @@ return {
 					JoinedCombat:DivideSpeed(200)
 
 					local Side = (Utility.TableCount(JoinedTable) == 0 and "Left" or "Right")
-					local Anim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Golden"][Side])
+					local Anim : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Golden"][Side])
 
 					JoinedCombat.LuaCharacter.Model:PivotTo(self:GetSimulatedRoot().CFrame)
 
@@ -3136,7 +3136,7 @@ return {
 					Anim.TimePosition = MainAnimation.TimePosition
 					
 					local LoopAnim : AnimationTrack
-					LoopAnim = JoinedCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Golden"][`{Side} Loop`])
+					LoopAnim = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Golden"][`{Side} Loop`])
 					
 					JoinedJob:Task(MainAnimation:GetMarkerReachedSignal("End"):Connect(function()
 						Anim:Stop(0)
@@ -3161,7 +3161,7 @@ return {
 			Job:Task(self.LuaCharacter:StopAutoRotate())
 			
 			local Anim
-			Anim = self.LuaCharacter.Humanoid:LoadAnimation(ReplicatedStorage.Animations.Emotes.Golden["Start Loop"])
+			Anim = self.LuaCharacter.Humanoid:LoadAnimation(replicatedStorage.Animations.Emotes.Golden["Start Loop"])
 			
 			Job:Task(Animation:GetMarkerReachedSignal("End"):Connect(function()
 				Anim:Play()
@@ -3251,7 +3251,7 @@ return {
 
 			Function = function(self, TargetCombat, MainJob, JoinedJob, UserAnimation : AnimationTrack)
 				local function PlayAnimation(LuaPlayer, Role : String, Direction : String)
-					local Animation : AnimationTrack = LuaPlayer.Character.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Shadowbox[Role][Direction])
+					local Animation : AnimationTrack = LuaPlayer.Character.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Shadowbox[Role][Direction])
 					Animation:Play()
 					
 					return Animation
@@ -3275,7 +3275,7 @@ return {
 					end
 
 					local ReceiveConnection
-					ReceiveConnection = JoinedJob:Task(ReplicatedStorage.Remotes.Emotes.ChooseDirection.OnServerEvent:Connect(function(Player, ChosenDirection)
+					ReceiveConnection = JoinedJob:Task(replicatedStorage.Remotes.Emotes.ChooseDirection.OnServerEvent:Connect(function(Player, ChosenDirection)
 						if not LeaderLuaPlayer.IsNPC and Player == LeaderLuaPlayer.Player then
 							LeaderChoice = ChosenDirection
 							
@@ -3318,7 +3318,7 @@ return {
 				
 				TargetCombat:DivideSpeed(10)
 
-				local DuoAnim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes.Shadowbox.Idle)
+				local DuoAnim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Shadowbox.Idle)
 				-- DuoAnim.Priority = Enum.AnimationPriority.Idle
 				DuoAnim:Play()
 				

@@ -3,7 +3,7 @@ local XZ_AXIS = Vector3.new(1, 0, 1);
 
 ---------------------------------------------------------------------
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
@@ -16,8 +16,8 @@ local Player = Players.LocalPlayer;
 
 ---------------------------------------------------------------------
 
-local BufferUtil = require( ReplicatedStorage.Packages.BufferUtil )
-local AenoirEmit = require( ReplicatedStorage.modules.client.replication.EffectUtility.AenoirEmit )
+local BufferUtil = require( replicatedStorage.Packages.BufferUtil )
+local AenoirEmit = require( replicatedStorage.modules.client.replication.EffectUtility.AenoirEmit )
 local Effects = require( script.Effects );
 local PartCache = require("./PartCache");
 local Presets = require("./Presets");

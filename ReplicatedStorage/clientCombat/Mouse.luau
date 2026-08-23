@@ -1,5 +1,5 @@
 local UserInputService = game:GetService("UserInputService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
@@ -8,12 +8,12 @@ local CurrentCamera = workspace.CurrentCamera
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local FakeMouseRemotes = Remotes.Combat.FakeMouse
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local AimAssist = require( ReplicatedStorage.modules.shared.Game.AimAssist )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local AimAssist = require( replicatedStorage.modules.shared.Game.AimAssist )
 local AimPresets = require( script.AimPresets )
 
 ----------------------------------------------------------------------------------

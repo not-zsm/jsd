@@ -2,7 +2,7 @@
 
 local MarketplaceService = game:GetService("MarketplaceService")
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local PhysicsService = game:GetService("PhysicsService")
 local PolicyService = game:GetService("PolicyService")
 local RunService = game:GetService("RunService")
@@ -11,14 +11,14 @@ local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local PromptPurchaseEvent = Remotes.PromptGamepassPurchase
 
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
-local Gamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local Table = require( ReplicatedStorage.Packages.Table )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
+local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local Table = require( replicatedStorage.Packages.Table )
 
 local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 

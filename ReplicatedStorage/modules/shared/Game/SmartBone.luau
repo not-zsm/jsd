@@ -1,6 +1,6 @@
 --!nocheck
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
@@ -8,7 +8,7 @@ local RunService = game:GetService("RunService")
 local Components = script:WaitForChild("Components")
 local Dependencies = script:WaitForChild("Dependencies")
 
-local Observer = require( ReplicatedStorage.Packages.Observer )
+local Observer = require( replicatedStorage.Packages.Observer )
 
 local CeiveImOverlay = require(Dependencies:WaitForChild("Debug"):WaitForChild("ImOverlay"))
 local Config = require(Dependencies:WaitForChild("Config"))

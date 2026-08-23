@@ -1,7 +1,7 @@
 local DialogueConfiguration = {}
 
 local SoundService = game:GetService("SoundService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local LocalPlayer = game:GetService("Players").LocalPlayer
 
@@ -192,7 +192,7 @@ DialogueConfiguration.Dialogues = {
 				Text = "Wsg bruzz.. You want me to call up cursed child? it'll cost you tho.",
 				Choices = {
 					{Text = "yes sir", Function = function()
-						ReplicatedStorage.Remotes.SpawnCharaBoss:FireServer()
+						replicatedStorage.Remotes.SpawnCharaBoss:FireServer()
 					end,
 					EndConversation = true},
 					{Text = "nah srry", EndConversation = true},

@@ -1,9 +1,9 @@
 --!native
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local Utility = {}
 
@@ -71,7 +71,7 @@ Utility.HitboxParams = OverlapParams.new()
 Utility.HitboxParams.FilterType = Enum.RaycastFilterType.Include
 
 task.spawn(function()
-	local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+	local MovementReplicatorSettings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
 	if MovementReplicatorSettings.use_replicator then
 		Utility.HitboxParams.CollisionGroup = "ResimulatedPart"

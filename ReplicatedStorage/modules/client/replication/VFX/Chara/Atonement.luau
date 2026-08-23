@@ -1,5 +1,5 @@
 local SoundService = game:GetService("SoundService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
 local Lighting = game:GetService("Lighting")
@@ -8,22 +8,22 @@ local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local AnimationRetriever = require(ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever)
-local RunCameraRig = require(ReplicatedStorage.modules.client.replication.Global.RunCameraRig)
-local CameraShake = require(ReplicatedStorage.modules.client.replication.Global.CameraShake)
-local RockHandler = require(ReplicatedStorage.modules.client.replication.Global.RockHandler)
-local VelocityUtil = require(ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil)
-local EffectUtility = require(ReplicatedStorage.modules.client.replication.EffectUtility)
-local BugoVFX = require(ReplicatedStorage.modules.client.replication.EffectUtility.Bugo)
-local ModelTransparency = require( ReplicatedStorage.modules.client.replication.Global.CharacterTransparency )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local AenoirMesh = require( ReplicatedStorage.modules.client.replication.EffectUtility.AenoirMesh )
+local AnimationRetriever = require(replicatedStorage.modules.client.replication.VFX.AnimationRetriever)
+local RunCameraRig = require(replicatedStorage.modules.client.replication.Global.RunCameraRig)
+local CameraShake = require(replicatedStorage.modules.client.replication.Global.CameraShake)
+local RockHandler = require(replicatedStorage.modules.client.replication.Global.RockHandler)
+local VelocityUtil = require(replicatedStorage.modules.shared.Game.Velocity.VelocityUtil)
+local EffectUtility = require(replicatedStorage.modules.client.replication.EffectUtility)
+local BugoVFX = require(replicatedStorage.modules.client.replication.EffectUtility.Bugo)
+local ModelTransparency = require( replicatedStorage.modules.client.replication.Global.CharacterTransparency )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local AenoirMesh = require( replicatedStorage.modules.client.replication.EffectUtility.AenoirMesh )
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Animations = ReplicatedStorage.Animations.Attacks.Chara.Atonement
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Animations = replicatedStorage.Animations.Attacks.Chara.Atonement
 local quickutil = require( script.quickutil )
-local OldLighting = require( ReplicatedStorage.modules.shared.Game.GameLighting )
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local OldLighting = require( replicatedStorage.modules.shared.Game.GameLighting )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
 ------------------- [ Functions ]-------------------
 -->> somebody get the door

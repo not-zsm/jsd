@@ -1,13 +1,13 @@
 local Velocity = {}
 Velocity.__index = Velocity
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local RunService = game:GetService("RunService")
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 function Velocity:Remove()
 	if self.Removed then return end

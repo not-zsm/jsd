@@ -9,7 +9,7 @@ return {
 			game.Loaded:Wait()
 		end
 
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local replicatedStorage = game:GetService("ReplicatedStorage")
 		local Players = game:GetService("Players")
 		local TweenService = game:GetService("TweenService")
 
@@ -18,7 +18,7 @@ return {
 		end
 
 		local Player = Players.LocalPlayer
-		local Weather = require( ReplicatedStorage.modules.client.weather )
+		local Weather = require( replicatedStorage.modules.client.weather )
 
 		local ACTOR_THREADS = 5
 
@@ -67,7 +67,7 @@ return {
 			end
 		end
 
-		-- this module lives in ReplicatedStorage now, where a LocalScript will
+		-- this module lives in replicatedStorage now, where a LocalScript will
 		-- not run, so the actors have to be parented into PlayerScripts. The
 		-- template stays put rather than being destroyed, since it is shared.
 		local Holder = Instance.new("Folder")

@@ -1,8 +1,8 @@
 -- Services
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local ServerStorage = game:GetService("ServerStorage")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -15,8 +15,8 @@ local DummyHandlers = script.DummyHandlers;
 
 local BanList = require( script.PrivateServerBanList )
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local Weather
 local LuaPlayerList
@@ -28,7 +28,7 @@ if RunService:IsServer() then
 	LuaPlayerList = require(ServerStorage.modules.LuaPlayerList)
 
 	-- On Click Strike
-	ReplicatedStorage.Remotes.Commands.ClickStrike.OnServerEvent:Connect(function(Player, MousePosition)
+	replicatedStorage.Remotes.Commands.ClickStrike.OnServerEvent:Connect(function(Player, MousePosition)
 		if Player:GetAttribute("ClickStrike") == true then
 			if Weather then
 				Weather.Smite(MousePosition)
@@ -515,7 +515,7 @@ local Commands = {
 		CanMacro = false;
 		Index = 15, Callback = function(LuaPlayer, TargetLuaPlayer, ReceivedParameters)
 			TargetLuaPlayer.Character:Respawn()
-			ReplicatedStorage.Remotes.Commands.Respawn:FireClient(TargetLuaPlayer.Player)
+			replicatedStorage.Remotes.Commands.Respawn:FireClient(TargetLuaPlayer.Player)
 		end},
 
 	["Spawn Dummy"] = {

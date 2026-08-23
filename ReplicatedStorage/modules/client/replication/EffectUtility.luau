@@ -1,15 +1,15 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local CraterDust = ReplicatedStorage.modules.effect.assets.Smoke
+local CraterDust = replicatedStorage.modules.effect.assets.Smoke
 
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local UndefinedTimeout = 60;
 
@@ -95,7 +95,7 @@ end
 	--end
 --end
 
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 function EffectUtility.Emit(_Instance : Instance, DontRemove : boolean?)
 	local ToCreateThread = false
@@ -173,7 +173,7 @@ end
 
 function EffectUtility.CloneAndEmit(Item : Attachment | BasePart | ParticleEmitter, Parent : Instance, DontRemove : Boolean?)
 	--if not LocalPlayer:GetAttribute("Blood") then
-	--	if Item.Parent == ReplicatedStorage.modules.effect.assets.Blood then
+	--	if Item.Parent == replicatedStorage.modules.effect.assets.Blood then
 	--		return
 	--	end
 	--end
@@ -331,7 +331,7 @@ function EffectUtility.EmitEffects(Folder : Folder, Parent : Instance, WorldPosi
 	end
 
 	if LocalPlayer then
-		if not (not LocalPlayer:GetAttribute("Blood") and Folder:IsDescendantOf(ReplicatedStorage.modules.effect.assets.Blood)) then
+		if not (not LocalPlayer:GetAttribute("Blood") and Folder:IsDescendantOf(replicatedStorage.modules.effect.assets.Blood)) then
 			Search()
 		end
 	else
@@ -435,14 +435,14 @@ EffectUtility.Weld = FakeWeld.new
 --	UpdateFakeWeld()
 --end
 
-function EffectUtility.WeldArmTrail(Limb : BasePart) : typeof(ReplicatedStorage.modules.effect.assets.Parts.Arm) -- welds cause weird mass behavior which made me crash out and break my keyboard (im not joking)
+function EffectUtility.WeldArmTrail(Limb : BasePart) : typeof(replicatedStorage.modules.effect.assets.Parts.Arm) -- welds cause weird mass behavior which made me crash out and break my keyboard (im not joking)
 	if not Limb:IsA("BasePart") then
 		warn("cannot do trail on a non limb")
 		
 		return nil
 	end
 	
-	local FakeArm = ReplicatedStorage.modules.effect.assets.Parts.Arm:Clone()
+	local FakeArm = replicatedStorage.modules.effect.assets.Parts.Arm:Clone()
 	FakeArm.Name = Limb.Name .. " Trail"
 	FakeArm.CFrame = Limb.CFrame
 	EffectUtility.Weld(FakeArm, Limb)

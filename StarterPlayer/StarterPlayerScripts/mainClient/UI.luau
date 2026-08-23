@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local TextChatService = game:GetService("TextChatService")
@@ -9,22 +9,22 @@ local CollectionService = game:GetService("CollectionService")
 
 ----------------------------------------------------------------------------------
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
 local UIRemotes = CombatRemotes.UI
 local HotbarRemotes = UIRemotes.Hotbar 
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local NumberStack = require( ReplicatedStorage.modules.shared.Utilities.NumberStack )
-local AnimatedGradient = require( ReplicatedStorage.modules.shared.Utilities.GradientEffect )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local NumberStack = require( replicatedStorage.modules.shared.Utilities.NumberStack )
+local AnimatedGradient = require( replicatedStorage.modules.shared.Utilities.GradientEffect )
 local ClientAnnouncementHandler = require( script.ClientAnnouncementHandler )
-local HUDMovement = require( ReplicatedStorage.modules.effect.hudMovement )
+local HUDMovement = require( replicatedStorage.modules.effect.hudMovement )
 
 local ScaleDescription = require(script:WaitForChild("InformationConfg"):WaitForChild("ScaleDescription"))
 
@@ -510,7 +510,7 @@ function UI:SaveMobileButtonPositions()
 		}
 	end
 
-	ReplicatedStorage.Remotes.SaveMobileUIPosition:FireServer(savedPositions)
+	replicatedStorage.Remotes.SaveMobileUIPosition:FireServer(savedPositions)
 end
 
 function UI:SetUpMobile(Value : boolean)
@@ -581,7 +581,7 @@ function UI:SetUpMobile(Value : boolean)
 		--	end
 		--end)
 
-		self.MobileUIJob:Task(ReplicatedStorage.Remotes.SaveMobileUIPosition.OnClientEvent:Connect(function(Positions)
+		self.MobileUIJob:Task(replicatedStorage.Remotes.SaveMobileUIPosition.OnClientEvent:Connect(function(Positions)
 			if (Positions ~= nil) then
 				self:LoadMobileButtonPositions(Positions)
 			else

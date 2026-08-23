@@ -8,7 +8,7 @@ Docs: https://devforum.roblox.com/t/wind-shake-high-performance-wind-effect-for-
 --]=]
 
 --!strict
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 local Settings = require(script.Settings)
@@ -30,7 +30,7 @@ type Settings = Settings.Class
 
 -----------------------------------------------------------------------------------------------------------------
 
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 local Paused = EventService.new()
 local Resumed = EventService.new()

@@ -24,18 +24,18 @@
 --]]
 
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 
-local Job = require(ReplicatedStorage.modules.shared.Utilities.Job)
-local clientCombat = require(ReplicatedStorage.clientCombat)
-local info = require(ReplicatedStorage.info)
-local network = require(ReplicatedStorage.modules.network)
-local soundUtil = require(ReplicatedStorage.modules.shared.soundUtil)
+local Job = require(replicatedStorage.modules.shared.Utilities.Job)
+local clientCombat = require(replicatedStorage.clientCombat)
+local info = require(replicatedStorage.info)
+local network = require(replicatedStorage.modules.network)
+local soundUtil = require(replicatedStorage.modules.shared.soundUtil)
 
 local uiConfig = require(script.UI.config)
 local shopHelper = require(script.UI.helpers.shopHelper)
@@ -175,12 +175,12 @@ end
 	LocalScript sitting beside this one deciding its own startup order.
 --]]
 function MainClient:StartPlayer()
-	local Replicator = ReplicatedStorage.modules.shared.movementReplicator
+	local Replicator = replicatedStorage.modules.shared.movementReplicator
 	require(Replicator:WaitForChild("ClientReplicator", 100))
 
-	require(ReplicatedStorage.modules.client.luaPlayer).new()
+	require(replicatedStorage.modules.client.luaPlayer).new()
 
-	local DonationBoard = ReplicatedStorage:WaitForChild("DonationBoardClient", 100)
+	local DonationBoard = replicatedStorage:WaitForChild("DonationBoardClient", 100)
 
 	if DonationBoard then
 		require(DonationBoard)

@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
@@ -24,9 +24,9 @@ TooltipUI.Parent = PlayerGui;
 
 ------------------------------------------------------------------------------------------------
 
-local Observer = require( ReplicatedStorage.Packages.Observer );
-local Maid = require( ReplicatedStorage.Packages.Maid );
-local HelpInput = require( ReplicatedStorage.Packages.HelpInput );
+local Observer = require( replicatedStorage.Packages.Observer );
+local Maid = require( replicatedStorage.Packages.Maid );
+local HelpInput = require( replicatedStorage.Packages.HelpInput );
 
 local UIBlur = require( script.UIBlur )
 local UILoading = require( script.UILoading )

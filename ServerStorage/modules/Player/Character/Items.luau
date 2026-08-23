@@ -1,5 +1,5 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local MarketplaceService = game:GetService("MarketplaceService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
@@ -9,9 +9,9 @@ local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 ----------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ function Items:_UpdateItemAnimations(Item : Table, Equipped : Bolean, AnimSpeed 
 		else
 			local Animator = self.LuaCharacter.Animator
 			if Animator then
-				local AnimInstance = ReplicatedStorage.Animations.Items.Idle[Item.Name]
+				local AnimInstance = replicatedStorage.Animations.Items.Idle[Item.Name]
 				if AnimInstance then
 					if Item.Idle and Item.Idle.IsPlaying then
 						Item.Idle:Stop()

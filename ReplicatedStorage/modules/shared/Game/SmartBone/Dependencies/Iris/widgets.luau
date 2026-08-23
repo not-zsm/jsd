@@ -6,7 +6,7 @@ return function(Iris: Types.Internal)
     widgets.GuiService = game:GetService("GuiService")
     widgets.RunService = game:GetService("RunService")
     widgets.UserInputService = game:GetService("UserInputService")
-    widgets.ContextActionService = game:GetService("ContextActionService")
+    widgets.contextActionService = game:GetService("ContextActionService")
     widgets.TextService = game:GetService("TextService")
 
     widgets.ICONS = {
@@ -453,7 +453,7 @@ clickedGuiObject.MouseButton1Click:Connect(function()
                     local keycode: Enum.KeyCode, modifier: Enum.ModifierKey = pathToKeys(thisWidget)
                     thisWidget.lastShortcutTick = -1
                     
-widgets.ContextActionService:BindAction(thisWidget.ID, function(_, inputState: Enum.UserInputState, inputObject: InputObject)
+widgets.contextActionService:BindAction(thisWidget.ID, function(_, inputState: Enum.UserInputState, inputObject: InputObject)
                         if inputState == Enum.UserInputState.Begin then
                             if inputObject:IsModifierKeyDown(modifier) then
                                 thisWidget.lastShortcutTick = Iris._cycleTick + 1

@@ -1,12 +1,12 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 
 ---------------------------------------------------------------------
 
-local Shared = ReplicatedStorage.modules.shared.havoc;
+local Shared = replicatedStorage.modules.shared.havoc;
 local Remotes = Shared.Remotes;
 
 ---------------------------------------------------------------------
@@ -17,11 +17,11 @@ local Client = require( script.Styles.Client )
 local Replicated = require( script.Styles.Replicated )
 local Settings = require(Shared.Settings);
 
-local Table = require( ReplicatedStorage.Packages.Table )
-local BufferUtil = require( ReplicatedStorage.Packages.BufferUtil )
-local DebrisPool = require( ReplicatedStorage.modules.shared.havoc.DebrisPool )
-local Serialise = require( ReplicatedStorage.Packages.Serialise );
-local Module = require( ReplicatedStorage.modules.shared.Game.Whitelist );
+local Table = require( replicatedStorage.Packages.Table )
+local BufferUtil = require( replicatedStorage.Packages.BufferUtil )
+local DebrisPool = require( replicatedStorage.modules.shared.havoc.DebrisPool )
+local Serialise = require( replicatedStorage.Packages.Serialise );
+local Module = require( replicatedStorage.modules.shared.Game.Whitelist );
 
 ---------------------------------------------------------------------
 
@@ -473,10 +473,10 @@ end
 -- Full client replication, craters and debris made client-side.
 -- Not recommended to use in junction with other methods.
 function HavocHandler:create_client(...)
-	if not ModuleHavoc:IsDescendantOf(ReplicatedStorage) then
+	if not ModuleHavoc:IsDescendantOf(replicatedStorage) then
 		ModuleHavoc.Name = "Havoc";
 		ModuleHavoc.Parent = Shared;
-		warn("Havoc module has been moved to the ReplicatedStorage");
+		warn("Havoc module has been moved to the replicatedStorage");
 	end
 	
 	local havoc = Client.new(self, ...);

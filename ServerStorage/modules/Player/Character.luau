@@ -1,9 +1,9 @@
 
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local ServerStorage = game:GetService("ServerStorage")
 local UserService = game:GetService("UserService")
 local InsertService = game:GetService("InsertService")
@@ -13,9 +13,9 @@ local Players = game:GetService("Players")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 local NumberStack = require( SharedUtilities.NumberStack )

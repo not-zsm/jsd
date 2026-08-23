@@ -1,14 +1,14 @@
 --== Imports ==--
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local TweenService      = game:GetService("TweenService")
 local SoundService      = game:GetService("SoundService")
 local HttpService       = game:GetService("HttpService")
 local RunService        = game:GetService("RunService")
 local Players           = game:GetService("Players")
 
-local Packages  = ReplicatedStorage.Packages.Des
+local Packages  = replicatedStorage.Packages.Des
 local Signal    = require(Packages.Signal)
 local Trove     = require(Packages.Trove)
 

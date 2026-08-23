@@ -1,12 +1,12 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local AI = require( ServerStorage.modules.AI )
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 return function(LuaPlayer, NPCJob)
 	local LuaCharacter = LuaPlayer.Character

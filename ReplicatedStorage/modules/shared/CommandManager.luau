@@ -1,20 +1,20 @@
 -- Services
 local StarterGui = game:GetService("StarterGui")
 local TextChatService = game:GetService("TextChatService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local GamepadService = game:GetService("GamepadService")
 local Players = game:GetService("Players")
 
 -- Modules
-local Commands = require( ReplicatedStorage.modules.shared.Commands )
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local Commands = require( replicatedStorage.modules.shared.Commands )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 local MultipleChoiceList = require( script.MultipleChoiceList )
-local Stylus = require( ReplicatedStorage.Packages.Stylus )
+local Stylus = require( replicatedStorage.Packages.Stylus )
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 local CommandRemotes = Remotes.Commands
 
-local Macros = ReplicatedStorage.modules.shared.Commands.Macros;
+local Macros = replicatedStorage.modules.shared.Commands.Macros;
 local ReferenceTime = DateTime.now().UnixTimestamp;
 
 local IconPlayerArchetypes = { All = "rbxassetid://128503307996830", Others = "rbxassetid://102905289808532" }

@@ -1,7 +1,7 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local Functions = require( script.Functions )
 

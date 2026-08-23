@@ -1,12 +1,12 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local Minigame = require( script.Minigame )
 local NPCSupport = require( script.NPCSupport )
 local Unstuck = require( script.Unstuck )
@@ -138,8 +138,8 @@ function Attack:StartGrab(VictimLuaPlayer)
 	local VictimLuaCharacter = VictimLuaPlayer.Character
 	local VictimCombat = VictimLuaCharacter.Combat
 	
-	local VictimHitAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Atonement"].VictimHit)
-	local VictimLoseAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Atonement"].VictimLose)
+	local VictimHitAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Atonement"].VictimHit)
+	local VictimLoseAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Atonement"].VictimLose)
 	
 	local GrabObject = self.Combat:GrabVictim(VictimLuaPlayer, self.LuaCharacter.RootPart, CFrame.new(0, 0, -3) * CFrame.Angles(0, math.rad(180), 0))
 
@@ -349,7 +349,7 @@ function Attack:StartGrab(VictimLuaPlayer)
 			
 			self:FireReliableVFX("Chara/Atonement", "Lose", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 		else
-			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Atonement"].WinEtc.Victim)
+			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Atonement"].WinEtc.Victim)
 			
 			self.Thread.OnClosed:Connect(function()
 				if VictimAnimation then

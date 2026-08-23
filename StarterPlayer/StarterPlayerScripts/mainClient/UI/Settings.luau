@@ -1,5 +1,5 @@
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -8,27 +8,27 @@ local StarterGui = game:GetService("StarterGui")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
-local Icon = require( ReplicatedStorage.Packages.Icon )
+local Icon = require( replicatedStorage.Packages.Icon )
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local AenoirUtil = require( ReplicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local AenoirUtil = require( replicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
 
 local SettingUpdate = require( script.SettingUpdate )
 local CustomMoveOrders = require( script.CustomMoveOrders )
 
-local UserInterfaceAnimations = require( ReplicatedStorage.modules.shared.Utilities.UserInterfaceAnimations )
+local UserInterfaceAnimations = require( replicatedStorage.modules.shared.Utilities.UserInterfaceAnimations )
 
-local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )
+local Whitelist = require( replicatedStorage.modules.shared.Game.Whitelist )
 
-local Maid = require( ReplicatedStorage.Packages.Maid )
-local Stylus = require( ReplicatedStorage.Packages.Stylus )
+local Maid = require( replicatedStorage.Packages.Maid )
+local Stylus = require( replicatedStorage.Packages.Stylus )
 
 
 local LocalPlayer = Players.LocalPlayer
@@ -55,7 +55,7 @@ function Settings:Init()
 		end)
 	end
 	
-	ReplicatedStorage.Remotes.LoadSettings.OnClientEvent:Once(function(Settings : {[string] : boolean})
+	replicatedStorage.Remotes.LoadSettings.OnClientEvent:Once(function(Settings : {[string] : boolean})
 		self.SettingsData = Settings
 		
 		--self.DeviceKeybinds = DeviceKeybinds

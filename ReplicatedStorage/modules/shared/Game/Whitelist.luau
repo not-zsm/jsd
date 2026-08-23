@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local MarketplaceService = game:GetService("MarketplaceService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local GroupService = game:GetService("GroupService")
@@ -9,9 +9,9 @@ local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 -------------------------------------------------------------
 
-local Table = require( ReplicatedStorage.Packages.Table )
-local Maid = require( ReplicatedStorage.Packages.Maid )
-local Signal = require( ReplicatedStorage.Packages.Signal )
+local Table = require( replicatedStorage.Packages.Table )
+local Maid = require( replicatedStorage.Packages.Maid )
+local Signal = require( replicatedStorage.Packages.Signal )
 local Types = require( script.Types );
 
 -------------------------------------------------------------

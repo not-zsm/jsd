@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
@@ -6,7 +6,7 @@ local Grabs = setmetatable({}, {__mode = "k"})
 local GrabHandler = {}
 local XZ = Vector3.new(1, 0, 1)
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local Presets = require( script.Presets )
 
 function GrabHandler.Set(Part0 : BasePart, BoundTo : BasePart, Offset : CFrame, PresetName : string)

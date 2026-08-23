@@ -1,8 +1,8 @@
 local DataStoreService = game:GetService("DataStoreService")
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local MarketplaceService = game:GetService("MarketplaceService")
 local PhysicsService = game:GetService("PhysicsService")
 local Players = game:GetService("Players")
@@ -10,21 +10,21 @@ local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local UIRemotes = Remotes.Combat.UI
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local EmoteData = require( ServerStorage.modules.Player.Character.Emotes.Data )
 local LeaderboardHandler = require( ServerStorage.modules.LeaderboardHandler )
 
 local Settings = require(script.Settings)
 
-local Gamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses )
-local GroupRankGamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses.GroupRankGamepasses )
+local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
+local GroupRankGamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses.GroupRankGamepasses )
 
 local GiftsProcessingStore = DataStoreService:GetDataStore("gifts-processing")
 
@@ -196,7 +196,7 @@ function Data:DataLoaded()
 			if Message.Type == "GamepassGift" and Message.GamepassName then
 				self.Profile.Data.OwnedGamepasses[Message.GamepassName] = true
 
-				ReplicatedStorage.Remotes.Announcement:FireClient(self.LuaPlayer.Player, 
+				replicatedStorage.Remotes.Announcement:FireClient(self.LuaPlayer.Player, 
 					`You have been gifted {Message.GamepassName} by another user.`
 				)
 

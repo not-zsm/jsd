@@ -1,12 +1,12 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local RockHandler = {}
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 local Rnd = Random.new();
 local Assets = script.Assets;

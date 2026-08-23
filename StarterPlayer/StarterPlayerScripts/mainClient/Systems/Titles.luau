@@ -7,13 +7,13 @@ return {
 	Start = function()
 		-- Services
 
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local replicatedStorage = game:GetService("ReplicatedStorage")
 		local TextChatService = game:GetService("TextChatService")
 		local Players = game:GetService("Players")
 		local RunService = game:GetService("RunService")
 
-		local TitleData = require(ReplicatedStorage.modules.shared.Game.TitleData)
-		local network = require(ReplicatedStorage.modules.network)
+		local TitleData = require(replicatedStorage.modules.shared.Game.TitleData)
+		local network = require(replicatedStorage.modules.network)
 
 		local LocalPlayer = Players.LocalPlayer
 
@@ -31,7 +31,7 @@ return {
 		local titlesList = titleEditor:WaitForChild("TitlesList")
 
 		-- Remotes
-		local remotes = ReplicatedStorage.Remotes
+		local remotes = replicatedStorage.Remotes
 		local onPlayerKillEvent = remotes.Combat.PlayerKilled -- Replace
 		local groupRank = 0
 
@@ -173,7 +173,7 @@ return {
 		end)
 
 		local NameColors = require( script.NameColors )
-		--local Observer = require( ReplicatedStorage.Packages.Observer )
+		--local Observer = require( replicatedStorage.Packages.Observer )
 
 		--task.defer(function()
 		--	Observer.observe_tag("Disguise", function(Player : Player)

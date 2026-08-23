@@ -1,7 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local MarketplaceService = game:GetService("MarketplaceService")
 local TweenService = game:GetService("TweenService")
 local PolicyService = game:GetService("PolicyService")
@@ -10,17 +10,17 @@ local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
 local ServerStorage = game:GetService("ServerStorage")
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
-local Limited_Emote_Dates = require( ReplicatedStorage.modules.shared.Game["Limited Emote Dates"] )
+local Limited_Emote_Dates = require( replicatedStorage.modules.shared.Game["Limited Emote Dates"] )
 local Limited_Products_Ids = require( script["Limited Product Ids"] )
 local Preloading = require( ServerStorage.modules.preloading )
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 ----------------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ function Emotes:Destroy()
 	task.spawn(function()
 		if self.LuaPlayer.Data and self.LuaPlayer.Data.Profile then
 			for Name in self.LuaPlayer.Data.Profile.Data.Emotes do
-				local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+				local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 				if Animation then
 					Preloading.Remove(self.LuaPlayer.Player, Animation)
@@ -75,7 +75,7 @@ function Emotes:_Init()
 	self:UpdateEmoteKillClaim()
 
 	for Name in self.LuaPlayer.Data.Profile.Data.Emotes do
-		local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+		local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 		if Animation then
 			Preloading.Add(self.LuaPlayer.Player, Animation)
@@ -262,9 +262,9 @@ function Emotes:PlayEmote(Name : string)
 		end)
 	end
 
-	local Music = ReplicatedStorage.Emotes:FindFirstChild(Name)
+	local Music = replicatedStorage.Emotes:FindFirstChild(Name)
 
-	local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+	local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 	local AnimationTrack : AnimationTrack? = nil
 	local StandTrack : AnimationTrack? = nil
 	local D4CTrack : AnimationTrack?
@@ -738,7 +738,7 @@ end
 --		return false
 --	end
 
---	local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+--	local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 --	if Animation then
 --		Preloading.Add(self.LuaPlayer.Player, Animation)
@@ -769,7 +769,7 @@ function Emotes:Claim(Name : string)
 		return false
 	end
 
-	local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+	local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 	if Animation then
 		Preloading.Add(self.LuaPlayer.Player, Animation)
@@ -793,7 +793,7 @@ function Emotes:ClaimByExtra(Name : string)
 		return false
 	end
 
-	local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+	local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 	if Animation then
 		Preloading.Add(self.LuaPlayer.Player, Animation)
@@ -816,7 +816,7 @@ function Emotes:Purchase(Name : string)
 		return false
 	end
 
-	local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+	local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 	if Animation then
 		Preloading.Add(self.LuaPlayer.Player, Animation)
@@ -840,7 +840,7 @@ function Emotes:Give(Name : string)
 		return false
 	end
 
-	local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+	local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 	if Animation then
 		Preloading.Add(self.LuaPlayer.Player, Animation)
@@ -914,7 +914,7 @@ function Emotes:GetAll(IncludeLimited : boolean)
 			return
 		end
 
-		local Animation = ReplicatedStorage.Animations.Emotes:FindFirstChild(Name)
+		local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
 
 		if Animation then
 			Preloading.Add(self.LuaPlayer.Player, Animation)

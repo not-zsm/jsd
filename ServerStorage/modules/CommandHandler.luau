@@ -3,20 +3,20 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 local MarketplaceService = game:GetService("MarketplaceService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local MessagingService = game:GetService("MessagingService")
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
-local Remotes = ReplicatedStorage.Remotes
-local Macros = ReplicatedStorage.modules.shared.Commands.Macros;
+local Remotes = replicatedStorage.Remotes
+local Macros = replicatedStorage.modules.shared.Commands.Macros;
 
-local Commands = require( ReplicatedStorage.modules.shared.Commands )
-local UserRoles = require( ReplicatedStorage.modules.shared.Commands.UserRoles )
-local BanList = require( ReplicatedStorage.modules.shared.Commands.PrivateServerBanList )
+local Commands = require( replicatedStorage.modules.shared.Commands )
+local UserRoles = require( replicatedStorage.modules.shared.Commands.UserRoles )
+local BanList = require( replicatedStorage.modules.shared.Commands.PrivateServerBanList )
 
 local AnnouncementHandler = require( ServerStorage.modules.AnnouncementHandler )
 
@@ -24,7 +24,7 @@ local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimit
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 --local Whitelist = require( ServerStorage.modules.Whitelist )
-local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )
+local Whitelist = require( replicatedStorage.modules.shared.Game.Whitelist )
 
 local CommandHandler = {}
 CommandHandler.__index = CommandHandler
@@ -699,14 +699,14 @@ function CommandHandler:InitSlashCommands()
 		end
 
 		if Parameters and Parameters[2] then
-			ReplicatedStorage.Remotes.WorldEvents.StartEvent:Fire(Parameters[2], Level)
+			replicatedStorage.Remotes.WorldEvents.StartEvent:Fire(Parameters[2], Level)
 		else
-			ReplicatedStorage.Remotes.WorldEvents.StartEvent:Fire(nil, Level);
+			replicatedStorage.Remotes.WorldEvents.StartEvent:Fire(nil, Level);
 		end
 	end)
 
 	self.SlashCommands:Create("stop_event", {"PS+", "Owner"}, false, function(Player : Player)
-		ReplicatedStorage.Remotes.WorldEvents.StopEvent:Fire()
+		replicatedStorage.Remotes.WorldEvents.StopEvent:Fire()
 	end)
 
 	self.SlashCommands:Create("removenewdummies", {"PS+", "Owner"}, false, function()

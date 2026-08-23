@@ -1,7 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local MarketplaceService = game:GetService("MarketplaceService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
@@ -20,14 +20,14 @@ end
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 local GrabRemotes = Remotes.Grab
 
 local UIRemotes = CombatRemotes.UI
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 ----------------------------------------------------------------------------------
@@ -48,16 +48,16 @@ local NumberStack = require( SharedUtilities.NumberStack )
 local Gamepasses = require( Shared.Game.Gamepasses )
 local Velocity = require( Shared.Game.Velocity )
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
-local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )
-local info = require( ReplicatedStorage.info )
+local Whitelist = require( replicatedStorage.modules.shared.Game.Whitelist )
+local info = require( replicatedStorage.info )
 local AnimationProxy = require( script.AnimationProxy )
 
 ----------------------------------------------------------------------------------
 
 local MovementReplicator = require( ServerStorage.modules.MovementReplicator )
-local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+local MovementReplicatorSettings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
 ----------------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ local DefaultAccessibleAttackSettings = {
 
 function Combat:Destroy()
 	StudioPrint("removed combat", self.LuaPlayer.PlayerName)
-	task.spawn(Preloading.Remove, self.LuaPlayer.Player, ReplicatedStorage.Animations.Global)
+	task.spawn(Preloading.Remove, self.LuaPlayer.Player, replicatedStorage.Animations.Global)
 
 	if not self.LuaPlayer.IsNPC then
 		task.spawn(self.AwardKillToHighestDamager, self, "Left")
@@ -789,7 +789,7 @@ function Combat:FireSpawnAnimation()
 					)
 				else
 					pcall(function()
-						Animation = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.CharacterSpawnAnimations[self.CurrentCharacter.Name].Spawn)
+						Animation = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.CharacterSpawnAnimations[self.CurrentCharacter.Name].Spawn)
 						Animation:Play()
 					end)
 				end
@@ -925,8 +925,8 @@ end;
 function Combat:LoadAnimations()
 	table.clear(self.Animations)
 
-	Preloading.Add(self.LuaPlayer.Player, ReplicatedStorage.Animations.Global)
-	self:IterateThroughAnimationFolder(self.Animations, ReplicatedStorage.Animations.Global)
+	Preloading.Add(self.LuaPlayer.Player, replicatedStorage.Animations.Global)
+	self:IterateThroughAnimationFolder(self.Animations, replicatedStorage.Animations.Global)
 
 	for _, Attack in self.Attacks do
 		Attack:UpdateAnimations()
@@ -1089,7 +1089,7 @@ function Combat:GetAttackFunctionModule(AttackDirectory: string): ModuleScript?
 		return CacheHit;
 	end;
 
-	local Instances = require( ReplicatedStorage.Packages.Instances )
+	local Instances = require( replicatedStorage.Packages.Instances )
 	local Item = Instances.find_directory(AttackFunctionList, AttackDirectory, "/");
 
 	if Item then
@@ -1857,11 +1857,10 @@ function Combat:AwardKillToHighestDamager(Type : string)
 
 	local SortedDamagers = {}
 
-	StudioPrint("this mfer just killed sumn:", self.LuaPlayer.PlayerName)
+	StudioPrint(self.LuaPlayer.PlayerName, "just killed sum1")
 
 	for Player : Player, Damage : number in self.TotalBeenDamaged do
 		if (Player and Player.Parent ~= nil) then
-			--print(`player that dealt damage to {self.LuaPlayer.PlayerName} until death:`, `{Player},`, "value:", Damage)
 			StudioPrint(`player that dealt damage to {self.LuaPlayer.PlayerName} until death:`, `{Player},`, "value:", Damage)
 
 			table.insert(SortedDamagers, {Player = Player, Damage = Damage})
@@ -3403,7 +3402,7 @@ function Combat:TeleportForward(DistanceToCover : number,  Callback : () -> ())
 	local Terrain = MapModel:FindFirstChild("Terrain")
 	local Props = MapModel:FindFirstChild("Props")
 
-	for _, Item in {Terrain, Props} do
+	for _, Item in {Terrain, Locations, Props} do
 		if Item then
 			Params:AddToFilter(Item)
 		end
@@ -3463,7 +3462,7 @@ function Combat:GetRandomFriend(UseCache: boolean?) -- yields btw so task.spawn 
 end
 
 function Combat:CreateMoveSFX(Character : string, MoveName : string, Name : string?)
-	local Module = ReplicatedStorage.modules.client.replication.VFX:FindFirstChild(Character)
+	local Module = replicatedStorage.modules.client.replication.VFX:FindFirstChild(Character)
 
 	if Module then
 		local Move = Module:FindFirstChild(MoveName)

@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 local RunService = game:GetService("RunService")
@@ -11,36 +11,36 @@ local LocalPlayerGui = LocalPlayer.PlayerGui
 
 ---------------------------------------------------------------------
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Attacks.Global.Ultimate.Chara.Alt
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Attacks.Global.Ultimate.Chara.Alt
 
 ---------------------------------------------------------------------
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
 
-local CharacterTransparency = require( ReplicatedStorage.modules.client.replication.Global.CharacterTransparency )
+local CharacterTransparency = require( replicatedStorage.modules.client.replication.Global.CharacterTransparency )
 
 ---------------------------------------------------------------------
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 local ArcVFX = EffectUtility.Arc -- 💖
 
 local VFXUtil = require( script.quickutil )
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
 
-local TekrinnDialogue = require( ReplicatedStorage.modules.effect.tekrinnDialogue )
+local TekrinnDialogue = require( replicatedStorage.modules.effect.tekrinnDialogue )
 
 ---------------------------------------------------------------------
 
-local Pat_Theme = require( ReplicatedStorage.modules.client.replication.VFX.Chara.Pat_Theme )
+local Pat_Theme = require( replicatedStorage.modules.client.replication.VFX.Chara.Pat_Theme )
 
 return {
 	Start = function(Model : Model)
@@ -214,7 +214,7 @@ return {
 			LocalPlayerGui.Statistics.Enabled = false
 
 			task.spawn(function()
-				local IconModule = require(ReplicatedStorage.Packages.Icon)
+				local IconModule = require(replicatedStorage.Packages.Icon)
 				IconModule.setTopbarEnabled(false)
 			end)
 		
@@ -224,7 +224,7 @@ return {
 				LocalPlayerGui.Statistics.Enabled = true
 
 				task.spawn(function()
-					local IconModule = require(ReplicatedStorage.Packages.Icon)
+					local IconModule = require(replicatedStorage.Packages.Icon)
 					IconModule.setTopbarEnabled(true)
 				end)
 			end)

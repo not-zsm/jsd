@@ -1,17 +1,18 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ContextActionService = game:GetService("ContextActionService")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local contextActionService = game:GetService("ContextActionService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
-local Animations = ReplicatedStorage.Animations
+local Animations = replicatedStorage.Animations
+local ass = replicatedStorage.ass
 
 local ClientHandlers = script.ClientHandlers
 
@@ -20,21 +21,19 @@ Combat.__index = Combat
 
 local OnCreatedMoves = require( script.OnCreatedMoves )
 
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local NumberStack = require( ReplicatedStorage.modules.shared.Utilities.NumberStack )
-local network = require( ReplicatedStorage.modules.network )
-local InfoCharacter = require( ReplicatedStorage.modules.client.character.InfoCharacter )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local NumberStack = require( replicatedStorage.modules.shared.Utilities.NumberStack )
+local network = require( replicatedStorage.modules.network )
+local InfoCharacter = require( replicatedStorage.modules.client.character.InfoCharacter )
 
-local Velocity = require( ReplicatedStorage.modules.shared.Game.Velocity )
+local Velocity = require( replicatedStorage.modules.shared.Game.Velocity )
 
 function Combat:_Init()
 	task.spawn(require, script.Quicktime);
 
 	self.LockOn = require(script.LockOn).new(self)
-	-- mainClient registers this; the UI lives with the menus rather than under
-	-- combat, and combat holds the one it is handed
 	self.UI = Combat.UIFactory(self)
 
 	self.FakeMouse = require(script.Mouse).new(self)
@@ -46,14 +45,12 @@ function Combat:_Init()
 	self:InitializeHumanoidAvailability();
 	self:Connect();
 
-	-- Race conditions happen with the Hotbar if this is before :Connect()
 	self.UI:Init();
 end
 
 function Combat:Connect()
 	local EquippedMove = nil
 
-	-- ButtonA always returns Typing as true no matter what, use ContextActionService to resolve
 	local function ConsoleJumpHold(_, input_state, input)
 		if (input_state == Enum.UserInputState.Begin) then
 			self:StartHoldingJump(false);
@@ -65,7 +62,7 @@ function Combat:Connect()
 		return Enum.ContextActionResult.Pass;
 	end
 
-	ContextActionService:BindActionAtPriority("ConsoleJumpCapture", ConsoleJumpHold, false, 2500, Enum.KeyCode.ButtonA);
+	contextActionService:BindActionAtPriority("ConsoleJumpCapture", ConsoleJumpHold, false, 2500, Enum.KeyCode.ButtonA);
 
 	UserInputService.InputBegan:Connect(function(Input, Typing)
 		if self:IsDisabled() then return end
@@ -163,7 +160,7 @@ function Combat:Connect()
 	end)
 
 	CombatRemotes.UpdatePivotRealtime.OnClientEvent:Connect(function(player)
-		local ClientReplicator = require( ReplicatedStorage.modules.shared.movementReplicator.ClientReplicator )
+		local ClientReplicator = require( replicatedStorage.modules.shared.movementReplicator.ClientReplicator )
 		local replicant = ClientReplicator.other_replicators[player];
 
 		if replicant and replicant.character then

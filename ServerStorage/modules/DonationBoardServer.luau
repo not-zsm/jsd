@@ -6,7 +6,7 @@ local MAX_RETRIES = 5
 local ServerScriptService = game:GetService("ServerScriptService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local MemoryStoreService = game:GetService("MemoryStoreService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local DataStoreService = game:GetService("DataStoreService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -25,7 +25,7 @@ local LuaPlayerList = require("./LuaPlayerList")
 
 local CharactersData = ServerStorage.characterData
 
-local DonationRemote = ReplicatedStorage.Remotes.RequestDonation
+local DonationRemote = replicatedStorage.Remotes.RequestDonation
 
 local DonationBoard = workspace.Leaderboards.DonationLeaderboard.LeaderboardGui.Holder
 
@@ -184,7 +184,7 @@ end)
 
 -- create gui for players and set up listners to auto update
 
-script.DonationBoardClient:Clone().Parent = ReplicatedStorage
+script.DonationBoardClient:Clone().Parent = replicatedStorage
 
 local function MakeGUI(UserId : number, Index : number, Amount : number)
 	local PlayerDisplay = script.PlayerTemplate:Clone()

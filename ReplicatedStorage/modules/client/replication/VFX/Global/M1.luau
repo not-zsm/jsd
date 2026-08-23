@@ -1,20 +1,20 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
-local ScreenPulse = require( ReplicatedStorage.modules.client.replication.Global.ScreenPulse )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
+local ScreenPulse = require( replicatedStorage.modules.client.replication.Global.ScreenPulse )
 
-local Shockwave = require( ReplicatedStorage.modules.client.replication.Global.Shockwave )
+local Shockwave = require( replicatedStorage.modules.client.replication.Global.Shockwave )
 
-local RaycastHitbox = require( ReplicatedStorage.modules.shared.Utilities.RaycastHitbox )
+local RaycastHitbox = require( replicatedStorage.modules.shared.Utilities.RaycastHitbox )
 
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 local LightInfo = TweenInfo.new(1)
 
 local CustomHits = require( script.CustomHits )

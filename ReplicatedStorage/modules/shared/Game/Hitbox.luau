@@ -1,10 +1,10 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 local ActiveList = {}
 

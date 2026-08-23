@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
 local Lighting = game:GetService("Lighting")
@@ -7,26 +7,26 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local LocalPlayerGui = LocalPlayer.PlayerGui
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local Dojyan_Util = require( script.quickutil )
 local MeshEmit = require( script.quickutil.MeshEmit )
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local HideAllUI = require( ReplicatedStorage.modules.client.replication.Global.HideAllUI )
-local DashRocks = require( ReplicatedStorage.modules.client.replication.Global.DashRocks )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local HideAllUI = require( replicatedStorage.modules.client.replication.Global.HideAllUI )
+local DashRocks = require( replicatedStorage.modules.client.replication.Global.DashRocks )
 
-local Fight_UI = require( ReplicatedStorage.modules.effect.assets.Characters.Chara.Fight_UI )
-local Create_Clone = require( ReplicatedStorage.modules.effect.assets.Characters.Chara.Create_Clone )
+local Fight_UI = require( replicatedStorage.modules.effect.assets.Characters.Chara.Fight_UI )
+local Create_Clone = require( replicatedStorage.modules.effect.assets.Characters.Chara.Create_Clone )
 
-local Animations = ReplicatedStorage.Animations.Attacks.Chara["Seven Souls"]
+local Animations = replicatedStorage.Animations.Attacks.Chara["Seven Souls"]
 
 local Effects = script.effects
 local Windup_Effects = script.windup_effects
@@ -483,7 +483,7 @@ return {
 
 				Job:Task(HideAllUI())
 
-				local Vignette = ReplicatedStorage.modules.effect.assets.Moon_Vignette:Clone()
+				local Vignette = replicatedStorage.modules.effect.assets.Moon_Vignette:Clone()
 				Vignette.Parent = LocalPlayerGui
 				Job:Task(Vignette)
 

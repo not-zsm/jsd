@@ -1,6 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local Type = script.Parent
 local HitboxInstance = Type.Parent
@@ -53,7 +53,7 @@ function Box:Detect(InRunLoop : boolean)
 	if self.Params.Debug then
 		if InRunLoop then
 			if (self.DebugPart == nil) then
-				self.DebugPart = ReplicatedStorage.modules.effect.assets.Parts.BoxDebug:Clone()
+				self.DebugPart = replicatedStorage.modules.effect.assets.Parts.BoxDebug:Clone()
 				self.DebugPart.CFrame = CurrentCF
 				self.DebugPart.Size = self.Params.Size
 				self.DebugPart.Parent = workspace.Visuals
@@ -61,7 +61,7 @@ function Box:Detect(InRunLoop : boolean)
 				self.DebugPart.CFrame = self:GetCFrame()
 			end
 		else
-			local Part = ReplicatedStorage.modules.effect.assets.Parts.BoxDebug:Clone()
+			local Part = replicatedStorage.modules.effect.assets.Parts.BoxDebug:Clone()
 			Part.CFrame = CurrentCF
 			Part.Size = self.Params.Size
 			Part.Parent = workspace.Visuals

@@ -1,7 +1,7 @@
 type R6 = typeof(script.Rigs.Friend)
 
 local CollectionService = game:GetService("CollectionService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
@@ -9,28 +9,28 @@ local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Afterimage = require( ReplicatedStorage.modules.client.replication.Global.Afterimage )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Afterimage = require( replicatedStorage.modules.client.replication.Global.Afterimage )
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local CharacterTransparency = require( ReplicatedStorage.modules.client.replication.Global.CharacterTransparency )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local CharacterTransparency = require( replicatedStorage.modules.client.replication.Global.CharacterTransparency )
 
 local Yuki_Emit = require(script.Yuki_Emit)
 
-local Dialogue = require(ReplicatedStorage.modules.effect.tekrinnDialogue)
+local Dialogue = require(replicatedStorage.modules.effect.tekrinnDialogue)
 
-local JobApplication = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local JobApplication = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local Animations = ReplicatedStorage.Animations.Emotes["Final Matchup"]
+local Animations = replicatedStorage.Animations.Emotes["Final Matchup"]
 
 local AttackerVFX = script.Effects.Attacker
 local VictimVFX = script.Effects.Victim
@@ -328,7 +328,7 @@ return {
 					end))
 				end
 
-				local Track = TabledFriends[FriendName].Humanoid.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Final Matchup"]:FindFirstChild(FriendName))
+				local Track = TabledFriends[FriendName].Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Final Matchup"]:FindFirstChild(FriendName))
 				Track:Play()
 				Track.TimePosition = Animation.TimePosition
 				Job:Task(Track.Stopped:Once(function()
@@ -372,7 +372,7 @@ return {
 			end
 		end))
 
-		local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Final Matchup"].Camera)
+		local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Final Matchup"].Camera)
 		CameraAnimation:Play(0)
 
 		Job:Task(RunService.PreSimulation:Connect(function()
@@ -384,7 +384,7 @@ return {
 			DontSupportCutsceneSetting = true
 		}))
 
-		Job:Task(Yuki_FOV.AnimateWithMoonFile(ReplicatedStorage.FOVFiles["Final Matchup"]))
+		Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["Final Matchup"]))
 		Job:Task(Camera)
 
 		local ColorCorrection = Job:Task(Instance.new("ColorCorrectionEffect"))

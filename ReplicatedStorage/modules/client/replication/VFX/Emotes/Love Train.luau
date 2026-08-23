@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
@@ -6,16 +6,16 @@ local Players = game:GetService("Players")
 
 ---------------------------------------------------------------------------------
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local Observer = require(ReplicatedStorage.modules.shared.Utilities.Observer)
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local Observer = require(replicatedStorage.modules.shared.Utilities.Observer)
 
 ---------------------------------------------------------------------------------
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 
 ---------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ local Cache = workspace.Visuals
 local Effects = script.Effects
 local LocalEffectUtility = require(script.Modules.EffectUtility)
 
-local AnimationFolder = ReplicatedStorage.Animations.Emotes["Love Train"]
+local AnimationFolder = replicatedStorage.Animations.Emotes["Love Train"]
 
 local ImpactFrames = LocalPlayer.PlayerGui.ImpactFrames.LoveTrain
 

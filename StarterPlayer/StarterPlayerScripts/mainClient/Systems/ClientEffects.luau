@@ -8,7 +8,7 @@ return {
 		local TweenService = game:GetService("TweenService")
 		local Players = game:GetService("Players")
 		local SoundService = game:GetService("SoundService")
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local replicatedStorage = game:GetService("ReplicatedStorage")
 
 		local function getFunction(str)
 			for i,v in script:GetChildren() do
@@ -18,15 +18,15 @@ return {
 			end
 		end
 
-		ReplicatedStorage.Remotes.Commands.Respawn.OnClientEvent:Connect(function()
+		replicatedStorage.Remotes.Commands.Respawn.OnClientEvent:Connect(function()
 			SoundService.NPC.Respawn:Play()
 		end)
 
-		ReplicatedStorage.Remotes.RemoveMicrophone.OnClientEvent:Connect(function(Emitter)
+		replicatedStorage.Remotes.RemoveMicrophone.OnClientEvent:Connect(function(Emitter)
 			Emitter:Destroy()
 		end)
 
-		ReplicatedStorage.Remotes.Ranked.UI.OnClientEvent:Connect(function(Data: string) 
+		replicatedStorage.Remotes.Ranked.UI.OnClientEvent:Connect(function(Data: string) 
 			local Module = getFunction(Data)
 			if Module then
 				Module = require(Module)

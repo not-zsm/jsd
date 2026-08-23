@@ -1,12 +1,12 @@
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local ContentProvider = game:GetService("ContentProvider")
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local GrabRemotes = Remotes.Grab
 local ProjectileRemotes = Remotes.Projectile
@@ -21,10 +21,10 @@ Replication.__index = Replication
 
 local EffectUtility = require( script.EffectUtility )
 
-local ReplicationPart = require( ReplicatedStorage.modules.shared.Utilities.ReplicationPart )
-local Instances = require( ReplicatedStorage.Packages.Instances )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local ReplicationPart = require( replicatedStorage.modules.shared.Utilities.ReplicationPart )
+local Instances = require( replicatedStorage.Packages.Instances )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local CharacterTransparency = require( script.Global.CharacterTransparency )
 

@@ -1,11 +1,11 @@
 --== Imports ==--
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local Players           = game:GetService("Players")
 
 local Session  = require(script.Session)
-local EventService = require(ReplicatedStorage.modules.shared.Utilities.EventService)
+local EventService = require(replicatedStorage.modules.shared.Utilities.EventService)
 
 --== Module ==--
 local Module = {}

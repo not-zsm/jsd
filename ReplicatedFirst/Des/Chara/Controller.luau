@@ -1,5 +1,5 @@
 --== Imports ==--
-local ContextActionService = game:GetService("ContextActionService")
+local contextActionService = game:GetService("ContextActionService")
 local TweenService         = game:GetService("TweenService")
 
 local Thumbstick = require("@self/Thumbstick")
@@ -300,7 +300,7 @@ function Module:Initialize()
 		return Enum.ContextActionResult.Sink
 	end
 
-	ContextActionService:BindAction("CONTROLLER_MOVE_KEYS", handler, false,
+	contextActionService:BindAction("CONTROLLER_MOVE_KEYS", handler, false,
 		Enum.KeyCode.W, Enum.KeyCode.A, Enum.KeyCode.S, Enum.KeyCode.D,
 		Enum.KeyCode.Up, Enum.KeyCode.Down, Enum.KeyCode.Left, Enum.KeyCode.Right,
 		Enum.KeyCode.DPadUp, Enum.KeyCode.DPadDown, Enum.KeyCode.DPadLeft, Enum.KeyCode.DPadRight,
@@ -325,7 +325,7 @@ function Module:Initialize()
 		updateReq()
 	end
 
-	ContextActionService:BindAction("CONTROLLER_MOVE_STICK", stickHandler, false, Enum.KeyCode.Thumbstick1)
+	contextActionService:BindAction("CONTROLLER_MOVE_STICK", stickHandler, false, Enum.KeyCode.Thumbstick1)
 
 	local ts = 	Thumbstick.new({
 		Position = UDim2.new(0.8, 0, 0.6, 0),
@@ -355,8 +355,8 @@ function Module:Initialize()
 	end)
 
 	self.Trove:Add(function()
-		ContextActionService:UnbindAction("CONTROLLER_MOVE_KEYS")
-		ContextActionService:UnbindAction("CONTROLLER_MOVE_STICK")
+		contextActionService:UnbindAction("CONTROLLER_MOVE_KEYS")
+		contextActionService:UnbindAction("CONTROLLER_MOVE_STICK")
 
 		Thumbstick:ClearUis()
 	end)

@@ -1,15 +1,15 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Debris = game:GetService("Debris")
 
-local Math = require( ReplicatedStorage.Packages.Math )
-local Maid = require( ReplicatedStorage.Packages.Maid )
-local Instances = require( ReplicatedStorage.Packages.Instances )
-local Table = require( ReplicatedStorage.Packages.Table )
-local InstanceCache = require( ReplicatedStorage.Packages.InstanceCache )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Signal = require( ReplicatedStorage.Packages.Signal )
+local Math = require( replicatedStorage.Packages.Math )
+local Maid = require( replicatedStorage.Packages.Maid )
+local Instances = require( replicatedStorage.Packages.Instances )
+local Table = require( replicatedStorage.Packages.Table )
+local InstanceCache = require( replicatedStorage.Packages.InstanceCache )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Signal = require( replicatedStorage.Packages.Signal )
 local DefaultParams = require( script.DefaultParams )
 
 -----------------------------------------------------------------------
