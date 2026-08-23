@@ -1,6 +1,7 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local network = require( replicatedStorage.modules.network )
+local key = require( replicatedStorage.modules.network.key )
 local connect = require( replicatedStorage.modules.network.connect )
 
 local EventService = require(replicatedStorage.modules.shared.Utilities.EventService)
@@ -74,8 +75,8 @@ function QuicktimeHandler._Init(self : object)
 
 	Active[self] = true
 	network.quicktime.sendTo({
-		key = self.Key.Name,
-		controllerKey = self.ControllerKey.Name,
+		key = key.name(self.Key),
+		controllerKey = key.name(self.ControllerKey),
 		rangeMin = self.Range.Min,
 		rangeMax = self.Range.Max,
 	}, self.Owner)

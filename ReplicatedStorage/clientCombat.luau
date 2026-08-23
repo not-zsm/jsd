@@ -24,6 +24,7 @@ local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local NumberStack = require( replicatedStorage.modules.shared.Utilities.NumberStack )
 local network = require( replicatedStorage.modules.network )
+local key = require( replicatedStorage.modules.network.key )
 local InfoCharacter = require( replicatedStorage.modules.client.character.InfoCharacter )
 
 local Velocity = require( replicatedStorage.modules.shared.Game.Velocity )
@@ -168,7 +169,7 @@ function Combat:Connect()
 
 	network.createAttack.listen(function(data)
 		local Name, DirectoryName, Properties = data.move, data.directory, data.properties
-		local Key = Enum.KeyCode[data.key] or Enum.UserInputType[data.key]
+		local Key = key.fromName(data.key)
 		if (self.Attacks[Name] ~= nil) then 
 			local Slot = self.UI.Hotbar:Get(Name)
 
@@ -223,7 +224,7 @@ function Combat:Connect()
 	end)
 
 	network.changeAttackKey.listen(function(data)
-		local Name, NewKey = data.move, Enum.KeyCode[data.key] or Enum.UserInputType[data.key]
+		local Name, NewKey = data.move, key.fromName(data.key)
 		self:ChangeAttackKey(Name, NewKey)
 	end)
 
@@ -725,7 +726,7 @@ end
 function Combat:_AttackInputUpdate(Name : string, State : boolean, Key : (Enum.KeyCode | Enum.UserInputType))
 	if (self.ClientHandlers[Name] == nil) then
 		if (Key ~= Enum.UserInputType.MouseButton1 and Key ~= Enum.UserInputType.MouseButton2) then
-			network.mouseAim.send(self.FakeMouse:Aim())
+			self.FakeMouse:SendAim()
 		end
 
 		if self.HoldingJump or self.FreeFalling then

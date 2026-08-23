@@ -1,6 +1,7 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local network = require( replicatedStorage.modules.network )
+local key = require( replicatedStorage.modules.network.key )
 local UserInputService = game:GetService("UserInputService")
 local contextActionService = game:GetService("ContextActionService")
 local SoundService = game:GetService("SoundService")
@@ -247,8 +248,8 @@ end
 
 network.quicktime.listen(function(data)
 	QuicktimeHandler.new(
-		Enum.KeyCode[data.key],
-		Enum.KeyCode[data.controllerKey] or Enum.UserInputType[data.controllerKey],
+		key.fromName(data.key),
+		key.fromName(data.controllerKey),
 		NumberRange.new(data.rangeMin, data.rangeMax)
 	)
 end)

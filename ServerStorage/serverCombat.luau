@@ -2,6 +2,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local network = require( replicatedStorage.modules.network )
+local key = require( replicatedStorage.modules.network.key )
 local MarketplaceService = game:GetService("MarketplaceService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
@@ -1171,7 +1172,7 @@ function Combat:_CreateAttack(Name : string, Key : (Enum.KeyCode | Enum.UserInpu
 		if Key and not self.LuaPlayer.IsNPC then
 			network.createAttack.sendTo({
 			move = Name,
-			key = Key.Name,
+			key = key.name(Key),
 			directory = NewAttack.DirectoryParent,
 			properties = NewAttack.Properties,
 		}, self.LuaPlayer.Player)
@@ -1209,7 +1210,7 @@ function Combat:ChangeKeyOfAttack(Name : string, AttackKey : (Enum.KeyCode | Enu
 
 	if Matched then
 		print("changed attack key")
-		network.changeAttackKey.sendTo({ move = Name, key = NewKey.Name }, self.LuaPlayer.Player :: Player)
+		network.changeAttackKey.sendTo({ move = Name, key = key.name(NewKey) }, self.LuaPlayer.Player :: Player)
 	end;
 end;
 

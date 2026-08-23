@@ -97,10 +97,25 @@ function FakeMouse:Check()
 end
 
 --- Check returns (CFrame, Model?); mouseAim wants them named.
+--[[
+	Check returns nothing until Params exists, and mouseAim wants a real CFrame:
+	FireServer used to swallow that, a typed packet does not.
+--]]
 function FakeMouse:Aim()
 	local Hit, Target = self:Check()
 
+	if Hit == nil then return nil end
+
 	return { hit = Hit, target = Target }
+end
+
+--- Sends the current aim, if there is one to send.
+function FakeMouse:SendAim()
+	local Aim = self:Aim()
+
+	if Aim then
+		network.mouseAim.send(Aim)
+	end
 end
 
 function FakeMouse:CleanRequestLoop()
@@ -153,7 +168,7 @@ function FakeMouse.new(Combat)
 			self:CleanRequestLoop()
 			
 			self.UpdateLoop = RunService.PreRender:Connect(function()
-				network.mouseAim.send(self:Aim())
+				self:SendAim()
 			end)
 		else
 			self:AimTo(false)

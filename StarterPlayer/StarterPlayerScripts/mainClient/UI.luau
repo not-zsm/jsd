@@ -10,6 +10,7 @@ local CollectionService = game:GetService("CollectionService")
 ----------------------------------------------------------------------------------
 
 local network = require( replicatedStorage.modules.network )
+local key = require( replicatedStorage.modules.network.key )
 local connect = require( replicatedStorage.modules.network.connect )
 
 
@@ -67,7 +68,7 @@ function UI:Init()
 	end)
 
 	network.hotbarAdd.listen(function(data)
-		self:AddOnHotbar(data.move, Enum.KeyCode[data.key] or Enum.UserInputType[data.key])
+		self:AddOnHotbar(data.move, key.fromName(data.key))
 	end)
 
 	network.hotbarShow.listen(function(Name : string)
