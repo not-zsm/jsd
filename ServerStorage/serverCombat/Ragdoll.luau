@@ -3,6 +3,8 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
+local network = require( replicatedStorage.modules.network )
+
 ----------------------------------------------------------------------------------
 
 local Remotes = replicatedStorage.Remotes
@@ -148,7 +150,7 @@ function Ragdoll:_Toggle(Value : boolean, DontStandUpright : boolean)
 			self.LuaCharacter.Humanoid.PlatformStand = Value
 		else
 			if not DontStandUpright then
-				CombatRemotes.Ragdoll:FireClient(self.LuaPlayer.Player, Value)
+				network.ragdoll.sendTo(Value, self.LuaPlayer.Player)
 			end
 		end
 	

@@ -105,7 +105,7 @@ function Attack:Evasive()
 		self:AddCertainCooldown("Side Dash", 2)
 		self:AddCertainCooldown("FrontBack Dash", 6)
 	else
-		CombatRemotes.EvasiveOutput:FireClient(self.LuaPlayer.Player, self.Direction, Was)
+		network.evasiveOutput.sendTo({ direction = self.Direction, was = Was }, self.LuaPlayer.Player)
 	end
 
 	self.Combat:StackState("Evasived", true, self.EvasiveIFramesTime)
@@ -193,7 +193,7 @@ function Attack:WallCombo(Raycast : RaycastResult, VictimLuaPlayer)
 	end
 
 	self.Thread.OnClosed:Connect(function()
-		CombatRemotes.WallComboOutput:FireClient(self.LuaPlayer.Player)
+		network.wallComboOutput.sendTo(nil, self.LuaPlayer.Player)
 
 		VictimLuaCharacter:RestartRespawnTimer()
 		
@@ -285,7 +285,7 @@ function Attack:Activate()
 				self:WallCombo(Raycast, WallComboVictimLuaPlayer)
 			else
 				if not self.LuaPlayer.IsNPC then
-					CombatRemotes.WallComboFail:FireClient(self.LuaPlayer.Player)
+					network.wallComboFail.sendTo(nil, self.LuaPlayer.Player)
 				end
 			end
 		else
@@ -660,7 +660,7 @@ function Attack:FrontDash()
 	LoopAnimation:Play(0.05, 1, FrontDashInfo and (FrontDashInfo.StartSpeed or StartSpeed) or StartSpeed)
 
 	if not self.LuaPlayer.IsNPC then
-		CombatRemotes.FrontDashOutput:FireClient(self.LuaPlayer.Player)
+		network.frontDashOutput.sendTo(nil, self.LuaPlayer.Player)
 	else
 		local VelocityObject = self.Combat:Velocity()
 		VelocityObject.Settings.Duration = 0.895

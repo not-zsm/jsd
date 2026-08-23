@@ -149,17 +149,17 @@ function Combat:Connect()
 		end
 	end)
 
-	CombatRemotes.UpdateJump.OnClientEvent:Connect(function(Value : boolean)
+	network.updateJump.listen(function(Value : boolean)
 		if not self.LuaCharacter.HumanoidAlive then return end
 
 		self.LuaCharacter.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, not Value)
 	end)
 
-	CombatRemotes.Ragdoll.OnClientEvent:Connect(function(Value : boolean)
+	network.ragdoll.listen(function(Value : boolean)
 		self:ToggleRagdollStates(Value)
 	end)
 
-	CombatRemotes.UpdatePivotRealtime.OnClientEvent:Connect(function(player)
+	network.updatePivot.listen(function(player)
 		local ClientReplicator = require( replicatedStorage.modules.shared.movementReplicator.ClientReplicator )
 		local replicant = ClientReplicator.other_replicators[player];
 
@@ -168,7 +168,9 @@ function Combat:Connect()
 		end;
 	end);
 
-	CombatRemotes.CreateAttack.OnClientEvent:Connect(function(Name : string, Key : (Enum.KeyCode | Enum.UserInputType), DirectoryName : string, Properties : {}) -- DontUseSavedKeybind, Place it before properties
+	network.createAttack.listen(function(data)
+		local Name, DirectoryName, Properties = data.move, data.directory, data.properties
+		local Key = Enum.KeyCode[data.key] or Enum.UserInputType[data.key]
 		if (self.Attacks[Name] ~= nil) then 
 			local Slot = self.UI.Hotbar:Get(Name)
 
@@ -204,7 +206,7 @@ function Combat:Connect()
 		end
 	end)
 
-	CombatRemotes.RemoveAttack.OnClientEvent:Connect(function(Name : string)
+	network.removeAttack.listen(function(Name : string)
 		if (self.Attacks[Name] == nil) then return end
 
 		local Attack = self.Attacks[Name];
@@ -222,11 +224,12 @@ function Combat:Connect()
 		end
 	end)
 
-	CombatRemotes.ChangeAttackKey.OnClientEvent:Connect(function(Name : string, NewKey : (Enum.KeyCode | Enum.UserInputType))
+	network.changeAttackKey.listen(function(data)
+		local Name, NewKey = data.move, Enum.KeyCode[data.key] or Enum.UserInputType[data.key]
 		self:ChangeAttackKey(Name, NewKey)
 	end)
 
-	CombatRemotes.ResetJumpFatigue.OnClientEvent:Connect(function()
+	network.resetJumpFatigue.listen(function()
 		self:ResetJumpFatigue()
 	end)
 
@@ -552,20 +555,25 @@ function Combat:InitializeHumanoidAvailability()
 			if not self.ConnectedToSpeed then
 				self.ConnectedToSpeed = true
 
-				CombatRemotes.DivideSpeed.OnClientEvent:Connect(function(Humanoid: Humanoid, Amount : number)
+				network.scaleSpeed.listen(function(data)
+		if not data.divide then return end
+		local Humanoid, Amount = data.humanoid, data.amount
 					if not Humanoid or self.LuaCharacter.Humanoid ~= Humanoid then return end;
 
 					self.LuaCharacter.Humanoid.WalkSpeed /= Amount
 				end);
 
-				CombatRemotes.TimesSpeed.OnClientEvent:Connect(function(Humanoid: Humanoid, Amount : number)
+				network.scaleSpeed.listen(function(data)
+		if data.divide then return end
+		local Humanoid, Amount = data.humanoid, data.amount
 					if not Humanoid or self.LuaCharacter.Humanoid ~= Humanoid then return end;
 
 					self.LuaCharacter.Humanoid.WalkSpeed *= Amount
 				end);
 
 				-- gulp....
-				CombatRemotes.SetSpeed.OnClientEvent:Connect(function(Humanoid: Humanoid, Value : number)
+				network.setSpeed.listen(function(data)
+		local Humanoid, Value = data.humanoid, data.value
 					if not Humanoid or self.LuaCharacter.Humanoid ~= Humanoid then return end;
 
 					self.LuaCharacter.Humanoid.WalkSpeed = Value

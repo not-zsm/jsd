@@ -1,5 +1,7 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
+local network = require( replicatedStorage.modules.network )
+
 local CombatRemotes = replicatedStorage.Remotes.Combat;
 local Signal = require( replicatedStorage.Packages.Signal )
 
@@ -8,7 +10,7 @@ Characters.List = {};
 Characters.InfoReady = false;
 Characters.OnReady = Signal.new();
 
-CombatRemotes.SendCharacterInfo.OnClientEvent:Connect(function(CharacterInfo)
+network.characterInfo.listen(function(CharacterInfo)
 	table.clear(Characters.List);
 	
 	for Key, Value in CharacterInfo do

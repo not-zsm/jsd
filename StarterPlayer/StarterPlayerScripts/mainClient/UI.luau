@@ -96,8 +96,9 @@ function UI:Init()
 		self:Toggle(not Toggle)
 	end)
 
-	CombatRemotes.PlayerKilled.OnClientEvent:Connect(function(KilledPlayer : Player, TotalKills : number, Type : string, ...)
-		local Stuff = {...}
+	network.playerKilled.listen(function(data)
+		local KilledPlayer, TotalKills, Type = data.killed, data.totalKills, data.kind
+		local Stuff = data.extra or {}
 		
 		local IsAPlayer = KilledPlayer:IsA("Player")
 		local Name = IsAPlayer and KilledPlayer.DisplayName .. " (" .. KilledPlayer:GetAttribute("Name") .. ")" or KilledPlayer:GetAttribute("Name")

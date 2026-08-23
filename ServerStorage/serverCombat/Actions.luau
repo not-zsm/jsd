@@ -188,7 +188,7 @@ function Actions:UpdateStates(State : any, Value : boolean)
 	end
 
 	if not self.LuaPlayer.IsNPC then
-		CombatRemotes.UpdateJump:FireClient(self.LuaPlayer.Player, JumpValue)
+		network.updateJump.sendTo(JumpValue, self.LuaPlayer.Player)
 	else
 		if self.LuaCharacter.HumanoidAlive then
 			self.LuaCharacter.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, JumpValue)

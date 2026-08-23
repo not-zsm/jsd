@@ -37,7 +37,8 @@ local MovementReplicatorSettings = require( replicatedStorage.modules.shared.mov
 ----------------------------------------------------------------------------------
 
 function DashHandler:_Init()
-	CombatRemotes.EvasiveOutput.OnClientEvent:Connect(function(Direction : string, Was : string)
+	network.evasiveOutput.listen(function(data)
+		local Direction, Was = data.direction, data.was
 		self.Combat:AddCooldown("Evasive")
 		self.Combat:AddCooldown("FrontBack Dash")
 		self.Combat:AddCooldown("Side Dash")
@@ -54,16 +55,16 @@ function DashHandler:_Init()
 		self.OnServerWantsCancel:Fire()
 	end)
 	
-	CombatRemotes.FrontDashOutput.OnClientEvent:Connect(function()
+	network.frontDashOutput.listen(function()
 		self.Combat:AddCooldown("FrontBack Dash")
 		self:FrontDashFunction()
 	end)
 
-	CombatRemotes.WallComboOutput.OnClientEvent:Connect(function()
+	network.wallComboOutput.listen(function()
 		self.Combat:AddCooldown("Wall Combo")
 	end)
 
-	CombatRemotes.WallComboFail.OnClientEvent:Connect(function()
+	network.wallComboFail.listen(function()
 		if not self.Combat:CooldownExists("FrontBack Dash") then
 			network.useMove.send({ move = "Dash", state = true, extra = {DashDirection = "Front"} })
 		end

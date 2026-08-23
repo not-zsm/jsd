@@ -1,4 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local RunService = game:GetService("RunService")
 
 local Remotes = replicatedStorage.Remotes
@@ -263,7 +265,7 @@ function CustomAttack.Activate(self)
 	LoopAnimation:Play()
 
 	if not self.LuaPlayer.IsNPC then
-		CombatRemotes.FrontDashOutput:FireClient(self.LuaPlayer.Player)
+		network.frontDashOutput.sendTo(nil, self.LuaPlayer.Player)
 	else
 		local VelocityObject = self.Combat:Velocity()
 		VelocityObject.Settings.Duration = 0.895

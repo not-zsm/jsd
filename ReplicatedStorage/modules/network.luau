@@ -330,5 +330,66 @@ return byteNet.defineNamespace("game", function()
 		--// emote input, client -> server
 		finishWriting = byteNet.definePacket({ value = byteNet.string }),
 		chooseDirection = byteNet.definePacket({ value = byteNet.string }),
+
+		--// combat state, server -> client
+		resetJumpFatigue = byteNet.definePacket({ value = byteNet.nothing }),
+		frontDashOutput = byteNet.definePacket({ value = byteNet.nothing }),
+		wallComboOutput = byteNet.definePacket({ value = byteNet.nothing }),
+		wallComboFail = byteNet.definePacket({ value = byteNet.nothing }),
+
+		ragdoll = byteNet.definePacket({ value = byteNet.bool }),
+		updateJump = byteNet.definePacket({ value = byteNet.bool }),
+		removeAttack = byteNet.definePacket({ value = byteNet.string }),
+		updatePivot = byteNet.definePacket({ value = byteNet.inst }),
+		characterInfo = byteNet.definePacket({ value = byteNet.unknown }),
+
+		--// keys cross as their Name; byteNet has no EnumItem type
+		changeAttackKey = byteNet.definePacket({
+			value = byteNet.struct({
+				move = byteNet.string,
+				key = byteNet.string,
+			}),
+		}),
+
+		createAttack = byteNet.definePacket({
+			value = byteNet.struct({
+				move = byteNet.string,
+				key = byteNet.string,
+				directory = byteNet.string,
+				properties = byteNet.optional(byteNet.unknown),
+			}),
+		}),
+
+		--// one packet for both directions of the walkspeed scale
+		scaleSpeed = byteNet.definePacket({
+			value = byteNet.struct({
+				humanoid = byteNet.inst,
+				amount = byteNet.float32,
+				divide = byteNet.bool,
+			}),
+		}),
+
+		setSpeed = byteNet.definePacket({
+			value = byteNet.struct({
+				humanoid = byteNet.inst,
+				value = byteNet.float32,
+			}),
+		}),
+
+		evasiveOutput = byteNet.definePacket({
+			value = byteNet.struct({
+				direction = byteNet.string,
+				was = byteNet.optional(byteNet.string),
+			}),
+		}),
+
+		playerKilled = byteNet.definePacket({
+			value = byteNet.struct({
+				killed = byteNet.inst,
+				totalKills = byteNet.uint32,
+				kind = byteNet.string,
+				extra = byteNet.optional(byteNet.unknown),
+			}),
+		}),
 	}
 end)

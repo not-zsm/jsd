@@ -421,7 +421,12 @@ function Data:AddKill(KilledPlayer : Player, Type : string, ...) -- Attacked, Le
 	self.LuaPlayer.Character.Emotes:UpdateEmoteKillClaim()
 
 	if KilledPlayer and Type then
-		Remotes.Combat.PlayerKilled:FireClient(self.LuaPlayer.Player, KilledPlayer, self.Profile.Data.Kills, Type, ...)
+		network.playerKilled.sendTo({
+			killed = KilledPlayer,
+			totalKills = self.Profile.Data.Kills,
+			kind = Type,
+			extra = if select("#", ...) > 0 then table.pack(...) else nil,
+		}, self.LuaPlayer.Player)
 	end
 end
 

@@ -202,7 +202,7 @@ function Combat:SendCharacterInformation()
 		end;
 	end;
 
-	CombatRemotes.SendCharacterInfo:FireClient( self.LuaPlayer.Player, Available );
+	network.characterInfo.sendTo(Available, self.LuaPlayer.Player);
 end;
 
 type FailToUseCharacterReason = "No Character" | "Early Access" | "Private Servers" | "Owner" | "Whitelist" | "Boss Drop" | "World Event";
@@ -1182,7 +1182,12 @@ function Combat:_CreateAttack(Name : string, Key : (Enum.KeyCode | Enum.UserInpu
 		end
 
 		if Key and not self.LuaPlayer.IsNPC then
-			CombatRemotes.CreateAttack:FireClient(self.LuaPlayer.Player, Name, Key, NewAttack.DirectoryParent, NewAttack.Properties)
+			network.createAttack.sendTo({
+			move = Name,
+			key = Key.Name,
+			directory = NewAttack.DirectoryParent,
+			properties = NewAttack.Properties,
+		}, self.LuaPlayer.Player)
 		end
 
 		if typeof(NewAttack.Initialise) == "function" then
@@ -1217,7 +1222,7 @@ function Combat:ChangeKeyOfAttack(Name : string, AttackKey : (Enum.KeyCode | Enu
 
 	if Matched then
 		print("changed attack key")
-		CombatRemotes.ChangeAttackKey:FireClient(self.LuaPlayer.Player :: Player, Name, NewKey)
+		network.changeAttackKey.sendTo({ move = Name, key = NewKey.Name }, self.LuaPlayer.Player :: Player)
 	end;
 end;
 
@@ -1287,7 +1292,7 @@ function Combat:RemoveAttack(Name : string, DontCallDestroy : boolean)
 		self.OnAttackChanged:Fire(Name, false)
 
 		if not self.LuaPlayer.IsNPC then
-			CombatRemotes.RemoveAttack:FireClient(self.LuaPlayer.Player :: Player, Name)
+			network.removeAttack.sendTo(Name, self.LuaPlayer.Player :: Player)
 		end
 	end
 end
@@ -1423,7 +1428,7 @@ function Combat:Afflict(VictimLuaPlayer, Arguments : {}) : (boolean, string)
 		VictimCombat:CombatTag()
 
 		if not self.LuaPlayer.IsNPC then
-			CombatRemotes.ResetJumpFatigue:FireClient(self.LuaPlayer.Player)
+			network.resetJumpFatigue.sendTo(nil, self.LuaPlayer.Player)
 		end
 
 		if (VictimLuaCharacter.Humanoid.Sit == true) then
@@ -2380,7 +2385,7 @@ function Combat:DivideSpeed(Amount : number)
 	if self.LuaPlayer.IsNPC then
 		self.LuaCharacter.Humanoid.WalkSpeed /= Amount
 	else
-		CombatRemotes.DivideSpeed:FireClient(self.LuaPlayer.Player, self.LuaCharacter.Humanoid, Amount)
+		network.scaleSpeed.sendTo({ humanoid = self.LuaCharacter.Humanoid, amount = Amount, divide = true }, self.LuaPlayer.Player)
 	end
 end
 
@@ -2389,7 +2394,7 @@ function Combat:TimesSpeed(Amount : number)
 	if self.LuaPlayer.IsNPC then
 		self.LuaCharacter.Humanoid.WalkSpeed *= Amount
 	else
-		CombatRemotes.TimesSpeed:FireClient(self.LuaPlayer.Player, self.LuaCharacter.Humanoid, Amount)
+		network.scaleSpeed.sendTo({ humanoid = self.LuaCharacter.Humanoid, amount = Amount, divide = false }, self.LuaPlayer.Player)
 	end
 end
 
