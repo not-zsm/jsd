@@ -59,6 +59,51 @@ def referenced_md5s(node):
     return out
 
 
+ZERO_ID = "0" * 32
+
+
+def unique_ids(root):
+    """Every non-zero <UniqueId name="UniqueId"> value in a tree."""
+    out = set()
+    for el in root.iter("UniqueId"):
+        if el.get("name") != "UniqueId":
+            continue
+        value = (el.text or "").strip()
+        if value and value != ZERO_ID:
+            out.add(value)
+    return out
+
+
+def refresh_unique_ids(item, taken):
+    """Give every instance in the subtree a UniqueId nothing else is using.
+
+    Separate from the referent: Studio refuses to open a place whose data model
+    holds the same UniqueId twice, and grafting a subtree out of the place it is
+    already in duplicates every one of them.
+
+    Roblox lays these out as machine bytes, then time, then an index, so a fresh
+    24-hex prefix with a counter underneath both looks native and cannot collide
+    with anything already in the file.
+    """
+    prefix = None
+    while prefix is None or any(value.startswith(prefix) for value in taken):
+        prefix = uuid.uuid4().hex[:24]
+
+    issued = 0
+    for node in item.iter("Item"):
+        props = node.find("Properties")
+        if props is None:
+            continue
+        for el in props:
+            if el.tag != "UniqueId" or el.get("name") != "UniqueId":
+                continue
+            value = f"{prefix}{issued:08x}"
+            el.text = value
+            taken.add(value)
+            issued += 1
+    return issued
+
+
 def refresh_referents(item):
     """Give every instance in the subtree a fresh referent, and repoint the
     <Ref> properties that named the old ones.
@@ -215,6 +260,22 @@ def validate(root, label):
     else:
         print(f"  {label}: all {len(duplicates)} referents unique")
 
+    ids = collections.Counter()
+    for el in root.iter("UniqueId"):
+        if el.get("name") != "UniqueId":
+            continue
+        value = (el.text or "").strip()
+        if value and value != ZERO_ID:
+            ids[value] += 1
+    repeated = {value: n for value, n in ids.items() if n > 1}
+    if repeated:
+        ok = False
+        print(f"  {label}: {len(repeated)} duplicate UniqueIds")
+        for value, n in list(repeated.items())[:10]:
+            print(f"    {value}  x{n}")
+    else:
+        print(f"  {label}: all {len(ids)} UniqueIds unique")
+
     return ok
 
 
@@ -255,6 +316,7 @@ def main():
 
     sync_sources(new_root, args.repo)
     new_index = index(new_root)
+    taken_ids = unique_ids(new_root)
 
     print("\ngrafting:")
     grafted = copied_blobs = 0
@@ -272,6 +334,7 @@ def main():
             print(f"  [already present] {'.'.join(dst + (src[-1],))}"); continue
 
         clone = copy.deepcopy(node)
+        refresh_unique_ids(clone, taken_ids)
         outside = refresh_referents(clone)
         if outside:
             counts = collections.Counter(outside)
