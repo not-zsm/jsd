@@ -9,7 +9,7 @@ local UIRemotes = Remotes.Combat.UI
 
 ----------------------------------------------------------------------------------
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 local Attack = {}

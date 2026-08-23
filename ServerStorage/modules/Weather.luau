@@ -8,8 +8,8 @@ local Remotes = ReplicatedStorage.Remotes
 
 local ReplicationRemotes = Remotes.Replication
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local Hitbox = require( ReplicatedStorage.Shared.Game.Hitbox.Type.Box )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Hitbox = require( ReplicatedStorage.modules.shared.Game.Hitbox.Type.Box )
 
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 

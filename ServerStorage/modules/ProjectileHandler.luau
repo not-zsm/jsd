@@ -3,11 +3,11 @@ local RunService = game:GetService("RunService")
 
 ---------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Projectiles.Remotes;
+local Remotes = ReplicatedStorage.modules.shared.projectiles.Remotes;
 
 ---------------------------------------------------------
 
-local Util = require( ReplicatedStorage.Projectiles.Util )
+local Util = require( ReplicatedStorage.modules.shared.projectiles.Util )
 local Projectile = require( script.Projectile )
 
 ---------------------------------------------------------

@@ -11,7 +11,7 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local Remotes = ReplicatedStorage.Remotes
 
-local Shared = ReplicatedStorage.Shared
+local Shared = ReplicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 ----------------------------------------------------------------------------------

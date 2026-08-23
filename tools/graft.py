@@ -222,7 +222,7 @@ def sync_sources(root, repo):
     return sourced, created
 
 
-def apply_moves(root, path):
+def apply_moves(root, path, repo=None):
     """Reparent subtrees within the place, optionally renaming.
 
     Run either side of the source sync. Before it, so a subtree can be moved
@@ -239,9 +239,40 @@ def apply_moves(root, path):
     for entry in json.load(open(path, encoding="utf-8")):
         src, dst = tuple(entry["src"].split(".")), tuple(entry["dst"].split("."))
         landed = entry.get("name") or src[-1]
-        node, parent = tree.get(src), tree.get(dst)
+        node = tree.get(src)
 
-        if node is None or parent is None:
+        if node is None:
+            continue
+
+        parent = tree.get(dst)
+
+        # a destination that only exists in the repo yet -- modules/client and
+        # the like -- has to be built before anything can be put in it. Never
+        # where the repo says a script belongs, though: the sync will make that
+        # one, and a Folder standing in its place would take the update instead.
+        if parent is None and repo is not None and dst in repo:
+            continue
+
+        if parent is None:
+            cursor = None
+            for depth in range(1, len(dst) + 1):
+                prefix = dst[:depth]
+                if prefix in tree:
+                    cursor = tree[prefix]
+                    continue
+                if cursor is None:
+                    break
+                folder = ET.Element("Item", {"class": "Folder", "referent": "RBX" + uuid.uuid4().hex})
+                props = ET.SubElement(folder, "Properties")
+                name = ET.SubElement(props, "string", {"name": "Name"}); name.text = prefix[-1]
+                cursor.append(folder)
+                tree[prefix] = folder
+                cursor = folder
+                print(f"  made folder  {'.'.join(prefix)}")
+            parent = tree.get(dst)
+
+        if parent is None:
+            print(f"  [no destination] {entry['dst']}")
             continue
 
         if landed != src[-1]:
@@ -364,7 +395,7 @@ def main():
         sys.exit(f"no --source given for: {', '.join(sorted(missing))}")
 
     print("\nmoving:")
-    apply_moves(new_root, args.moves)
+    apply_moves(new_root, args.moves, repo_tree(args.repo))
 
     sync_sources(new_root, args.repo)
     new_index = index(new_root)
@@ -418,7 +449,7 @@ def main():
 
     print(f"\ncarried {copied_blobs} shared-string blobs")
 
-    apply_moves(new_root, args.moves)
+    apply_moves(new_root, args.moves, repo_tree(args.repo))
 
     sourced, created = sync_sources(new_root, args.repo)
     print(f"\ngrafted {grafted} subtrees, sourced {sourced}, created {created}")

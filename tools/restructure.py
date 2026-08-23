@@ -209,9 +209,30 @@ def main():
     for src, dst in mover.moves:
         s, d = instance_to_fs(src), instance_to_fs(dst)
         for suffix in ("", ".luau", ".server.luau", ".client.luau", ".meta.json"):
-            if os.path.exists(s + suffix):
-                os.makedirs(os.path.dirname(d + suffix) or ".", exist_ok=True)
-                subprocess.run(["git", "mv", s + suffix, d + suffix], check=True)
+            source = s + suffix
+            if not os.path.exists(source):
+                continue
+            target = d + suffix
+
+            if os.path.isdir(source):
+                # everything may already have been moved out from under it by a
+                # longer rule, and git mv has nothing to say about an empty dir
+                if not os.listdir(source):
+                    os.rmdir(source)
+                    continue
+
+                # git mv of a directory ONTO an existing directory nests it
+                # rather than merging, so merge by hand when the target is there
+                if os.path.isdir(target):
+                    for child in os.listdir(source):
+                        subprocess.run(["git", "mv", os.path.join(source, child),
+                                        os.path.join(target, child)], check=True)
+                    if not os.listdir(source):
+                        os.rmdir(source)
+                    continue
+
+            os.makedirs(os.path.dirname(target) or ".", exist_ok=True)
+            subprocess.run(["git", "mv", source, target], check=True)
     # A move across services leaves files naming a service they never declared,
     # which is nil at runtime rather than a syntax error -- so check for it.
     services_used = re.compile(r'(?<![.\w])(' + "|".join(SERVICES) + r')\s*\.')

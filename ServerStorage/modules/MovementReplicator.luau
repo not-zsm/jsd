@@ -11,10 +11,10 @@ local Maid = require( Packages.Maid )
 local Signal = require( Packages.Signal ) 
 local BufferUtil = require( Packages.BufferUtil )
 
-local Settings = require( ReplicatedStorage.MovementReplicator.Settings )
-local Util = require( ReplicatedStorage.MovementReplicator.Util )
-local Casting = require( ReplicatedStorage.MovementReplicator.Lib.Casting )
-local Metadata = require( ReplicatedStorage.MovementReplicator.Metadata )
+local Settings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+local Util = require( ReplicatedStorage.modules.shared.movementReplicator.Util )
+local Casting = require( ReplicatedStorage.modules.shared.movementReplicator.Lib.Casting )
+local Metadata = require( ReplicatedStorage.modules.shared.movementReplicator.Metadata )
 
 local Replicant = require( script.Replicant )
 local Types = require( script.Types )
@@ -31,8 +31,8 @@ end
 
 ---------------------------------------------------------------------------------
 
-local Shared = ReplicatedStorage.MovementReplicator;
-local Remotes = ReplicatedStorage.MovementReplicator.Remotes;
+local Shared = ReplicatedStorage.modules.shared.movementReplicator;
+local Remotes = ReplicatedStorage.modules.shared.movementReplicator.Remotes;
 
 ---------------------------------------------------------------------------------
 

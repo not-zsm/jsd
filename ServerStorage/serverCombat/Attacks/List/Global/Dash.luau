@@ -10,14 +10,14 @@ local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.Shared
+local Shared = ReplicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 local Utility = require( SharedUtilities.Utility )
 local EventService = require( SharedUtilities.EventService )
 local Job = require( SharedUtilities.Job )
 
-local MovementReplicatorSettings = require( ReplicatedStorage.MovementReplicator.Settings )
+local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
 
 ----------------------------------------------------------------------------------
 

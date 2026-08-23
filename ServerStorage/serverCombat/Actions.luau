@@ -9,7 +9,7 @@ local Remotes = ReplicatedStorage.Remotes
 local CombatRemotes = Remotes.Combat
 local HotbarRemotes = CombatRemotes.UI.Hotbar
 
-local Job = require( ReplicatedStorage.Shared.Utilities.Job )
+local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
 
 local Actions = {}
 Actions.__index = Actions

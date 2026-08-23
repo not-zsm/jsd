@@ -2,7 +2,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
+local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )
 
 return {
 	DisplayName = "Chara",

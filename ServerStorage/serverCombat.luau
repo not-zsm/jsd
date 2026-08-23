@@ -25,7 +25,7 @@ local GrabRemotes = Remotes.Grab
 
 local UIRemotes = CombatRemotes.UI
 
-local Shared = ReplicatedStorage.Shared
+local Shared = ReplicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 ----------------------------------------------------------------------------------
@@ -46,16 +46,16 @@ local NumberStack = require( SharedUtilities.NumberStack )
 local Gamepasses = require( Shared.Game.Gamepasses )
 local Velocity = require( Shared.Game.Velocity )
 
-local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
+local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
 
-local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
+local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )
 local info = require( ReplicatedStorage.info )
 local AnimationProxy = require( script.AnimationProxy )
 
 ----------------------------------------------------------------------------------
 
 local MovementReplicator = require( ServerStorage.modules.MovementReplicator )
-local MovementReplicatorSettings = require( ReplicatedStorage.MovementReplicator.Settings )
+local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
 
 ----------------------------------------------------------------------------------
 
@@ -3462,7 +3462,7 @@ function Combat:GetRandomFriend(UseCache: boolean?) -- yields btw so task.spawn 
 end
 
 function Combat:CreateMoveSFX(Character : string, MoveName : string, Name : string?)
-	local Module = ReplicatedStorage.Client.Replication.VFX:FindFirstChild(Character)
+	local Module = ReplicatedStorage.modules.client.replication.VFX:FindFirstChild(Character)
 
 	if Module then
 		local Move = Module:FindFirstChild(MoveName)

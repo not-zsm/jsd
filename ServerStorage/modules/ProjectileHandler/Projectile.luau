@@ -3,7 +3,7 @@ local RunService = game:GetService("RunService")
 
 ---------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Projectiles.Remotes
+local Remotes = ReplicatedStorage.modules.shared.projectiles.Remotes
 local Maid = require( ReplicatedStorage.Packages.Maid )
 
 ---------------------------------------------------------

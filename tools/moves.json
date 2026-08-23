@@ -20,20 +20,79 @@
     "name": "preloading"
   },
   {
-    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientUIHandler.Headshot",
-    "dst": "ReplicatedStorage.Client.Main.Systems.ClientUIHandler"
+    "src": "ReplicatedStorage.Client.Main",
+    "dst": "StarterPlayer.StarterPlayerScripts",
+    "name": "mainClient"
   },
   {
-    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientUIHandler.PartyRequest",
-    "dst": "ReplicatedStorage.Client.Main.Systems.ClientUIHandler"
+    "src": "ReplicatedStorage.clientCombat.UI",
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient",
+    "name": "UI"
   },
   {
-    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.Hotbar.Hotbar",
-    "dst": "ReplicatedStorage.Client.Main.Systems.ToolHotbar"
+    "src": "ReplicatedStorage.Client.Camera",
+    "dst": "ReplicatedStorage.modules.client",
+    "name": "camera"
   },
   {
-    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.Weather.Main",
-    "dst": "ReplicatedStorage.Client.Main.Systems.Weather"
+    "src": "ReplicatedStorage.Client.Character",
+    "dst": "ReplicatedStorage.modules.client",
+    "name": "character"
+  },
+  {
+    "src": "ReplicatedStorage.Client.Replication",
+    "dst": "ReplicatedStorage.modules.client",
+    "name": "replication"
+  },
+  {
+    "src": "ReplicatedStorage.Client.StandJoint",
+    "dst": "ReplicatedStorage.modules.client",
+    "name": "standJoint"
+  },
+  {
+    "src": "ReplicatedStorage.Client.Weather",
+    "dst": "ReplicatedStorage.modules.client",
+    "name": "weather"
+  },
+  {
+    "src": "ReplicatedStorage.Client.HUDMovement",
+    "dst": "ReplicatedStorage.modules.effect",
+    "name": "hudMovement"
+  },
+  {
+    "src": "ReplicatedStorage.Client.TekrinnDialogue",
+    "dst": "ReplicatedStorage.modules.effect",
+    "name": "tekrinnDialogue"
+  },
+  {
+    "src": "ReplicatedStorage.Client",
+    "dst": "ReplicatedStorage.modules.client",
+    "name": "luaPlayer"
+  },
+  {
+    "src": "ReplicatedStorage.Effects",
+    "dst": "ReplicatedStorage.modules.effect",
+    "name": "assets"
+  },
+  {
+    "src": "ReplicatedStorage.Shared",
+    "dst": "ReplicatedStorage.modules",
+    "name": "shared"
+  },
+  {
+    "src": "ReplicatedStorage.Havoc",
+    "dst": "ReplicatedStorage.modules.shared",
+    "name": "havoc"
+  },
+  {
+    "src": "ReplicatedStorage.Projectiles",
+    "dst": "ReplicatedStorage.modules.shared",
+    "name": "projectiles"
+  },
+  {
+    "src": "ReplicatedStorage.MovementReplicator",
+    "dst": "ReplicatedStorage.modules.shared",
+    "name": "movementReplicator"
   },
   {
     "src": "ReplicatedStorage.clientCombat.ClientHandlers.WallRun.Jump",
@@ -42,5 +101,21 @@
   {
     "src": "ReplicatedStorage.clientCombat.ClientHandlers.WallRun.Run",
     "dst": "ReplicatedStorage.clientCombat.ClientHandlers.WallJump"
+  },
+  {
+    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientUIHandler.Headshot",
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient.Systems.ClientUIHandler"
+  },
+  {
+    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientUIHandler.PartyRequest",
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient.Systems.ClientUIHandler"
+  },
+  {
+    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.Hotbar.Hotbar",
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient.Systems.ToolHotbar"
+  },
+  {
+    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.Weather.Main",
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient.Systems.Weather"
   }
 ]

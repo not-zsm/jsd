@@ -12,17 +12,17 @@ local Remotes = ReplicatedStorage.Remotes
 
 local UIRemotes = Remotes.Combat.UI
 
-local Job = require( ReplicatedStorage.Shared.Utilities.Job )
-local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 
 local EmoteData = require( ServerStorage.modules.Player.Character.Emotes.Data )
 local LeaderboardHandler = require( ServerStorage.modules.LeaderboardHandler )
 
 local Settings = require(script.Settings)
 
-local Gamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses )
-local GroupRankGamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses.GroupRankGamepasses )
+local Gamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses )
+local GroupRankGamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses.GroupRankGamepasses )
 
 local GiftsProcessingStore = DataStoreService:GetDataStore("gifts-processing")
 

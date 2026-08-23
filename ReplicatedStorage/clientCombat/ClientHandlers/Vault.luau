@@ -9,7 +9,7 @@ local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.Shared
+local Shared = ReplicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 local Animations = ReplicatedStorage.Animations
@@ -19,8 +19,8 @@ local Animations = ReplicatedStorage.Animations
 local VaultHandler = {}
 VaultHandler.__index = VaultHandler	
 
-local Vault = require( ReplicatedStorage.Client.Replication.VFX.Global.Vault )
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Vault = require( ReplicatedStorage.modules.client.replication.VFX.Global.Vault )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 
 ----------------------------------------------------------------------------------
 

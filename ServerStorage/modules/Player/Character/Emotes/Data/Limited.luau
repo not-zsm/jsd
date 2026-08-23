@@ -2,15 +2,15 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 
-local LoveTrainStorage = ReplicatedStorage.Client.Replication.VFX.Emotes["Love Train"]
-local ChainsawStorage = ReplicatedStorage.Client.Replication.VFX.Emotes["Chainsaw Heart"]
+local LoveTrainStorage = ReplicatedStorage.modules.client.replication.VFX.Emotes["Love Train"]
+local ChainsawStorage = ReplicatedStorage.modules.client.replication.VFX.Emotes["Chainsaw Heart"]
 
-local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
-local JobApplication = require( ReplicatedStorage.Shared.Utilities.Job )
+local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local JobApplication = require( ReplicatedStorage.modules.shared.Utilities.Job )
 
-local EyeOfRah_Assets = ReplicatedStorage.Effects["Eye Of Rah"]
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local ModelTransparency = require( ReplicatedStorage.Client.Replication.Global.CharacterTransparency )
+local EyeOfRah_Assets = ReplicatedStorage.modules.effect.assets["Eye Of Rah"]
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local ModelTransparency = require( ReplicatedStorage.modules.client.replication.Global.CharacterTransparency )
 
 return {
 	["Combat Gods"] = {
@@ -268,7 +268,7 @@ return {
 	
 	["Final Matchup"] = {
 		CustomFunction = function(self, Job, Animation)
-			local Ball = Job:Task(ReplicatedStorage.Client.Replication.VFX.Emotes["Final Matchup"].Ball:Clone())
+			local Ball = Job:Task(ReplicatedStorage.modules.client.replication.VFX.Emotes["Final Matchup"].Ball:Clone())
 			Ball.Parent = self.LuaCharacter.Model
 			Ball.Motor.Part0 = self.LuaCharacter.RootPart
 		end,
@@ -281,7 +281,7 @@ return {
 			StopAnimationWhenPlayerJoins = true,
 
 			Function = function(self, TargetCombat, MainJob, JoinedJob)
-				local ReplicationModule = ReplicatedStorage.Client.Replication.VFX.Emotes["Final Matchup"]
+				local ReplicationModule = ReplicatedStorage.modules.client.replication.VFX.Emotes["Final Matchup"]
 				local Animations = ReplicatedStorage.Animations.Emotes["Final Matchup"]
 				
 				local KeyframelessTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(Animations.Keyframeless)
@@ -862,7 +862,7 @@ return {
 			
 			Job:Task(Animation:GetMarkerReachedSignal("FAH"):Connect(function()
 				do
-					local WAH = ReplicatedStorage.Effects.Emotes["Toxic Moshpit"].WAH:Clone()
+					local WAH = ReplicatedStorage.modules.effect.assets.Emotes["Toxic Moshpit"].WAH:Clone()
 					WAH.Parent = self.LuaCharacter.RootPart
 					WAH.Flames:Emit()
 				
@@ -880,7 +880,7 @@ return {
 				
 				self.LuaPlayer.Replication:FireReliableVFX("Emotes/Toxic Moshpit", "FAH", self.LuaCharacter.Model)
 				
-				local SFX = EffectUtility.AddSFX(ReplicatedStorage.Effects.Emotes["Toxic Moshpit"].FAH, self.LuaCharacter.RootPart)
+				local SFX = EffectUtility.AddSFX(ReplicatedStorage.modules.effect.assets.Emotes["Toxic Moshpit"].FAH, self.LuaCharacter.RootPart)
 				task.delay(2, SFX.Destroy, SFX)
 				
 				local Hitbox = self.Hitbox:Create(true)

@@ -13,7 +13,7 @@ local HotbarRemotes = Remotes.Combat.UI.Hotbar
 
 local AttackAnimations = ReplicatedStorage.Animations.Attacks
 
-local Shared = ReplicatedStorage.Shared
+local Shared = ReplicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 local Preloading = require( ServerStorage.modules.preloading )

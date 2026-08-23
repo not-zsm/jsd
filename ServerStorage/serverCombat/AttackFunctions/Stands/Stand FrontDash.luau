@@ -4,8 +4,8 @@ local RunService = game:GetService("RunService")
 local Remotes = ReplicatedStorage.Remotes
 local CombatRemotes = Remotes.Combat
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.Shared.Utilities.Job )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
 
 local CustomAttack = {};
 

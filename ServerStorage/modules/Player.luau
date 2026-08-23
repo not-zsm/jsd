@@ -15,9 +15,9 @@ local Remotes = ReplicatedStorage.Remotes
 
 local PromptPurchaseEvent = Remotes.PromptGamepassPurchase
 
-local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
-local Gamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses )
-local Job = require( ReplicatedStorage.Shared.Utilities.Job )
+local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local Gamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses )
+local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
 local Table = require( ReplicatedStorage.Packages.Table )
 
 local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )

@@ -53,10 +53,10 @@ local Mesh = require( script.Mesh )
 local Spatial = require( script.Spatial )
 local Types = require( script.Types )
 
-local PartCache = require( ReplicatedStorage.Havoc.PartCache );
-local Settings = require( ReplicatedStorage.Havoc.Settings );
+local PartCache = require( ReplicatedStorage.modules.shared.havoc.PartCache );
+local Settings = require( ReplicatedStorage.modules.shared.havoc.Settings );
 local Signal = require( ReplicatedStorage.Packages.Signal );
-local DebrisPool = require( ReplicatedStorage.Havoc.DebrisPool )
+local DebrisPool = require( ReplicatedStorage.modules.shared.havoc.DebrisPool )
 
 -------------------------------------------------------------------------------------------
 
@@ -980,7 +980,7 @@ function Destruction.collapse_whole_structure(self: Destruction, weld_assembly: 
 	debug.profileend();
 	
 	if RunService:IsStudio() then
-		ReplicatedStorage.Havoc.Remotes.Replicated.CollapseStructure:FireAllClients(weld_assembly[1]);
+		ReplicatedStorage.modules.shared.havoc.Remotes.Replicated.CollapseStructure:FireAllClients(weld_assembly[1]);
 	end
 	
 	return weld_assembly;

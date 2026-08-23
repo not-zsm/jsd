@@ -10,8 +10,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PathfindingService = game:GetService("PathfindingService")
 local RunService = game:GetService("RunService")
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
 
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 

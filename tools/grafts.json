@@ -2,7 +2,7 @@
   {
     "from": "old",
     "src": "ReplicatedStorage.Modules.Player.Replication.VFX.Invincible",
-    "dst": "ReplicatedStorage.Client.Replication.VFX"
+    "dst": "ReplicatedStorage.modules.client.replication.VFX"
   },
   {
     "from": "old",
@@ -32,12 +32,12 @@
   {
     "from": "jjk",
     "src": "ReplicatedStorage.modules.effect.tekrinnDialogue.subtitleDialogue",
-    "dst": "ReplicatedStorage.Client.TekrinnDialogue"
+    "dst": "ReplicatedStorage.modules.effect.tekrinnDialogue"
   },
   {
     "from": "jjk",
     "src": "StarterPlayer.StarterPlayerScripts.PlayerScriptsLoader.mainClient.UI.hotbar",
-    "dst": "ReplicatedStorage.clientCombat.UI.Hotbar"
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient.UI.Hotbar"
   },
   {
     "from": "jjk",

@@ -6,7 +6,7 @@ local HttpService = game:GetService("HttpService")
 
 ---------------------------------------------------------------------
 
-local Shared = ReplicatedStorage.Havoc;
+local Shared = ReplicatedStorage.modules.shared.havoc;
 local Remotes = Shared.Remotes;
 
 ---------------------------------------------------------------------
@@ -19,9 +19,9 @@ local Settings = require(Shared.Settings);
 
 local Table = require( ReplicatedStorage.Packages.Table )
 local BufferUtil = require( ReplicatedStorage.Packages.BufferUtil )
-local DebrisPool = require( ReplicatedStorage.Havoc.DebrisPool )
+local DebrisPool = require( ReplicatedStorage.modules.shared.havoc.DebrisPool )
 local Serialise = require( ReplicatedStorage.Packages.Serialise );
-local Module = require( ReplicatedStorage.Shared.Game.Whitelist );
+local Module = require( ReplicatedStorage.modules.shared.Game.Whitelist );
 
 ---------------------------------------------------------------------
 

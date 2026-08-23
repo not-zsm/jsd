@@ -9,7 +9,7 @@ local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 local AllTimeLeaderboard = DataStoreService:GetOrderedDataStore("AllTimeRobuxLeaderboard")
 
-local DataModule = require(ReplicatedStorage.Shared.Game.TitleData)
+local DataModule = require(ReplicatedStorage.modules.shared.Game.TitleData)
 local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 local function GetAllTimeData(UserId : number)

@@ -10,7 +10,7 @@ local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.Shared
+local Shared = ReplicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 local Animations = ReplicatedStorage.Animations
@@ -20,17 +20,17 @@ local Animations = ReplicatedStorage.Animations
 local DashHandler = {}
 DashHandler.__index = DashHandler
 
-local Replication = ReplicatedStorage.Client.Replication
+local Replication = ReplicatedStorage.modules.client.replication
 
 local EffectUtility = require( Replication.EffectUtility )
 local DashRocks = require( Replication.Global.DashRocks )
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local Hitbox = require( ReplicatedStorage.Shared.Game.Hitbox.Type.Box )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Hitbox = require( ReplicatedStorage.modules.shared.Game.Hitbox.Type.Box )
 
-local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
+local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
 
-local MovementReplicatorSettings = require( ReplicatedStorage.MovementReplicator.Settings )
+local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
 
 ----------------------------------------------------------------------------------
 

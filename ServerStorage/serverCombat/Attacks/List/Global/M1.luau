@@ -5,12 +5,12 @@ local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
-local Shared = ReplicatedStorage.Shared
+local Shared = ReplicatedStorage.modules.shared
 
 local Utility = require( Shared.Utilities.Utility )
 local EventService = require( Shared.Utilities.EventService )
 
-local MovementReplicatorSettings = require( ReplicatedStorage.MovementReplicator.Settings )
+local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
 
 local HavocHandler = require( ServerStorage.modules.HavocHandler )
 local Table = require( ReplicatedStorage.Packages.Table )

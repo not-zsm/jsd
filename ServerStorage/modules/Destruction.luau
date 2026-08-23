@@ -8,10 +8,10 @@ local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicationRemotes = ReplicatedStorage.Remotes.Replication
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
-local AttributeListener = require( ReplicatedStorage.Client.Replication.Global.AttributeListener )
+local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
 
 function Destruction.Recognise(Object : (BasePart | Model)) : (Model?)
 	if Object:IsA("Model") then

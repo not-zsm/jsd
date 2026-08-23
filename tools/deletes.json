@@ -1,12 +1,8 @@
 [
-  "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientEffects",
-  "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientUIHandler",
-  "StarterPlayer.StarterPlayerScripts.Scripts.Game.Hotbar",
-  "StarterPlayer.StarterPlayerScripts.Scripts.Game.LocalTitleScript",
-  "StarterPlayer.StarterPlayerScripts.Scripts.Game.Weather",
   "StarterPlayer.StarterPlayerScripts.footsteps",
   "ReplicatedStorage.clientCombat.ClientHandlers.WallRun",
   "ServerScriptService.Scripts",
   "ServerStorage.Modules",
-  "ServerStorage.modules.Weather.Init"
+  "ServerStorage.modules.Weather.Init",
+  "StarterPlayer.StarterPlayerScripts.Scripts"
 ]

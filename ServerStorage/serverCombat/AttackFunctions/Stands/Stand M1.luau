@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 
 local CustomAttack = {};
 

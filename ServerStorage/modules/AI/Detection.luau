@@ -3,7 +3,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 
 local ServerStorage = game:GetService("ServerStorage")
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 
 local Sorting = require(script.Sorting)
 

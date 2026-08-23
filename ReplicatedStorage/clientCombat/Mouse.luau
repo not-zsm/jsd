@@ -12,8 +12,8 @@ local Remotes = ReplicatedStorage.Remotes
 
 local FakeMouseRemotes = Remotes.Combat.FakeMouse
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local AimAssist = require( ReplicatedStorage.Shared.Game.AimAssist )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local AimAssist = require( ReplicatedStorage.modules.shared.Game.AimAssist )
 local AimPresets = require( script.AimPresets )
 
 ----------------------------------------------------------------------------------

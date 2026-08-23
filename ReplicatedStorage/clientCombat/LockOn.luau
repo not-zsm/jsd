@@ -10,7 +10,7 @@ local MaxYAngle = math.rad(75)
 local YThetaClamp = math.rad(5) --math.rad(5)
 local MinYAngle = math.rad(0)
 
-local AimAssist = require( ReplicatedStorage.Shared.Game.AimAssist )
+local AimAssist = require( ReplicatedStorage.modules.shared.Game.AimAssist )
 local LockOnEffect = require( script.Effect )
 
 function LockOn.new(combat)

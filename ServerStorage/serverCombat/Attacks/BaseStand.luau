@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 
 local ServerStorage = game:GetService("ServerStorage")
 local BaseAttack = require( "./BaseAttack" );
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 local Preloading = require( ServerStorage.modules.preloading )
 
 -- I usually avoid using multi-inheritance but whatever

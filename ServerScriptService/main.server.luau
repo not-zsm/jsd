@@ -45,7 +45,7 @@ end)
 
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
-task.spawn(require, ReplicatedStorage.Shared.Game.Appearances)
+task.spawn(require, ReplicatedStorage.modules.shared.Game.Appearances)
 task.spawn(require, ServerStorage.modules.HavocHandler )
 task.spawn(require, ServerStorage.modules.CommandHandler)
 task.spawn(require, ServerStorage.modules.AnnouncementHandler)

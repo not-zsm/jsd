@@ -6,7 +6,7 @@ local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 local Minigame = require( script.Minigame )
 local NPCSupport = require( script.NPCSupport )
 local Unstuck = require( script.Unstuck )

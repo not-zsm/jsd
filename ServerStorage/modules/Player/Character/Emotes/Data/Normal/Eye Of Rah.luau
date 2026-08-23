@@ -1,15 +1,15 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
 
 --local Ids = {
 --	7207821215, 85042395, 150522417, 141123572
 --}
 
-local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
+local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )
 
-local Assets = ReplicatedStorage.Effects["Eye Of Rah"]
+local Assets = ReplicatedStorage.modules.effect.assets["Eye Of Rah"]
 
 return function(self, Job)
 	local OriginalFace = self.LuaCharacter.Head:FindFirstChildOfClass("Decal")

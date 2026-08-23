@@ -8,8 +8,8 @@ local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
-local VelocityUtil = require( ReplicatedStorage.Shared.Game.Velocity.VelocityUtil )
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
+local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 
 local Attack = {}
 Attack.__index = Attack

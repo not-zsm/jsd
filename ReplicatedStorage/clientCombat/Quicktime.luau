@@ -13,8 +13,8 @@ ScreenGui.IgnoreGuiInset = true
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = LocalPlayer.PlayerGui
 
-local EventService = require(ReplicatedStorage.Shared.Utilities.EventService)
-local Job = require(ReplicatedStorage.Shared.Utilities.Job)
+local EventService = require(ReplicatedStorage.modules.shared.Utilities.EventService)
+local Job = require(ReplicatedStorage.modules.shared.Utilities.Job)
 
 local RemoteHandler = ReplicatedStorage.Remotes.CreateQT
 local SFX = script.SFX

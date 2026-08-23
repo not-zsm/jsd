@@ -8,10 +8,10 @@ local Maid = require( Packages.Maid )
 local BufferUtil = require( Packages.BufferUtil )
 
 local Types = require( script.Parent.Types );
-local Util = require( ReplicatedStorage.MovementReplicator.Util )
-local Settings = require( ReplicatedStorage.MovementReplicator.Settings )
+local Util = require( ReplicatedStorage.modules.shared.movementReplicator.Util )
+local Settings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
 
-local Remotes = ReplicatedStorage.MovementReplicator.Remotes;
+local Remotes = ReplicatedStorage.modules.shared.movementReplicator.Remotes;
 
 ---------------------------------------------------------------------------------
 

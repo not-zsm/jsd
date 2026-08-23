@@ -3,11 +3,11 @@ local CollectionService = game:GetService("CollectionService")
 local TweenService = game:GetService("TweenService")
 local Chat = game:GetService("Chat")
 
-local EffectUtility = require( ReplicatedStorage.Client.Replication.EffectUtility )
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
+local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
 
-local CharacterTransparency = require( ReplicatedStorage.Client.Replication.Global.CharacterTransparency )
+local CharacterTransparency = require( ReplicatedStorage.modules.client.replication.Global.CharacterTransparency )
 
 local Type = require( ReplicatedStorage.Packages.Type )
 

@@ -11,7 +11,7 @@ local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.Shared
+local Shared = ReplicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 local Animations = ReplicatedStorage.Animations
@@ -25,13 +25,13 @@ Combat.__index = Combat
 
 local OnCreatedMoves = require( script.OnCreatedMoves )
 
-local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
-local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.Shared.Utilities.Job )
-local NumberStack = require( ReplicatedStorage.Shared.Utilities.NumberStack )
-local InfoCharacter = require( ReplicatedStorage.Client.Character.InfoCharacter )
+local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local NumberStack = require( ReplicatedStorage.modules.shared.Utilities.NumberStack )
+local InfoCharacter = require( ReplicatedStorage.modules.client.character.InfoCharacter )
 
-local Velocity = require( ReplicatedStorage.Shared.Game.Velocity )
+local Velocity = require( ReplicatedStorage.modules.shared.Game.Velocity )
 
 ----------------------------------------------------------------------------------
 
@@ -39,7 +39,9 @@ function Combat:_Init()
 	task.spawn(require, script.Quicktime);
 
 	self.LockOn = require(script.LockOn).new(self)
-	self.UI = require(script.UI).new(self)
+	-- mainClient registers this; the UI lives with the menus rather than under
+	-- combat, and combat holds the one it is handed
+	self.UI = Combat.UIFactory(self)
 
 	self.FakeMouse = require(script.Mouse).new(self)
 
@@ -167,7 +169,7 @@ function Combat:Connect()
 	end)
 
 	CombatRemotes.UpdatePivotRealtime.OnClientEvent:Connect(function(player)
-		local ClientReplicator = require( ReplicatedStorage.MovementReplicator.ClientReplicator )
+		local ClientReplicator = require( ReplicatedStorage.modules.shared.movementReplicator.ClientReplicator )
 		local replicant = ClientReplicator.other_replicators[player];
 
 		if replicant and replicant.character then

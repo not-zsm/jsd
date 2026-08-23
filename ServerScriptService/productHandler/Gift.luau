@@ -4,7 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local DataStoreService = game:GetService("DataStoreService")
 
 local ServerStorage = game:GetService("ServerStorage")
-local Gamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses )
+local Gamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses )
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 local GiftsProcessingStore = DataStoreService:GetDataStore("gifts-processing")
