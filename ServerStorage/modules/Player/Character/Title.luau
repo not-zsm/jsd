@@ -12,7 +12,6 @@ local ServerStorage = game:GetService("ServerStorage")
 local AllTimeLeaderboard = DataStoreService:GetOrderedDataStore("AllTimeRobuxLeaderboard")
 
 local DataModule = require(replicatedStorage.modules.shared.Game.TitleData)
-local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 local function GetAllTimeData(UserId : number)
 	local Success, AllTimeData = pcall(function()

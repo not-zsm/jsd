@@ -9,6 +9,7 @@ local MemoryStoreService = game:GetService("MemoryStoreService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local network = require( replicatedStorage.modules.network )
+local rateLimiter = require( replicatedStorage.modules.shared.Utilities.rateLimiter )
 local DataStoreService = game:GetService("DataStoreService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -17,7 +18,6 @@ local ServerStorage = game:GetService("ServerStorage")
 local AllTimeLeaderboard = DataStoreService:GetOrderedDataStore("AllTimeRobuxLeaderboard")
 local MonthlyLeaderboard = MemoryStoreService:GetSortedMap("MonthlyRobuxLeaderboard")
 
-local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 local ProfileStore = require( ServerStorage.modules.Utility.ProfileStore )
 local Products = require( ServerScriptService.productHandler.Products )
 
@@ -27,7 +27,6 @@ local LuaPlayerList = require("./LuaPlayerList")
 
 local CharactersData = ServerStorage.characterData
 
-local DonationRemote = replicatedStorage.Remotes.RequestDonation
 
 local DonationBoard = workspace.Leaderboards.DonationLeaderboard.LeaderboardGui.Holder
 
@@ -169,7 +168,7 @@ for Amount, ProductId in Donations do
 end
 
 network.donate.listen(function(Amount : number, Player : Player)
-	if (RemoteRateLimiter.Check(DonationRemote, Player, 10) == false) then
+	if (rateLimiter.check(Player, "donate", 10) == false) then
 		return
 	end
 	

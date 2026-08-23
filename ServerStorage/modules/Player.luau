@@ -23,7 +23,6 @@ local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local Table = require( replicatedStorage.Packages.Table )
 
-local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 ---------------------------------------------------------------------------------- 
 

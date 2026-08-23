@@ -20,7 +20,6 @@ local BanList = require( replicatedStorage.modules.shared.Commands.PrivateServer
 
 local AnnouncementHandler = require( ServerStorage.modules.AnnouncementHandler )
 
-local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 --local Whitelist = require( ServerStorage.modules.Whitelist )

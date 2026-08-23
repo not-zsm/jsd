@@ -9,16 +9,7 @@ return {
 		local Players = game:GetService("Players")
 		local SoundService = game:GetService("SoundService")
 		local replicatedStorage = game:GetService("ReplicatedStorage")
-
-local network = require( replicatedStorage.modules.network )
-
-		local function getFunction(str)
-			for i,v in script:GetChildren() do
-				if v.Name:lower() == str:lower() then
-					return v
-				end
-			end
-		end
+		local network = require( replicatedStorage.modules.network )
 
 		network.respawn.listen(function()
 			SoundService.NPC.Respawn:Play()
@@ -26,20 +17,6 @@ local network = require( replicatedStorage.modules.network )
 
 		network.removeMicrophone.listen(function(Emitter)
 			Emitter:Destroy()
-		end)
-
-		replicatedStorage.Remotes.Ranked.UI.OnClientEvent:Connect(function(Data: string) 
-			local Module = getFunction(Data)
-			if Module then
-				Module = require(Module)
-			end
-
-			if typeof(Module) ~= "table" then return end
-
-			local New = Module.New({})
-
-			New:Track()
-			New:Fire()
 		end)
 	end,
 }

@@ -61,7 +61,6 @@ local MovementReplicatorSettings = require( replicatedStorage.modules.shared.mov
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 local CommandHandler = require( ServerStorage.modules.CommandHandler )
 
-local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 ----------------------------------------------------------------------------------
 
@@ -254,16 +253,6 @@ end
 
 function Combat:SwitchCharacter(Character : string, IconId : string?)
 	if self.SwitchCooldown then return end
-
-	if shared.IsRankedPlace and IconId then
-		self.LuaPlayer.PendingCharacterName = Character
-
-		if IconId then
-			Remotes.Ranked.UpdateSelectionDisplay:FireAllClients(self.LuaPlayer.Player, IconId)
-		end
-
-		return 
-	end
 
 	local CharacterModule = self:GetCharacterModule(Character);
 

@@ -14,7 +14,6 @@ local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
-local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 local Limited_Emote_Dates = require( replicatedStorage.modules.shared.Game["Limited Emote Dates"] )
 local Limited_Products_Ids = require( script["Limited Product Ids"] )
