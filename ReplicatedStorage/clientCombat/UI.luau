@@ -22,6 +22,7 @@ local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 local NumberStack = require( ReplicatedStorage.Shared.Utilities.NumberStack )
 local AnimatedGradient = require( ReplicatedStorage.Shared.Utilities.GradientEffect )
 local ClientAnnouncementHandler = require( script.ClientAnnouncementHandler )
+local HUDMovement = require( ReplicatedStorage.Client.HUDMovement )
 
 local ScaleDescription = require(script:WaitForChild("InformationConfg"):WaitForChild("ScaleDescription"))
 
@@ -315,98 +316,15 @@ function UI:Init()
 end
 
 function UI:ChangeHotbarDisplay(Name : string, NewText : string, NewTip : string, FlashColor : Color3)
-	local Data : {} = self.CurrentHotbar[Name]
-	if (Data == nil) then return end
-
-	local GUI = Data.GUI
-
-	local Button = GUI.Button
-	local Skill : Frame = Button.Skill
-	Skill.DisplayName.Text = NewText
-
-	if NewTip then
-		if NewTip == "" then
-			Skill.Tip.Text = ""
-			Skill.Tip.Visible = false
-		else
-			Skill.Tip.Text = NewTip
-			Skill.Tip.Visible = true
-		end
-	else
-		if NewText == Name then
-			self:UpdateAttackToUseData(Name)
-		else
-			Skill.Tip.Visible = false
-		end
-	end
-	
-	if (FlashColor and GUI.Parent ~= nil) then
-		Skill.DisplayName.TextColor3 = FlashColor
-
-		Button.FlashBorder.Color = FlashColor
-		Button.FlashBorder.Transparency = 0
-		Button.FlashBorder.Enabled = true
-
-		local Tween = TweenService:Create(Button.FlashBorder, FlashInfo, {
-			Transparency = 1
-		})
-
-		TweenService:Create(Skill.DisplayName, FlashInfo, {
-			TextColor3 = Color3.new(1, 1, 1)
-		}):Play()
-
-		Tween:Play()
-
-		Tween.Completed:Connect(function(PlaybackState)
-			if (PlaybackState == Enum.PlaybackState.Completed and GUI.Parent ~= nil) then
-				Button.FlashBorder.Enabled = false
-			end
-		end)
-	end
+	self.Hotbar:SetDisplay(Name, NewText, NewTip, FlashColor)
 end
 
 function UI:AddCooldown(Name : string, Duration : number)
-	local Data : {} = self.CurrentHotbar[Name]
-	if (Data == nil) then return end
-
-	local GUI = Data.GUI
-	local Button = GUI.Button
-
-	local TimingVal = Instance.new("NumberValue")
-	TimingVal.Value = 1
-
-	TimingVal.Changed:Connect(function()
-		if (GUI.Parent ~= nil) then
-			Button.Cooldown.Size = UDim2.fromScale(1, TimingVal.Value)
-			Button.CooldownValue.Text = math.round(TimingVal.Value * Duration)
-		end	
-	end)
-
-	local Tween = TweenService:Create(TimingVal, TweenInfo.new(Duration, Enum.EasingStyle.Linear), 
-		{Value = 0}
-	)
-
-	Button.CooldownValue.Text = Duration
-	Button.CooldownValue.Visible = true
-
-	Button.Cooldown.Visible = true
-	Button.Cooldown.Size = UDim2.fromScale(1, 1)
-
-	Tween:Play()
-
-	Data.RemoveCooldown:Once(function()
-		TimingVal:Destroy()
-
-		Button.Cooldown.Visible = false
-		Button.CooldownValue.Visible = false
-	end)
+	self.Hotbar:AddCooldown(Name, Duration)
 end
 
 function UI:RemoveCooldown(Name : string)
-	local Data : {} = self.CurrentHotbar[Name]
-	if (Data == nil) then return end
-
-	Data.RemoveCooldown:Fire()
+	self.Hotbar:RemoveCooldown(Name)
 end
 
 function UI:Toggle(Toggle : boolean, Time : number)
@@ -416,19 +334,11 @@ function UI:Toggle(Toggle : boolean, Time : number)
 
 	if not Toggle then
 		if self.UIToggleStack:IsTrue() then
-			self.MainGUI:SetAttribute("Hidden", true)
-
-			TweenService:Create(self.MainGUIHolder, TweenInfo.new(Time, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-				Position = UDim2.fromScale(0, 0.3)
-			}):Play()
+			self:SetHUDHidden(true, Time)
 		end
 	else
 		if self.UIToggleStack:IsFalse() then
-			self.MainGUI:SetAttribute("Hidden", nil)
-
-			TweenService:Create(self.MainGUIHolder, TweenInfo.new(Time, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-				Position = UDim2.fromScale(0, 0)
-			}):Play()
+			self:SetHUDHidden(false, Time)
 		end
 	end
 end
@@ -436,19 +346,21 @@ end
 function UI:ToggleNoStack(Toggle : boolean, Time : number)
 	Time = Time or 1.3
 	
-	if Toggle then
-		self.MainGUI:SetAttribute("Hidden", true)
+	self:SetHUDHidden(Toggle, Time)
+end
 
-		TweenService:Create(self.MainGUIHolder, TweenInfo.new(Time, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-			Position = UDim2.fromScale(0, 0.3)
-		}):Play()
-	else
-		self.MainGUI:SetAttribute("Hidden", nil)
+-- The hotbar is its own ScreenGui now, so hiding the HUD is two moves. The
+-- Hidden attribute stays on Main because TekrinnDialogue rides it.
+function UI:SetHUDHidden(Hidden : boolean, Time : number?)
+	Time = Time or 1.3
 
-		TweenService:Create(self.MainGUIHolder, TweenInfo.new(Time, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-			Position = UDim2.fromScale(0, 0)
-		}):Play()
-	end
+	self.MainGUI:SetAttribute("Hidden", Hidden or nil)
+
+	TweenService:Create(self.MainGUIHolder, TweenInfo.new(Time, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+		Position = UDim2.fromScale(0, Hidden and 0.3 or 0)
+	}):Play()
+
+	self.Hotbar:SetHidden(Hidden, Time)
 end
 
 function UI:UpdateDeviceSupport(Controller : boolean?, Touch : boolean)
@@ -494,9 +406,7 @@ function UI:UpdateDeviceSupport(Controller : boolean?, Touch : boolean)
 		
 		ReplicatedStorage.Remotes.TellServerCurrentDevice:FireServer(Device)
 		
-		for Name, Table in self.CurrentHotbar do
-			self:UpdateSkillTextToSupportDevice(Table.GUI)
-		end
+		self.Hotbar:RefreshKeys()
 
 		--if self.Settings.DeviceKeybinds and self.Settings.DeviceKeybinds[Device] then
 		--	for Name, Key in self.Settings.DeviceKeybinds[Device] do
@@ -506,449 +416,92 @@ function UI:UpdateDeviceSupport(Controller : boolean?, Touch : boolean)
 	end
 end
 
-local BetterSubNames = {
-	[Enum.KeyCode.ButtonA] = "A",
-	[Enum.KeyCode.ButtonY] = "Y",
-	[Enum.KeyCode.ButtonB] = "B",
-	[Enum.KeyCode.ButtonX] = "X",
-	[Enum.KeyCode.ButtonL1] = "L1",
-	[Enum.KeyCode.ButtonL2] = "L2",
-	[Enum.KeyCode.ButtonR1] = "R1",
-	[Enum.KeyCode.ButtonR2] = "R2",
-	[Enum.KeyCode.DPadRight] = "DPad-R",
-	[Enum.KeyCode.DPadUp] = "DPad-U",
-	[Enum.KeyCode.DPadLeft] = "DPad-L"
-}
-
-function UI:UpdateSkillTextToSupportDevice(GUI : Frame)
-	local Skill : Frame = GUI.Button.Skill
-	local Key = GUI:GetAttribute("Key")
-	local Order = GUI:GetAttribute("Order")
-
-	if self.Combat.UsingController and Utility.KeyboardToControllerInputs[Key] then
-		local NewName = BetterSubNames[Utility.KeyboardToControllerInputs[Key]]
-
-		if NewName then
-			Skill.Key.Text = NewName
-		end
-	else
-		local DisplayKey = Key.Name
-
-		if Key == Enum.UserInputType.MouseButton1 then
-			DisplayKey = "M1"
-
-		elseif Key == Enum.UserInputType.MouseButton2 then
-			DisplayKey = "M2"
-		end
-		
-		Skill.Key.Text = (Order > 0 and Order <= 9) and Order or DisplayKey
-	end
-end
 
 function UI:UpdateAttackToUseData(Name : string)
-	local Data : {} = self.CurrentHotbar[Name]
-	if (Data == nil) then return end
-
-	local GUI = Data.GUI
-	local Data = HotbarData[Name]
-
-	if (Data ~= nil and Data.OnAdded) then
-		Data.OnAdded(GUI)
-	end
+	self.Hotbar:ApplyTip(Name)
 end
 
 function UI:InitiateUltimate()
-	--local Gradient = AnimatedGradient.new(self.UltimateGradiant)
+	local Attributes = self.Combat.AttributeValues
 
-	local function UpdateMaxText(Key : (Enum.KeyCode | Enum.UserInputType))
-		--print("ultimate text updated", Key)
-		
-		if (Key == nil) then
-			--local Keybind = self.Combat:GetKeybindForMove("Ultimate") 
-				
-			--if Keybind then
-			--	Key = Keybind
-			--else
-				if self.Combat.UsingController then
-					Key = Utility.KeyboardToControllerInputs[Enum.KeyCode.G]
-				else
-					Key = Enum.KeyCode.G
-				end
-			--end
-		end
+	local function AwakenKey() : string
+		local Key = self.Combat.UsingController
+			and Utility.KeyboardToControllerInputs[Enum.KeyCode.G]
+			or Enum.KeyCode.G
 
-		if typeof(Key) == "EnumItem" then
-			self.Ultimate.IsMax.Text = "[" .. Key.Name .. "]"
+		return typeof(Key) == "EnumItem" and Key.Name or "G"
+	end
+
+	local function UpdateName()
+		local Progress = Attributes:GetAttribute("Ultimate")
+
+		if Progress == 100 then
+			self.Hotbar:SetUltMax(true, AwakenKey())
 		else
-			print("ultimate key wasnt an enum? idk vro")
-		end
-		
-	end
-	
-	--task.spawn(function()
-	--	self.Settings.OnKeybindUpdated:Connect(function(Move : string, NewKey : (Enum.KeyCode | Enum.UserInputType))
-	--		if Move == "Ultimate" then
-	--			UpdateMaxText(NewKey)
-	--		end
-	--	end)
-	--end)
-	
-	task.spawn(function()
-		self.Combat.OnDeviceChanged:Connect(function()
-			UpdateMaxText()
-		end)
-	end)
-	
-	task.spawn(UpdateMaxText)
-	
-	local function UpdateUltimateColor()
-		self.UltimateGradiant.Color = self.Combat.AttributeValues:GetAttribute("UltimateColor")
-		self.Ultimate.Title.Gradient.Color = self.Combat.AttributeValues:GetAttribute("UltimateColor")
-		self.Ultimate.IsMax.Gradient.Color = self.Combat.AttributeValues:GetAttribute("UltimateColor")
-	end
-
-	local function UpdateUltimateName()
-		self.Ultimate.Title.Text = self.Combat.AttributeValues:GetAttribute("UltimateName")
-	end
-	
-	local function UpdateUltimateBar()
-		self.Ultimate.Visible = self.Combat.AttributeValues:GetAttribute("UltimateBar")
-	end
-
-	local function UpdateMaxIndicator(Progress : number)
-		if (Progress == 100) then
-			task.spawn(UpdateMaxText)
-			
-			self.Ultimate.IsMax.TextTransparency = 1
-			self.Ultimate.IsMax.Visible = true
-
-			TweenService:Create(self.Ultimate.IsMax, TweenInfo.new(0.15), {
-				TextTransparency = 0
-			}):Play()
-			
-			--Gradient:Animate()
-		else
-			self.Ultimate.IsMax.Visible = false
-			self.Ultimate.IsMax.TextTransparency = 0
-
-			TweenService:Create(self.Ultimate.IsMax, TweenInfo.new(0.15), {
-				TextTransparency = 1
-			}):Play()
-		end
-		
-		if (Progress == 0) then
-			--Gradient:Stop()
+			self.Hotbar:SetUltName( Attributes:GetAttribute("UltimateName") )
 		end
 	end
 
-	local function MaxIndicatorUpdate(Progress : number)
-		if not self.Settings.Loaded then
-			self.Settings.OnLoaded:Once(function()
-				UpdateMaxIndicator(Progress)
-			end)
-		else
-			UpdateMaxIndicator(Progress)
-		end
+	local function UpdateProgress(Instant : boolean?)
+		local Progress = Attributes:GetAttribute("Ultimate") or 0
+
+		self.Hotbar:SetUltProgress(Progress / 100, Instant)
+		UpdateName()
 	end
 
-	self.UltimateTweenGradient.Changed:Connect(function(Value)
-		self.UltimateGradiant.Transparency = self:CalculateUltimateGradientValue(Value)
+	self.Combat.OnDeviceChanged:Connect(UpdateName)
+
+	Attributes:GetAttributeChangedSignal("Ultimate"):Connect(function()
+		UpdateProgress()
 	end)
 
-	local StartValue = self.Combat.AttributeValues:GetAttribute("Ultimate")
+	Attributes:GetAttributeChangedSignal("UltimateName"):Connect(UpdateName)
 
-	if (StartValue ~= nil) then
-		self.UltimateTweenGradient.Value = (StartValue / 100)
-	end
-
-	if (StartValue == 0) then
-		self.UltimateGradiant.Transparency = self:CalculateUltimateGradientValue(0)
-	end
-
-	self.Combat.AttributeValues:GetAttributeChangedSignal("Ultimate"):Connect(function()
-		local Progress = self.Combat.AttributeValues:GetAttribute("Ultimate")
-
-		TweenService:Create(self.UltimateTweenGradient, TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
-			Value = (Progress / 100)
-		}):Play()
-
-		MaxIndicatorUpdate(Progress)
+	Attributes:GetAttributeChangedSignal("UltimateColor"):Connect(function()
+		self.Hotbar:SetUltColor( Attributes:GetAttribute("UltimateColor") )
 	end)
 
-	MaxIndicatorUpdate(StartValue)
+	Attributes:GetAttributeChangedSignal("UltimateBar"):Connect(function()
+		self.Hotbar:SetUltVisible( Attributes:GetAttribute("UltimateBar") )
+	end)
 
-	if (self.Combat.AttributeValues:GetAttribute("UltimateColor") ~= nil) then
-		UpdateUltimateColor()
+	if Attributes:GetAttribute("UltimateColor") ~= nil then
+		self.Hotbar:SetUltColor( Attributes:GetAttribute("UltimateColor") )
 	end
 
-	if (self.Combat.AttributeValues:GetAttribute("UltimateName") ~= nil) then
-		UpdateUltimateName()
-	end
-	
-	if (self.Combat.AttributeValues:GetAttribute("UltimateBar") ~= nil) then
-		UpdateUltimateBar()
+	if Attributes:GetAttribute("UltimateBar") ~= nil then
+		self.Hotbar:SetUltVisible( Attributes:GetAttribute("UltimateBar") )
 	end
 
-	self.Combat.AttributeValues:GetAttributeChangedSignal("UltimateColor"):Connect(UpdateUltimateColor)
-	self.Combat.AttributeValues:GetAttributeChangedSignal("UltimateName"):Connect(UpdateUltimateName)
-	self.Combat.AttributeValues:GetAttributeChangedSignal("UltimateBar"):Connect(UpdateUltimateBar)
-	
-	do
-		--local Hovering = false
+	UpdateProgress(true)
 
-		--self.Ultimate.MobileButton.MouseEnter:Connect(function()
-		--	Hovering = true
-		--end)
-
-		--self.Ultimate.MobileButton.MouseLeave:Connect(function()
-		--	Hovering = false
-		--end)
-
-		--UserInputService.InputBegan:Connect(function(Input, Typing)
-		--	if Input.UserInputType == Enum.UserInputType.Touch and Hovering then
-		--		self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Ultimate", true)
-		--	end
-		--end)
-
-		--UserInputService.InputEnded:Connect(function(Input)
-		--	if Input.UserInputType == Enum.UserInputType.Touch then
-		--		self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Ultimate", false)
-		--	end
-		--end)
-		
-		self.Ultimate.MobileButton.MouseButton1Click:Connect(function()
-			self.Combat:_AttackInputUpdate("Ultimate")
-		end)
-	end
+	self.Hotbar.UltBar.button.MouseButton1Click:Connect(function()
+		self.Combat:_AttackInputUpdate("Ultimate")
+	end)
 end
 
 function UI:UseOnHotbar(Name : string, CustomColor : Color3)
-	local Data : {} = self.CurrentHotbar[Name]
-	if (Data == nil) then return end
-
-	local GUI = Data.GUI
-	local Button = GUI.Button
-
-	local Transparency = Button.Available.Grad:GetAttribute("StartTransparency")
-
-	if CustomColor then
-		Button.Available.Grad.Color = ColorSequence.new(CustomColor)
-	end
-
-	Button.Available.Grad.Transparency = Transparency
-	Button.Available.Visible = true
-
-	Button.BlinkValue.Value = 0
-
-	local Tween = TweenService:Create(Button.BlinkValue, TweenInfo.new(0.25), {Value = 1})
-	Tween:Play()
-
-	local Connection = Button.BlinkValue.Changed:Connect(function()
-		Button.Available.Grad.Transparency = Utility.InterpolateNumberSequenceValues(Transparency, Button.BlinkValue.Value, 1)
-	end)
-
-	Tween.Completed:Once(function(PlaybackState)
-		Connection:Disconnect()
-
-		if (PlaybackState == Enum.PlaybackState.Completed and GUI.Parent ~= nil) then
-			Button.Available.Visible = false
-		end
-	end)
+	self.Hotbar:Use(Name, CustomColor)
 end
 
 function UI:OverlayOnHotbar(Name : string, Value : boolean)
-	local Data : {} = self.CurrentHotbar[Name]
-	if (Data == nil) then return end
+	self.Hotbar:SetOverlay(Name, Value)
+end
 
-	local GUI = Data.GUI
-	local Button = GUI.Button
-	
-	if (Value ~= nil) then
-		Button.Overlay.Visible = Value
-	else
-		Button.Overlay.Visible = not Button.Overlay.Visible
-	end
-end;
+function UI:HideOnHotbar(Name : string)
+	self.Hotbar:SetSlotShown(Name, false)
+end
 
-function UI:HideOnHotbar(Name: string)
-	local HotbarItem = self.CurrentHotbar[Name];
-	
-	if HotbarItem and HotbarItem.DummyGUI.Visible then
-		local GUI = HotbarItem.GUI;
-		local Info = TweenInfo.new(0.5);
-		
-		HotbarItem.DummyGUI.Visible = false;
-		
-		local Tween = TweenService:Create(GUI.Button, Info, { Position = UDim2.fromScale(0, 2) });
-		
-		Tween.Completed:Once(function(Status)
-			if Status == Enum.PlaybackState.Completed then
-				GUI.Visible = false;
-			end;
-		end);
-
-		Tween:Play();
-	end;
-end;
-
-function UI:ShowOnHotbar(Name: string)
-	local HotbarItem = self.CurrentHotbar[Name];
-
-	if HotbarItem and not HotbarItem.DummyGUI.Visible then
-		local GUI = HotbarItem.GUI;
-		local Info = TweenInfo.new(0.5);
-		
-		HotbarItem.DummyGUI.Visible = true;
-		
-		GUI.Button.Position = UDim2.fromScale(0, 2);
-		GUI.Visible = true;
-		
-		local Tween = TweenService:Create(GUI.Button, Info, { Position = UDim2.fromScale(0, 0) });
-		Tween:Play();
-	end;
-end;
+function UI:ShowOnHotbar(Name : string)
+	self.Hotbar:SetSlotShown(Name, true)
+end
 
 function UI:AddOnHotbar(Name : string, Key : (Enum.KeyCode | Enum.UserInputType))
-	if typeof(Key) ~= "EnumItem" then return end
-	
-	if (self.CurrentHotbar[Name] ~= nil) then
-		local Order = (Key.Value - 48)
-
-		local HotbarItem = self.CurrentHotbar[Name];
-		
-		local DummyGUI : Frame = HotbarItem.DummyGUI;
-		local GUI : Frame = HotbarItem.GUI
-		local Button : ImageButton = GUI.Button
-		local Skill : Frame = Button.Skill
-
-		GUI:SetAttribute("Name", Name)
-		GUI:SetAttribute("Key", Key)
-		GUI:SetAttribute("Order", Order)
-		
-		self:UpdateSkillTextToSupportDevice(GUI)
-		self:UpdateAttackToUseData(Name)
-
-		Skill.DisplayName.Text, GUI.Name = Name, Name;
-		GUI.LayoutOrder = Order;
-		
-		DummyGUI.Name = Name;
-		DummyGUI.LayoutOrder = Order;
-	else
-		local Order = (Key.Value - 48)
-
-		local DummyGUI : Frame = self.MainGUIHolder.DummySkillTemplate:Clone()
-		DummyGUI.LayoutOrder = Order;
-		DummyGUI.Position = UDim2.fromScale(0.5, 1.5);
-		DummyGUI.Name = Name;
-		
-		local GUI : Frame = self.MainGUIHolder.SkillTemplate:Clone()
-		local Button : ImageButton = GUI.Button
-		local Skill : Frame = Button.Skill
-	
-		GUI:SetAttribute("Name", Name)
-		GUI:SetAttribute("Key", Key)
-		GUI:SetAttribute("Order", Order)
-
-		local HotbarItem = {
-			RemoveCooldown = EventService.new(),
-			Job = Job.new(),
-			GUI = GUI,
-			DummyGUI = DummyGUI,
-		};
-		
-		self.CurrentHotbar[Name] = HotbarItem;
-
-		self:UpdateSkillTextToSupportDevice(GUI)
-		self:UpdateAttackToUseData(Name)
-
-		Skill.DisplayName.Text, GUI.Name = Name, Name;
-		
-		GUI.LayoutOrder = Order;
-		GUI.Visible = true;
-		GUI.Position = UDim2.fromScale(0.5, 1.5);
-		GUI.Parent = self.Hotbar;
-		
-		DummyGUI.Parent = self.DummyHotbar;
-		
-		HotbarItem.Job:Task(Button.MouseButton1Click:Connect(function()
-			self.Combat:_AttackInputUpdate(Name)
-		end))
-		
-		local Info = TweenInfo.new(0.33, Enum.EasingStyle.Cubic);
-		
-		local function UpdateGUI(Immediate: boolean?)
-			local NewPosition = (DummyGUI.AbsolutePosition - self.DummyHotbar.AbsolutePosition) + DummyGUI.AbsoluteSize * DummyGUI.AnchorPoint;
-			local NewOffset = UDim2.fromOffset(NewPosition.X, NewPosition.Y);
-			
-			if Immediate then
-				GUI.Position = NewOffset;
-			else
-				TweenService:Create(GUI, Info, {Position = NewOffset}):Play();
-			end;
-		end;
-		
-		task.defer(UpdateGUI, true);
-		HotbarItem.Job:Task(DummyGUI:GetPropertyChangedSignal("AbsolutePosition"):Connect(UpdateGUI));
-		
-		TweenService:Create(Button, TweenInfo.new(0.5, Enum.EasingStyle.Cubic), { Position = UDim2.fromScale(0, 0) }):Play()
-		
-		--local Hovering = false
-
-		--self.CurrentHotbar[Name].Job:Task(Button.MouseEnter:Connect(function()
-		--	Hovering = true
-		--end))
-
-		--self.CurrentHotbar[Name].Job:Task(Button.MouseLeave:Connect(function()
-		--	Hovering = false
-		--end))
-
-		--self.CurrentHotbar[Name].Job:Task(UserInputService.InputBegan:Connect(function(Input, Typing)
-		--	if Input.UserInputType == Enum.UserInputType.Touch and Hovering then
-		--		self.LuaPlayer.Remotes.Combat.AttackInput:FireServer(Name, true)
-		--	end
-		--end))
-
-		--self.CurrentHotbar[Name].Job:Task(UserInputService.InputEnded:Connect(function(Input)
-		--	if Input.UserInputType == Enum.UserInputType.Touch then
-		--		self.LuaPlayer.Remotes.Combat.AttackInput:FireServer(Name, false)
-		--	end
-		--end))
-	end
+	self.Hotbar:Add(Name, Key)
 end
 
 function UI:RemoveFromHotbar(Name : string)
-	local HotbarItem = self.CurrentHotbar[Name];
-	if not HotbarItem then return end
-	
-	HotbarItem.Job:Destroy()
-	HotbarItem.DummyGUI:Destroy();
-	
-	self.CurrentHotbar[Name] = nil;
-	
-	local GUI = HotbarItem.GUI;
-	local Info = TweenInfo.new(0.5);
-	local Tween = TweenService:Create(GUI.Button, Info, { Position = UDim2.fromScale(0, 2) });
-	
-	Tween.Completed:Once(function()
-		GUI:Destroy();
-	end);
-	
-	Tween:Play();
-end
-
-function UI:CalculateUltimateGradientValue(Alpha: number)
-	Alpha = math.clamp(Alpha * ULTIMATE_OUTER_GRADIENT_OFFSET, 0, ULTIMATE_OUTER_GRADIENT_OFFSET)
-
-	local Delta = ULTIMATE_INNER_GRADIENT_OFFSET + Alpha / 2
-
-	return NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 1),
-		NumberSequenceKeypoint.new(Utility.AlphaClamp(0.5 - Delta - ULTIMATE_BAR_GRADIENT_FADE), 1),
-		NumberSequenceKeypoint.new(Utility.AlphaClamp(0.5 - Delta), 0),
-		NumberSequenceKeypoint.new(Utility.AlphaClamp(0.5 + Delta), 0),
-		NumberSequenceKeypoint.new(Utility.AlphaClamp(0.5 + Delta + ULTIMATE_BAR_GRADIENT_FADE), 1),
-		NumberSequenceKeypoint.new(1, 1)
-	})
+	self.Hotbar:Remove(Name)
 end
 
 function UI:LoadMobileButtonPositions(savedPositions : {})
@@ -1165,9 +718,7 @@ function UI.new(Combat)
 
 	self.MainGUIHolder = self.MainGUI:WaitForChild("Holder")
 
-	self.Ultimate = self.MainGUIHolder:WaitForChild("Ultimate")
-	self.Hotbar = self.MainGUIHolder:WaitForChild("Hotbar")
-	self.DummyHotbar = self.MainGUIHolder:WaitForChild("DummyHotbar");
+	self.Hotbar = require(script.Hotbar).new(self)
 	
 	self.Announcement = self.AnnouncementGUI:WaitForChild("Holder")
 	self.Information = self.InformationGUI:WaitForChild("Holder")
@@ -1181,12 +732,7 @@ function UI.new(Combat)
 
 	self.MobileDragFrame = self.MobileGUI:WaitForChild("DragFrame")
 
-	self.UltimateGradiant = self.Ultimate.Fill.UIGradient
-	self.UltimateTweenGradient = Instance.new("NumberValue")
-
 	self.UIToggleStack = NumberStack.new()
-
-	self.CurrentHotbar = {}
 	
 	task.spawn(function()
 		if UserInputService.TouchEnabled then
@@ -1222,6 +768,12 @@ function UI.new(Combat)
 				Add(Model)
 			end
 		end)
+	end)
+
+	-- SetHUDHidden owns Position on these two, so the sway has to be the only
+	-- other writer: it reads their rest position once and offsets from it
+	HUDMovement({ self.Hotbar.Holder, self.Hotbar.UltBar }, function()
+		return self.LuaPlayer.Player:GetAttribute("HUD_Sway") ~= false
 	end)
 
 	self.Emotes = require(script.Emotes).new(self)

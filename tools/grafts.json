@@ -1,24 +1,42 @@
 [
-  { "from": "old",
+  {
+    "from": "old",
     "src": "ReplicatedStorage.Modules.Player.Replication.VFX.Invincible",
-    "dst": "ReplicatedStorage.Client.Replication.VFX" },
-  { "from": "old",
+    "dst": "ReplicatedStorage.Client.Replication.VFX"
+  },
+  {
+    "from": "old",
     "src": "ServerScriptService.Scripts.Game.Modules.Player.Character.Combat.Attacks.List.Invincible",
-    "dst": "ServerStorage.serverCombat.Attacks.List" },
-  { "from": "old",
+    "dst": "ServerStorage.serverCombat.Attacks.List"
+  },
+  {
+    "from": "old",
     "src": "ServerScriptService.Scripts.Game.Modules.Player.Character.Combat.Characters.Invincible",
-    "dst": "ServerStorage.serverCombat.Characters" },
-  { "from": "old",
+    "dst": "ServerStorage.serverCombat.Characters"
+  },
+  {
+    "from": "old",
     "src": "ReplicatedStorage.Animations.Attacks.Invincible",
-    "dst": "ReplicatedStorage.Animations.Attacks" },
-  { "from": "old",
+    "dst": "ReplicatedStorage.Animations.Attacks"
+  },
+  {
+    "from": "old",
     "src": "ReplicatedStorage.Animations.Attacks.Global.Ultimate.Invincible",
-    "dst": "ReplicatedStorage.Animations.Attacks.Global.Ultimate" },
-  { "from": "old",
+    "dst": "ReplicatedStorage.Animations.Attacks.Global.Ultimate"
+  },
+  {
+    "from": "old",
     "src": "ReplicatedStorage.Animations.Attacks.Global.Dash.WallCombo.Invincible",
-    "dst": "ReplicatedStorage.Animations.Attacks.Global.Dash.WallCombo" },
-
-  { "from": "jjk",
+    "dst": "ReplicatedStorage.Animations.Attacks.Global.Dash.WallCombo"
+  },
+  {
+    "from": "jjk",
     "src": "ReplicatedStorage.modules.effect.tekrinnDialogue.subtitleDialogue",
-    "dst": "ReplicatedStorage.Client.TekrinnDialogue" }
+    "dst": "ReplicatedStorage.Client.TekrinnDialogue"
+  },
+  {
+    "from": "jjk",
+    "src": "StarterPlayer.StarterPlayerScripts.PlayerScriptsLoader.mainClient.UI.hotbar",
+    "dst": "ReplicatedStorage.clientCombat.UI.Hotbar"
+  }
 ]

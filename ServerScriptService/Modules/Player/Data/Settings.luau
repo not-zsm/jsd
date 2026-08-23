@@ -25,6 +25,7 @@ return {
 	["Accessories"] = true,
 	["Voxel_Interpolation"] = true,
 	["Head_Tracking"] = true,
+	["HUD_Sway"] = true,
 	["Auto_Use"] = true,
 	["Kill_Sound"] = "0",
 	

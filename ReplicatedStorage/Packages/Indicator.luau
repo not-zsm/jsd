@@ -93,7 +93,7 @@ function Indicator.new(Config)
 	if self.Visible then
 		local Sound = Instance.new("Sound")
 		Sound.Volume = 0.5
-		Sound.SoundId = "rbxassetid://104549436332148"
+		Sound.SoundId = "rbxassetid://79894516715649"
 		Sound.Parent = SoundService
 
 		Sound:Play()

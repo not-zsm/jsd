@@ -87,6 +87,7 @@ function Settings:Init()
 		self:CreateToggleInSection("Graphics", "Hit IFrame Effect", "Shows IFrames When Hit")
 		self:CreateToggleInSection("Graphics", "Accessories", "Shows Accessories When Enabled")
 		self:CreateToggleInSection("Graphics", "Voxel Interpolation", "Enables the Tweening of Voxelized Debris")
+		self:CreateToggleInSection("Graphics", "HUD Sway", "HUD Leans With The Camera")
 		
 		-- Audio
 		self:CreatePercentageInSection("Audio", "Sound Effects", "Volume of SFX")

@@ -113,6 +113,62 @@ def repo_tree(repo):
     return out
 
 
+def sync_sources(root, repo):
+    """Point every script in the place at the repo's copy, creating any the
+    place does not have yet.
+
+    Runs before the grafts as well as after: a graft destination can be a
+    module that only exists in the repo, and a grafted subtree can carry a
+    script whose source in the place it came from is stale.
+    """
+    print("\nsyncing sources from repo:")
+    target = repo_tree(repo)
+    tree = index(root)
+    sourced = created = 0
+
+    for path, item in list(tree.items()):
+        if item.get("class") not in SCRIPTS:
+            continue
+        text = target.get(path)
+        if text is None:
+            continue
+        props = item.find("Properties")
+        el = next((c for c in props if c.get("name") == "Source"), None)
+        if el is None:
+            el = ET.SubElement(props, "ProtectedString", {"name": "Source"})
+        el.text = ET.CDATA(text)
+        sourced += 1
+
+    for path in sorted(target, key=len):
+        if path in tree:
+            continue
+        parent = tree.get(path[:-1])
+        if parent is None:
+            cursor = None
+            for depth in range(1, len(path)):
+                prefix = path[:depth]
+                if prefix in tree:
+                    cursor = tree[prefix]; continue
+                if cursor is None:
+                    break
+                folder = ET.Element("Item", {"class": "Folder", "referent": "RBX" + uuid.uuid4().hex})
+                props = ET.SubElement(folder, "Properties")
+                n = ET.SubElement(props, "string", {"name": "Name"}); n.text = prefix[-1]
+                cursor.append(folder); tree[prefix] = folder; cursor = folder
+            parent = tree.get(path[:-1])
+        if parent is None:
+            print(f"  [no parent] {'.'.join(path)}"); continue
+        item = ET.Element("Item", {"class": "ModuleScript", "referent": "RBX" + uuid.uuid4().hex})
+        props = ET.SubElement(item, "Properties")
+        n = ET.SubElement(props, "string", {"name": "Name"}); n.text = path[-1]
+        src = ET.SubElement(props, "ProtectedString", {"name": "Source"}); src.text = ET.CDATA(target[path])
+        parent.append(item); tree[path] = item
+        created += 1
+        print(f"  [created] {'.'.join(path)}")
+
+    return sourced, created
+
+
 def validate(root, label):
     ok = True
 
@@ -197,6 +253,9 @@ def main():
     if missing:
         sys.exit(f"no --source given for: {', '.join(sorted(missing))}")
 
+    sync_sources(new_root, args.repo)
+    new_index = index(new_root)
+
     print("\ngrafting:")
     grafted = copied_blobs = 0
     for entry in manifest:
@@ -237,51 +296,7 @@ def main():
 
     print(f"\ncarried {copied_blobs} shared-string blobs")
 
-    print("\nsyncing sources from repo:")
-    target = repo_tree(args.repo)
-    new_index = index(new_root)
-    sourced = created = 0
-
-    for path, item in list(new_index.items()):
-        if item.get("class") not in SCRIPTS:
-            continue
-        text = target.get(path)
-        if text is None:
-            continue
-        props = item.find("Properties")
-        el = next((c for c in props if c.get("name") == "Source"), None)
-        if el is None:
-            el = ET.SubElement(props, "ProtectedString", {"name": "Source"})
-        el.text = ET.CDATA(text)
-        sourced += 1
-
-    for path in sorted(target, key=len):
-        if path in new_index:
-            continue
-        parent = new_index.get(path[:-1])
-        if parent is None:
-            cursor = None
-            for depth in range(1, len(path)):
-                prefix = path[:depth]
-                if prefix in new_index:
-                    cursor = new_index[prefix]; continue
-                if cursor is None:
-                    break
-                folder = ET.Element("Item", {"class": "Folder", "referent": "RBX" + uuid.uuid4().hex})
-                props = ET.SubElement(folder, "Properties")
-                n = ET.SubElement(props, "string", {"name": "Name"}); n.text = prefix[-1]
-                cursor.append(folder); new_index[prefix] = folder; cursor = folder
-            parent = new_index.get(path[:-1])
-        if parent is None:
-            print(f"  [no parent] {'.'.join(path)}"); continue
-        item = ET.Element("Item", {"class": "ModuleScript", "referent": "RBX" + uuid.uuid4().hex})
-        props = ET.SubElement(item, "Properties")
-        n = ET.SubElement(props, "string", {"name": "Name"}); n.text = path[-1]
-        s = ET.SubElement(props, "ProtectedString", {"name": "Source"}); s.text = ET.CDATA(target[path])
-        parent.append(item); new_index[path] = item
-        created += 1
-        print(f"  [created] {'.'.join(path)}")
-
+    sourced, created = sync_sources(new_root, args.repo)
     print(f"\ngrafted {grafted} subtrees, sourced {sourced}, created {created}")
 
     print("\nvalidating:")

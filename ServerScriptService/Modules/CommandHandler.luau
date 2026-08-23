@@ -686,7 +686,7 @@ function CommandHandler:InitSlashCommands()
 
 	local TestPlacePermissionType = (shared.IsTestPlace and {"None", "PS", "PS+", "Owner"} or {"Owner"})
 
-	self.SlashCommands:Create("toggle_hitbox", {"PS+", "Owner"}, false, function(Player : Player)
+	self.SlashCommands:Create("showhitboxes", {"PS+", "Owner"}, false, function(Player : Player)
 		workspace:SetAttribute("HitboxVisible", not workspace:GetAttribute("HitboxVisible"))
 	end)
 

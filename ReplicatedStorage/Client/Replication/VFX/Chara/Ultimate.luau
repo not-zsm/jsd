@@ -44,7 +44,7 @@ return {
 
 			--local Theme = Instance.new("Sound")
 			--Theme.Name = "Chara_Theme"
-			--Theme.SoundId = PlayAlt and "rbxassetid://113613695330573" or "rbxassetid://74426750731046"
+			--Theme.SoundId = PlayAlt and "rbxassetid://98450691438882" or "rbxassetid://74426750731046"
 			--Theme.Volume = 0
 			--Theme.Looped = true
 			--Theme.SoundGroup = SoundService.UltimateMusic

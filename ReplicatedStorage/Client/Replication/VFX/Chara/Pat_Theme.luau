@@ -5,7 +5,7 @@ local TweenService = game:GetService("TweenService")
 local AttributeListener = require( ReplicatedStorage.Client.Replication.Global.AttributeListener )
 
 local Normal = "rbxassetid://74426750731046"
-local Alt = "rbxassetid://113613695330573"
+local Alt = "rbxassetid://98450691438882"
 
 return function(PlayLocally : boolean, PlayAlt : boolean, Model : Model)
 	local Theme = Instance.new("Sound")

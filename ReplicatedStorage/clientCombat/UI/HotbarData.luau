@@ -1,9 +1,7 @@
-local RunService = game:GetService("RunService")
-
 local function Tip(Text : string)
-	return function(GUI : TextButton)
-		GUI.Button.Skill.Tip.Text = Text
-		GUI.Button.Skill.Tip.Visible = true
+	return function(Slot)
+		Slot.Tip.Text = Text
+		Slot.Tip.Visible = true
 	end
 end
 

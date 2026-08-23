@@ -10,7 +10,7 @@ local info = require(ReplicatedStorage.info)
 
 local ENTRANCE = 0.35
 local STACK_SPACING = 100
-local HOTBAR_SHIFT = 80
+local HUD_SHIFT = 80
 local HIGHER_UP_SHIFT = 60
 
 local module = {}
@@ -176,8 +176,10 @@ local function retireTexts(parent)
 	end
 end
 
--- Holder drifts to its stack slot rather than snapping, and rides the hotbar
--- so a subtitle never sits on top of it.
+-- Holder drifts to its stack slot rather than snapping, and rides the combat
+-- HUD so a subtitle never sits on top of it. The HUD is not a ScreenGui that
+-- gets disabled here the way jjk's is: UI:Toggle slides Main.Holder down and
+-- marks Main with a Hidden attribute, so that is what we follow.
 local function startFloating(ui, holder)
 	if ui:GetAttribute("IsFloating") then return end
 	ui:SetAttribute("IsFloating", true)
@@ -196,8 +198,8 @@ local function startFloating(ui, holder)
 
 			if not holder.Parent then return end
 
-			local hotbar = LocalPlayer.PlayerGui:FindFirstChild("Hotbar")
-			local shift = (hotbar and hotbar:IsA("ScreenGui") and not hotbar.Enabled) and HOTBAR_SHIFT or 0
+			local main = LocalPlayer.PlayerGui:FindFirstChild("Main")
+			local shift = (main and main:GetAttribute("Hidden")) and HUD_SHIFT or 0
 
 			local targetY = baseY
 				- STACK_SPACING * (ui:GetAttribute("StackCount") or 0)
