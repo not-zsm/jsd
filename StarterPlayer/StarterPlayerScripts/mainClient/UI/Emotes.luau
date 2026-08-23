@@ -23,6 +23,8 @@ local Limited_Emote_Dates = require( replicatedStorage.modules.shared.Game["Limi
 
 ----------------------------------------------------------------------------------
 
+local OPEN = TweenInfo.new(0.7, Enum.EasingStyle.Circular, Enum.EasingDirection.Out)
+
 local Emotes = {}
 Emotes.__index = Emotes
 
@@ -255,7 +257,31 @@ function Emotes:Toggle()
 		self.UI.Icons:CloseAllExcept(self.GUI)
 	end
 
-	self.GUI.Enabled = not self.GUI.Enabled
+	-- tracked rather than read off Enabled: the close fade leaves Enabled true
+	-- for its whole run, so a quick re-press would read as a second close
+	self.WheelOpen = not self.WheelOpen
+
+	if self.WheelFade then
+		self.WheelFade:Cancel()
+		self.WheelFade = nil
+	end
+
+	if self.WheelOpen then
+		self.GUI.Enabled = true
+
+		self.WheelFade = TweenService:Create(self.Wheel, OPEN, { GroupTransparency = 0 })
+		self.WheelFade:Play()
+	else
+		self.WheelFade = TweenService:Create(self.Wheel, OPEN, { GroupTransparency = 1 })
+
+		self.WheelFade.Completed:Once(function(State)
+			if State == Enum.PlaybackState.Completed and not self.WheelOpen then
+				self.GUI.Enabled = false
+			end
+		end)
+
+		self.WheelFade:Play()
+	end
 
 	--if not self.EmotesOpened then
 	--	self.GUI.Enabled = true
@@ -288,7 +314,7 @@ function Emotes:ResetCircle()
 	self.ListHolder.Visible = false
 
 	for _, Emote in ipairs(self.Circle:GetChildren()) do
-		if Emote:IsA("ImageButton") then
+		if Emote:IsA("ViewportFrame") then
 			Emote.Visible = true
 		end
 	end
@@ -353,13 +379,13 @@ function Emotes:Create(Name : string, Type : string)
 end
 
 function Emotes:CreateOnSlot(Slot : string, Name : string)
-	local Emote : ImageButton = self.Circle:FindFirstChild(Slot)
+	local Emote : ViewportFrame = self.Circle:FindFirstChild(Slot)
 	if (Emote == nil) then return end
 
-	Emote.EmoteName.Text = Name
+	Emote.emoteName.Text = Name
 
 	if Colors[Name] then
-		SetColor(Emote.EmoteName, Colors[Name])
+		SetColor(Emote.emoteName, Colors[Name])
 	end
 
 	if Name ~= "None" then
@@ -367,15 +393,22 @@ function Emotes:CreateOnSlot(Slot : string, Name : string)
 	end
 end
 
-function Emotes:MakeViewportOnSlot(Emote : TextButton, Name : string)
-	local PreviousDummy = Emote.EmoteViewPort.WorldModel:FindFirstChild("Dummy")
+--[[
+	Builds the preview inside a slot.
 
-	if PreviousDummy then
-		PreviousDummy:Destroy()
+	The wheel ships with an `emoter` in each viewport; jsd's Dummy replaces it,
+	because the outfit application below is what makes the preview look like a
+	person rather than a grey rig.
+--]]
+function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
+	local World = Emote:WaitForChild("WorldModel")
+
+	for _, Old in World:GetChildren() do
+		Old:Destroy()
 	end
 
 	local Dummy = script.Dummy:Clone()
-	Dummy.Parent = Emote.EmoteViewPort.WorldModel
+	Dummy.Parent = World
 
 	task.spawn(function()
 		local Appearances = require( replicatedStorage.modules.shared.Game.Appearances )
@@ -423,17 +456,17 @@ end
 function Emotes:ApplySlot(Slot : string, Name : string)
 	self.Slots[Slot] = Name
 
-	local Emote : ImageButton = self.Circle[Slot]
+	local Emote : ViewportFrame = self.Circle:FindFirstChild(Slot)
 	if not Emote then return end
 
 	self:MakeViewportOnSlot(Emote, Name)
 
-	Emote.EmoteName.Text = Name
+	Emote.emoteName.Text = Name
 
 	if Colors[Name] then
-		SetColor(Emote.EmoteName, Colors[Name])
+		SetColor(Emote.emoteName, Colors[Name])
 	else
-		Emote.EmoteName.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Emote.emoteName.TextColor3 = Color3.fromRGB(255, 255, 255)
 	end
 
 	if self.FocusingOnSlot == Slot then
@@ -443,7 +476,7 @@ end
 
 function Emotes:CreateSlotsInCircle(Amount : number)
 	for _, Slot in ipairs(self.Circle:GetChildren()) do
-		if Slot:IsA("ImageButton") then
+		if Slot:IsA("ViewportFrame") then
 			Slot:Destroy()
 		end
 	end
@@ -451,10 +484,12 @@ function Emotes:CreateSlotsInCircle(Amount : number)
 	for Count = 0, Amount - 1 do
 		local Alpha = (-0.5 + Count / Amount * 2) * math.pi
 
-		local Slot : ImageButton = self.Holder.EmoteSlotTemplate:Clone()
+		local Slot : ViewportFrame = self.SlotTemplate:Clone()
 		local SlotId = tostring(Count + 1)
+		local Button : TextButton = Slot:WaitForChild("pick")
 
 		Slot.Name = SlotId
+		Slot.AnchorPoint = Vector2.new(0.5, 0.5)
 		Slot.Position = UDim2.fromScale(0.5 + math.cos(Alpha) / 2.25, 0.5 + math.sin(Alpha) / 2.35)
 
 		local Job = Job.new()
@@ -467,31 +502,31 @@ function Emotes:CreateSlotsInCircle(Amount : number)
 			)
 
 			if TimedClick then
-				Job:Task(Slot.MouseButton1Down:Connect(function()
+				Job:Task(Button.MouseButton1Down:Connect(function()
 					self.SelectSlotThread = task.delay(0.3, function()
 						self.SelectSlotThread = nil
 						self:SelectSlot(SlotId)
 					end)
 				end))
 
-				Job:Task(Slot.MouseButton1Click:Connect(function()
+				Job:Task(Button.MouseButton1Click:Connect(function()
 					if not self.FocusingOnSlot then
 						self:PressedSlotWithEmote(SlotId)
 					end
 				end))
 
-				Job:Task(Slot.MouseButton1Up:Connect(function()
+				Job:Task(Button.MouseButton1Up:Connect(function()
 					if self.SelectSlotThread then
 						task.cancel(self.SelectSlotThread)
 						self.SelectSlotThread = nil
 					end
 				end))
 			else
-				Job:Task(Slot.MouseButton1Down:Connect(function()
+				Job:Task(Button.MouseButton1Down:Connect(function()
 					self:PressedSlotWithEmote(SlotId)
 				end))
 
-				Job:Task(Slot.MouseButton2Down:Connect(function()
+				Job:Task(Button.MouseButton2Down:Connect(function()
 					self:SelectSlot(SlotId)
 				end))
 			end
@@ -509,7 +544,7 @@ function Emotes:SelectSlot(Slot : string)
 	self.FocusingOnSlot = Slot
 
 	for _, Emote in ipairs(self.Circle:GetChildren()) do
-		if Emote:IsA("ImageButton") and Emote.Name ~= Slot then
+		if Emote:IsA("ViewportFrame") and Emote.Name ~= Slot then
 			Emote.Visible = false
 		end
 	end
@@ -529,14 +564,39 @@ function Emotes.new(UI)
 	self.GUI = self.LuaPlayer.PlayerGui:WaitForChild("Emotes")
 
 	self.Holder = self.GUI:WaitForChild("Holder")
-	self.Circle = self.Holder:WaitForChild("EmoteCircle")
+
+	--[[
+		jjk's wheel, hosted inside jsd's emote screen.
+
+		The canvas group is what fades on open and the display frame is what the
+		slots live in; the old EmoteCircle stays in the place but is hidden, so
+		everything else on the screen -- the list, the titles, the gamepass
+		prompts -- is untouched.
+	--]]
+	local OldCircle = self.Holder:WaitForChild("EmoteCircle")
+	OldCircle.Visible = false
+
+	self.Wheel = script.Parent.emoteWheel.container:Clone()
+	self.Wheel.Position = OldCircle.Position
+	self.Wheel.Size = OldCircle.Size
+	self.Wheel.AnchorPoint = OldCircle.AnchorPoint
+	self.Wheel.Parent = self.Holder
+
+	self.Circle = self.Wheel:WaitForChild("display")
+
+	-- one viewport ships with the wheel; it becomes the template for the rest
+	self.SlotTemplate = self.Circle:WaitForChild("1"):Clone()
+	self.SlotTemplate.Visible = false
 
 	self.ListHolder = self.Holder:WaitForChild("ListHolder")
 	self.TitleHolder = self.Holder:WaitForChild("TitleHolder")
 
 	self.EmoteList = self.ListHolder:WaitForChild("EmoteList")
 
+	self.Wheel.GroupTransparency = 1
+
 	self.EmotesOpened = false
+	self.WheelOpen = false
 	self.CanOpenEmotes = true
 
 	self.OnToggled = EventService.new()
