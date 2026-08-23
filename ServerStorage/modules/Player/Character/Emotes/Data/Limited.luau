@@ -71,7 +71,7 @@ return {
 					TargetCombat.LuaCharacter:Anchor(true)
 
 					TargetCombat.LuaCharacter.Model:PivotTo(self.LuaCharacter.RootPart.CFrame)
-					replicatedStorage.Remotes.Grab.Set:FireAllClients(TargetCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
+					network.grabSet.sendToAll({ part = TargetCombat.LuaCharacter.RootPart, boundTo = self.LuaCharacter.RootPart, offset = CFrame.identity })
 
 					attacker:Play(0)
 					victim:Play(0)
@@ -92,7 +92,7 @@ return {
 						self.LuaCharacter:Anchor(false)
 						TargetCombat.LuaCharacter:Anchor(false)
 
-						replicatedStorage.Remotes.Grab.Detach:FireAllClients(TargetCombat.LuaCharacter.RootPart)
+						network.grabDetach.sendToAll(TargetCombat.LuaCharacter.RootPart)
 					end)
 				end)
 

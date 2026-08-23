@@ -23,7 +23,6 @@ end
 local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
-local GrabRemotes = Remotes.Grab
 
 local UIRemotes = CombatRemotes.UI
 
@@ -2661,7 +2660,7 @@ function Combat:StartGrabAlign(VictimLuaPlayer, BoundTo : BasePart, Offset : CFr
 		AlignPosition.Parent = GrabAttachment
 		AlignOrientation.Parent = GrabAttachment
 
-		GrabRemotes.Set:FireAllClients(VictimLuaCharacter.RootPart, BoundTo, Offset, PresetName)
+		network.grabSet.sendToAll({ part = VictimLuaCharacter.RootPart, boundTo = BoundTo, offset = Offset, preset = PresetName })
 
 		GrabAttachment.Parent = self.LuaCharacter.RootPart --(BoundTo == self.LuaCharacter.RootPart and self:GetSimulatedRoot() or BoundTo)
 	end
@@ -2728,14 +2727,14 @@ function Combat:GrabVictim(VictimLuaPlayer, BoundTo : BasePart, Offset : CFrame,
 
 	function GrabObject.SetOffset(NewOffset : CFrame)
 		if not GrabObject.Destroyed and self:IsntTheSamePerson(VictimLuaPlayer) then
-			GrabRemotes.SetOffset:FireAllClients(VictimLuaCharacter.RootPart, NewOffset)
+			network.grabSetOffset.sendToAll({ part = VictimLuaCharacter.RootPart, offset = NewOffset })
 			GrabAttachment.CFrame = NewOffset
 		end
 	end
 
 	function GrabObject.SetBound(NewBound : BasePart?)
 		if not GrabObject.Destroyed and self:IsntTheSamePerson(VictimLuaPlayer) then
-			GrabRemotes.SetBound:FireAllClients(VictimLuaCharacter.RootPart, NewBound)
+			network.grabSetBound.sendToAll({ part = VictimLuaCharacter.RootPart, boundTo = NewBound })
 
 			if (NewBound == nil) then
 				self.LuaCharacter:SetCollisionGroup("Player")
@@ -2761,7 +2760,7 @@ function Combat:GrabVictim(VictimLuaPlayer, BoundTo : BasePart, Offset : CFrame,
 		GrabObject.Job:Destroy()
 
 		if self:IsntTheSamePerson(VictimLuaPlayer) then
-			GrabRemotes.Detach:FireAllClients(VictimLuaCharacter.RootPart)
+			network.grabDetach.sendToAll(VictimLuaCharacter.RootPart)
 
 			self.LuaCharacter:SetCollisionGroup("Player")
 			VictimLuaCharacter:SetCollisionGroup("Player")

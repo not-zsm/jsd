@@ -500,7 +500,7 @@ function Combat:DestructibleDestroyLoop(Offset: CFrame, Size: (Vector3 | number)
 					end)
 				end)
 
-				Remotes.Replication.ClientSentDestruction:FireServer(DestructibleEntity)
+				network.clientDestruction.send(DestructibleEntity)
 			end
 		end
 	end)

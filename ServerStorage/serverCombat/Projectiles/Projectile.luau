@@ -2,13 +2,14 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local UserInputService = game:GetService("UserInputService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
 local Remotes = replicatedStorage.Remotes
-local ProjectileRemotes = Remotes.Projectile
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
@@ -68,7 +69,7 @@ local DownwardVector = Vector3.yAxis * -30
 		self.Position = NewPosition
 	end
 	
-	ProjectileRemotes.Update:FireAllClients(self.Instance, self.Position, NewDirection)
+	network.projectileUpdate.sendToAll({ config = self.Instance, position = self.Position, direction = NewDirection })
 	self.Traveled += NewDirection.Magnitude
 end
 
@@ -152,7 +153,7 @@ function Projectile.new(Projectiles, Name : string, Origin : Vector3, Direction 
 	self.Params.FilterType = Enum.RaycastFilterType.Exclude
 
 	self:InitHitbox()
-	ProjectileRemotes.Create:FireAllClients(self.Instance, self.Position, self.Direction)
+	network.projectileCreate.sendToAll({ config = self.Instance, origin = self.Position, direction = self.Direction })
 
 	return self
 end

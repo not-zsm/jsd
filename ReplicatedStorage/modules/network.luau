@@ -215,5 +215,61 @@ return byteNet.defineNamespace("game", function()
 				important = byteNet.bool,
 			}),
 		}),
+
+		--// grab, server -> every client
+		grabSet = byteNet.definePacket({
+			value = byteNet.struct({
+				part = byteNet.inst,
+				boundTo = byteNet.inst,
+				offset = byteNet.cframe,
+				preset = byteNet.optional(byteNet.string),
+			}),
+		}),
+
+		grabSetBound = byteNet.definePacket({
+			value = byteNet.struct({
+				part = byteNet.inst,
+				boundTo = byteNet.inst,
+			}),
+		}),
+
+		grabSetOffset = byteNet.definePacket({
+			value = byteNet.struct({
+				part = byteNet.inst,
+				offset = byteNet.cframe,
+			}),
+		}),
+
+		grabDetach = byteNet.definePacket({ value = byteNet.inst }),
+
+		--// projectiles
+		projectileCreate = byteNet.definePacket({
+			value = byteNet.struct({
+				config = byteNet.inst,
+				origin = byteNet.vec3,
+				direction = byteNet.vec3,
+			}),
+		}),
+
+		--// a position stream: a dropped frame costs nothing, the next one
+		--// carries the truth
+		projectileUpdate = byteNet.definePacket({
+			reliabilityType = "unreliable",
+			value = byteNet.struct({
+				config = byteNet.inst,
+				position = byteNet.vec3,
+				direction = byteNet.vec3,
+			}),
+		}),
+
+		--// destruction
+		destruction = byteNet.definePacket({
+			value = byteNet.struct({
+				part = byteNet.inst,
+				effect = byteNet.optional(byteNet.string),
+			}),
+		}),
+
+		clientDestruction = byteNet.definePacket({ value = byteNet.inst }),
 	}
 end)

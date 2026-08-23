@@ -1,5 +1,7 @@
 local Players = game:GetService("Players")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local ContentProvider = game:GetService("ContentProvider")
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local RunService = game:GetService("RunService")
@@ -8,8 +10,6 @@ local RunService = game:GetService("RunService")
 
 local Remotes = replicatedStorage.Remotes
 
-local GrabRemotes = Remotes.Grab
-local ProjectileRemotes = Remotes.Projectile
 local ReplicationRemotes = Remotes.Replication
 
 local VFX = script.VFX
@@ -38,13 +38,27 @@ task.spawn(require, script.Maps)
 ----------------------------------------------------------------------------------
 
 function Replication:_Init()
-	GrabRemotes.Set.OnClientEvent:Connect(GrabHandler.Set)
-	GrabRemotes.SetOffset.OnClientEvent:Connect(GrabHandler.SetOffset)
-	GrabRemotes.SetBound.OnClientEvent:Connect(GrabHandler.SetBound)
-	GrabRemotes.Detach.OnClientEvent:Connect(GrabHandler.Remove)
+	network.grabSet.listen(function(data)
+		GrabHandler.Set(data.part, data.boundTo, data.offset, data.preset)
+	end)
 
-	ProjectileRemotes.Create.OnClientEvent:Connect(Projectiles.Create)
-	ProjectileRemotes.Update.OnClientEvent:Connect(Projectiles.Update)
+	network.grabSetOffset.listen(function(data)
+		GrabHandler.SetOffset(data.part, data.offset)
+	end)
+
+	network.grabSetBound.listen(function(data)
+		GrabHandler.SetBound(data.part, data.boundTo)
+	end)
+
+	network.grabDetach.listen(GrabHandler.Remove)
+
+	network.projectileCreate.listen(function(data)
+		Projectiles.Create(data.config, data.origin, data.direction)
+	end)
+
+	network.projectileUpdate.listen(function(data)
+		Projectiles.Update(data.config, data.position, data.direction)
+	end)
 
 	task.spawn(function()
 		Remotes.Emotes.Collabs.Proxy.OnClientEvent:Connect(function(...)
@@ -56,8 +70,8 @@ function Replication:_Init()
 		end)
 	end)
 
-	ReplicationRemotes.Destruction.OnClientEvent:Connect(function(Object : BasePart, CustomEffect : string?)
-		self:Destruct(Object, CustomEffect)
+	network.destruction.listen(function(data)
+		self:Destruct(data.part, data.effect)
 	end)
 
 	self:ConnectToVFXRemotes()

@@ -1,4 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local CollectionService = game:GetService("CollectionService")
 local TweenService = game:GetService("TweenService")
 local Chat = game:GetService("Chat")
@@ -2688,7 +2690,7 @@ return {
 				JoinedJob:Task(JoinedCombat.LuaCharacter:StopAutoRotate())
 				JoinedCombat:DivideSpeed(200)
 				
-				replicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
+				network.grabSet.sendToAll({ part = JoinedCombat.LuaCharacter.RootPart, boundTo = self.LuaCharacter.RootPart, offset = CFrame.identity })
 				
 				local AcceptedUser : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Piggy Back"].AcceptedUser)
 				local AcceptedFriend : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Piggy Back"].AcceptedFriend)
@@ -2736,7 +2738,7 @@ return {
 				JoinedJob:Task(function()
 					if not JoinedCombat:GetState("Grabbed") then
 						JoinedCombat.LuaCharacter:SetCollisionGroup("Player")
-						replicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
+						network.grabDetach.sendToAll(JoinedCombat.LuaCharacter.RootPart)
 					end
 					
 					JoinedCombat:TimesSpeed(200)
@@ -2983,7 +2985,7 @@ return {
 				JoinedCombat.LuaCharacter:Anchor(true, true)
 				JoinedCombat.LuaCharacter.Model:PivotTo(self.LuaCharacter.RootPart.CFrame)
 				
-				replicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
+				network.grabSet.sendToAll({ part = JoinedCombat.LuaCharacter.RootPart, boundTo = self.LuaCharacter.RootPart, offset = CFrame.identity })
 
 				Anim:Play()
 				Anim.TimePosition = MainAnimation.TimePosition
@@ -2993,7 +2995,7 @@ return {
 					
 					if not JoinedCombat:GetState("Grabbed") then
 						JoinedCombat.LuaCharacter:SetCollisionGroup("Player")
-						replicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
+						network.grabDetach.sendToAll(JoinedCombat.LuaCharacter.RootPart)
 					end
 					
 					JoinedCombat:TimesSpeed(50)
@@ -3050,7 +3052,7 @@ return {
 				JoinedJob:Task(JoinedCombat.LuaCharacter:StopAutoRotate())
 				JoinedCombat:DivideSpeed(200)
 
-				replicatedStorage.Remotes.Grab.Set:FireAllClients(JoinedCombat.LuaCharacter.RootPart, self.LuaCharacter.RootPart, CFrame.identity)
+				network.grabSet.sendToAll({ part = JoinedCombat.LuaCharacter.RootPart, boundTo = self.LuaCharacter.RootPart, offset = CFrame.identity })
 
 				local AcceptedUser : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Hug.InitUser)
 				local AcceptedFriend : AnimationTrack = JoinedCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes.Hug.InitTarget)
@@ -3086,7 +3088,7 @@ return {
 				JoinedJob:Task(function()
 					if not JoinedCombat:GetState("Grabbed") then
 						JoinedCombat.LuaCharacter:SetCollisionGroup("Player")
-						replicatedStorage.Remotes.Grab.Detach:FireAllClients(JoinedCombat.LuaCharacter.RootPart)
+						network.grabDetach.sendToAll(JoinedCombat.LuaCharacter.RootPart)
 					end
 
 					JoinedCombat:TimesSpeed(200)

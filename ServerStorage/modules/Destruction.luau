@@ -2,11 +2,13 @@ local Destruction = {}
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
+local rateLimiter = require( replicatedStorage.modules.shared.Utilities.rateLimiter )
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 
 local ServerStorage = game:GetService("ServerStorage")
-local ReplicationRemotes = replicatedStorage.Remotes.Replication
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
@@ -56,7 +58,7 @@ function Destruction.DestroyObject(Destructible : (Model | BasePart), CustomCall
 		task.delay(Utility.DestructionRespawnTime, Destruction.RestoreObject, Destructible);
 	end;
 	
-	ReplicationRemotes.Destruction:FireAllClients(Destructible, CustomCallback)
+	network.destruction.sendToAll({ part = Destructible, effect = CustomCallback })
 end;
 
 function Destruction.Destruct(Object : BasePart, Power : number, CustomCallback : string?, Indefinite: boolean?)
@@ -92,7 +94,8 @@ function Destruction.SphereDetect(...)
 	Destruction._Destruct("Sphere", ...)
 end
 
-ReplicationRemotes.ClientSentDestruction.OnServerEvent:Connect(function(MainPlayer, Object : BasePart)
+network.clientDestruction.listen(function(Object : BasePart, MainPlayer : Player)
+	if not rateLimiter.check(MainPlayer, "clientDestruction", 30) then return end
 	if (Object == nil or typeof(Object) ~= "Instance" or not Object:IsA("BasePart") or Object.Parent == nil) then return end
 	
 	if not MainPlayer.Character then return end
@@ -116,7 +119,7 @@ ReplicationRemotes.ClientSentDestruction.OnServerEvent:Connect(function(MainPlay
 
 			for _, Player in Players:GetPlayers() do
 				if Player ~= MainPlayer then
-					ReplicationRemotes.Destruction:FireClient(Player, Object)
+					network.destruction.sendTo({ part = Object }, Player)
 				end
 			end
 		end
