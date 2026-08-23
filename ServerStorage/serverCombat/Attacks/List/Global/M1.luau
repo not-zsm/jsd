@@ -19,6 +19,9 @@ local Table = require( replicatedStorage.Packages.Table )
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
+--- Movesets missing an ArmFlashes table, so the warning stays a one-off.
+local Warned = {}
+
 local Attack = {}
 Attack.__index = Attack
 
@@ -184,6 +187,20 @@ function Attack:M1()
 	local CharacterInfo : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Info or nil
 	local CharacterStats : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Stats or nil
 
+	--[[
+		The moveset's arm flash for this swing, keyed by the air finisher when
+		there is one and the punch number otherwise. A false entry is a punch
+		that opts out -- a weapon swing with no bare limb to light up -- and is
+		not the same as a moveset that forgot to define the table at all.
+	--]]
+	local ArmFlashes = CharacterStats and CharacterStats.M1 and CharacterStats.M1.ArmFlashes
+	local Flash = ArmFlashes and ArmFlashes[self.Condition or self.Count]
+
+	if ArmFlashes == nil and CharacterName and not Warned[CharacterName] then
+		Warned[CharacterName] = true
+		warn(`{CharacterName} has no Stats.M1.ArmFlashes; every moveset needs one`)
+	end
+
 	local AnimationDirectory = self:GetAnimationDirectory()
 	local Animation : AnimationTrack = (self.Condition ~= nil and AnimationDirectory[self.Condition] or AnimationDirectory[tostring(self.Count)])
 
@@ -328,6 +345,14 @@ function Attack:M1()
 						self:FireReliableVFX("Global/M1", "Hit", self.LuaCharacter.RootPart, VictimLuaCharacter.RootPart, self.Count, CharacterName) 
 					end
 
+					-- the victim lights up in the attacker's colour, whether or not
+					-- this punch had an arm flash of its own
+					if Flash or ArmFlashes then
+						local Colour = Flash and Flash.Colour or (ArmFlashes[1] and ArmFlashes[1].Colour)
+
+						self:FireReliableVFX("Global/PunchFlash", "Highlight", VictimLuaCharacter.Model, Colour, 0.15)
+					end
+
 					if (self.Count == 4) then
 						if CharacterStats and CharacterStats.M1 and CharacterStats.M1.LastM1KnocksUp then
 							local VictimVelocityObject = self:VelocityOn(VictimCombat)
@@ -391,12 +416,20 @@ function Attack:M1()
 
 	if (self.Condition ~= nil) then
 		self:FireReliableVFX("Global/M1", "SpecialSwing", self.LuaCharacter.RootPart, self.Condition, CharacterName)
+
+		if Flash then
+			self:FireReliableVFX("Global/PunchFlash", "Arm", self.LuaCharacter.Model, Flash.Limb, Flash.Colour, Flash.Duration)
+		end
 	else
 		self.Thread.Job:Task(Animation:GetMarkerReachedSignal("swing"):Once(function()
 			if self.Combat.Attacks.Weapons then
 				self:FireReliableVFX("Global/M1", "Swing", self.LuaCharacter.RootPart, self.Count, CharacterName, AttackingWith, self.Combat.Attacks.Weapons.CurrentlyUsing)
 			else
 				self:FireReliableVFX("Global/M1", "Swing", self.LuaCharacter.RootPart, self.Count, CharacterName, AttackingWith)
+			end
+
+			if Flash then
+				self:FireReliableVFX("Global/PunchFlash", "Arm", self.LuaCharacter.Model, Flash.Limb, Flash.Colour, Flash.Duration)
 			end
 		end))
 	end
