@@ -1,41 +1,9 @@
---[[
-	Data for the menus mainClient owns.
-
-	Ported from jjk's UI/config. Colours come from info.movesets so a character
-	is described in one place; characterSelect.data is the extra a menu needs
-	that a moveset does not carry.
---]]
+--- Data for the menus mainClient owns. Ported from jjk's UI/config.
 local Players = game:GetService("Players")
-local replicatedStorage = game:GetService("ReplicatedStorage")
-
-local info = require(replicatedStorage.info)
 
 local Player = Players.LocalPlayer
 
 return {
-	characterSelect = {
-		-- order they appear in; a key here needs a matching info.movesets entry
-		-- and an assets folder under charSelectHelper, or the slot shows empty
-		characters = { "chara", "invincible" },
-
-		ea = {},
-		admin = { "invincible" },
-
-		data = {
-			chara = {
-				name = "Chara",
-				alias = "the fallen child",
-				colour = info.movesets.chara.colour,
-			},
-
-			invincible = {
-				name = "Invincible",
-				alias = "think, Mark",
-				colour = info.movesets.invincible.colour,
-			},
-		},
-	},
-
 	shop = {
 		SKELETONCHANCE = 20,
 

@@ -27,21 +27,7 @@ function Icons:_Init()
 			Client:Shop("main shop")
 		end)
 
-	self.CharacterSelectIcon = self.IconModule.new()
-		:setLeft()
-		:setImage("120551654281972")
-		:setLabel("Character Select")
-		:setCaption("Opens character select")
-		:setOrder(2)
-		:oneClick()
-		:bindEvent("selected", function()
-			local Client = self.UI.MainClient
-			if not Client then return end
-
-			self:CloseAllExcept(nil, true)
-			SoundService.GUI.BasicOpen:Play()
-			Client:CharacterSelect()
-		end)
+	self.CharacterIcon = require(script.Characters)()
 
 	self.InformationIcon = self.IconModule.new()
 		:setLeft()
