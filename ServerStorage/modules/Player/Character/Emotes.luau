@@ -65,11 +65,12 @@ function Emotes:_Init()
 
 	local HasExtraSlots = self.LuaPlayer.Data:HasGamepass("Extra Emote Slots") -- yields
 	
-	local LoadSlotsEvent = EmoteEvent:WaitForChild("LoadSlots", 100)
-	local UpdateEvent = EmoteEvent:WaitForChild("Update", 100)
+	network.emoteSlotsLoaded.sendTo(HasExtraSlots, self.LuaPlayer.Player)
 
-	LoadSlotsEvent:FireClient(self.LuaPlayer.Player, HasExtraSlots)
-	UpdateEvent:FireClient(self.LuaPlayer.Player, self.LuaPlayer.Data.Profile.Data.Emotes, self.LuaPlayer.Data.Profile.Data.CurrentEmoteSlots)
+	network.emotesUpdated.sendTo({
+		emotes = self.LuaPlayer.Data.Profile.Data.Emotes,
+		slots = self.LuaPlayer.Data.Profile.Data.CurrentEmoteSlots,
+	}, self.LuaPlayer.Player)
 
 	self:UpdateEmoteKillClaim()
 
