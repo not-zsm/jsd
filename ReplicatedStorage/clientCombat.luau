@@ -41,9 +41,9 @@ function Combat:_Init()
 	self.LockOn = require(script.LockOn).new(self)
 	self.UI = require(script.UI).new(self)
 
-	self.GUICooldowns = self.UI.Ultimate:WaitForChild("DashCooldowns")
-	self.GUICooldownTemplate = self.UI.Ultimate:WaitForChild("CooldownTemplate").Template
-	self.GUICooldownIcons = self.UI.Ultimate:WaitForChild("CooldownIcons")
+	self.GUICooldowns = self.UI.Hotbar.ExtraCooldowns
+	self.GUICooldownTemplate = self.UI.Hotbar.CooldownTemplate
+	self.GUICooldownIcons = self.UI.Hotbar.CooldownIcons
 
 	self.FakeMouse = require(script.Mouse).new(self)
 
@@ -114,7 +114,7 @@ function Combat:Connect()
 						continue
 					end
 
-					if self.UI.CurrentHotbar[Name] then -- if its a 1 2 3 4 move 
+					if self.UI.Hotbar:Get(Name) then -- if its a 1 2 3 4 move 
 						if EquippedMove then
 							self.UI:OverlayOnHotbar(EquippedMove.Name, false)
 
@@ -153,7 +153,7 @@ function Combat:Connect()
 			end
 		else
 			for Name, Table in self.Attacks do
-				if Table.Key == Key and not self.UI.CurrentHotbar[Name] then
+				if Table.Key == Key and not self.UI.Hotbar:Get(Name) then
 					self:_AttackInputUpdate(Name, false, Key)
 				end
 			end
@@ -181,8 +181,10 @@ function Combat:Connect()
 
 	CombatRemotes.CreateAttack.OnClientEvent:Connect(function(Name : string, Key : (Enum.KeyCode | Enum.UserInputType), DirectoryName : string, Properties : {}) -- DontUseSavedKeybind, Place it before properties
 		if (self.Attacks[Name] ~= nil) then 
-			if self.UI.CurrentHotbar[Name] then
-				self.UI.CurrentHotbar[Name].RemoveCooldown:Fire()
+			local Slot = self.UI.Hotbar:Get(Name)
+
+			if Slot then
+				Slot.RemoveCooldown:Fire()
 			end
 
 			return 
@@ -413,16 +415,14 @@ function Combat:AddCooldown(Name : string, Duration : number?)
 
 	if (Icon ~= nil) then
 		local GUI : Frame = self.GUICooldownTemplate:Clone()
-		local NewIcon : ImageButton = Icon:Clone()
 
-		NewIcon.Parent = GUI
+		GUI.Icon.Image = Icon.Image
+		GUI.TextLabel.Text = Name
+		GUI.Visible = true
 		GUI.Parent = self.GUICooldowns
 
-		NewIcon.Visible = true
-		GUI.Visible = true
-
-		local Tween = TweenService:Create(GUI.Fill, TweenInfo.new(Duration, Enum.EasingStyle.Linear), {
-			Size = UDim2.fromScale(1, 0)
+		local Tween = TweenService:Create(GUI.cd, TweenInfo.new(Duration, Enum.EasingStyle.Linear), {
+			Size = UDim2.new(0, 0, GUI.cd.Size.Y.Scale, GUI.cd.Size.Y.Offset)
 		})
 
 		Tween:Play()

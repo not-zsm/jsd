@@ -67,6 +67,8 @@ function Hotbar.new(UI)
 	self.Holder = GUI:WaitForChild("backpack"):WaitForChild("holder")
 	self.UltBar = GUI:WaitForChild("ultBar")
 	self.ExtraCooldowns = GUI:WaitForChild("extraCD")
+	self.CooldownTemplate = self.ExtraCooldowns:WaitForChild("template")
+	self.CooldownIcons = self.ExtraCooldowns:WaitForChild("CooldownIcons")
 
 	self.Template.Parent = script          -- keep the template out of the layout
 	self.HolderPosition = self.Holder.Position
