@@ -15,12 +15,20 @@ local VFX = {}
 
 	The moveset says which limb and what colour per punch, so a character
 	swinging a weapon on some of its combo can leave those entries out rather
-	than glowing an empty hand.
+	than glowing an empty hand. Limb takes a list for a punch thrown with both.
 --]]
-function VFX.Arm(Character : Model, LimbName : string, Colour : Color3, Duration : number)
-	if not (Character and LimbName) then return end
+function VFX.Arm(Character : Model, Limbs : (string | { string }), Colour : Color3, Duration : number)
+	if not (Character and Limbs) then return end
 
-	local Limb = Character:FindFirstChild(LimbName, true)
+	if typeof(Limbs) == "table" then
+		for _, LimbName in Limbs do
+			VFX.Arm(Character, LimbName, Colour, Duration)
+		end
+
+		return
+	end
+
+	local Limb = Character:FindFirstChild(Limbs, true)
 	if not (Limb and Limb:IsA("BasePart")) then return end
 
 	if Players.LocalPlayer:DistanceFromCharacter(Limb.Position) > RANGE then return end
@@ -37,7 +45,7 @@ function VFX.Arm(Character : Model, LimbName : string, Colour : Color3, Duration
 		end
 	end
 
-	Flash.Name = LimbName .. " Flash"
+	Flash.Name = Limbs .. " Flash"
 	Flash.CanCollide = false
 	Flash.CanQuery = false
 	Flash.CanTouch = false

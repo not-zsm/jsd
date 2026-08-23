@@ -27,7 +27,8 @@ return {
 				[4] = { Limb = "Left Arm", Colour = Color3.fromRGB(70, 130, 255), Duration = 0.4 },
 
 				Up = { Limb = "Right Leg", Colour = Color3.fromRGB(70, 130, 255), Duration = 0.4 },
-				Down = { Limb = "Right Arm", Colour = Color3.fromRGB(70, 130, 255), Duration = 0.4 },
+				-- Limb takes a list when the punch is thrown with both
+				Down = { Limb = { "Left Arm", "Right Arm" }, Colour = Color3.fromRGB(70, 130, 255), Duration = 0.4 },
 			},
 		},
 	},

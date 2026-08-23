@@ -27,7 +27,7 @@ return {
 				Every moveset has to have this table -- the M1 warns if it is
 				missing. An entry set to false is a punch that deliberately has no
 				flash: Chara's second and fourth swing the knife, so there is no
-				bare arm to light up.
+				bare arm to light up. Limb takes a list to flash both.
 			--]]
 			ArmFlashes = {
 				[1] = { Limb = "Right Arm", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.35 },
