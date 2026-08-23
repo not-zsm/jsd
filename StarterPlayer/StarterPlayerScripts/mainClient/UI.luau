@@ -16,7 +16,6 @@ local Remotes = replicatedStorage.Remotes
 local CombatRemotes = Remotes.Combat
 
 local UIRemotes = CombatRemotes.UI
-local HotbarRemotes = UIRemotes.Hotbar 
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
@@ -65,35 +64,31 @@ function UI:Init()
 		end
 	end)
 
-	HotbarRemotes.Use.OnClientEvent:Connect(function(Name : string)
+	network.hotbarUse.listen(function(Name : string)
 		self:UseOnHotbar(Name)
 	end)
-	
-	HotbarRemotes.Add.OnClientEvent:Connect(function(Name : string, Key : (Enum.KeyCode | Enum.UserInputType))
-		self:AddOnHotbar(Name, Key)
+
+	network.hotbarAdd.listen(function(data)
+		self:AddOnHotbar(data.move, Enum.KeyCode[data.key] or Enum.UserInputType[data.key])
 	end)
-	
-	HotbarRemotes.Show.OnClientEvent:Connect(function(Name : string)
+
+	network.hotbarShow.listen(function(Name : string)
 		self:ShowOnHotbar(Name)
 	end)
-	
-	HotbarRemotes.Hide.OnClientEvent:Connect(function(Name : string)
+
+	network.hotbarHide.listen(function(Name : string)
 		self:HideOnHotbar(Name)
 	end)
 
-	HotbarRemotes.ChangeDisplay.OnClientEvent:Connect(function(Name : string, NewText : string, NewTip : string, FlashColor : Color3)
-		self:ChangeHotbarDisplay(Name, NewText, NewTip, FlashColor)
+	network.hotbarDisplay.listen(function(data)
+		self:ChangeHotbarDisplay(data.move, data.text, data.tip, data.flash)
 	end)
 
-	HotbarRemotes.ImportantChangeDisplay.OnClientEvent:Connect(function(Name : string, NewText : string, NewTip : string, FlashColor : Color3)
-		self:ChangeHotbarDisplay(Name, NewText, NewTip, FlashColor)
+	network.hotbarCooldown.listen(function(data)
+		self:AddCooldown(data.move, data.duration)
 	end)
 
-	HotbarRemotes.AddCooldown.OnClientEvent:Connect(function(Name : string, Duration : string)
-		self:AddCooldown(Name, Duration)
-	end)
-
-	HotbarRemotes.RemoveCooldown.OnClientEvent:Connect(function(Name : string)
+	network.hotbarRemoveCooldown.listen(function(Name : string)
 		self:RemoveCooldown(Name)
 	end)
 

@@ -11,7 +11,6 @@ local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 local UIRemotes = CombatRemotes.UI
-local HotbarRemotes = Remotes.Combat.UI.Hotbar
 
 local AttackAnimations = replicatedStorage.Animations.Attacks
 
@@ -248,7 +247,7 @@ function BaseAttack:AddCooldown(Duration : number, ClientActionLikeIndicator : b
 
 	-- 🔹 Notify UI
 	if not self.LuaPlayer.IsNPC then
-		HotbarRemotes.AddCooldown:FireClient(self.LuaPlayer.Player, self.Name, Duration)
+		network.hotbarCooldown.sendTo({ move = self.Name, duration = Duration }, self.LuaPlayer.Player)
 		
 		if ClientActionLikeIndicator then
 			network.moveCooldown.sendTo({ move = self.Name, duration = Duration }, self.LuaPlayer.Player)
@@ -269,7 +268,7 @@ function BaseAttack:RemoveCooldown()
 
 	-- 🔹 Notify UI
 	if not self.LuaPlayer.IsNPC then
-		HotbarRemotes.RemoveCooldown:FireClient(self.LuaPlayer.Player, self.Name)
+		network.hotbarRemoveCooldown.sendTo(self.Name, self.LuaPlayer.Player)
 	end
 
 	self:ResetCooldownThread()
@@ -297,7 +296,7 @@ function BaseAttack:PauseCooldown()
 
 	-- 🔹 Notify UI about the pause
 	if not self.LuaPlayer.IsNPC then
-		HotbarRemotes.PauseCooldown:FireClient(self.LuaPlayer.Player, self.Name, self.RemainingCooldown)
+		network.hotbarRemoveCooldown.sendTo(self.Name, self.LuaPlayer.Player)
 	end
 end
 
@@ -311,7 +310,7 @@ function BaseAttack:ResumeCooldown()
 	
 	-- 🔹 Notify UI about the resume
 	if not self.LuaPlayer.IsNPC then
-		HotbarRemotes.ResumeCooldown:FireClient(self.LuaPlayer.Player, self.Name, self.RemainingCooldown)
+		network.hotbarCooldown.sendTo({ move = self.Name, duration = self.RemainingCooldown }, self.LuaPlayer.Player)
 	end
 
 	self.CooldownThread = task.delay(self.RemainingCooldown, function()
@@ -408,13 +407,13 @@ end;
 function BaseAttack:HideDisplay()
 	if self.LuaPlayer.IsNPC then return end;
 	
-	UIRemotes.Hotbar.Hide:FireClient(self.LuaPlayer.Player, self.Name)
+	network.hotbarHide.sendTo(self.Name, self.LuaPlayer.Player)
 end;
 
 function BaseAttack:ShowDisplay()
 	if self.LuaPlayer.IsNPC then return end;
 	
-	UIRemotes.Hotbar.Show:FireClient(self.LuaPlayer.Player, self.Name);
+	network.hotbarShow.sendTo(self.Name, self.LuaPlayer.Player);
 end;
 
 -- Wrapper that can decide whether to fire VFX

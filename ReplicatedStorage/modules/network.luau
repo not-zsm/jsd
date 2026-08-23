@@ -183,5 +183,37 @@ return byteNet.defineNamespace("game", function()
 				hasAll = byteNet.bool,
 			}),
 		}),
+
+		--// hotbar, all server -> client
+		hotbarUse = byteNet.definePacket({ value = byteNet.string }),
+		hotbarShow = byteNet.definePacket({ value = byteNet.string }),
+		hotbarHide = byteNet.definePacket({ value = byteNet.string }),
+		hotbarRemoveCooldown = byteNet.definePacket({ value = byteNet.string }),
+
+		--// the key is an EnumItem, which byteNet has no type for; its Name
+		--// crosses as a string and the client resolves it back
+		hotbarAdd = byteNet.definePacket({
+			value = byteNet.struct({
+				move = byteNet.string,
+				key = byteNet.string,
+			}),
+		}),
+
+		hotbarCooldown = byteNet.definePacket({
+			value = byteNet.struct({
+				move = byteNet.string,
+				duration = byteNet.float32,
+			}),
+		}),
+
+		hotbarDisplay = byteNet.definePacket({
+			value = byteNet.struct({
+				move = byteNet.string,
+				text = byteNet.optional(byteNet.string),
+				tip = byteNet.optional(byteNet.string),
+				flash = byteNet.optional(byteNet.unknown),
+				important = byteNet.bool,
+			}),
+		}),
 	}
 end)

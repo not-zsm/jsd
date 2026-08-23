@@ -2,12 +2,13 @@
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local RunService = game:GetService("RunService")
 
 local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
-local HotbarRemotes = CombatRemotes.UI.Hotbar
 
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
@@ -59,7 +60,7 @@ function Actions:UseMove(Name : string, State : boolean?, Extra : {}?)
 					Attack:Trigger()
 
 					if not self.LuaPlayer.IsNPC then
-						HotbarRemotes.Use:FireClient(self.LuaPlayer.Player, Attack.Name)
+						network.hotbarUse.sendTo(Attack.Name, self.LuaPlayer.Player)
 					end
 				end
 			else
@@ -72,7 +73,7 @@ function Actions:UseMove(Name : string, State : boolean?, Extra : {}?)
 						Attack:Trigger()
 
 						if not self.LuaPlayer.IsNPC then
-							HotbarRemotes.Use:FireClient(self.LuaPlayer.Player, Attack.Name)
+							network.hotbarUse.sendTo(Attack.Name, self.LuaPlayer.Player)
 						end
 					end
 
@@ -114,7 +115,7 @@ function Actions:_Init()
 			Attack:Trigger()
 
 			if not self.LuaPlayer.IsNPC then
-				HotbarRemotes.Use:FireClient(self.LuaPlayer.Player, Attack.Directory.Name)
+				network.hotbarUse.sendTo(Attack.Directory.Name, self.LuaPlayer.Player)
 			end
 		end
 	end))

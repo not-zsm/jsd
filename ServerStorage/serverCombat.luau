@@ -579,7 +579,13 @@ function Combat:ChangeAttackDisplay(Name : string, NewName : string, Settings : 
 	end
 
 	Settings = Settings or {}
-	UIRemotes.Hotbar.ImportantChangeDisplay:FireClient(self.LuaPlayer.Player, Name, NewName, Settings.Tip, Settings.FlashColor)
+	network.hotbarDisplay.sendTo({
+		move = Name,
+		text = NewName,
+		tip = Settings.Tip,
+		flash = Settings.FlashColor,
+		important = true,
+	}, self.LuaPlayer.Player)
 end
 
 --function Combat:ResetCurrentCharacterIfNotAllowed()
