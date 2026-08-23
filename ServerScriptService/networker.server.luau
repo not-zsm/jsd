@@ -198,3 +198,12 @@ end))
 network.setEmoteSlot.listen(onEmotes("setEmoteSlot", 5, function(Emotes, data)
 	Emotes:SetSlot(data.slot, data.emote)
 end))
+
+network.clientReady.listen(function(_, player)
+	if not rateLimiter.check(player, "clientReady", 5) then return end
+
+	local Combat = getCombat(player)
+	if not Combat then return end
+
+	Combat:ResendState()
+end)

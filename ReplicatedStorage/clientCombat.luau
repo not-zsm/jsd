@@ -325,6 +325,9 @@ function Combat:Connect()
 			self.UI.Icons.InformationIcon:notify()
 		end
 	end)
+
+	-- everything above is listening now, so ask for whatever landed before it was
+	network.clientReady.send()
 end
 
 function Combat:IsEnabled()

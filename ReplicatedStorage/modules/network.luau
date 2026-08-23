@@ -54,6 +54,17 @@ return byteNet.defineNamespace("game", function()
 
 		--// the main combat input. state is absent for a one-shot move, and
 		--// unknown writes a reference index so it cannot carry nil itself
+		--[[
+			The client announcing its listeners are up.
+
+			require(network) yields until the server has published the namespace,
+			which a RemoteEvent never made us wait for -- so combat's listeners
+			now register later than the server's first sends. Anything Combat:_Init
+			pushed out landed before anyone was listening. The client says when it
+			is ready and the server replays.
+		--]]
+		clientReady = byteNet.definePacket({ value = byteNet.nothing }),
+
 		useMove = byteNet.definePacket({
 			value = byteNet.struct({
 				move = byteNet.string,

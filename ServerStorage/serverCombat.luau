@@ -163,6 +163,33 @@ end
 --	return self.LuaPlayer.Player:HasTag("DonationCharacterAccess") or (Whitelist and table.find(Whitelist, self.LuaPlayer.UserId))
 --end
 
+--[[
+	Replays everything the client needs but may have missed.
+
+	Attacks created in _Init go out before the client's listeners exist, so this
+	runs again when the client says it is ready.
+--]]
+function Combat:ResendState()
+	if self.LuaPlayer.IsNPC or not self.LuaPlayer:PlayerExists() then return end
+
+	for Name, Attack in self.Attacks do
+		if not Attack.Key then continue end
+
+		network.createAttack.sendTo({
+			move = Name,
+			key = key.name(Attack.Key),
+			directory = Attack.DirectoryParent,
+			properties = Attack.Properties,
+		}, self.LuaPlayer.Player)
+	end
+
+	if self.CurrentCharacter then
+		network.setCharacter.sendTo(self.CurrentCharacter.Name, self.LuaPlayer.Player)
+	end
+
+	self:SendCharacterInformation()
+end
+
 function Combat:SendCharacterInformation()
 	--if true then return end;
 
