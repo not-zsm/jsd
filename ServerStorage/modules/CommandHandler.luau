@@ -8,6 +8,7 @@ local MessagingService = game:GetService("MessagingService")
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 
+local ServerStorage = game:GetService("ServerStorage")
 local Remotes = ReplicatedStorage.Remotes
 local SendNotificationEvent = Remotes.Notification
 local Macros = ReplicatedStorage.Shared.Commands.Macros;
@@ -16,12 +17,12 @@ local Commands = require( ReplicatedStorage.Shared.Commands )
 local UserRoles = require( ReplicatedStorage.Shared.Commands.UserRoles )
 local BanList = require( ReplicatedStorage.Shared.Commands.PrivateServerBanList )
 
-local AnnouncementHandler = require( ServerScriptService.Modules.AnnouncementHandler )
+local AnnouncementHandler = require( ServerStorage.modules.AnnouncementHandler )
 
-local RemoteRateLimiter = require( ServerScriptService.Modules.Utility.RemoteRateLimiter )
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
---local Whitelist = require( ServerScriptService.Modules.Whitelist )
+--local Whitelist = require( ServerStorage.modules.Whitelist )
 local Whitelist = require( ReplicatedStorage.Shared.Game.Whitelist )
 
 local CommandHandler = {}

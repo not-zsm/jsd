@@ -4,7 +4,7 @@ local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local AI = require( ServerScriptService.Modules.AI )
+local AI = require( ServerStorage.modules.AI )
 
 local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 

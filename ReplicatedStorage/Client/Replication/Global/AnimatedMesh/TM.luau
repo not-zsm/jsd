@@ -1,5 +1,4 @@
 local TS = game:GetService("TweenService")
-local rp = game:GetService("ReplicatedStorage")
 local RS = game:GetService('RunService')
 
 -- modules

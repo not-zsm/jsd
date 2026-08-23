@@ -1,5 +1,25 @@
 [
   {
+    "src": "ServerScriptService.Scripts.Boot",
+    "dst": "ServerScriptService",
+    "name": "main"
+  },
+  {
+    "src": "ServerScriptService.Modules.ProductHandler",
+    "dst": "ServerScriptService",
+    "name": "productHandler"
+  },
+  {
+    "src": "ServerScriptService.Modules",
+    "dst": "ServerStorage",
+    "name": "modules"
+  },
+  {
+    "src": "ServerStorage.Modules.Preloading",
+    "dst": "ServerStorage.modules",
+    "name": "preloading"
+  },
+  {
     "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientUIHandler.Headshot",
     "dst": "ReplicatedStorage.Client.Main.Systems.ClientUIHandler"
   },

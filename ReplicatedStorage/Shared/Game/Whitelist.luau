@@ -6,6 +6,7 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 
+local ServerStorage = game:GetService("ServerStorage")
 -------------------------------------------------------------
 
 local Table = require( ReplicatedStorage.Packages.Table )
@@ -22,7 +23,7 @@ local DataConfiguration = script:WaitForChild("Data");
 local DEFAULT_SETTINGS: Types.PermissionSettings;
 
 if RunService:IsServer() then
-	DEFAULT_SETTINGS = require(ServerScriptService.Modules.Whitelist_Settings);
+	DEFAULT_SETTINGS = require(ServerStorage.modules.Whitelist_Settings);
 else
 	DEFAULT_SETTINGS = {
 		mode = "Web"; -- "Web" or "Product"

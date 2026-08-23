@@ -44,9 +44,10 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
+local ServerStorage = game:GetService("ServerStorage")
 local IsStudio = RunService:IsStudio()
 
-local LuaPlayerList = require(ServerScriptService.Modules.LuaPlayerList)
+local LuaPlayerList = require(ServerStorage.modules.LuaPlayerList)
 local JobHandler = require(ReplicatedStorage.Shared.Utilities.Job)
 
 local TextForPeople = {

@@ -5,6 +5,7 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local PhysicsService = game:GetService("PhysicsService")
 local Players = game:GetService("Players")
 
+local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
 local Remotes = ReplicatedStorage.Remotes
@@ -15,8 +16,8 @@ local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 
-local EmoteData = require( ServerScriptService.Modules.Player.Character.Emotes.Data )
-local LeaderboardHandler = require( ServerScriptService.Modules.LeaderboardHandler )
+local EmoteData = require( ServerStorage.modules.Player.Character.Emotes.Data )
+local LeaderboardHandler = require( ServerStorage.modules.LeaderboardHandler )
 
 local Settings = require(script.Settings)
 
@@ -27,7 +28,7 @@ local GiftsProcessingStore = DataStoreService:GetDataStore("gifts-processing")
 
 ----------------------------------------------------------------------------------
 
-local ProfileStore = require( ServerScriptService.Modules.Utility.ProfileStore )
+local ProfileStore = require( ServerStorage.modules.Utility.ProfileStore )
 
 local Data = {}
 Data.__index = Data

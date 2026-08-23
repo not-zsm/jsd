@@ -15,9 +15,9 @@ local ServerStorage = game:GetService("ServerStorage")
 local AllTimeLeaderboard = DataStoreService:GetOrderedDataStore("AllTimeRobuxLeaderboard")
 local MonthlyLeaderboard = MemoryStoreService:GetSortedMap("MonthlyRobuxLeaderboard")
 
-local RemoteRateLimiter = require( ServerScriptService.Modules.Utility.RemoteRateLimiter )
-local ProfileStore = require( ServerScriptService.Modules.Utility.ProfileStore )
-local Products = require( ServerScriptService.Modules.ProductHandler.Products )
+local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
+local ProfileStore = require( ServerStorage.modules.Utility.ProfileStore )
+local Products = require( ServerScriptService.productHandler.Products )
 
 local AbbreviateTime = require("./LeaderboardHandler/LeaderboardModule/Abbreviate Time")
 local AbbreviateNumber = require("./LeaderboardHandler/LeaderboardModule/Abbreviate Number")

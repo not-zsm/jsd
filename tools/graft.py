@@ -137,7 +137,13 @@ def refresh_referents(item):
     return outside
 
 
+SUFFIX_CLASS = {".server.luau": "Script", ".client.luau": "LocalScript", ".luau": "ModuleScript"}
+
+
 def repo_tree(repo):
+    """path -> (source, class). The suffix decides the class: a .server.luau
+    the place does not have yet has to be created as a Script, or it sits there
+    as a ModuleScript and never runs."""
     out = {}
     for d, _, files in os.walk(repo):
         parts = d.split(os.sep)
@@ -148,13 +154,13 @@ def repo_tree(repo):
                 continue
             full = os.path.join(d, f)
             rel = os.path.relpath(full, repo).split(os.sep)
-            last = rel[-1]
-            for suf in (".server.luau", ".client.luau", ".luau"):
+            last, cls = rel[-1], "ModuleScript"
+            for suf, name in SUFFIX_CLASS.items():
                 if last.endswith(suf):
-                    last = last[:-len(suf)]
+                    last, cls = last[:-len(suf)], name
                     break
             key = tuple(rel[:-1]) if last == "init" else tuple(rel[:-1]) + (last,)
-            out[key] = open(full, encoding="utf-8", errors="replace").read()
+            out[key] = (open(full, encoding="utf-8", errors="replace").read(), cls)
     return out
 
 
@@ -174,9 +180,10 @@ def sync_sources(root, repo):
     for path, item in list(tree.items()):
         if item.get("class") not in SCRIPTS:
             continue
-        text = target.get(path)
-        if text is None:
+        entry = target.get(path)
+        if entry is None:
             continue
+        text = entry[0]
         props = item.find("Properties")
         el = next((c for c in props if c.get("name") == "Source"), None)
         if el is None:
@@ -203,15 +210,54 @@ def sync_sources(root, repo):
             parent = tree.get(path[:-1])
         if parent is None:
             print(f"  [no parent] {'.'.join(path)}"); continue
-        item = ET.Element("Item", {"class": "ModuleScript", "referent": "RBX" + uuid.uuid4().hex})
+        text, cls = target[path]
+        item = ET.Element("Item", {"class": cls, "referent": "RBX" + uuid.uuid4().hex})
         props = ET.SubElement(item, "Properties")
         n = ET.SubElement(props, "string", {"name": "Name"}); n.text = path[-1]
-        src = ET.SubElement(props, "ProtectedString", {"name": "Source"}); src.text = ET.CDATA(target[path])
+        src = ET.SubElement(props, "ProtectedString", {"name": "Source"}); src.text = ET.CDATA(text)
         parent.append(item); tree[path] = item
         created += 1
-        print(f"  [created] {'.'.join(path)}")
+        print(f"  [created] {'.'.join(path)}  [{cls}]")
 
     return sourced, created
+
+
+def apply_moves(root, path):
+    """Reparent subtrees within the place, optionally renaming.
+
+    Run either side of the source sync. Before it, so a subtree can be moved
+    out of the way before the sync recreates its scripts at the destination;
+    after it, for destinations that only exist because the sync made them. An
+    entry whose source has already gone is simply skipped.
+    """
+    if not path:
+        return
+
+    tree = index(root)
+    moved = 0
+
+    for entry in json.load(open(path, encoding="utf-8")):
+        src, dst = tuple(entry["src"].split(".")), tuple(entry["dst"].split("."))
+        landed = entry.get("name") or src[-1]
+        node, parent = tree.get(src), tree.get(dst)
+
+        if node is None or parent is None:
+            continue
+
+        if landed != src[-1]:
+            for el in node.find("Properties"):
+                if el.get("name") == "Name":
+                    el.text = landed
+                    break
+
+        # lxml detaches from the old parent on append, so a move keeps the
+        # instance's referent and UniqueId -- nothing is duplicated
+        parent.append(node)
+        print(f"  moved  {entry['src']}  ->  {entry['dst']}.{landed}")
+        moved += 1
+        tree = index(root)
+
+    return moved
 
 
 def validate(root, label):
@@ -317,6 +363,9 @@ def main():
     if missing:
         sys.exit(f"no --source given for: {', '.join(sorted(missing))}")
 
+    print("\nmoving:")
+    apply_moves(new_root, args.moves)
+
     sync_sources(new_root, args.repo)
     new_index = index(new_root)
     taken_ids = unique_ids(new_root)
@@ -369,21 +418,7 @@ def main():
 
     print(f"\ncarried {copied_blobs} shared-string blobs")
 
-    if args.moves:
-        print("\nmoving:")
-        tree = index(new_root)
-        for entry in json.load(open(args.moves, encoding="utf-8")):
-            src, dst = tuple(entry["src"].split(".")), tuple(entry["dst"].split("."))
-            node, parent = tree.get(src), tree.get(dst)
-            if node is None:
-                print(f"  [not there] {entry['src']}"); continue
-            if parent is None:
-                print(f"  [no destination] {entry['dst']}"); continue
-            # lxml detaches from the old parent on append, so a move keeps the
-            # instance's referent and UniqueId -- nothing is duplicated
-            parent.append(node)
-            print(f"  {entry['src']}  ->  {entry['dst']}.{src[-1]}")
-            tree = index(new_root)
+    apply_moves(new_root, args.moves)
 
     sourced, created = sync_sources(new_root, args.repo)
     print(f"\ngrafted {grafted} subtrees, sourced {sourced}, created {created}")

@@ -14,6 +14,10 @@ local info = require(ReplicatedStorage.info)
 -- to require(info) whenever they are next touched.
 shared.info = info
 
+-- was an Init Script parented under the module; a Script does not run in
+-- ServerStorage, so it starts from here now
+require( ServerStorage.modules.Weather )
+
 shared.TesterPlaceId = info.placeIds.test
 shared.Group = info.groupID
 shared.PlaceIds = {
@@ -39,14 +43,14 @@ end)
 
 ----------------------------------------------------------------------------------
 
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 task.spawn(require, ReplicatedStorage.Shared.Game.Appearances)
-task.spawn(require, ServerScriptService.Modules.HavocHandler )
-task.spawn(require, ServerScriptService.Modules.CommandHandler)
-task.spawn(require, ServerScriptService.Modules.AnnouncementHandler)
-task.spawn(require, ServerScriptService.Modules.Npcs)
-task.spawn(require, ServerScriptService.Modules.DonationBoardServer)
+task.spawn(require, ServerStorage.modules.HavocHandler )
+task.spawn(require, ServerStorage.modules.CommandHandler)
+task.spawn(require, ServerStorage.modules.AnnouncementHandler)
+task.spawn(require, ServerStorage.modules.Npcs)
+task.spawn(require, ServerStorage.modules.DonationBoardServer)
 
 task.spawn(function()
 	local function Update(Sound : Sound)
@@ -130,7 +134,7 @@ local function AddLuaPlayer(Player : Player)
 		end
 	end
 
-	local LuaPlayer = require(ServerScriptService.Modules.Player).new(Player)
+	local LuaPlayer = require(ServerStorage.modules.Player).new(Player)
 	LuaPlayerList.Add(LuaPlayer)
 
 	task.wait()

@@ -8,7 +8,7 @@ local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 local Attack = {}
 Attack.__index = Attack

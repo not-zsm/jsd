@@ -5,10 +5,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 
+local ServerStorage = game:GetService("ServerStorage")
 local ReplicationRemotes = ReplicatedStorage.Remotes.Replication
 
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 local AttributeListener = require( ReplicatedStorage.Client.Replication.Global.AttributeListener )
 

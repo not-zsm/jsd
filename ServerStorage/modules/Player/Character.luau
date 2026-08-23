@@ -21,8 +21,8 @@ local EventService = require( SharedUtilities.EventService )
 local Utility = require( SharedUtilities.Utility )
 local Job = require( SharedUtilities.Job )
 
-local rbxlscore = require( ServerScriptService.Modules.Utility.rbxlscore )
-local CommandHandler = require( ServerScriptService.Modules.CommandHandler )
+local rbxlscore = require( ServerStorage.modules.Utility.rbxlscore )
+local CommandHandler = require( ServerStorage.modules.CommandHandler )
 
 ----------------------------------------------------------------------------------
 

@@ -1,3 +1,4 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ReplicatedStorage = game:GetService 'ReplicatedStorage'
 local TweenService = game:GetService 'TweenService'
 local Debris = game:GetService 'Debris'

@@ -35,7 +35,7 @@ local Passives = require( script.Passives )
 
 ----------------------------------------------------------------------------------
 
-local Preloading = require( ServerStorage.Modules.Preloading )
+local Preloading = require( ServerStorage.modules.preloading )
 
 local Job = require( SharedUtilities.Job )
 local EventService = require( SharedUtilities.EventService )
@@ -54,15 +54,15 @@ local AnimationProxy = require( script.AnimationProxy )
 
 ----------------------------------------------------------------------------------
 
-local MovementReplicator = require( ServerScriptService.Modules.MovementReplicator )
+local MovementReplicator = require( ServerStorage.modules.MovementReplicator )
 local MovementReplicatorSettings = require( ReplicatedStorage.MovementReplicator.Settings )
 
 ----------------------------------------------------------------------------------
 
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
-local CommandHandler = require( ServerScriptService.Modules.CommandHandler )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
+local CommandHandler = require( ServerStorage.modules.CommandHandler )
 
-local RemoteRateLimiter = require( ServerScriptService.Modules.Utility.RemoteRateLimiter )
+local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 ----------------------------------------------------------------------------------
 

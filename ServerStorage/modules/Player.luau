@@ -8,6 +8,7 @@ local PolicyService = game:GetService("PolicyService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
+local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
 local Remotes = ReplicatedStorage.Remotes
@@ -19,7 +20,7 @@ local Gamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses )
 local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 local Table = require( ReplicatedStorage.Packages.Table )
 
-local RemoteRateLimiter = require( ServerScriptService.Modules.Utility.RemoteRateLimiter )
+local RemoteRateLimiter = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 ---------------------------------------------------------------------------------- 
 

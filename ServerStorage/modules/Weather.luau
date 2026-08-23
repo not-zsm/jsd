@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+local ServerStorage = game:GetService("ServerStorage")
 local Remotes = ReplicatedStorage.Remotes
 
 local ReplicationRemotes = Remotes.Replication
@@ -10,7 +11,7 @@ local ReplicationRemotes = Remotes.Replication
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 local Hitbox = require( ReplicatedStorage.Shared.Game.Hitbox.Type.Box )
 
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 -- Temporarily off. Flip this back to true to restore the random cycle; the
 -- /smite command and Weather.Rain still work either way, and so does the

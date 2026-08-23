@@ -1,3 +1,4 @@
+local TweenService = game:GetService("TweenService")
 -- made by Fw_Yuki
 
 --//setting up a custom type

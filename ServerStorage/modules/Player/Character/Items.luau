@@ -6,6 +6,7 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
 local Remotes = ReplicatedStorage.Remotes
@@ -21,7 +22,7 @@ local Utility = require( SharedUtilities.Utility )
 
 ----------------------------------------------------------------------------------
 
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 ----------------------------------------------------------------------------------
 

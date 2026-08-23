@@ -13,7 +13,7 @@ local RunService = game:GetService("RunService")
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
 
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 local Time = require(script.Time)
 

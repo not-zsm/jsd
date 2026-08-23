@@ -3,8 +3,9 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local DataStoreService = game:GetService("DataStoreService")
 
+local ServerStorage = game:GetService("ServerStorage")
 local Gamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses )
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 local GiftsProcessingStore = DataStoreService:GetDataStore("gifts-processing")
 local Webhook = require( script.Parent.Webhook )

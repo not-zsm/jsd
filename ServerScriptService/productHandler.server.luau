@@ -9,12 +9,12 @@ local Players = game:GetService("Players")
 local Gift = require( script.Gift )
 local Webhook = require( script.Webhook )
 
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
-local Data = require( ServerScriptService.Modules.Player.Character.Emotes.Data )
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
+local Data = require( ServerStorage.modules.Player.Character.Emotes.Data )
 
 local Gamepasses = require( ReplicatedStorage.Shared.Game.Gamepasses )
 local HasGamepassOffline = require( ReplicatedStorage.Shared.Game.Gamepasses.HasGamepassOffline )
-local RemoteAntiSpam = require( ServerScriptService.Modules.Utility.RemoteRateLimiter )
+local RemoteAntiSpam = require( ServerStorage.modules.Utility.RemoteRateLimiter )
 
 local Products = require( script.Products )
 

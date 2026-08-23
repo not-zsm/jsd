@@ -22,8 +22,8 @@ local LuaPlayerList
 if RunService:IsServer() then
 	local ServerScriptService = game:GetService("ServerScriptService")
 
-	Weather = require(ServerScriptService.Modules.Weather)
-	LuaPlayerList = require(ServerScriptService.Modules.LuaPlayerList)
+	Weather = require(ServerStorage.modules.Weather)
+	LuaPlayerList = require(ServerStorage.modules.LuaPlayerList)
 
 	-- On Click Strike
 	ReplicatedStorage.Remotes.Commands.ClickStrike.OnServerEvent:Connect(function(Player, MousePosition)

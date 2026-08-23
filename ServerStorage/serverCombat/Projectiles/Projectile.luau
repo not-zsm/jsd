@@ -4,6 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
+local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
 local Remotes = ReplicatedStorage.Remotes
@@ -14,7 +15,7 @@ local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 local Job = require( ReplicatedStorage.Shared.Utilities.Job )
 local EventService = require( ReplicatedStorage.Shared.Utilities.EventService )
 
-local Destruction = require( ServerScriptService.Modules.Destruction )
+local Destruction = require( ServerStorage.modules.Destruction )
 
 ----------------------------------------------------------------------------------
 

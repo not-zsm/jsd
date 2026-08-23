@@ -10,7 +10,7 @@ local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 local VelocityUtil = require( ReplicatedStorage.Shared.Game.Velocity.VelocityUtil )
 local Utility = require( ReplicatedStorage.Shared.Utilities.Utility )
 
-local Destruction = require(ServerScriptService.Modules.Destruction)
+local Destruction = require(ServerStorage.modules.Destruction)
 
 local Attack = {}
 Attack.__index = Attack

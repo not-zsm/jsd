@@ -16,7 +16,7 @@ local AttackAnimations = ReplicatedStorage.Animations.Attacks
 local Shared = ReplicatedStorage.Shared
 local SharedUtilities = Shared.Utilities
 
-local Preloading = require( ServerStorage.Modules.Preloading )
+local Preloading = require( ServerStorage.modules.preloading )
 local AnimationProxy = require( "../AnimationProxy" );
 
 local EventService = require( SharedUtilities.EventService )

@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Players = game:GetService("Players")
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 
 local CharaEffects = ReplicatedStorage.Effects.Characters.Chara

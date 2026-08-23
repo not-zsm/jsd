@@ -1,5 +1,6 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
+local ServerStorage = game:GetService("ServerStorage")
+local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 return {
 	[2657712724] = {
