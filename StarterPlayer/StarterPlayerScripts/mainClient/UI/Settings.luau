@@ -10,7 +10,7 @@ local StarterGui = game:GetService("StarterGui")
 
 local Remotes = ReplicatedStorage.Remotes
 
-local SettingsRemotes = Remotes.Settings
+local network = require( ReplicatedStorage.modules.network )
 
 local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
 local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
@@ -132,7 +132,7 @@ function Settings:Init()
 			Close()
 			
 			if not LocalPlayer:GetAttribute("Blood") then
-				SettingsRemotes.Toggle:FireServer("Blood")
+				network.toggleSetting.send({ setting = "Blood" })
 				
 				if self.Toggles.Blood then
 					self.Toggles.Blood.Update(true)
@@ -144,7 +144,7 @@ function Settings:Init()
 			Close()
 
 			--if LocalPlayer:GetAttribute("Blood") == true then
-			--	SettingsRemotes.Toggle:FireServer("Blood")
+			--	network.toggleSetting.send({ setting = "Blood" })
 			--	self.Toggles["Blood"].Update(false)
 			--end
 		end))
@@ -435,7 +435,7 @@ function Settings:CreateToggleInSection(SectionName : string, Text : string, Des
 
 	Toggle.MouseButton1Click:Connect(function()
 		Update(not NewToggle:GetAttribute("Toggled"))
-		SettingsRemotes.Toggle:FireServer(Text)
+		network.toggleSetting.send({ setting = Text })
 	end)
 
 	NewToggle.Parent = self.Options[SectionName]
@@ -483,7 +483,7 @@ function Settings:CreatePercentageInSection(SectionName : string, Text : string,
 		local NewPercentage = SetPercentage(Percentage)
 
 		Percent.Display.TextBox.Text = tostring(NewPercentage)
-		SettingsRemotes.Percentage:FireServer(Text, NewPercentage)
+		network.sliderSetting.send({ setting = Text, value = NewPercentage })
 	end
 
 	local ConvertedText = Text:gsub(" ", "_")
@@ -532,7 +532,7 @@ function Settings:CreateStringInSection(SectionName : string, Text : string)
 			if Asset then
 				Asset = tostring(Asset)
 				
-				SettingsRemotes.String:FireServer(Text, Asset)
+				network.stringSetting.send({ setting = Text, value = Asset })
 				TextBox.Text = Asset
 			else
 				StarterGui:SetCore("SendNotification", {
@@ -546,7 +546,7 @@ function Settings:CreateStringInSection(SectionName : string, Text : string)
 			end
 		else
 			if String ~= "" then
-				SettingsRemotes.String:FireServer(Text, String)
+				network.stringSetting.send({ setting = Text, value = String })
 				TextBox.Text = String
 			end
 		end

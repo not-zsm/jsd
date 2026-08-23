@@ -1,4 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
@@ -156,7 +158,7 @@ function VaultHandler:Cast()
 			
 			Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
 
-			self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Vault", true)
+			network.useMove.send({ move = "Vault", state = true })
 			
 			task.delay(0.5, function()
 				self.Vaulting = false

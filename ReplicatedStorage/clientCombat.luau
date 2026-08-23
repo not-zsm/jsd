@@ -24,6 +24,7 @@ local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventSe
 local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
 local NumberStack = require( ReplicatedStorage.modules.shared.Utilities.NumberStack )
+local network = require( ReplicatedStorage.modules.network )
 local InfoCharacter = require( ReplicatedStorage.modules.client.character.InfoCharacter )
 
 local Velocity = require( ReplicatedStorage.modules.shared.Game.Velocity )
@@ -344,20 +345,20 @@ function Combat:StartHoldingJump(Typing : boolean)
 	self.OnSpaceChanged:Fire(true)
 
 	if not Typing then
-		CombatRemotes.UpdateSpace:FireServer(true)
+		network.spaceHeld.send(true)
 	end
 
-	CombatRemotes.UpdateAirState:FireServer("Up")
+	network.airState.send("Up")
 end
 
 function Combat:StartNotHoldingJump()
 	self.HoldingJump = false
 	self.OnSpaceChanged:Fire(false)
 
-	CombatRemotes.UpdateSpace:FireServer(false)
+	network.spaceHeld.send(false)
 
 	if not self.FreeFalling then
-		CombatRemotes.UpdateAirState:FireServer("")
+		network.airState.send("")
 	end
 end
 
@@ -617,8 +618,8 @@ function Combat:InitializeHumanoidAvailability()
 				self:OnHumanoidLoaded()
 			end
 
-			CombatRemotes.UpdateAirState:FireServer("")
-			CombatRemotes.UpdateSpace:FireServer(false)
+			network.airState.send("")
+			network.spaceHeld.send(false)
 
 			self.LuaCharacter.Humanoid.Jumping:Connect(function(Active : boolean)
 				if Active then
@@ -633,7 +634,7 @@ function Combat:InitializeHumanoidAvailability()
 
 					self.LuaCharacter.Humanoid.JumpPower = math.max(self.LuaCharacter.Humanoid.JumpPower - self.JumpFatigue, 27)
 
-					self.LuaPlayer.Remotes.OnJumped:FireServer()
+					network.clientJumped.send()
 				end
 			end)
 
@@ -661,18 +662,18 @@ function Combat:InitializeHumanoidAvailability()
 					self.FreeFalling = true
 					self.OnFreeFalling:Fire()
 
-					CombatRemotes.UpdateAirState:FireServer("Down")
+					network.airState.send("Down")
 
 				elseif (NewState == Enum.HumanoidStateType.Landed or NewState == Enum.HumanoidStateType.Physics) then
 					self.FreeFalling = false
 					self.OnLanded:Fire()
 
-					self.LuaPlayer.Remotes.OnLanded:FireServer()
+					network.clientLanded.send()
 
 					if not self.HoldingJump then
-						CombatRemotes.UpdateAirState:FireServer("")
+						network.airState.send("")
 					else
-						CombatRemotes.UpdateAirState:FireServer("Up")
+						network.airState.send("Up")
 					end
 				end
 			end)
@@ -725,12 +726,12 @@ function Combat:_AttackInputUpdate(Name : string, State : boolean, Key : (Enum.K
 		end
 
 		if self.HoldingJump or self.FreeFalling then
-			self.LuaPlayer.Remotes.Combat.AttackInput:FireServer(Name, State, {
+			network.useMove.send({ move = Name, state = State, extra = {
 				HoldingJump = self.HoldingJump, 
 				FreeFalling = self.FreeFalling
-			})
+			} })
 		else
-			self.LuaPlayer.Remotes.Combat.AttackInput:FireServer(Name, State)
+			network.useMove.send({ move = Name, state = State })
 		end
 	else
 		if (Name == "Dash") then

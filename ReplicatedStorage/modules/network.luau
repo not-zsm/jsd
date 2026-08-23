@@ -21,5 +21,45 @@ return byteNet.defineNamespace("game", function()
 				count = byteNet.uint16,
 			}),
 		}),
+
+		--// settings: one packet per value shape, so each stays typed
+		toggleSetting = byteNet.definePacket({
+			value = byteNet.struct({
+				setting = byteNet.string,
+			}),
+		}),
+
+		sliderSetting = byteNet.definePacket({
+			value = byteNet.struct({
+				setting = byteNet.string,
+				value = byteNet.float32,
+			}),
+		}),
+
+		stringSetting = byteNet.definePacket({
+			value = byteNet.struct({
+				setting = byteNet.string,
+				value = byteNet.string,
+			}),
+		}),
+
+		--// what the client reports about its own movement and input
+		clientLanded = byteNet.definePacket({ value = byteNet.nothing }),
+		clientJumped = byteNet.definePacket({ value = byteNet.nothing }),
+		dashProximity = byteNet.definePacket({ value = byteNet.nothing }),
+
+		spaceHeld = byteNet.definePacket({ value = byteNet.bool }),
+		airState = byteNet.definePacket({ value = byteNet.string }),
+		currentDevice = byteNet.definePacket({ value = byteNet.string }),
+
+		--// the main combat input. state is absent for a one-shot move, and
+		--// unknown writes a reference index so it cannot carry nil itself
+		useMove = byteNet.definePacket({
+			value = byteNet.struct({
+				move = byteNet.string,
+				state = byteNet.optional(byteNet.bool),
+				extra = byteNet.optional(byteNet.unknown),
+			}),
+		}),
 	}
 end)

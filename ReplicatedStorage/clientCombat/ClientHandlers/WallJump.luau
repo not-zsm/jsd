@@ -9,6 +9,8 @@
 	not what happens any more.
 --]]
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Debris = game:GetService("Debris")
@@ -139,11 +141,10 @@ function WallJumpHandler:Fire(Side : number, Forward : Vector3, Right : Vector3,
 	end)
 
 	-- M1 reads this to allow an air attack off the bounce
-	local AttackInput = self.LuaPlayer.Remotes.Combat.AttackInput
-	AttackInput:FireServer(script.Name, true)
+	network.useMove.send({ move = script.Name, state = true })
 
 	task.delay(DURATION, function()
-		AttackInput:FireServer(script.Name, false)
+		network.useMove.send({ move = script.Name, state = false })
 	end)
 
 	local Animation : AnimationTrack? = self.Animations[Side == 1 and "jumpR" or "jumpL"]

@@ -14,6 +14,13 @@ local function getCombat(Player : Player)
 	return LuaCharacter and LuaCharacter.Combat
 end
 
+local function getData(Player : Player)
+	local LuaPlayer = LuaPlayerList.LuaPlayers[Player]
+	local Data = LuaPlayer and LuaPlayer.Data
+
+	return Data and Data.Profile and Data or nil
+end
+
 --// CLIENT -> SERVER
 network.switchCharacter.listen(function(data, player)
 	-- The icon picker sends the module name ("Chara"), the select screen sends the
@@ -37,4 +44,78 @@ network.purchase.listen(function(data, player)
 	-- There is no currency in player data yet, so nothing can be debited and
 	-- nothing granted. Validated and logged until one exists.
 	warn(`purchase: {player.Name} wants {data.count}x {data.item} for {price * data.count}`)
+end)
+
+network.toggleSetting.listen(function(data, player)
+	if not rateLimiter.check(player, "toggleSetting", 20) then return end
+
+	local Data = getData(player)
+	if not Data then return end
+
+	Data:ToggleSetting(data.setting)
+end)
+
+network.sliderSetting.listen(function(data, player)
+	if not rateLimiter.check(player, "sliderSetting", 20) then return end
+	if data.value ~= data.value then return end
+
+	local Data = getData(player)
+	if not Data then return end
+
+	Data:SetSliderSetting(data.setting, data.value)
+end)
+
+network.stringSetting.listen(function(data, player)
+	if not rateLimiter.check(player, "stringSetting", 20) then return end
+
+	local Data = getData(player)
+	if not Data then return end
+
+	Data:SetStringSetting(data.setting, data.value)
+end)
+
+--// movement and input the client reports about itself
+local function onCombat(key : string, rate : number, apply : (any, any) -> ())
+	return function(data, player)
+		if not rateLimiter.check(player, key, rate) then return end
+
+		local Combat = getCombat(player)
+		if not Combat then return end
+
+		apply(Combat, data)
+	end
+end
+
+network.clientLanded.listen(onCombat("clientLanded", 30, function(Combat)
+	Combat:OnClientLanded()
+end))
+
+network.clientJumped.listen(onCombat("clientJumped", 30, function(Combat)
+	Combat:OnClientJumped()
+end))
+
+network.dashProximity.listen(onCombat("dashProximity", 5, function(Combat)
+	Combat:OnDashProximity()
+end))
+
+network.spaceHeld.listen(onCombat("spaceHeld", 30, function(Combat, held)
+	Combat:SetSpaceHeld(held)
+end))
+
+network.airState.listen(onCombat("airState", 30, function(Combat, state)
+	Combat:SetAirState(state)
+end))
+
+network.currentDevice.listen(onCombat("currentDevice", 5, function(Combat, device)
+	Combat:SetDevice(device)
+end))
+
+network.useMove.listen(function(data, player)
+	if not rateLimiter.check(player, "useMove", 30) then return end
+
+	local Combat = getCombat(player)
+	local Actions = Combat and Combat.Actions
+	if not Actions then return end
+
+	Actions:UseMove(data.move, data.state, data.extra)
 end)

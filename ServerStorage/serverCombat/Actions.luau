@@ -18,78 +18,80 @@ function Actions:Destroy()
 	self.Job:Destroy()
 end
 
-function Actions:_Init()
-	if not self.LuaPlayer.IsNPC and self.LuaPlayer:PlayerExists() then
-		self.LuaPlayer.Remotes.Combat.AttackInput.OnServerEvent:Connect(function(Player2 : Player, Name : string, State : boolean, Extra : {})
-			if shared.IsRankedLobby then return end
-			if self.LuaPlayer.Player ~= Player2 then return end
+--[[
+	One move input from the client: press, release, or a one-shot.
 
-			if typeof(Name) ~= "string" or (State ~= nil and typeof(State) ~= "boolean") then 
-				return print("wrong parameters stupid cheater")
+	This was a remote handler wired per player, opening with an identity check
+	and hand-written type checks. byteNet types the payload and the networker
+	resolves the sender, so both are gone; State stays nilable because a
+	one-shot move sends no state at all.
+--]]
+function Actions:UseMove(Name : string, State : boolean?, Extra : {}?)
+	if shared.IsRankedLobby then return end
+
+	local Attack = self.Combat.Attacks[Name]
+
+	if (Attack ~= nil and Attack.Available and Attack.Activate ~= nil) then
+
+		if (State ~= nil) then
+			Attack.HeldState = State
+		end
+
+		Attack:UpdateAirVariantChecking(Extra)
+
+		if (Attack.BeginRequestingMouseOnBuffer and State ~= nil) then
+			if State then
+				self.Combat.Mouse:BeginRequesting()
+			else
+				self.Combat.Mouse:EndRequesting()
 			end
+		end
 
-			local Attack = self.Combat.Attacks[Name]
+		if (Attack.BypassHumanoidAlive or self.LuaCharacter.HumanoidAlive) then
+			if (State == nil) then
+				if not self:IsEnabled() then return end
 
-			if (Attack ~= nil and Attack.Available and Attack.Activate ~= nil) then
-
-				if (State ~= nil) then
-					Attack.HeldState = State
+				if Attack.Pretrigger then
+					Attack:Pretrigger(Extra, State)
 				end
 
-				Attack:UpdateAirVariantChecking(Extra)
+				if Attack:ConditionToActivate(true) and not self.Combat:GetState("CannotUse" .. Attack.DirectoryParent) then
+					Attack:Trigger()
 
-				if (Attack.BeginRequestingMouseOnBuffer and State ~= nil) then
-					if State then
-						self.Combat.Mouse:BeginRequesting()
-					else
-						self.Combat.Mouse:EndRequesting()
+					if not self.LuaPlayer.IsNPC then
+						HotbarRemotes.Use:FireClient(self.LuaPlayer.Player, Attack.Name)
 					end
 				end
+			else
+				if State and self:IsEnabled() then
+					if Attack.Pretrigger then
+						Attack:Pretrigger(Extra, State)
+					end
 
-				if (Attack.BypassHumanoidAlive or self.LuaCharacter.HumanoidAlive) then
-					if (State == nil) then
-						if not self:IsEnabled() then return end
+					if Attack:ConditionToActivate(State) and not self.Combat:GetState("CannotUse" .. Attack.DirectoryParent) then
+						Attack:Trigger()
 
+						if not self.LuaPlayer.IsNPC then
+							HotbarRemotes.Use:FireClient(self.LuaPlayer.Player, Attack.Name)
+						end
+					end
+
+				elseif not State then
+					if (Attack.Deactivate ~= nil and Attack:ThreadAvailable()) then
 						if Attack.Pretrigger then
 							Attack:Pretrigger(Extra, State)
 						end
 
-						if Attack:ConditionToActivate(true) and not self.Combat:GetState("CannotUse" .. Attack.DirectoryParent) then
-							Attack:Trigger()
-
-							if not self.LuaPlayer.IsNPC then
-								HotbarRemotes.Use:FireClient(self.LuaPlayer.Player, Attack.Name)
-							end
-						end
-					else
-						if State and self:IsEnabled() then
-							if Attack.Pretrigger then
-								Attack:Pretrigger(Extra, State)
-							end
-
-							if Attack:ConditionToActivate(State) and not self.Combat:GetState("CannotUse" .. Attack.DirectoryParent) then
-								Attack:Trigger()
-
-								if not self.LuaPlayer.IsNPC then
-									HotbarRemotes.Use:FireClient(self.LuaPlayer.Player, Attack.Name)
-								end
-							end
-
-						elseif not State then
-							if (Attack.Deactivate ~= nil and Attack:ThreadAvailable()) then
-								if Attack.Pretrigger then
-									Attack:Pretrigger(Extra, State)
-								end
-
-								Attack:Deactivate()
-							end
-						end
+						Attack:Deactivate()
 					end
-
 				end
 			end
-		end)
+
+		end
 	end
+end
+
+function Actions:_Init()
 
 	self.Job:Task(RunService.PostSimulation:Connect(function()
 		if (self.BufferReady == false) then return end

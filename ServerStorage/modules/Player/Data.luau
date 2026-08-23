@@ -356,75 +356,56 @@ function Data:InitSettings()
 
 	Remotes.LoadSettings:FireClient(self.LuaPlayer.Player, self.Profile.Data.Settings)--, self.Profile.Data.DeviceKeybinds)
 
-	self.Job:Task(Remotes.Settings.Toggle.OnServerEvent:Connect(function(Player, Setting : string)
-		if Player ~= self.LuaPlayer.Player or typeof(Setting) ~= "string" then 
-			return 
+end
+
+--[[
+	The three setting writes, one per value shape.
+
+	These were remote handlers wired up per player inside InitSettings. The
+	networker owns the transport now and resolves the player to this object, so
+	the identity checks the handlers opened with are no longer needed.
+--]]
+function Data:ToggleSetting(Setting : string)
+	Setting = Setting:gsub(" ", "_")
+
+	if (Settings[Setting] == nil) then return end
+
+	local Player = self.LuaPlayer.Player
+	local Value = not Player:GetAttribute(Setting)
+
+	Player:SetAttribute(Setting, Value)
+	self.Profile.Data.Settings[Setting] = Value
+end
+
+function Data:SetSliderSetting(Setting : string, Percentage : number)
+	Setting = Setting:gsub(" ", "_")
+
+	if (Settings[Setting] == nil) then return end
+
+	local Value = math.clamp(Percentage, 0, 200)
+
+	self.LuaPlayer.Player:SetAttribute(Setting, Value)
+	self.Profile.Data.Settings[Setting] = Value
+end
+
+function Data:SetStringSetting(Setting : string, String : string)
+	local Player = self.LuaPlayer.Player
+
+	if Setting == "Kill Sound" then
+		if not self:HasGamepass("Kill Sounds") then
+			MarketplaceService:PromptGamePassPurchase(Player, 1039898973)
+			return
 		end
 
-		Setting = Setting:gsub(" ", "_")
+		if not tonumber(String) then return end
+	end
 
-		if (Settings[Setting] ~= nil) then
-			local Value = not Player:GetAttribute(Setting)
-			Player:SetAttribute(Setting, Value)
-			self.Profile.Data.Settings[Setting] = Value
-		end
-	end))
+	Setting = Setting:gsub(" ", "_")
 
-	self.Job:Task(Remotes.Settings.Percentage.OnServerEvent:Connect(function(Player, Setting : string, Percentage : any)
-		if Player ~= self.LuaPlayer.Player or typeof(Setting) ~= "string" or typeof(Percentage) ~= "number" then 
-			return 
-		end
+	if (Settings[Setting] == nil) then return end
 
-		Setting = Setting:gsub(" ", "_")
-
-		if (Settings[Setting] ~= nil) then
-			local Value = math.clamp(Percentage or 0, 0, 200)
-			Player:SetAttribute(Setting, Value)
-			self.Profile.Data.Settings[Setting] = Value
-		end
-	end))
-
-	--self.Job:Task(Remotes.Settings.Keybind.OnServerEvent:Connect(function(Player, Move : string, Key : (Enum.KeyCode | Enum.UserInputType), Device : string)
-	--	if Player ~= self.LuaPlayer.Player or typeof(Move) ~= "string" or typeof(Device) ~= "string" or typeof(Key) ~= "EnumItem" then 
-	--		return
-	--	end
-
-	--	if self.Profile.Data.DeviceKeybinds[Device] then
-	--		self.Profile.Data.DeviceKeybinds[Device][Move] = Key.Name
-	--		print("updated device Keybinds:", self.Profile.Data.DeviceKeybinds)
-	--	end
-
-	--	if  self.LuaPlayer.Character.Combat.Attacks[Move] then
-	--		Remotes.Combat.ChangeAttackKey:FireClient(self.LuaPlayer.Player, Move, Key)
-	--	end
-	--end))
-
-	self.Job:Task(Remotes.Settings.String.OnServerEvent:Connect(function(Player, Setting : string, String : any)
-		if Player ~= self.LuaPlayer.Player or typeof(Setting) ~= "string" or typeof(String) ~= "string"  then
-			return 
-		end
-
-		task.spawn(function()
-			if Setting == "Kill Sound" then
-				if not self:HasGamepass("Kill Sounds") then
-					MarketplaceService:PromptGamePassPurchase(self.LuaPlayer.Player, 1039898973)
-
-					return
-				end
-
-				if not tonumber(String) then
-					return
-				end
-			end
-
-			Setting = Setting:gsub(" ", "_")
-
-			if (Settings[Setting] ~= nil) then
-				Player:SetAttribute(Setting, String)
-				self.Profile.Data.Settings[Setting] = String
-			end
-		end)
-	end))
+	Player:SetAttribute(Setting, String)
+	self.Profile.Data.Settings[Setting] = String
 end
 
 function Data:AddKill(KilledPlayer : Player, Type : string, ...) -- Attacked, Left

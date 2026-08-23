@@ -1,5 +1,7 @@
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local CollectionService = game:GetService("CollectionService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -67,7 +69,7 @@ function DashHandler:_Init()
 
 	CombatRemotes.WallComboFail.OnClientEvent:Connect(function()
 		if not self.Combat:CooldownExists("FrontBack Dash") then
-			self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Dash", true, {DashDirection = "Front", WallCombo = nil})
+			network.useMove.send({ move = "Dash", state = true, extra = {DashDirection = "Front"} })
 		end
 	end)
 
@@ -266,7 +268,7 @@ function DashHandler:Evasive(Direction : string)
 		end)
 
 		self:SmoothEvasive(Direction)
-		self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Dash", true, {DashDirection = Direction, Evasive = true})
+		network.useMove.send({ move = "Dash", state = true, extra = {DashDirection = Direction, Evasive = true} })
 	end
 end
 
@@ -280,7 +282,7 @@ function DashHandler:Dash(Direction : string)
 		end
 
 		self:Fire(Direction)
-		self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Dash", true, {DashDirection = Direction})
+		network.useMove.send({ move = "Dash", state = true, extra = {DashDirection = Direction} })
 	end
 end
 
@@ -298,13 +300,13 @@ function DashHandler:FrontDash()
 		local Raycast = workspace:Blockcast(CF, Vector3.new(3, 0.01, 0.01), CF.LookVector *  13.5, Utility.VisualParams)
 
 		if (Raycast ~= nil and Raycast.Instance.CanCollide) then-- and Raycast.Normal:Dot(Vector3.yAxis) < 0.5) then
-			return self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Dash", true, {DashDirection = "Front", WallCombo = {Position = Raycast.Position, Normal = Raycast.Normal}})
+			return network.useMove.send({ move = "Dash", state = true, extra = {DashDirection = "Front", WallCombo = {Position = Raycast.Position, Normal = Raycast.Normal}} })
 		end
 	end
 
 	if not self.Combat:CooldownExists("FrontBack Dash") then
 		self.SentFrontDashToServer = true -- so you dont accidently waste your side dash as you front dash (happens more often with worse ping)
-		self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Dash", true, {DashDirection = "Front"})
+		network.useMove.send({ move = "Dash", state = true, extra = {DashDirection = "Front"} })
 
 		task.delay(0.1 + self.LuaPlayer.Player:GetNetworkPing(), function()
 			self.SentFrontDashToServer = false

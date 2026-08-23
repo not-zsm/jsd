@@ -9,6 +9,8 @@ local CollectionService = game:GetService("CollectionService")
 
 ----------------------------------------------------------------------------------
 
+local network = require( ReplicatedStorage.modules.network )
+
 local Remotes = ReplicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
@@ -390,7 +392,7 @@ function UI:UpdateDeviceSupport(Controller : boolean?, Touch : boolean)
 		self.Combat.CurrentDevice = Device
 		self.Combat.OnDeviceChanged:Fire(Device)
 		
-		ReplicatedStorage.Remotes.TellServerCurrentDevice:FireServer(Device)
+		network.currentDevice.send(Device)
 		
 		self.Hotbar:RefreshKeys()
 

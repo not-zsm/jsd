@@ -125,61 +125,6 @@ function Combat:_Init()
 	self.Mouse = require( script.Mouse ).new(self)
 	self.Projectiles = require( script.Projectiles ).new(self)
 
-	if not self.LuaPlayer.IsNPC and self.LuaPlayer:PlayerExists() then
-		self.LuaPlayer.Remotes.OnLanded.OnServerEvent:Connect(function(Player2 : Player)
-			if self.LuaPlayer.Player ~= Player2 then return end
-
-			self.ClientJumping = false
-			self.ClientLanded:Fire()
-		end)
-
-		self.LuaPlayer.Remotes.OnJumped.OnServerEvent:Connect(function(Player2 : Player)
-			if self.LuaPlayer.Player ~= Player2 then return end
-
-			self.ClientJumping = true
-			self.ClientJumped:Fire()
-		end)
-
-		self.Job:Task(CombatRemotes.UpdateSpace.OnServerEvent:Connect(function(Player2 : Player, Boolean : boolean)
-			if self.LuaPlayer.Player ~= Player2 or not self.LuaCharacter.HumanoidAlive then return end
-
-			self.SpaceHeld = Boolean
-			self.OnSpaceStateChanged:Fire(Boolean)
-		end))
-
-		self.Job:Task(CombatRemotes.UpdateAirState.OnServerEvent:Connect(function(Player2 : Player, State : string)
-			if self.LuaPlayer.Player ~= Player2 or not self.LuaCharacter.HumanoidAlive then return end
-
-			self.AirState = State
-			self.OnAirStateChanged:Fire(State)
-		end))
-
-		self.Job:Task(Remotes.TellServerCurrentDevice.OnServerEvent:Connect(function(Player2 : Player, Device : string)
-			if self.LuaPlayer.Player ~= Player2 or typeof(Device) ~= "string" then return end
-
-			if (RemoteRateLimiter.Check(Remotes.TellServerCurrentDevice, self.LuaPlayer.Player, 5) == false) then
-				return
-			end
-
-			if Device == "Touch" or Device == "Controller" or Device == "Keyboard" then
-				self.CurrentDevicePlayingOn = Device
-			end
-		end))
-
-		self.Job:Task(CombatRemotes.DashProximity.OnServerEvent:Connect(function(Player2 : Player)
-			if self.LuaPlayer.Player ~= Player2 or not self.LuaCharacter.HumanoidAlive then return end
-
-			if (RemoteRateLimiter.Check(CombatRemotes.DashProximity, self.LuaPlayer.Player, 5) == false) then
-				return print("dash rate limited")
-			end
-
-			for _, Attack in self.Attacks do
-				if (Attack.Available and Attack.OnDashProximityReceived ~= nil) then
-					Attack.OnDashProximityReceived:Fire()
-				end
-			end
-		end))
-	end
 
 	task.defer(self.ConnectHumanoidAvailability, self)
 
@@ -260,6 +205,53 @@ function Combat:SendCharacterInformation()
 end;
 
 type FailToUseCharacterReason = "No Character" | "Early Access" | "Private Servers" | "Owner" | "Whitelist" | "Boss Drop" | "World Event";
+
+--[[
+	What the client reports about its own movement and input.
+
+	These were six remote handlers wired per player in _Init, each opening with
+	the same identity check. The networker resolves the sender to this object,
+	so the checks went with the transport.
+--]]
+function Combat:OnClientLanded()
+	self.ClientJumping = false
+	self.ClientLanded:Fire()
+end
+
+function Combat:OnClientJumped()
+	self.ClientJumping = true
+	self.ClientJumped:Fire()
+end
+
+function Combat:SetSpaceHeld(Held : boolean)
+	if not self.LuaCharacter.HumanoidAlive then return end
+
+	self.SpaceHeld = Held
+	self.OnSpaceStateChanged:Fire(Held)
+end
+
+function Combat:SetAirState(State : string)
+	if not self.LuaCharacter.HumanoidAlive then return end
+
+	self.AirState = State
+	self.OnAirStateChanged:Fire(State)
+end
+
+function Combat:SetDevice(Device : string)
+	if Device ~= "Touch" and Device ~= "Controller" and Device ~= "Keyboard" then return end
+
+	self.CurrentDevicePlayingOn = Device
+end
+
+function Combat:OnDashProximity()
+	if not self.LuaCharacter.HumanoidAlive then return end
+
+	for _, Attack in self.Attacks do
+		if (Attack.Available and Attack.OnDashProximityReceived ~= nil) then
+			Attack.OnDashProximityReceived:Fire()
+		end
+	end
+end
 
 function Combat:SwitchCharacter(Character : string, IconId : string?)
 	if self.SwitchCooldown then return end
