@@ -8,8 +8,6 @@ Icons.__index = Icons
 function Icons:_Init() 
 	-- in order
 
-	self.CharacterIcon = require(script.Characters)(self.LuaPlayer.Player)
-
 	-- The ported menus belong to mainClient, which hands itself to the UI once it
 	-- has built it. Read it at click time rather than here, so the icons do not
 	-- depend on which of the two finished first.
@@ -18,12 +16,13 @@ function Icons:_Init()
 		:setImage("9405933217")
 		:setLabel("Shop")
 		:setCaption("Opens the shop")
-		:setOrder(4)
+		:setOrder(1)
 		:oneClick()
 		:bindEvent("selected", function()
 			local Client = self.UI.MainClient
 			if not Client then return end
 
+			self:CloseAllExcept(nil, true)
 			SoundService.GUI.BasicOpen:Play()
 			Client:Shop("main shop")
 		end)
@@ -33,12 +32,13 @@ function Icons:_Init()
 		:setImage("120551654281972")
 		:setLabel("Character Select")
 		:setCaption("Opens character select")
-		:setOrder(5)
+		:setOrder(2)
 		:oneClick()
 		:bindEvent("selected", function()
 			local Client = self.UI.MainClient
 			if not Client then return end
 
+			self:CloseAllExcept(nil, true)
 			SoundService.GUI.BasicOpen:Play()
 			Client:CharacterSelect()
 		end)
@@ -46,7 +46,7 @@ function Icons:_Init()
 	self.InformationIcon = self.IconModule.new()
 		:setLeft()
 		:setImage("13858288308")
-		:setOrder(3)
+		:setOrder(4)
 
 		:bindEvent("selected", function()
 			SoundService.GUI.BasicOpen:Play()
@@ -115,7 +115,7 @@ function Icons:_Init()
 		:setLeft()
 		:setImage("13867996075")
 		:oneClick()
-		:setOrder(6)
+		:setOrder(5)
 		:bindEvent("selected", function()
 			self:CloseAllExcept(self.UI.GiftingGUI)
 			self.UI.GiftingGUI.Enabled = not self.UI.GiftingGUI.Enabled
@@ -137,7 +137,7 @@ function Icons:_Init()
 					:setImage(14906357487)
 					:oneClick()
 					:bindToggleKey(Enum.KeyCode.N)
-					:setOrder(9)
+					:setOrder(6)
 					:bindEvent("selected", function()
 						self:CloseAllExcept(self.CommandManager.GUI)
 						self.CommandManager.GUI.Enabled = not self.CommandManager.GUI.Enabled
@@ -178,20 +178,37 @@ function Icons:_Init()
 	end)
 end
 
-function Icons:CloseAllExcept(ToNotClose : Instance)
+--[[
+	Closes every menu but one.
+
+	The older menus are ScreenGuis that toggle Enabled; the ported ones are built
+	on demand into mainClient's container. Both kinds have to shut, or opening
+	settings leaves the shop sitting on top of it.
+
+	KeepContainer is for the container menus themselves -- they close each other
+	through createContainer, and clearing it here would eat their toggle.
+--]]
+function Icons:CloseAllExcept(ToNotClose : Instance?, KeepContainer : boolean?)
 	local UI_Module = self.UI
 
 	local Elements = {
 		UI_Module.Emotes.GUI, 
 		UI_Module.Settings.GUI, 
 		UI_Module.GiftingGUI, 
-		UI_Module.InformationGUI
+		UI_Module.InformationGUI,
+		UI_Module.CharacterInformationGUI
 	}
 
 	for _, GUI in Elements do
 		if GUI ~= ToNotClose then
 			GUI.Enabled = false
 		end
+	end
+
+	local Client = UI_Module.MainClient
+
+	if Client and not KeepContainer then
+		Client:CloseMenus()
 	end
 end
 

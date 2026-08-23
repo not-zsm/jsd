@@ -154,7 +154,7 @@ function Settings:Init()
 		:setLeft()
 		:setImage("8382597378")
 		:oneClick()
-		:setOrder(2)
+		:setOrder(3)
 		:bindEvent("selected", function()
 			if self.UI.Icons then
 				self.UI.Icons:CloseAllExcept(self.GUI)

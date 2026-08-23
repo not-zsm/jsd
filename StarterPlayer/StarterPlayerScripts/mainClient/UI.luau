@@ -181,29 +181,6 @@ function UI:Init()
 		TextChatService:WaitForChild("TextChannels").RBXGeneral:DisplaySystemMessage(`{Name}'s Activity: {Activity}`)
 	end)
 	
-	task.spawn(function()
-		local SetMatchStateEvent = ReplicatedStorage.Remotes.Ranked:WaitForChild("SetMatchState")
-		
-		SetMatchStateEvent.OnClientEvent:Connect(function(newState)
-			if newState == "CharacterSelection" then
-				if self.Icons.CharacterIcon then
-					self.Icons.CharacterIcon:setEnabled(true)
-				end
-
-			elseif newState == "Fighting" then
-				if self.Icons.CharacterIcon then
-					self.Icons.CharacterIcon:deselect()
-					self.Icons.CharacterIcon:setEnabled(false)
-				end
-
-			elseif newState == "Intermission" then
-				if self.Icons.CharacterIcon then
-					self.Icons.CharacterIcon:setEnabled(false)
-				end
-			end
-		end)
-	end)
-
 	Remotes.Notification.OnClientEvent:Connect(function(Data : {})
 		Data = Data or {
 			Title = "Notification",
@@ -386,6 +363,7 @@ function UI:UpdateDeviceSupport(Controller : boolean?, Touch : boolean)
 				:oneClick()
 				:setOrder(8)
 				:bindEvent("selected", function()
+					self.Icons:CloseAllExcept(self.Emotes.GUI)
 					self.Emotes:Toggle()
 				end)
 		end

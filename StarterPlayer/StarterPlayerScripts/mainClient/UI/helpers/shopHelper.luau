@@ -150,8 +150,12 @@ function shopHelper:shopkeeperYap(toYap)
 				waitTime = 0.11
 			else
 				if not self.skipVoice then
-					local sound = soundFolder[self.keeper:GetAttribute('nir')]
-					soundHandler:playSound(sound, soundService)
+					-- one lookup per character of the line, so a missing voice
+					-- would throw all the way through the sentence
+					local sound = soundFolder:FindFirstChild(self.keeper:GetAttribute('nir') or '')
+					if sound then
+						soundHandler:playSound(sound, soundService)
+					end
 				end
 			end
 			
@@ -202,8 +206,12 @@ function shopHelper:pressKeeper()
 		elseif self.pokeLimit == 1 then
 			self:shopkeeperYap('wait that kinda hurts...')
 		else
-			local range = if self.pokeLimit == 2 then 1 else (#config.shop.keeper.pokeResponses[self.keeper:GetAttribute('nir')])
-			self:shopkeeperYap(config.shop.keeper.pokeResponses[self.keeper:GetAttribute('nir')][math.random(1, range)])
+			local lines = config.shop.keeper.pokeResponses[self.keeper:GetAttribute('nir')]
+
+			if lines then
+				local range = if self.pokeLimit == 2 then 1 else #lines
+				self:shopkeeperYap(lines[math.random(1, range)])
+			end
 		end
 		
 		self.pokeLimit += 1
@@ -246,13 +254,13 @@ function shopHelper:timeoutResponses()
 		end
 	end)
 
-	self.container:Add(self.timeoutTask)
+	self.container:Task(self.timeoutTask)
 end
 
 function shopHelper:_handleSkeleton()
-	local skeletonModel = self.keeper.Parent.skell
+	local skeletonModel = self.keeper.Parent:FindFirstChild('skell')
 	if not skeletonModel then return end
-	self.container:Add(skeletonModel)
+	self.container:Task(skeletonModel)
 	
 	local viewport = starterGUI:FindFirstChild('upperViewport')
 	if not viewport then return end -- jjk had a full-screen viewport to run across

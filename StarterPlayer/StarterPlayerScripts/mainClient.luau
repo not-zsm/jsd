@@ -27,6 +27,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
+local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 
@@ -246,30 +247,45 @@ local function createBGBlur(container, tweenTime, size)
 	blurTween:Play()
 end
 
+local NIR_BY_INDEX = { "zsm", "dih", "niki", "pook" }
+
 local function applyOutfit(container, char: Model)
-	local selectedPerson = info.theBigFour[math.random(1, #info.theBigFour)]
-	local desc = Players:GetHumanoidDescriptionFromUserIdAsync(selectedPerson)
+	local pick = math.random(1, #info.theBigFour)
+
+	-- Who the keeper is decides which poke lines they answer with, so set it
+	-- whether or not the avatar itself arrives.
+	char:SetAttribute("nir", NIR_BY_INDEX[pick])
+
+	-- A failed web call used to take the rest of Shop with it, poke button and
+	-- purchase buttons included.
+	local got, desc = pcall(Players.GetHumanoidDescriptionFromUserIdAsync, Players, info.theBigFour[pick])
+	if not got then
+		warn(`shop: could not fetch the keeper's outfit: {desc}`)
+		return
+	end
+
 	local humanoid = char:FindFirstChildOfClass("Humanoid")
 	if not humanoid then return end
 
 	container:Task(task.spawn(function()
 		humanoid:ApplyDescriptionResetAsync(desc)
 	end))
-	--humanoid:ApplyDescriptionAsync(desc)
-
-	if selectedPerson == info.theBigFour[1] then
-		char:SetAttribute('nir', 'zsm')
-	elseif selectedPerson == info.theBigFour[2] then
-		char:SetAttribute('nir', 'dih')
-	elseif selectedPerson == info.theBigFour[3] then
-		char:SetAttribute('nir', 'niki')
-	elseif selectedPerson == info.theBigFour[4] then
-		char:SetAttribute('nir', 'pook')
-	end
 end
 
 function MainClient:destroyContainer()
 	if self.Container then self.Container:Destroy() self.Container = nil end
+end
+
+--[[
+	Shuts a container menu for something else to open.
+
+	destroyContainer on its own leaves PreviousMenu set, which is what makes the
+	icons toggle -- so closing the shop that way would cost you a click to get it
+	back. Clearing it means the next press opens.
+--]]
+function MainClient:CloseMenus()
+	self.PreviousMenu = nil
+	self:destroyContainer()
 end
 
 function MainClient:createContainer(menu)
@@ -476,13 +492,13 @@ function MainClient:CharacterSelect()
 
 	setCentreName()
 
-	container:Task(userInputService.InputChanged:Connect(function(input)
+	container:Task(UserInputService.InputChanged:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseWheel then
 			scroll(-input.Position.Z)
 		end
 	end))
 
-	container:Task(userInputService.InputBegan:Connect(function(input, processed)
+	container:Task(UserInputService.InputBegan:Connect(function(input, processed)
 		if processed then return end
 		local k = input.KeyCode
 		if k == Enum.KeyCode.Up or k == Enum.KeyCode.W then
