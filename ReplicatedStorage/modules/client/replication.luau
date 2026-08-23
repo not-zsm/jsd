@@ -10,7 +10,6 @@ local RunService = game:GetService("RunService")
 
 local Remotes = replicatedStorage.Remotes
 
-local ReplicationRemotes = Remotes.Replication
 
 local VFX = script.VFX
 
@@ -166,28 +165,18 @@ function Replication:Destruct(Object : (BasePart | Model), CustomEffect : string
 end
 
 function Replication:ConnectToVFXRemotes()
-	local function AddEvent(Event : (RemoteEvent | UnreliableRemoteEvent))
-		Event.OnClientEvent:Connect(function(Name : string, Function : string, ...)
-			self:FireEffect(Name, Function, ...)
-		end)
-	end
+	local function Receive(data)
+		local args = data.args
 
-	do
-		for _, Item in ipairs(ReplicationRemotes.Reliable:GetChildren()) do
-			if Item:IsA("RemoteEvent") then
-				AddEvent(Item)
-			end
-		end
-
-		for _, Item in ipairs(ReplicationRemotes.Unreliable:GetChildren()) do
-			if Item:IsA("UnreliableRemoteEvent") then
-				AddEvent(Item)
-			end
+		if args then
+			self:FireEffect(data.directory, data.fn, table.unpack(args, 1, args.n))
+		else
+			self:FireEffect(data.directory, data.fn)
 		end
 	end
 
-	ReplicationRemotes.Reliable.ChildAdded:Connect(AddEvent)
-	ReplicationRemotes.Unreliable.ChildAdded:Connect(AddEvent)
+	network.vfx.listen(Receive)
+	network.vfxReliable.listen(Receive)
 end
 
 function Replication:FireEffect(Name : string, Function : string, ...)

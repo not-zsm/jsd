@@ -1,12 +1,13 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( replicatedStorage.modules.network )
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
 local Remotes = replicatedStorage.Remotes
 
-local ReplicationRemotes = Remotes.Replication
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local Hitbox = require( replicatedStorage.modules.shared.Game.Hitbox.Type.Box )
@@ -55,9 +56,11 @@ function Weather.Smite(Position : Vector3)
 	local Raycast = workspace:Raycast(Position, Vector3.yAxis * -225, Utility.VisualParams)
 	if (Raycast == nil) then return end
 	
-	local ChosenEvent = math.random(1, ReplicationRemotes:GetAttribute("EventAmount"))
-	local Event = ReplicationRemotes.Reliable:WaitForChild(ChosenEvent)
-	Event:FireAllClients("Global/Lightning", "Strike", Raycast.Position, Raycast.Instance.Color)
+	network.vfxReliable.sendToAll({
+		directory = "Global/Lightning",
+		fn = "Strike",
+		args = table.pack(Raycast.Position, Raycast.Instance.Color),
+	})
 	
 	local Params = Hitbox.NewParams()
 	Params.Offset = CFrame.new(0, 3, 0)

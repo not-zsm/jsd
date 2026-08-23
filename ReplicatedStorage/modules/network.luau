@@ -271,5 +271,34 @@ return byteNet.defineNamespace("game", function()
 		}),
 
 		clientDestruction = byteNet.definePacket({ value = byteNet.inst }),
+
+		--[[
+			Every visual effect in the game.
+
+			directory addresses a module under the VFX folder ("Chara/Onslaught"),
+			fn names the method on it, and args is that call's varargs packed with
+			table.pack so a trailing nil still counts. unknown carries them by
+			reference, which is what a RemoteEvent was doing anyway.
+
+			This replaced two folders of RemoteEvents built at runtime and picked
+			from at random to spread load. byteNet already batches a frame's
+			packets into one buffer, so the pool bought nothing.
+		--]]
+		vfx = byteNet.definePacket({
+			reliabilityType = "unreliable",
+			value = byteNet.struct({
+				directory = byteNet.string,
+				fn = byteNet.string,
+				args = byteNet.optional(byteNet.unknown),
+			}),
+		}),
+
+		vfxReliable = byteNet.definePacket({
+			value = byteNet.struct({
+				directory = byteNet.string,
+				fn = byteNet.string,
+				args = byteNet.optional(byteNet.unknown),
+			}),
+		}),
 	}
 end)

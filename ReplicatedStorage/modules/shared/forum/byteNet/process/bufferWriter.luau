@@ -66,12 +66,18 @@ function bufferWriter.i8(value: number)
 end
 
 -- this exists solely for the unknown and instance data type. Will likely be obselete soon enough
+--[[
+	jsd: widened from u8. Every VFX call in the game rides `unknown` and every
+	grabbed part rides `inst`, both of which land here, and a channel flushes
+	once per Heartbeat -- so the 256th reference in a busy frame used to wrap to
+	index 0 and hand one effect another's arguments, silently. Costs a byte.
+--]]
 function bufferWriter.reference(value: any)
 	table.insert(references, value)
 	local index = #references
 
-	buffer.writeu8(buff, cursor, index)
-	cursor += 1
+	buffer.writeu16(buff, cursor, index)
+	cursor += 2
 end
 
 function bufferWriter.u16(value: number)
