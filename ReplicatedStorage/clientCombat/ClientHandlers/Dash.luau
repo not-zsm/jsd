@@ -1,38 +1,38 @@
 local UserInputService = game:GetService("UserInputService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local CollectionService = game:GetService("CollectionService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
-local Animations = ReplicatedStorage.Animations
+local Animations = replicatedStorage.Animations
 
 ----------------------------------------------------------------------------------
 
 local DashHandler = {}
 DashHandler.__index = DashHandler
 
-local Replication = ReplicatedStorage.modules.client.replication
+local Replication = replicatedStorage.modules.client.replication
 
 local EffectUtility = require( Replication.EffectUtility )
 local DashRocks = require( Replication.Global.DashRocks )
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Hitbox = require( ReplicatedStorage.modules.shared.Game.Hitbox.Type.Box )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Hitbox = require( replicatedStorage.modules.shared.Game.Hitbox.Type.Box )
 
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
-local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+local MovementReplicatorSettings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
 ----------------------------------------------------------------------------------
 

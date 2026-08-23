@@ -1,6 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Projectiles = ReplicatedStorage.modules.shared.projectiles.Projectiles;
+local Projectiles = replicatedStorage.modules.shared.projectiles.Projectiles;
 
 local Util = {};
 

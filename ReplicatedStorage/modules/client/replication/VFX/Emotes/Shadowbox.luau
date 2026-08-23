@@ -1,12 +1,12 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer.PlayerGui
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 
 local GUI = nil
 
@@ -36,7 +36,7 @@ return {
 		
 		if not GUI then
 			warn("Shadowbox GUI not found")
-			ReplicatedStorage.Remotes.Emotes.ChooseDirection:FireServer(AvailableDirections[math.random(1, #AvailableDirections)])
+			replicatedStorage.Remotes.Emotes.ChooseDirection:FireServer(AvailableDirections[math.random(1, #AvailableDirections)])
 			return
 		end
 		
@@ -55,14 +55,14 @@ return {
 			Connections[Direction] = Button.MouseButton1Click:Connect(function()
 				if table.find(AvailableDirections, Direction) then
 					GUI.Enabled = false
-					ReplicatedStorage.Remotes.Emotes.ChooseDirection:FireServer(Direction)
+					replicatedStorage.Remotes.Emotes.ChooseDirection:FireServer(Direction)
 				end
 			end)
 		end
 	end,
 	
 	Setup = function(Character: Model)
-		local Retrieved = AnimationRetriever.new(Character, ReplicatedStorage.Animations.Emotes.Shadowbox.Start)
+		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.Animations.Emotes.Shadowbox.Start)
 		if (Retrieved == nil) then return end
 
 		local Job = Retrieved.Job

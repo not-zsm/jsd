@@ -1,15 +1,15 @@
 
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 local UIRemotes = Remotes.Combat.UI
 
 ----------------------------------------------------------------------------------
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 local Attack = {}
@@ -53,7 +53,7 @@ function Attack:Activate()
 			self.Thread.Job:Task(self.LuaCharacter:StopAutoRotate())
 			
 			local GrabObject = self.Combat:GrabVictim(VictimLuaPlayer, self.LuaCharacter.RootPart, CFrame.Angles(0, math.pi, 0))
-			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Lethal Wound"].Victim)
+			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Lethal Wound"].Victim)
 			
 			local Ended = false
 	
@@ -71,7 +71,7 @@ function Attack:Activate()
 
 				self.Thread.CancelJob:Task(self:CreateMoveSFX("Chara", "Lethal Wound Finisher"))
 
-				local FinisherVictimAnimation : AnimationTrack = VictimLuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Lethal Wound"].FinisherVictim)
+				local FinisherVictimAnimation : AnimationTrack = VictimLuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Lethal Wound"].FinisherVictim)
 				VictimLuaCharacter:StopRespawnTimer()
 
 				self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("stab"):Connect(function()

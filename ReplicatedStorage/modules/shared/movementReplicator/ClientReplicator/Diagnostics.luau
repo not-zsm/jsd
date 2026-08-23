@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -10,21 +10,21 @@ local PlayerGui = Player:WaitForChild("PlayerGui");
 
 ---------------------------------------------------------------------------------
 
-local MovementReplicatorFolder = ReplicatedStorage.modules.shared.movementReplicator
+local MovementReplicatorFolder = replicatedStorage.modules.shared.movementReplicator
 local Remotes = MovementReplicatorFolder:WaitForChild("Remotes");
 local Assets = MovementReplicatorFolder:WaitForChild("Assets");
 
 ---------------------------------------------------------------------------------
 
-local Packages = ReplicatedStorage.Packages
+local Packages = replicatedStorage.Packages
 
 local Signal = require( Packages.Signal )
 local Maid = require( Packages.Maid )
 
-local Settings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
-local Metadata = require( ReplicatedStorage.modules.shared.movementReplicator.Metadata )
-local Casting = require( ReplicatedStorage.modules.shared.movementReplicator.Lib.Casting )
-local Util = require( ReplicatedStorage.modules.shared.movementReplicator.Util )
+local Settings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
+local Metadata = require( replicatedStorage.modules.shared.movementReplicator.Metadata )
+local Casting = require( replicatedStorage.modules.shared.movementReplicator.Lib.Casting )
+local Util = require( replicatedStorage.modules.shared.movementReplicator.Util )
 
 local Types = require( script.Parent.Types );
 

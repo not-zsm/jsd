@@ -1,13 +1,13 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local AnimationRetriever = require(ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever)
-local CameraShake = require(ReplicatedStorage.modules.client.replication.Global.CameraShake)
-local Yuki_FOV = require(ReplicatedStorage.modules.client.replication.Global.Yuki_FOV)
+local AnimationRetriever = require(replicatedStorage.modules.client.replication.VFX.AnimationRetriever)
+local CameraShake = require(replicatedStorage.modules.client.replication.Global.CameraShake)
+local Yuki_FOV = require(replicatedStorage.modules.client.replication.Global.Yuki_FOV)
 
 return {
 	Start = function(Reference : Configuration, IsCrashout : boolean?)

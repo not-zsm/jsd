@@ -1,10 +1,10 @@
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local VelocityUtil = require(ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil)
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local VelocityUtil = require(replicatedStorage.modules.shared.Game.Velocity.VelocityUtil)
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local JobModule = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local JobModule = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local function CreateVelocity(Name : String, RootPart : BasePart, BaseStrength : Number)
 	local Velocity = VelocityUtil.Create(RootPart, Name)

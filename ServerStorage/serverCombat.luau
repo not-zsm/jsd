@@ -3403,7 +3403,7 @@ function Combat:TeleportForward(DistanceToCover : number,  Callback : () -> ())
 	local Terrain = MapModel:FindFirstChild("Terrain")
 	local Props = MapModel:FindFirstChild("Props")
 
-	for _, Item in {Terrain, Locations, Props} do
+	for _, Item in {Terrain, Props} do
 		if Item then
 			Params:AddToFilter(Item)
 		end

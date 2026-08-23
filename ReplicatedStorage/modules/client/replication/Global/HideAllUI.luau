@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local LocalPlayer = Players.LocalPlayer
 local LocalPlayerGui = LocalPlayer.PlayerGui
@@ -10,7 +10,7 @@ return function()
 	LocalPlayerGui.Statistics.Enabled = false
 
 	task.spawn(function()
-		local IconModule = require(ReplicatedStorage.Packages.Icon)
+		local IconModule = require(replicatedStorage.Packages.Icon)
 		IconModule.setTopbarEnabled(false)
 	end)
 
@@ -20,7 +20,7 @@ return function()
 		LocalPlayerGui.Statistics.Enabled = true
 
 		task.spawn(function()
-			local IconModule = require(ReplicatedStorage.Packages.Icon)
+			local IconModule = require(replicatedStorage.Packages.Icon)
 			IconModule.setTopbarEnabled(true)
 		end)
 	end

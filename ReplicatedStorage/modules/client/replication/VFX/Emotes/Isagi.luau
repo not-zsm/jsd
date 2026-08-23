@@ -1,17 +1,17 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 ---------------------------------------------------------------------------------
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
 
 ---------------------------------------------------------------------------------
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 
 ---------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ local AuraTable = {}
 
 return {
 	OnStart = function(Model : Model)
-		local Retrieved = AnimationRetriever.new(Model, ReplicatedStorage.Animations.Emotes.Isagi.Start)
+		local Retrieved = AnimationRetriever.new(Model, replicatedStorage.Animations.Emotes.Isagi.Start)
 
 		if (Retrieved == nil) then return end
 		
@@ -63,7 +63,7 @@ return {
 			Camera.RootPart.CFrame = RootPart.CFrame * CameraOffset
 			Camera.Parent = workspace.Visuals
 
-			local CameraAnimation = Camera.AnimationController.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Isagi"].Camera)
+			local CameraAnimation = Camera.AnimationController.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Isagi"].Camera)
 			CameraAnimation:Play(0)
 
 			NewJob:Task(RunCameraRig(RootPart, Camera, CameraOffset, {

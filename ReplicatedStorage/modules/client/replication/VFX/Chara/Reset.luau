@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
 local Lighting = game:GetService("Lighting")
@@ -7,21 +7,21 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local LocalPlayerGui = LocalPlayer.PlayerGui
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Attacks.Chara.Reset
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Attacks.Chara.Reset
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local TekrinnDialogue = require( ReplicatedStorage.modules.effect.tekrinnDialogue )
+local TekrinnDialogue = require( replicatedStorage.modules.effect.tekrinnDialogue )
 
 return {
 	MiniExplosion = function(Position : Vector3)
@@ -152,7 +152,7 @@ return {
 			LocalPlayerGui.Statistics.Enabled = false
 
 			task.spawn(function()
-				local IconModule = require(ReplicatedStorage.Packages.Icon)
+				local IconModule = require(replicatedStorage.Packages.Icon)
 				IconModule.setTopbarEnabled(false)
 			end)
 
@@ -162,7 +162,7 @@ return {
 				LocalPlayerGui.Statistics.Enabled = true
 
 				task.spawn(function()
-					local IconModule = require(ReplicatedStorage.Packages.Icon)
+					local IconModule = require(replicatedStorage.Packages.Icon)
 					IconModule.setTopbarEnabled(true)
 				end)
 			end)

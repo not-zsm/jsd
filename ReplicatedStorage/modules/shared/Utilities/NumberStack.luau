@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 local NumberStack = {}
 NumberStack.__index = NumberStack

@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
@@ -6,12 +6,12 @@ local Visuals = workspace:WaitForChild("Visuals");
 
 ---------------------------------------------------------------------------------
 
-local Packages = ReplicatedStorage.Packages
+local Packages = replicatedStorage.Packages
 
 local Maid = require( Packages.Maid )
 local Debounce = require( Packages.Debounce )
 
-local Util = require( ReplicatedStorage.modules.shared.movementReplicator.Util )
+local Util = require( replicatedStorage.modules.shared.movementReplicator.Util )
 
 local Types = require( script.Parent.Parent.Types );
 

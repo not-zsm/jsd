@@ -5,7 +5,7 @@ return {
 	Async = true,
 
 	Start = function()
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local replicatedStorage = game:GetService("ReplicatedStorage")
 		local UserInputService = game:GetService("UserInputService")
 		local Players = game:GetService("Players")
 		local Player = Players.LocalPlayer
@@ -15,7 +15,7 @@ return {
 		Player:GetAttributeChangedSignal("ClickStrike"):Once(function()
 			Mouse.Button1Down:Connect(function()
 				if Player:GetAttribute("ClickStrike") == true then
-					ReplicatedStorage.Remotes.Commands.ClickStrike:FireServer(Mouse.Hit.Position)
+					replicatedStorage.Remotes.Commands.ClickStrike:FireServer(Mouse.Hit.Position)
 				end
 			end)
 		end)

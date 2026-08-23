@@ -1,8 +1,8 @@
 --!strict
 -- Was StarterPlayerScripts/Game/Wind.client.luau
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local WindShake = require(ReplicatedStorage.modules.shared.Utilities.WindShake)
+local WindShake = require(replicatedStorage.modules.shared.Utilities.WindShake)
 
 return {
 	Name = "Wind",

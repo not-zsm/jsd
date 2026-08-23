@@ -1,10 +1,10 @@
 local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local DataStoreService = game:GetService("DataStoreService")
 
 local ServerStorage = game:GetService("ServerStorage")
-local Gamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses )
+local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
 local GiftsProcessingStore = DataStoreService:GetDataStore("gifts-processing")
@@ -47,11 +47,11 @@ return function(PlayerGifting : Player, GamepassName : String)
 			if (ReceiverProfile and ReceiverProfile:IsActive()) then
 				ReceiverProfile.Data.OwnedGamepasses[GamepassName] = true
 				
-				ReplicatedStorage.Remotes.Announcement:FireClient(ReceivingPlayer, 
+				replicatedStorage.Remotes.Announcement:FireClient(ReceivingPlayer, 
 					`You have been gifted {GamepassName} by {PlayerGifting.Name}. Make sure to say thank you!`
 				)
 				
-				ReplicatedStorage.Remotes.Announcement:FireClient(PlayerGifting, 
+				replicatedStorage.Remotes.Announcement:FireClient(PlayerGifting, 
 					`You have gifted {GamepassName} to {ReceivingPlayer.Name}.`, "How nice of you!"
 				)
 
@@ -97,7 +97,7 @@ return function(PlayerGifting : Player, GamepassName : String)
 		local Name = Players:GetNameFromUserIdAsync(ReceiverUserId)
 		
 		if Name then
-			ReplicatedStorage.Remotes.Announcement:FireClient(PlayerGifting, 
+			replicatedStorage.Remotes.Announcement:FireClient(PlayerGifting, 
 				`You have gifted {GamepassName} to {Name}.`, "How nice of you! They will receive your gift when they join the game."
 			)
 		end

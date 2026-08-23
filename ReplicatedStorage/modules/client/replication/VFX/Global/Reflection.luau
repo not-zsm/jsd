@@ -1,8 +1,8 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Yuki_InfinityBubble = require( ReplicatedStorage.modules.client.replication.Global.Yuki_InfinityBubble )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Yuki_InfinityBubble = require( replicatedStorage.modules.client.replication.Global.Yuki_InfinityBubble )
 
 local VFX = {}
 

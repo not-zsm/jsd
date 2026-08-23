@@ -1,13 +1,13 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
 
 return {
 	Start = function(Character : Model)
-		local Retrieved = AnimationRetriever.new(Character, ReplicatedStorage.Animations.Emotes["Lonely Lonely"].Start)
+		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.Animations.Emotes["Lonely Lonely"].Start)
 		if (Retrieved == nil) then return end
 
 		local RootPart = Retrieved.RootPart
@@ -19,7 +19,7 @@ return {
 		Camera:PivotTo(RootPart.CFrame * Offset)
 		Camera.Parent = workspace.Visuals
 
-		local Animation = Camera.Humanoid.Animator:LoadAnimation(ReplicatedStorage.Animations.Emotes["Lonely Lonely"].Camera)
+		local Animation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Lonely Lonely"].Camera)
 		Animation:Play(0)
 
 		--function(Value : boolean)

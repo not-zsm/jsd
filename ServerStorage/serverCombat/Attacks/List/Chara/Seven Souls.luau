@@ -1,15 +1,15 @@
 
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local Attack = {}
 Attack.__index = Attack
@@ -57,7 +57,7 @@ function Attack:Activate()
 			VictimLuaCharacter:StopRespawnTimer()
 
 			local GrabObject = self.Combat:GrabVictim(VictimLuaPlayer, self.LuaCharacter.RootPart, CFrame.new(0, 0, -7) * CFrame.Angles(0, math.pi, 0))
-			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Seven Souls"].Victim)
+			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Seven Souls"].Victim)
 
 			--local Ultimate, Matched = self.Combat:MatchAttack("Ultimate", Enum.KeyCode.G)
 

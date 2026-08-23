@@ -1,16 +1,16 @@
 
 
 local UserInputService = game:GetService("UserInputService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 local FakeMouseRemotes = Remotes.Combat.FakeMouse
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local NumberStack = require( ReplicatedStorage.modules.shared.Utilities.NumberStack )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local NumberStack = require( replicatedStorage.modules.shared.Utilities.NumberStack )
 
 ----------------------------------------------------------------------------------
 

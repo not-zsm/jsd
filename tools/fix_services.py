@@ -12,15 +12,18 @@ import os
 import re
 import sys
 
+# Workspace is deliberately absent: `workspace` is a global, so a file that
+# says workspace.Map needs no declaration and adding one would shadow it.
 SERVICES = ["ReplicatedStorage", "ServerScriptService", "ServerStorage",
-            "ReplicatedFirst", "StarterGui", "StarterPlayer", "Workspace",
+            "ReplicatedFirst", "StarterGui", "StarterPlayer",
             "Players", "RunService", "TweenService", "Debris", "CollectionService"]
 SKIP = {".git", "tools", "studio", "docs", "Packages"}
 
 # a declaration counts wherever it is -- the system wrappers put theirs inside
 # Start -- but a new one is only ever inserted at file level
-DECLARE = re.compile(r'^[ \t]*local\s+(\w+)\s*=\s*game:GetService\(\s*"(\w+)"\s*\)\s*$', re.M)
-TOP_LEVEL = re.compile(r'^local\s+(\w+)\s*=\s*game:GetService\(\s*"(\w+)"\s*\)\s*$', re.M)
+# either quote style: the ported jjk helpers use single
+DECLARE = re.compile(r'^[ \t]*local\s+(\w+)\s*=\s*game:GetService\(\s*[\'"](\w+)[\'"]\s*\)\s*$', re.M)
+TOP_LEVEL = re.compile(r'^local\s+(\w+)\s*=\s*game:GetService\(\s*[\'"](\w+)[\'"]\s*\)\s*$', re.M)
 
 
 def files(root="."):
@@ -35,6 +38,20 @@ def files(root="."):
 BLOCK_COMMENT = re.compile(r'--\[(=*)\[.*?\]\1\]', re.S)
 
 
+def local_name(text, service):
+    """What this file calls the service, honouring its prevailing convention.
+
+    The codebase moved its service locals to camelCase, so a file may declare
+    `local replicatedStorage = game:GetService("ReplicatedStorage")`. A new
+    declaration should match whichever style the file already uses.
+    """
+    for m in TOP_LEVEL.finditer(text):
+        if m.group(1)[:1].islower():
+            return service[0].lower() + service[1:]
+
+    return service
+
+
 def uses(text, service):
     """Is the service actually indexed or called here?
 
@@ -43,10 +60,14 @@ def uses(text, service):
     comment, and a module that happens to name its own table after a service --
     DebrisPool's `local Debris = {}` would be shadowed into a broken state.
     """
-    if re.search(rf'local\s+{service}\b(?!\s*=\s*game\s*:\s*GetService)', text):
-        return False
+    names = {service, service[0].lower() + service[1:]}
 
-    pattern = re.compile(rf'(?<![.\w]){service}\s*(?:\.\s*\w|\[|:\s*\w+\s*\()')
+    for name in names:
+        if re.search(rf'local\s+{name}\b(?!\s*=\s*game\s*:\s*GetService)', text):
+            return False
+
+    alternation = "|".join(sorted(names, key=len, reverse=True))
+    pattern = re.compile(rf'(?<![.\w])(?:{alternation})\s*(?:\.\s*\w|\[|:\s*\w+\s*\()')
 
     for line in BLOCK_COMMENT.sub("", text).splitlines():
         if pattern.search(line.split("--", 1)[0]):
@@ -67,8 +88,9 @@ def main():
         for service in SERVICES:
             used = uses(new, service)
 
-            if used and service not in declared:
-                line = f'local {service} = game:GetService("{service}")'
+            if used and service not in declared.values():
+                name = local_name(new, service)
+                line = f'local {name} = game:GetService("{service}")'
                 last = None
                 for m in TOP_LEVEL.finditer(new):
                     last = m
@@ -76,14 +98,14 @@ def main():
                     new = new[:last.end()] + "\n" + line + new[last.end():]
                 else:
                     new = line + "\n" + new
-                declared[service] = service
+                declared[name] = service
                 added += 1
-                print(f"  + {service:<22} {path}")
+                print(f"  + {name:<22} {path}")
 
         # a declaration whose name appears nowhere else is dead weight
         for name, service in list(declared.items()):
             if len(re.findall(rf'(?<![.\w]){name}(?![\w])', new)) == 1 and TOP_LEVEL.search(new):
-                new = re.sub(rf'^local\s+{name}\s*=\s*game:GetService\(\s*"{service}"\s*\)\s*\n', "", new, count=1, flags=re.M)
+                new = re.sub(rf'^local\s+{name}\s*=\s*game:GetService\(\s*[\'"]{service}[\'"]\s*\)\s*\n', "", new, count=1, flags=re.M)
                 removed += 1
                 print(f"  - {service:<22} {path}")
 

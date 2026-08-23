@@ -1,5 +1,5 @@
 --!nonstrict
-local ContextActionService = game:GetService("ContextActionService")
+local contextActionService = game:GetService("ContextActionService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -468,7 +468,7 @@ do
 			resetTouchState()
 
 			if inputEnabled then -- enable
-				ContextActionService:BindActionAtPriority(
+				contextActionService:BindActionAtPriority(
 					"RbxCameraThumbstick",
 					thumbstick,
 					false,
@@ -476,7 +476,7 @@ do
 					Enum.KeyCode.Thumbstick2
 				)
 
-				ContextActionService:BindActionAtPriority(
+				contextActionService:BindActionAtPriority(
 					"RbxCameraKeypress",
 					keypress,
 					false,
@@ -488,7 +488,7 @@ do
 				)
 
 				if VRService.VREnabled then
-					ContextActionService:BindAction(
+					contextActionService:BindAction(
 						"RbxCameraGamepadReset",
 						gamepadReset,
 						false,
@@ -496,7 +496,7 @@ do
 					)
 				end
 				
-				ContextActionService:BindAction(
+				contextActionService:BindAction(
 					"RbxCameraGamepadZoom",
 					gamepadZoomPress,
 					false,
@@ -513,14 +513,14 @@ do
 				end
 
 			else -- disable
-				ContextActionService:UnbindAction("RbxCameraThumbstick")
-				ContextActionService:UnbindAction("RbxCameraMouseMove")
-				ContextActionService:UnbindAction("RbxCameraMouseWheel")
-				ContextActionService:UnbindAction("RbxCameraKeypress")
+				contextActionService:UnbindAction("RbxCameraThumbstick")
+				contextActionService:UnbindAction("RbxCameraMouseMove")
+				contextActionService:UnbindAction("RbxCameraMouseWheel")
+				contextActionService:UnbindAction("RbxCameraKeypress")
 
-				ContextActionService:UnbindAction("RbxCameraGamepadZoom")
+				contextActionService:UnbindAction("RbxCameraGamepadZoom")
 				if VRService.VREnabled then
-					ContextActionService:UnbindAction("RbxCameraGamepadReset")
+					contextActionService:UnbindAction("RbxCameraGamepadReset")
 				end 
 
 				for _, conn in pairs(connectionList) do

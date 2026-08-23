@@ -1,7 +1,7 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 
-local ScreenPulse = require( ReplicatedStorage.modules.client.replication.Global.ScreenPulse )
+local ScreenPulse = require( replicatedStorage.modules.client.replication.Global.ScreenPulse )
 
 local VFX = {}
 

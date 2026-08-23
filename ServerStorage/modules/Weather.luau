@@ -1,15 +1,15 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local ReplicationRemotes = Remotes.Replication
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Hitbox = require( ReplicatedStorage.modules.shared.Game.Hitbox.Type.Box )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Hitbox = require( replicatedStorage.modules.shared.Game.Hitbox.Type.Box )
 
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 

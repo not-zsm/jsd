@@ -1,42 +1,42 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 
-local Flight = require(ReplicatedStorage:WaitForChild("BuildTools"):WaitForChild("FlightHandler"):WaitForChild("Flight"))
+local Flight = require(replicatedStorage:WaitForChild("BuildTools"):WaitForChild("FlightHandler"):WaitForChild("Flight"))
 
 local LocalPlayer = Players.LocalPlayer
 
 ---------------------------------------------------------------------
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Attacks.Global.Ultimate.Invincible
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Attacks.Global.Ultimate.Invincible
 
 ---------------------------------------------------------------------
 
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
 ---------------------------------------------------------------------
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local JobModule = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local JobModule = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
-local Smoke = require( ReplicatedStorage.modules.client.replication.Global.Smoke )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local Smoke = require( replicatedStorage.modules.client.replication.Global.Smoke )
 
-local BugoMesh = require( ReplicatedStorage.modules.client.replication.EffectUtility.Bugo )
+local BugoMesh = require( replicatedStorage.modules.client.replication.EffectUtility.Bugo )
 
-local TekrinnDialogue = require(ReplicatedStorage.modules.effect.tekrinnDialogue)
+local TekrinnDialogue = require(replicatedStorage.modules.effect.tekrinnDialogue)
 
 ---------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ return {
 			local CameraAnimation : AnimationTrack = Camera.Humanoid.Animator:LoadAnimation(Animations.Camera)
 			CameraAnimation:Play(0)
 			
-			Job:Task(Yuki_FOV.AnimateWithMoonFile(ReplicatedStorage.FOVFiles["Invincible Ultimate"]))
+			Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["Invincible Ultimate"]))
 
 			Job:Task(Animation:GetMarkerReachedSignal("end"):Connect(function()
 				CameraAnimation:Stop(0)

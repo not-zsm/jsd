@@ -1,6 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
-local ContextActionService = game:GetService("ContextActionService")
+local contextActionService = game:GetService("ContextActionService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
@@ -13,10 +13,10 @@ ScreenGui.IgnoreGuiInset = true
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = LocalPlayer.PlayerGui
 
-local EventService = require(ReplicatedStorage.modules.shared.Utilities.EventService)
-local Job = require(ReplicatedStorage.modules.shared.Utilities.Job)
+local EventService = require(replicatedStorage.modules.shared.Utilities.EventService)
+local Job = require(replicatedStorage.modules.shared.Utilities.Job)
 
-local RemoteHandler = ReplicatedStorage.Remotes.CreateQT
+local RemoteHandler = replicatedStorage.Remotes.CreateQT
 local SFX = script.SFX
 
 type object = {
@@ -220,7 +220,7 @@ function QuicktimeHandler.Bind(self : object)
 
 		local ID = tostring(QTEID)
 
-		ContextActionService:BindActionAtPriority(ID, function(_, State : Enum.UserInputState)
+		contextActionService:BindActionAtPriority(ID, function(_, State : Enum.UserInputState)
 			if State == Enum.UserInputState.Begin then
 				self.OnPressed:Fire()
 			end
@@ -230,7 +230,7 @@ function QuicktimeHandler.Bind(self : object)
 		end, false, -QTEID, self.Key, self.ControllerKey)
 
 		self.Job:Task(function()
-			ContextActionService:UnbindAction(ID)
+			contextActionService:UnbindAction(ID)
 		end)
 	else
 		self.Button.MouseButton1Down:Connect(function()

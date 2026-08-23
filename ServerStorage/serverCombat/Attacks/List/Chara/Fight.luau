@@ -1,15 +1,15 @@
 
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local Attack = {}
 Attack.__index = Attack
@@ -74,7 +74,7 @@ function Attack:Activate()
 			--local Is_Finisher = self:IsFinisherEnabled() and VictimLuaCharacter.Humanoid.Health <= 15
 
 			local AttackerAnimation : AnimationTrack = self.Animations.Hit--[Is_Finisher and "Finisher" or "Hit"]
-			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Fight"].Victim)--[Is_Finisher and "FinisherVictim" or "Victim"])
+			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Fight"].Victim)--[Is_Finisher and "FinisherVictim" or "Victim"])
 
 			self.Animations.Windup:Stop(0)
 			AttackerAnimation:Play(0)

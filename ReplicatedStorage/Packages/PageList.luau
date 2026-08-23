@@ -4,9 +4,9 @@
 	I have finally made a good solution to the paged-searching that I was wondering how to do efficiently.
 ]]
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Maid = require( ReplicatedStorage.Packages.Maid )
+local Maid = require( replicatedStorage.Packages.Maid )
 
 -------------------------------------------------------------------------------------------------
 

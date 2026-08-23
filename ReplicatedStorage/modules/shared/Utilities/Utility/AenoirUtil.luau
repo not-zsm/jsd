@@ -1,6 +1,6 @@
 local Util = {};
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Utility = require( script.Parent )

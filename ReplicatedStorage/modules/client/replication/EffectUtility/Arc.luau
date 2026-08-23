@@ -1,9 +1,9 @@
 local EffectUtility = {}
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 
 function EffectUtility.ToggleAttachment(Attachment : Attachment, Value : boolean, DurationUntilDisable : number?)
 	for _, Effect : ParticleEmitter in ipairs(Attachment:GetDescendants()) do

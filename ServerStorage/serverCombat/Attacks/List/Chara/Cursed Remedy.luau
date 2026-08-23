@@ -1,15 +1,15 @@
 
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local Attack = {}
 Attack.__index = Attack
@@ -94,7 +94,7 @@ function Attack:Activate()
 
 			local FinishersEnabled = self:IsFinisherEnabled();
 			local Activate_Finisher = FinishersEnabled and (VictimLuaCharacter.Humanoid.Health <= 40)
-			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Cursed Remedy"][Activate_Finisher and "FinisherVictim" or "Victim"])
+			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Cursed Remedy"][Activate_Finisher and "FinisherVictim" or "Victim"])
 
 			self.Thread.OnClosed:Connect(function()
 				self.Combat:StackState("HitboxImmunity", false)
@@ -252,7 +252,7 @@ function Attack:Activate()
 			--		self:Close()
 			--	end))
 				
-			--	local FinisherVictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Cursed Remedy"].FinisherVictim)
+			--	local FinisherVictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Cursed Remedy"].FinisherVictim)
 
 			--	self.Thread.OnClosed:Connect(function()
 			--		VictimLuaCharacter:RestartRespawnTimer()

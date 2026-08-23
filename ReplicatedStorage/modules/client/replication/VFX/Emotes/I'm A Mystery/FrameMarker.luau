@@ -1,5 +1,5 @@
 local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local FrameMarker = {}
 FrameMarker.__index = FrameMarker

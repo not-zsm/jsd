@@ -1,12 +1,12 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Emotes.Erased
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Emotes.Erased
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local Bars = require( ReplicatedStorage.modules.client.replication.Global.BlackBars )
+local Bars = require( replicatedStorage.modules.client.replication.Global.BlackBars )
 
 local Emotes = {}
 

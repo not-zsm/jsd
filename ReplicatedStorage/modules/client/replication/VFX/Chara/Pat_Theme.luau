@@ -1,8 +1,8 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
 
 local Normal = "rbxassetid://74426750731046"
 local Alt = "rbxassetid://98450691438882"

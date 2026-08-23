@@ -10,14 +10,14 @@ local DEFAULT_DATA : FadeData = {
 	Tween = TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.In)
 }
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui : PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
-local Reconcile = require(ReplicatedStorage.Packages.Table).reconcile
+local Reconcile = require(replicatedStorage.Packages.Table).reconcile
 
 return function(Data : FadeData) : (() -> ())
 	local fade_data : FadeData = Reconcile(Data or {}, DEFAULT_DATA)

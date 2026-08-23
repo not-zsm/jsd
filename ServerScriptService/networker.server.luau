@@ -1,9 +1,9 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
-local info = require( ReplicatedStorage.info )
-local network = require( ReplicatedStorage.modules.network )
-local rateLimiter = require( ReplicatedStorage.modules.shared.Utilities.rateLimiter )
+local info = require( replicatedStorage.info )
+local network = require( replicatedStorage.modules.network )
+local rateLimiter = require( replicatedStorage.modules.shared.Utilities.rateLimiter )
 
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 

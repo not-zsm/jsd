@@ -1,9 +1,9 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Ragdoll = require( ReplicatedStorage.modules.shared.movementReplicator.Lib.Ragdoll )
-local Settings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+local Ragdoll = require( replicatedStorage.modules.shared.movementReplicator.Lib.Ragdoll )
+local Settings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
-local Assets = ReplicatedStorage.modules.shared.movementReplicator.Assets;
+local Assets = replicatedStorage.modules.shared.movementReplicator.Assets;
 
 local GhostRagdoll = {};
 GhostRagdoll.__index = GhostRagdoll;

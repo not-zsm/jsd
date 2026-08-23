@@ -1,10 +1,10 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
 local CurrentCamera = workspace.CurrentCamera
 
-local CameraShaker = require( ReplicatedStorage.modules.shared.Utilities.CameraShaker )
+local CameraShaker = require( replicatedStorage.modules.shared.Utilities.CameraShaker )
 
 local Shaker = CameraShaker.new(Enum.RenderPriority.Camera.Value + 10, function(ShakeCFrame : CFrame)
 	CurrentCamera.CFrame *= ShakeCFrame

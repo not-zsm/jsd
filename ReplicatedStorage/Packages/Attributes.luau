@@ -9,7 +9,7 @@
 	- You should use the .changed signal this provides.
 ]]
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 ------------------------------------------------------------------------------------
 

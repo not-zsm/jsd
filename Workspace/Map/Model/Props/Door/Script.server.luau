@@ -5,12 +5,12 @@ local hitbox = main:WaitForChild("hitbox")
 local prompt = hitbox:WaitForChild("prompt")
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local ServerStorage = game:GetService("ServerStorage")
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 prompt.Triggered:Connect(function(player_who_triggered)
 	if main:GetAttribute("Destructed") or not prompt.Enabled then return end
@@ -20,7 +20,7 @@ prompt.Triggered:Connect(function(player_who_triggered)
 	local luaplayer = LuaPlayerList.LuaPlayers[player_who_triggered]
 	
 	if luaplayer then
-		local kick_anim : AnimationTrack = luaplayer.Character:LoadAnimation(ReplicatedStorage.Animations.Miscellaneous.KickDoor)
+		local kick_anim : AnimationTrack = luaplayer.Character:LoadAnimation(replicatedStorage.Animations.Miscellaneous.KickDoor)
 		if (kick_anim == nil) then return end
 
 		prompt.Enabled = false

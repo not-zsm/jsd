@@ -1,11 +1,11 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
 
 local VFX = {}
 
@@ -26,7 +26,7 @@ function VFX.Explode(RootPart : BasePart)
 				PoolSizeRandom = Vector2.new(-0.6, 0.6),
 			})
 			
-			EffectUtility.EmitEffects(ReplicatedStorage.modules.effect.assets.Blood.Splash, Item)
+			EffectUtility.EmitEffects(replicatedStorage.modules.effect.assets.Blood.Splash, Item)
 			Item.Transparency = 1
 			
 		elseif Item:IsA("Decal") then

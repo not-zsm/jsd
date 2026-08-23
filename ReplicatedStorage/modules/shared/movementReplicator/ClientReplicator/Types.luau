@@ -1,12 +1,12 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Packages = ReplicatedStorage.Packages
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local Packages = replicatedStorage.Packages
 
 local Maid = require( Packages.Maid )
 local CFSpring = require( Packages.Spring.CFSpring )
 local Signal = require( Packages.Signal )
 
 local BufferUtil = require( Packages.BufferUtil )
-local Assets = ReplicatedStorage.modules.shared.movementReplicator.Assets;
+local Assets = replicatedStorage.modules.shared.movementReplicator.Assets;
 
 export type ClassReplicant = {
 	__index: ClassReplicant;

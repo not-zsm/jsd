@@ -1,21 +1,21 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 local UIRemotes = CombatRemotes.UI
 local HotbarRemotes = Remotes.Combat.UI.Hotbar
 
-local AttackAnimations = ReplicatedStorage.Animations.Attacks
+local AttackAnimations = replicatedStorage.Animations.Attacks
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
 local Preloading = require( ServerStorage.modules.preloading )

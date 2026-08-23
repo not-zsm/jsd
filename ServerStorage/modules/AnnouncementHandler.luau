@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 local MessagingService = game:GetService("MessagingService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TextService = game:GetService("TextService")
 
 local AnnouncementHandler = {}
@@ -10,7 +10,7 @@ function AnnouncementHandler.Send(Message : {Data : string})
 		local Success, Result = pcall(TextService.FilterStringAsync, TextService, Message.Data or Message, Player.UserId)
 
 		if Success then
-			ReplicatedStorage.Remotes.Announcement:FireClient(Player, Result:GetNonChatStringForBroadcastAsync())
+			replicatedStorage.Remotes.Announcement:FireClient(Player, Result:GetNonChatStringForBroadcastAsync())
 		end
 	end
 end

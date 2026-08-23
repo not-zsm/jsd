@@ -1,18 +1,18 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer.PlayerGui
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 
 local LoopAnim = nil
 
 return {
 	Start = function(Character : Model)
-		local Retrieved = AnimationRetriever.new(Character, ReplicatedStorage.Animations.Emotes.Write.Loop)
+		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.Animations.Emotes.Write.Loop)
 		if (Retrieved == nil) then return end
 
 		local Job = Retrieved.Job
@@ -25,7 +25,7 @@ return {
 		
 		Job:Task(TextBox.FocusLost:Connect(function(EnterPressed)
 			if EnterPressed then
-				ReplicatedStorage.Remotes.Emotes.FinishWriting:FireServer(TextBox.Text)
+				replicatedStorage.Remotes.Emotes.FinishWriting:FireServer(TextBox.Text)
 				
 				TextBox.Text = ""
 				TextBox:ReleaseFocus()

@@ -187,7 +187,7 @@ export type WidgetUtility = {
     RunService: RunService,
     TextService: TextService,
     UserInputService: UserInputService,
-    ContextActionService: ContextActionService,
+    contextActionService: contextActionService,
 
     getTime: () -> number,
     getMouseLocation: () -> Vector2,

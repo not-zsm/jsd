@@ -1,23 +1,23 @@
 local VFX = {}
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
 
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
-local Smoke = require( ReplicatedStorage.modules.client.replication.Global.Smoke )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
+local Smoke = require( replicatedStorage.modules.client.replication.Global.Smoke )
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Attacks.Chara["Lethal Wound"]
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Attacks.Chara["Lethal Wound"]
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local function Stab(MainRootPart : BasePart, VictimModel : Model, Type : string)
 	EffectUtility.CloneAndEmit(script.Assets[Type], MainRootPart)

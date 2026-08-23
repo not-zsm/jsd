@@ -1,12 +1,12 @@
 local AnimationRetriever = {}
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local AenoirUtil = require( ReplicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local AenoirUtil = require( replicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
 
 local Active = {}
 

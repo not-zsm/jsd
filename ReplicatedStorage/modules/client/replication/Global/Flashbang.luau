@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local CaptureService = game:GetService("CaptureService")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
@@ -8,8 +8,8 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer;
 local PlayerGui = Player:WaitForChild("PlayerGui");
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local AenoirUtil = require( ReplicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local AenoirUtil = require( replicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
 local AenoirEmit = EffectUtility.AenoirEmit
 
 local Assets = script;

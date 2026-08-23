@@ -1,12 +1,12 @@
 local CollectionService = game:GetService("CollectionService")
 local TextService = game:GetService("TextService")
 local TweenService = game:GetService("TweenService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local info = require(ReplicatedStorage.info)
+local info = require(replicatedStorage.info)
 
 local ENTRANCE = 0.35
 local STACK_SPACING = 100

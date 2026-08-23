@@ -2,10 +2,10 @@ local RemoteRateLimiter = {}
 local Cooldowns = {}
 
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
-local Remotes = ReplicatedStorage.Remotes
+local network = require( replicatedStorage.modules.network )
+local Remotes = replicatedStorage.Remotes
 
 function RemoteRateLimiter.Check(Remote : RemoteEvent, Player : Player, Rate : number)
 	if Cooldowns[Player] == nil then

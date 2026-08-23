@@ -5,13 +5,13 @@
 	it, carrying the fall speed forward. Miss either condition and you get the
 	soft landing instead, weighted by how hard you hit.
 --]]
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
 ----------------------------------------------------------------------------------
 
-local Animations = ReplicatedStorage.Animations
+local Animations = replicatedStorage.Animations
 
 ----------------------------------------------------------------------------------
 

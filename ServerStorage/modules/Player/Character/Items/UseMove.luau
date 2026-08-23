@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 return function(self, MoveName)
 	--local Conditions = not self.Combat:GetState("Stunned") 

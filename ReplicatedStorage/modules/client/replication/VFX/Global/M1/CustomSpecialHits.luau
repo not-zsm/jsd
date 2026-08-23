@@ -1,14 +1,14 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local Effects = ReplicatedStorage.modules.effect.assets
+local Effects = replicatedStorage.modules.effect.assets
 local CharacterEffects = Effects.Characters
 
 local LocalPlayer = Players.LocalPlayer
 
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
 return {
 	["Chara"] = function(RootPart : BasePart, Type : string, Distance : number)

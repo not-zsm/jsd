@@ -54,10 +54,10 @@ local function getTweenData(obj: Instance, duration: number, prefix: string, def
 	return TweenInfo.new(duration, Values.TweenStyle, Values.TweenDirection)
 end
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local MeshVFX = {}
-MeshVFX.DefaultStorage = ReplicatedStorage.modules.effect.assets.Parts.MeshVFX
+MeshVFX.DefaultStorage = replicatedStorage.modules.effect.assets.Parts.MeshVFX
 
 function MeshVFX.Create(MeshModel : Model, StartPosition : (CFrame | Vector3), GoalOffsetFromStartPosition : (CFrame | Vector3))
 	local MeshModelClone = MeshModel:Clone()

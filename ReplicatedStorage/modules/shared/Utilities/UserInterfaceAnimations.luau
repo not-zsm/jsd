@@ -1,11 +1,11 @@
 local UserInterfaceAnimations = {}
 type Button = ImageButton | TextButton
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 function UserInterfaceAnimations.Click(Button : Button, Pop : number, Info : TweenInfo)
 	Info = Info or TweenInfo.new(0.1, Enum.EasingStyle.Cubic, Enum.EasingDirection.In, 0, true)

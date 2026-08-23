@@ -8,19 +8,19 @@
 	were posed for a character already rotated flat against the wall, which is
 	not what happens any more.
 --]]
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Debris = game:GetService("Debris")
 
 ----------------------------------------------------------------------------------
 
-local Animations = ReplicatedStorage.Animations
+local Animations = replicatedStorage.Animations
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
 ----------------------------------------------------------------------------------
 

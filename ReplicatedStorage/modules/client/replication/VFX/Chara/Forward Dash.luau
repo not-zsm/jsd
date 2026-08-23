@@ -1,17 +1,17 @@
-local ReplicatedStorage = game:GetService('ReplicatedStorage')
+local replicatedStorage = game:GetService('ReplicatedStorage')
 local Players = game:GetService("Players")
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 
-local CharaEffects = ReplicatedStorage.modules.effect.assets.Characters.Chara
+local CharaEffects = replicatedStorage.modules.effect.assets.Characters.Chara
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 
 local VFX = {};
 

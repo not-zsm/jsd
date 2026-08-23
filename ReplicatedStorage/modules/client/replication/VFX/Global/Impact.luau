@@ -1,19 +1,19 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
 local LocalPlayer = Players.LocalPlayer
 
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Shockwave = require( ReplicatedStorage.modules.client.replication.Global.Shockwave )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Shockwave = require( replicatedStorage.modules.client.replication.Global.Shockwave )
 
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local VFX = {}
 

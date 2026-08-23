@@ -1,8 +1,8 @@
 --!strict
 -- Was StarterPlayerScripts/Game/ScaleStroke.client.luau
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local UIStrokeAdjuster = require(ReplicatedStorage.modules.shared.Utilities.UIStrokeAdjuster)
+local UIStrokeAdjuster = require(replicatedStorage.modules.shared.Utilities.UIStrokeAdjuster)
 
 --- ScreenGuis whose strokes scale with resolution.
 local TAGGED = { "Gifting", "Settings", "Information" }

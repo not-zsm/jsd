@@ -1,11 +1,11 @@
 local SlashCommands = {}
 SlashCommands.__index = SlashCommands
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 function SlashCommands.new(CommandHandler)
 	local self = setmetatable({}, SlashCommands)

@@ -2,9 +2,9 @@ local PreviousTransparency = {}
 local PreviousEnabled = {}
 local PreviousParticleTransparency = {};
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local AenoirEmit = require( ReplicatedStorage.modules.client.replication.EffectUtility.AenoirEmit )
+local AenoirEmit = require( replicatedStorage.modules.client.replication.EffectUtility.AenoirEmit )
 
 return function(Model : Model, NewValue : number)
 	

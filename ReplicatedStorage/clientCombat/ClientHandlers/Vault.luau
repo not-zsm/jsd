@@ -1,28 +1,28 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
-local Animations = ReplicatedStorage.Animations
+local Animations = replicatedStorage.Animations
 
 ----------------------------------------------------------------------------------
 
 local VaultHandler = {}
 VaultHandler.__index = VaultHandler	
 
-local Vault = require( ReplicatedStorage.modules.client.replication.VFX.Global.Vault )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Vault = require( replicatedStorage.modules.client.replication.VFX.Global.Vault )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 ----------------------------------------------------------------------------------
 

@@ -1,23 +1,23 @@
 -- I'm tired
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local HideAllUI = require( ReplicatedStorage.modules.client.replication.Global.HideAllUI )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Create_Clone = require( ReplicatedStorage.modules.effect.assets.Characters.Chara.Create_Clone )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local HideAllUI = require( replicatedStorage.modules.client.replication.Global.HideAllUI )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Create_Clone = require( replicatedStorage.modules.effect.assets.Characters.Chara.Create_Clone )
 
-local MoonUtil = require( ReplicatedStorage.modules.client.replication.Global.MoonUtil )
+local MoonUtil = require( replicatedStorage.modules.client.replication.Global.MoonUtil )
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Attacks.Chara["Bloody Mary"]
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Attacks.Chara["Bloody Mary"]
 
 local Assets = script.Assets
 

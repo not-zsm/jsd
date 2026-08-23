@@ -1,7 +1,7 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
 
 return function(Part : BasePart, RaycastDistance : number, PartSize : number)
 	local Raycast = workspace:Raycast(
@@ -11,7 +11,7 @@ return function(Part : BasePart, RaycastDistance : number, PartSize : number)
 	)
 
 	if (Raycast) then
-		local Dust = ReplicatedStorage.modules.effect.assets.Parts.Dust:Clone()
+		local Dust = replicatedStorage.modules.effect.assets.Parts.Dust:Clone()
 		Dust.Smoke.Size = NumberSequence.new(Utility.Seed:NextNumber(1.45, 1.8))
 		
 		Dust.Smoke.Color = ColorSequence.new(Color3.new(

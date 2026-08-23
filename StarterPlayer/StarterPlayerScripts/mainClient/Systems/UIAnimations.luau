@@ -1,12 +1,12 @@
 --!strict
 -- Was StarterPlayerScripts/Game/UserInterfaceAnimations.client.luau
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-require(ReplicatedStorage.Packages.UserInterface)
+require(replicatedStorage.Packages.UserInterface)
 
-local Observer = require(ReplicatedStorage.modules.shared.Utilities.Observer)
-local UserInterfaceAnimations = require(ReplicatedStorage.modules.shared.Utilities.UserInterfaceAnimations)
-local Job = require(ReplicatedStorage.modules.shared.Utilities.Job)
+local Observer = require(replicatedStorage.modules.shared.Utilities.Observer)
+local UserInterfaceAnimations = require(replicatedStorage.modules.shared.Utilities.UserInterfaceAnimations)
+local Job = require(replicatedStorage.modules.shared.Utilities.Job)
 
 type Button = ImageButton | TextButton
 

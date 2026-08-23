@@ -1,7 +1,7 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local NumberStack = require( ReplicatedStorage.modules.shared.Utilities.NumberStack )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local NumberStack = require( replicatedStorage.modules.shared.Utilities.NumberStack )
 
 local function AirVariant_HoldingSpace_FreeFalling(Name : string, ChangingName: string, Color : Color3, self : Combat, NewJob : Job.object)
 	local Stack = NumberStack.new()

@@ -13,7 +13,7 @@ local sign  = math.sign
 local sqrt  = math.sqrt
 local tan   = math.tan
 
-local ContextActionService = game:GetService("ContextActionService")
+local contextActionService = game:GetService("ContextActionService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
@@ -258,7 +258,7 @@ function AllowFreeCam()
 			end
 
 			function Input.StartCapture()
-				ContextActionService:BindActionAtPriority("FreecamKeyboard", Keypress, false, INPUT_PRIORITY,
+				contextActionService:BindActionAtPriority("FreecamKeyboard", Keypress, false, INPUT_PRIORITY,
 					Enum.KeyCode.W, Enum.KeyCode.U,
 					Enum.KeyCode.A, Enum.KeyCode.H,
 					Enum.KeyCode.S, Enum.KeyCode.J,
@@ -267,11 +267,11 @@ function AllowFreeCam()
 					Enum.KeyCode.Q, Enum.KeyCode.Y,
 					Enum.KeyCode.Up, Enum.KeyCode.Down
 				)
-				ContextActionService:BindActionAtPriority("FreecamMousePan",          MousePan,   false, INPUT_PRIORITY, Enum.UserInputType.MouseMovement)
-				ContextActionService:BindActionAtPriority("FreecamMouseWheel",        MouseWheel, false, INPUT_PRIORITY, Enum.UserInputType.MouseWheel)
-				ContextActionService:BindActionAtPriority("FreecamGamepadButton",     GpButton,   false, INPUT_PRIORITY, Enum.KeyCode.ButtonX, Enum.KeyCode.ButtonY)
-				ContextActionService:BindActionAtPriority("FreecamGamepadTrigger",    Trigger,    false, INPUT_PRIORITY, Enum.KeyCode.ButtonR2, Enum.KeyCode.ButtonL2)
-				ContextActionService:BindActionAtPriority("FreecamGamepadThumbstick", Thumb,      false, INPUT_PRIORITY, Enum.KeyCode.Thumbstick1, Enum.KeyCode.Thumbstick2)
+				contextActionService:BindActionAtPriority("FreecamMousePan",          MousePan,   false, INPUT_PRIORITY, Enum.UserInputType.MouseMovement)
+				contextActionService:BindActionAtPriority("FreecamMouseWheel",        MouseWheel, false, INPUT_PRIORITY, Enum.UserInputType.MouseWheel)
+				contextActionService:BindActionAtPriority("FreecamGamepadButton",     GpButton,   false, INPUT_PRIORITY, Enum.KeyCode.ButtonX, Enum.KeyCode.ButtonY)
+				contextActionService:BindActionAtPriority("FreecamGamepadTrigger",    Trigger,    false, INPUT_PRIORITY, Enum.KeyCode.ButtonR2, Enum.KeyCode.ButtonL2)
+				contextActionService:BindActionAtPriority("FreecamGamepadThumbstick", Thumb,      false, INPUT_PRIORITY, Enum.KeyCode.Thumbstick1, Enum.KeyCode.Thumbstick2)
 			end
 
 			function Input.StopCapture()
@@ -279,12 +279,12 @@ function AllowFreeCam()
 				Zero(gamepad)
 				Zero(keyboard)
 				Zero(mouse)
-				ContextActionService:UnbindAction("FreecamKeyboard")
-				ContextActionService:UnbindAction("FreecamMousePan")
-				ContextActionService:UnbindAction("FreecamMouseWheel")
-				ContextActionService:UnbindAction("FreecamGamepadButton")
-				ContextActionService:UnbindAction("FreecamGamepadTrigger")
-				ContextActionService:UnbindAction("FreecamGamepadThumbstick")
+				contextActionService:UnbindAction("FreecamKeyboard")
+				contextActionService:UnbindAction("FreecamMousePan")
+				contextActionService:UnbindAction("FreecamMouseWheel")
+				contextActionService:UnbindAction("FreecamGamepadButton")
+				contextActionService:UnbindAction("FreecamGamepadTrigger")
+				contextActionService:UnbindAction("FreecamGamepadThumbstick")
 			end
 		end
 	end
@@ -478,7 +478,7 @@ function AllowFreeCam()
 			return Enum.ContextActionResult.Pass
 		end
 
-		ContextActionService:BindActionAtPriority("FreecamToggle", HandleActivationInput, false, TOGGLE_INPUT_PRIORITY, FREECAM_MACRO_KB[#FREECAM_MACRO_KB])
+		contextActionService:BindActionAtPriority("FreecamToggle", HandleActivationInput, false, TOGGLE_INPUT_PRIORITY, FREECAM_MACRO_KB[#FREECAM_MACRO_KB])
 
 		if FFlagUserShowGuiHideToggles then
 			script:SetAttribute(FREECAM_ENABLED_ATTRIBUTE_NAME, enabled)

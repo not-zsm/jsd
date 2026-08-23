@@ -1,33 +1,33 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 
 local CombatRemotes = Remotes.Combat
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
-local Animations = ReplicatedStorage.Animations
+local Animations = replicatedStorage.Animations
 
 ----------------------------------------------------------------------------------
 
 local MovementHandler = {}
 MovementHandler.__index = MovementHandler
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
-local InfoCharacter = require( ReplicatedStorage.modules.client.character.InfoCharacter )
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
+local InfoCharacter = require( replicatedStorage.modules.client.character.InfoCharacter )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local Chara_Voicelines = ReplicatedStorage.modules.client.replication.VFX.Chara.Voicelines
+local Chara_Voicelines = replicatedStorage.modules.client.replication.VFX.Chara.Voicelines
 
 local MovementNames = {"Walk", "WalkBack", "WalkLeft", "WalkRight", "Run"};
 local WalkNames = {"Walk", "WalkBack", "WalkLeft", "WalkRight"};
@@ -285,7 +285,7 @@ function MovementHandler:Sit(Value : boolean)
 	end
 end
 
---local Observer = require( ReplicatedStorage.modules.shared.Utilities.Observer )
+--local Observer = require( replicatedStorage.modules.shared.Utilities.Observer )
 
 function MovementHandler:InitStand()
 	local function Setup(Stand : Model)
@@ -301,7 +301,7 @@ function MovementHandler:InitStand()
 
 		assert(CharacterInfo, "No character info");
 
-		for _, Item : (Animation | Folder) in ipairs(ReplicatedStorage.Animations.Attacks[CurrentCharacter][CharacterInfo.StandName]:GetChildren()) do
+		for _, Item : (Animation | Folder) in ipairs(replicatedStorage.Animations.Attacks[CurrentCharacter][CharacterInfo.StandName]:GetChildren()) do
 			if Item:IsA("Animation") then
 				local Track = self.StandAnimator:LoadAnimation(Item)
 
@@ -340,7 +340,7 @@ function MovementHandler:InitStand()
 
 	--	RunService.PostSimulation:Wait()
 
-	--	for _, Item : (Animation | Folder) in ipairs(ReplicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"]:GetChildren()) do
+	--	for _, Item : (Animation | Folder) in ipairs(replicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"]:GetChildren()) do
 	--		if Item:IsA("Animation") then
 	--			local Track = self.StandAnimator:LoadAnimation(Item)
 
@@ -373,7 +373,7 @@ function MovementHandler:InitStand()
 
 	--	RunService.PostSimulation:Wait()
 
-	--	for _, Item : (Animation | Folder) in ipairs(ReplicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"]:GetChildren()) do
+	--	for _, Item : (Animation | Folder) in ipairs(replicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"]:GetChildren()) do
 	--		if Item:IsA("Animation") then
 	--			local Track = self.StandAnimator:LoadAnimation(Item)
 

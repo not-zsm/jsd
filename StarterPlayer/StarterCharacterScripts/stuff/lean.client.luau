@@ -3,9 +3,9 @@ if not script.Parent:IsDescendantOf(workspace) then return end
 
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local info = require(ReplicatedStorage.info)
+local info = require(replicatedStorage.info)
 
 local Character = script.Parent.Parent
 

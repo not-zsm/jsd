@@ -1,8 +1,8 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local network = require( ReplicatedStorage.modules.network )
+local network = require( replicatedStorage.modules.network )
 
-local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )
+local Whitelist = require( replicatedStorage.modules.shared.Game.Whitelist )
 
 return {
 	DisplayName = "Chara",
@@ -178,7 +178,7 @@ return {
 	},
 
 	OnRespawn = function(LuaPlayer, _, Rng : number)
-		local Animation : AnimationTrack = LuaPlayer.Character.Animator:LoadAnimation(ReplicatedStorage.Animations.CharacterSpawnAnimations.Chara.Spawn)
+		local Animation : AnimationTrack = LuaPlayer.Character.Animator:LoadAnimation(replicatedStorage.Animations.CharacterSpawnAnimations.Chara.Spawn)
 
 		Animation:Play()
 		LuaPlayer.Replication:FireReliableVFX("Chara/Spawn", "Start", LuaPlayer.Character.Model)
@@ -258,7 +258,7 @@ return {
 			local VictimCombat = VictimLuaCharacter.Combat
 
 			local UserAnimation : AnimationTrack = self.Animations.WallCombo.Chara.User
-			local VictimAnimation : AnimationTrack? = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Global.Dash.WallCombo.Chara.Victim)
+			local VictimAnimation : AnimationTrack? = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Global.Dash.WallCombo.Chara.Victim)
 			local VictimFlung = false
 
 			self.Thread.OnClosed:Connect(function()

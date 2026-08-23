@@ -1,7 +1,7 @@
 local ball = script.Parent.Parent.Parent.Parent
 local driverSeat = ball.DriverSeat
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Logic for player entering the ball
 local function enterBall(player: Player)

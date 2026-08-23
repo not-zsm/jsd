@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 return {
 	DevOnly = true,
@@ -84,11 +84,11 @@ return {
 				-- End Windup and start the vertical flight
 				StartAnimation:Stop(0)
 				
-				local FlightStart : AnimationTrack = self.LuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Global.Ultimate.Invincible.FlightStart)
+				local FlightStart : AnimationTrack = self.LuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Global.Ultimate.Invincible.FlightStart)
 				FlightStart:Play(0)
 				
 				-- Load SlamAnimation
-				local SlamAnimation : AnimationTrack = self.LuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Global.Ultimate.Invincible.Slam)
+				local SlamAnimation : AnimationTrack = self.LuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Global.Ultimate.Invincible.Slam)
 				
 				-- Start Listening for mouse position
 				self.Combat.Mouse:BeginRequesting(nil, "Invincible_Ultimate")
@@ -229,7 +229,7 @@ return {
 			
 			
 	--		local AttackerAnimation = self.Animations.WallCombo.Invincible.User
-	--		local VictimAnimation = VictimLuaCharacter.Humanoid:LoadAnimation(ReplicatedStorage.Animations.Attacks.Global.Dash.WallCombo.Invincible.Victim)
+	--		local VictimAnimation = VictimLuaCharacter.Humanoid:LoadAnimation(replicatedStorage.Animations.Attacks.Global.Dash.WallCombo.Invincible.Victim)
 
 	--		local Ended = false
 

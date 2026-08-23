@@ -2,19 +2,19 @@ local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local Lighting = game:GetService("Lighting")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local MoonUtil = require( ReplicatedStorage.modules.client.replication.Global.MoonUtil )
-local Animations = ReplicatedStorage.Animations.Emotes["Chainsaw Heart"]
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local MoonUtil = require( replicatedStorage.modules.client.replication.Global.MoonUtil )
+local Animations = replicatedStorage.Animations.Emotes["Chainsaw Heart"]
 
 local LocalPlayer = Players.LocalPlayer
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local OldLighting = require( ReplicatedStorage.modules.shared.Game.GameLighting )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
-local Yuki_FOV = require(ReplicatedStorage.modules.client.replication.Global.Yuki_FOV)
-local RunCameraRig = require(ReplicatedStorage.modules.client.replication.Global.RunCameraRig)
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local OldLighting = require( replicatedStorage.modules.shared.Game.GameLighting )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+local Yuki_FOV = require(replicatedStorage.modules.client.replication.Global.Yuki_FOV)
+local RunCameraRig = require(replicatedStorage.modules.client.replication.Global.RunCameraRig)
 
 local function tweenBeamTransparency(
 	beam: Beam,
@@ -152,7 +152,7 @@ return {
 				CameraAnimation.TimePosition = Animation.TimePosition
 			end))
 
-			local RemoveFOV = Yuki_FOV.AnimateWithMoonFile(ReplicatedStorage.FOVFiles["Chainsaw Heart"])
+			local RemoveFOV = Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["Chainsaw Heart"])
 			Job:Task(RemoveFOV)
 
 			Job:Task(RunCameraRig(RootPart, Camera, nil, {}))

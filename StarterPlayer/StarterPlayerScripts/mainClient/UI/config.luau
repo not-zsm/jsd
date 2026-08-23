@@ -6,9 +6,9 @@
 	that a moveset does not carry.
 --]]
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local info = require(ReplicatedStorage.info)
+local info = require(replicatedStorage.info)
 
 local Player = Players.LocalPlayer
 

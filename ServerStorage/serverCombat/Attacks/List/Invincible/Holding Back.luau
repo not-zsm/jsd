@@ -1,12 +1,12 @@
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
@@ -64,7 +64,7 @@ function Attack:Finisher(VictimLuaPlayer)
 		end)
 	end))
 	
-	local VictimAnimation = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Invincible["Holding Back"].Finisher.Victim)
+	local VictimAnimation = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Invincible["Holding Back"].Finisher.Victim)
 	
 	self.Thread.Job:Task(self.Animations.Finisher.User:GetMarkerReachedSignal("10"):Connect(function()
 		VictimKilled = true

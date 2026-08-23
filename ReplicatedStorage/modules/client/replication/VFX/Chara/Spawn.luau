@@ -1,17 +1,17 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local Lighting = game:GetService("Lighting")
 
 local LocalPlayer = Players.LocalPlayer
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local AnimationObject = ReplicatedStorage.Animations.CharacterSpawnAnimations.Chara.Spawn
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local AnimationObject = replicatedStorage.Animations.CharacterSpawnAnimations.Chara.Spawn
 
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 local ArcVFX = EffectUtility.Arc -- 💖
 
 local Assets = script.Assets

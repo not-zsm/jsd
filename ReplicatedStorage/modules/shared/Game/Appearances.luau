@@ -63,8 +63,8 @@ task.spawn(function()
 end)
 
 if RunService:IsServer() then
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
-	local Observer = require( ReplicatedStorage.Packages.Observer )
+	local replicatedStorage = game:GetService("ReplicatedStorage")
+	local Observer = require( replicatedStorage.Packages.Observer )
 
 	Observer.observe_tag("Random_Developer_Outfit", function(Model : Model)
 		local Developer : HumanoidDescription = Appearances.GetRandomDeveloper()

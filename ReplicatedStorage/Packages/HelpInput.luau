@@ -1,7 +1,7 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService");
 local RunService = game:GetService("RunService")
-local ContextActionService = game:GetService("ContextActionService")
+local contextActionService = game:GetService("ContextActionService")
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer;
@@ -86,12 +86,12 @@ function InputHelper.LockCameraRotation()
 		return Enum.ContextActionResult.Sink;
 	end
 	
-	ContextActionService:BindAction("BlockCameraPan", blockCamera, false, Enum.UserInputType.Touch)
+	contextActionService:BindAction("BlockCameraPan", blockCamera, false, Enum.UserInputType.Touch)
 	xpcall(SetCameraInputEnabled, warn, false);
 end
 
 function InputHelper.UnlockCameraRotation()
-	ContextActionService:UnbindAction("BlockCameraPan")
+	contextActionService:UnbindAction("BlockCameraPan")
 	xpcall(SetCameraInputEnabled, warn, true);
 end
 
@@ -249,7 +249,7 @@ function InputHelper.BindToHandle(Handle: Handles, Context): RBXScriptConnection
 			Connection:Disconnect()
 		end
 		
-		ContextActionService:BindAction("MobileInputSink", DummyMethod, false, Enum.UserInputType.Touch);
+		contextActionService:BindAction("MobileInputSink", DummyMethod, false, Enum.UserInputType.Touch);
 		
 		Connection = UserInputService.InputEnded:Connect(function(input, processed)
 			if InputHelper.IsInteract(input) or (input.KeyCode == Enum.KeyCode.ButtonA) then
@@ -257,7 +257,7 @@ function InputHelper.BindToHandle(Handle: Handles, Context): RBXScriptConnection
 					Connection:Disconnect();
 				end;
 				
-				ContextActionService:UnbindAction("MobileInputSink");
+				contextActionService:UnbindAction("MobileInputSink");
 				Context[Enum.UserInputState.End](Handle);
 			end
 		end)

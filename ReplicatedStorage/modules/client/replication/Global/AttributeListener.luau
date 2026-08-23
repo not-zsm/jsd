@@ -1,9 +1,9 @@
 local AttributeListener = {}
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 --function AttributeListener.GetReplicationFromSource(ReplicationSource : (Player | Model | BasePart))
 --	local Source = nil

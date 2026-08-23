@@ -1,18 +1,18 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local AnimationRetriever = require(ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever)
-local CameraShake = require(ReplicatedStorage.modules.client.replication.Global.CameraShake)
-local RockHandler = require(ReplicatedStorage.modules.client.replication.Global.RockHandler)
-local EffectUtility = require(ReplicatedStorage.modules.client.replication.EffectUtility)
-local BugoVFX = require(ReplicatedStorage.modules.client.replication.EffectUtility.Bugo)
-local Vignette = require(ReplicatedStorage.modules.client.replication.Global.Vignette)
-local Yuki_FOV = require(ReplicatedStorage.modules.client.replication.Global.Yuki_FOV)
-local Utility = require(ReplicatedStorage.modules.shared.Utilities.Utility)
-local Table = require(ReplicatedStorage.Packages.Table)
+local AnimationRetriever = require(replicatedStorage.modules.client.replication.VFX.AnimationRetriever)
+local CameraShake = require(replicatedStorage.modules.client.replication.Global.CameraShake)
+local RockHandler = require(replicatedStorage.modules.client.replication.Global.RockHandler)
+local EffectUtility = require(replicatedStorage.modules.client.replication.EffectUtility)
+local BugoVFX = require(replicatedStorage.modules.client.replication.EffectUtility.Bugo)
+local Vignette = require(replicatedStorage.modules.client.replication.Global.Vignette)
+local Yuki_FOV = require(replicatedStorage.modules.client.replication.Global.Yuki_FOV)
+local Utility = require(replicatedStorage.modules.shared.Utilities.Utility)
+local Table = require(replicatedStorage.Packages.Table)
 
 local EffectFolder = script.Effects
 
@@ -54,7 +54,7 @@ end
 
 return {
 	Start = function(character : Model)
-		local retrieved = AnimationRetriever.new(character, ReplicatedStorage.Animations.Emotes["Super Saiyan"])
+		local retrieved = AnimationRetriever.new(character, replicatedStorage.Animations.Emotes["Super Saiyan"])
 		if (retrieved == nil) then return end
 		
 		local root_part = retrieved.RootPart

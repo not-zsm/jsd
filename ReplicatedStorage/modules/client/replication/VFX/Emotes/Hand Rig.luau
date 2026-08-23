@@ -1,8 +1,8 @@
 local TweenService = game:GetService("TweenService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
 
 local Info = TweenInfo.new(0.5)
 

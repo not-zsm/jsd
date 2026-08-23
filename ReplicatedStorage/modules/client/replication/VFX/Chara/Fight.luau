@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
@@ -10,38 +10,38 @@ local LocalPlayer = Players.LocalPlayer
 
 ---------------------------------------------------------------------
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Attacks.Chara.Fight
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Attacks.Chara.Fight
 
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
-
----------------------------------------------------------------------
-
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
-
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
-
-local Afterimage = require( ReplicatedStorage.modules.client.replication.Global.Afterimage )
-local ATrainAfterimage = require( ReplicatedStorage.modules.client.replication.Global.ATrainAfterimage )
-
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-
-local Chara_Assets = ReplicatedStorage.modules.effect.assets.Characters.Chara
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
 
 ---------------------------------------------------------------------
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
+
+local Afterimage = require( replicatedStorage.modules.client.replication.Global.Afterimage )
+local ATrainAfterimage = require( replicatedStorage.modules.client.replication.Global.ATrainAfterimage )
+
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+
+local Chara_Assets = replicatedStorage.modules.effect.assets.Characters.Chara
 
 ---------------------------------------------------------------------
 
-local Fight_UI = require( ReplicatedStorage.modules.effect.assets.Characters.Chara.Fight_UI )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
+
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+
+---------------------------------------------------------------------
+
+local Fight_UI = require( replicatedStorage.modules.effect.assets.Characters.Chara.Fight_UI )
 
 local function Hit_VFX(Model : Model, AnimationName : string, Finisher : boolean)
 	local Retrieved = AnimationRetriever.new(Model, Animations[AnimationName])

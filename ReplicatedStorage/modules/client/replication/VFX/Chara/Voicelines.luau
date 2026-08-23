@@ -1,6 +1,6 @@
 local Lines = {}
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
@@ -8,8 +8,8 @@ local LocalPlayer = Players.LocalPlayer
 
 local SoundService = game:GetService("SoundService")
 
-local TekrinnDialogue = require( ReplicatedStorage.modules.effect.tekrinnDialogue )
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
+local TekrinnDialogue = require( replicatedStorage.modules.effect.tekrinnDialogue )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
 local CurrentLine
 local PreviousLinePriority = 0

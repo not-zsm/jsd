@@ -3,15 +3,15 @@ GamepassGiftingHandler.__index = GamepassGiftingHandler
 
 local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserService = game:GetService("UserService")
 
-local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+local Remotes = replicatedStorage:WaitForChild("Remotes")
 
 local LocalPlayer = Players.LocalPlayer
 
 -- Configuration Module
-local Gamepasses = require( ReplicatedStorage.modules.shared.Game.Gamepasses )
+local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
 
 function GamepassGiftingHandler.new(Gui)
 	local self = setmetatable({}, GamepassGiftingHandler)

@@ -1,13 +1,13 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local CollectionService = game:GetService("CollectionService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
 local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 
-local info = require(ReplicatedStorage.info)
+local info = require(replicatedStorage.info)
 
 -- shared.* is still read in about twenty places. It mirrors info rather than
 -- holding its own values, so there is one source and the call sites can migrate
@@ -45,7 +45,7 @@ end)
 
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
 
-task.spawn(require, ReplicatedStorage.modules.shared.Game.Appearances)
+task.spawn(require, replicatedStorage.modules.shared.Game.Appearances)
 task.spawn(require, ServerStorage.modules.HavocHandler )
 task.spawn(require, ServerStorage.modules.CommandHandler)
 task.spawn(require, ServerStorage.modules.AnnouncementHandler)

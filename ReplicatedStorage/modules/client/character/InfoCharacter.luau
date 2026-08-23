@@ -1,7 +1,7 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local CombatRemotes = ReplicatedStorage.Remotes.Combat;
-local Signal = require( ReplicatedStorage.Packages.Signal )
+local CombatRemotes = replicatedStorage.Remotes.Combat;
+local Signal = require( replicatedStorage.Packages.Signal )
 
 local Characters = {};
 Characters.List = {};

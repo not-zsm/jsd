@@ -1,10 +1,10 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local HotbarData = require( script.Parent.HotbarData )
 
 local LocalPlayer = Players.LocalPlayer

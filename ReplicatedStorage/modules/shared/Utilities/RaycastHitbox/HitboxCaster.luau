@@ -1,13 +1,13 @@
 -- @author Swordphin123
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 
 local VisualizerCache = require(script.Parent.VisualizerCache)
 local Solver = require(script.Parent.Solver)
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 local ActiveHitboxes = {}
 

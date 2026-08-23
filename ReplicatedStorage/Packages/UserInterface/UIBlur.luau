@@ -1,12 +1,12 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local Lighting = game:GetService("Lighting")
 
 -----------------------------------------------------------------------------------------
 
-local Maid = require( ReplicatedStorage.Packages.Maid )
-local Observer = require( ReplicatedStorage.Packages.Observer )
+local Maid = require( replicatedStorage.Packages.Maid )
+local Observer = require( replicatedStorage.Packages.Observer )
 
 -----------------------------------------------------------------------------------------
 

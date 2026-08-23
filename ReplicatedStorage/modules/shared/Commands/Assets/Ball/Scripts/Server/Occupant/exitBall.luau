@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local ball = script.Parent.Parent.Parent.Parent
 local driverSeat = ball.DriverSeat

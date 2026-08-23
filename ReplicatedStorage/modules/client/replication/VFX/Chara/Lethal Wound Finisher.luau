@@ -1,13 +1,13 @@
 local VFX = {}
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
 
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 
 local LocalPlayer = Players.LocalPlayer
 local Slice = nil

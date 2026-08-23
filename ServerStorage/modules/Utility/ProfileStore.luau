@@ -182,7 +182,7 @@ local MAX_MESSAGE_QUEUE = 1000 -- Max messages saved in a profile that were sent
 
 ----- Dependencies -----
 
--- local Util = require(ReplicatedStorage.modules.shared.Util)
+-- local Util = require(replicatedStorage.modules.shared.Util)
 -- local Signal = Util.Signal
 
 local Signal do

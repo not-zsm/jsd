@@ -1,8 +1,8 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local Havoc = require("../Havoc");
 
-local Shared = ReplicatedStorage.modules.shared.havoc;
+local Shared = replicatedStorage.modules.shared.havoc;
 local Remotes = Shared.Remotes;
 
 local ReplicatedDestruction = setmetatable({}, Havoc);

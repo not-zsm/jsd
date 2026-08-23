@@ -1,8 +1,8 @@
 --!native
 --!strict
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ContextActionService = game:GetService("ContextActionService");
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local contextActionService = game:GetService("ContextActionService");
 local CollectionService = game:GetService("CollectionService");
 local RunService = game:GetService("RunService");
 local Players = game:GetService("Players");

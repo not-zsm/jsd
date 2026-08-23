@@ -1,18 +1,18 @@
 local VFX = {}
 
 local Lighting = game:GetService("Lighting")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local SparksThread = {}
 

@@ -1,19 +1,19 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
-local Shared = ReplicatedStorage.modules.shared
+local Shared = replicatedStorage.modules.shared
 
 local Utility = require( Shared.Utilities.Utility )
 local EventService = require( Shared.Utilities.EventService )
 
-local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+local MovementReplicatorSettings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
 local HavocHandler = require( ServerStorage.modules.HavocHandler )
-local Table = require( ReplicatedStorage.Packages.Table )
+local Table = require( replicatedStorage.Packages.Table )
 
 ----------------------------------------------------------------------------------
 

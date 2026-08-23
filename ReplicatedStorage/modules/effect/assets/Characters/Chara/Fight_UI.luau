@@ -1,13 +1,13 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 local Players = game:GetService("Players")
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
 
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local LocalPlayer = Players.LocalPlayer
 

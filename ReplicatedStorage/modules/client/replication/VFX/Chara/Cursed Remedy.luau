@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
@@ -12,31 +12,31 @@ local CurrentCamera = workspace.CurrentCamera
 
 ---------------------------------------------------------------------
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Attacks.Chara["Cursed Remedy"]
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Attacks.Chara["Cursed Remedy"]
 
 ---------------------------------------------------------------------
 
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
-local Smoke = require( ReplicatedStorage.modules.client.replication.Global.Smoke )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
+local Smoke = require( replicatedStorage.modules.client.replication.Global.Smoke )
 
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
-local Afterimage = require( ReplicatedStorage.modules.client.replication.Global.Afterimage )
-local ATrainAfterimage = require( ReplicatedStorage.modules.client.replication.Global.ATrainAfterimage )
+local Afterimage = require( replicatedStorage.modules.client.replication.Global.Afterimage )
+local ATrainAfterimage = require( replicatedStorage.modules.client.replication.Global.ATrainAfterimage )
 
 ---------------------------------------------------------------------
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
 
-local TekrinnDialogue = require( ReplicatedStorage.modules.effect.tekrinnDialogue )
+local TekrinnDialogue = require( replicatedStorage.modules.effect.tekrinnDialogue )
 
 ---------------------------------------------------------------------
 
@@ -352,7 +352,7 @@ return {
 					LocalPlayerGui.Statistics.Enabled = false
 
 					task.spawn(function()
-						local IconModule = require(ReplicatedStorage.Packages.Icon)
+						local IconModule = require(replicatedStorage.Packages.Icon)
 						IconModule.setTopbarEnabled(false)
 					end)
 
@@ -364,7 +364,7 @@ return {
 						LocalPlayerGui.Statistics.Enabled = true
 
 						task.spawn(function()
-							local IconModule = require(ReplicatedStorage.Packages.Icon)
+							local IconModule = require(replicatedStorage.Packages.Icon)
 							IconModule.setTopbarEnabled(true)
 						end)
 						

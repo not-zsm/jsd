@@ -1,7 +1,7 @@
 
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ function Attack:Activate()
 			local VictimCombat = VictimLuaCharacter.Combat
 
 			local GrabObject = self.Combat:GrabVictim(VictimLuaPlayer, self.LuaCharacter.RootPart, CFrame.new(0, 0, -4.224) * CFrame.Angles(0, math.pi, 0))
-			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara["Death Charge"].Victim)
+			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Chara["Death Charge"].Victim)
 
 			self.Animations.Windup:Stop(0)
 			self.Animations.Hit:Play(0)

@@ -1,8 +1,8 @@
 --!nocheck
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Signal = require( ReplicatedStorage.Packages.Signal )
+local Signal = require( replicatedStorage.Packages.Signal )
 
 export type SliceInfo = {coordinate: CFrame, size: Vector3};
 

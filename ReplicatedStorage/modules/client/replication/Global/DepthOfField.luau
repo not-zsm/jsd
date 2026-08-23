@@ -10,11 +10,11 @@ type Class = {
 	NearIntensity : number?,
 }
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 
-local Table = require(ReplicatedStorage.Packages.Table)
+local Table = require(replicatedStorage.Packages.Table)
 
 return function(Data : Class)
 	Data = Table.reconcile(Data or {}, {

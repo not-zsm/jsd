@@ -1,17 +1,17 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 ---------------------------------------------------------------------------------
 
-local Packages = ReplicatedStorage.Packages
+local Packages = replicatedStorage.Packages
 local Maid = require( Packages.Maid )
 local BufferUtil = require( Packages.BufferUtil )
 
 local Types = require( script.Parent.Types );
-local Util = require( ReplicatedStorage.modules.shared.movementReplicator.Util )
-local Settings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+local Util = require( replicatedStorage.modules.shared.movementReplicator.Util )
+local Settings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
-local Remotes = ReplicatedStorage.modules.shared.movementReplicator.Remotes;
+local Remotes = replicatedStorage.modules.shared.movementReplicator.Remotes;
 
 ---------------------------------------------------------------------------------
 

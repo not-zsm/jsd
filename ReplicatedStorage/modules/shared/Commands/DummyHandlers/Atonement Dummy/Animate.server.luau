@@ -2,8 +2,8 @@ local Model = script.Parent
 local Humanoid = Model:WaitForChild("Humanoid")
 local Animator = Humanoid:WaitForChild("Animator")
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local AnimationsFolder = ReplicatedStorage:WaitForChild("Animations")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local AnimationsFolder = replicatedStorage:WaitForChild("Animations")
 local MovementFolder = AnimationsFolder:WaitForChild("Movement")
 local CharaAnimations = MovementFolder:WaitForChild("Chara")
 

@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
@@ -9,22 +9,22 @@ local CurrentCamera = workspace.CurrentCamera
 
 -------------------------------------------------------------------------------
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 -------------------------------------------------------------------------------
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
 
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Smoke = require( ReplicatedStorage.modules.client.replication.Global.Smoke )
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Smoke = require( replicatedStorage.modules.client.replication.Global.Smoke )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
 
 local Flies = setmetatable({}, {__mode = "k"}) -- removes automatically if index is nil
 
@@ -49,7 +49,7 @@ end
 return {
 	StartBeatdown = function(Model : Model, VictimModel : Model)
 		local Retrieved = AnimationRetriever.new(Model,
-			ReplicatedStorage.Animations.Attacks.Invincible["Holding Back"].Finisher.User
+			replicatedStorage.Animations.Attacks.Invincible["Holding Back"].Finisher.User
 		)
 
 		if (Retrieved == nil) then return end
@@ -88,11 +88,11 @@ return {
 		
 		-- Start Camera
 		if PlayerIsAttackerOrVictim then
-			local Camera : Model = Job:Task(ReplicatedStorage.modules.effect.assets["Camera's"].MJJBA:Clone())
+			local Camera : Model = Job:Task(replicatedStorage.modules.effect.assets["Camera's"].MJJBA:Clone())
 			Camera:PivotTo(RootPart.CFrame)
 			Camera.Parent = workspace.Visuals
 
-			local CameraAnimation : AnimationTrack = Camera.Humanoid.Animator:LoadAnimation(ReplicatedStorage.Animations.Attacks.Invincible["Holding Back"].Finisher.BeatdownCamera)
+			local CameraAnimation : AnimationTrack = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Attacks.Invincible["Holding Back"].Finisher.BeatdownCamera)
 			CameraAnimation:Play(0)
 
 			Job:Task(CameraAnimation.Stopped:Connect(function()

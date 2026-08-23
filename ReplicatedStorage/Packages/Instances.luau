@@ -1,7 +1,7 @@
 --!native
 --!strict
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Debris = game:GetService("Debris")
 local TweenService = game:GetService("TweenService")
 local GeometryService = game:GetService("GeometryService")

@@ -3,7 +3,7 @@
 --!strict
 --!native
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Maid = require( "./Maid" )

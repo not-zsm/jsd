@@ -1,6 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
 
 return {
 	["Purple"] = function(Origin : Vector3, Direction : Vector3)

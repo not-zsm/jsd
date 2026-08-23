@@ -10,7 +10,7 @@ return {
 		end
 
 		local Players = game:GetService("Players")
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local replicatedStorage = game:GetService("ReplicatedStorage")
 		local TweenService = game:GetService("TweenService")
 		local RunService = game:GetService("RunService")
 
@@ -21,8 +21,8 @@ return {
 
 		local Status = MatchmakingScreen:WaitForChild("Status")
 
-		local Functions = require(ReplicatedStorage.modules.shared.QueueFunctions)
-		local HitboxBox = require(ReplicatedStorage.modules.shared.Game.Hitbox.Type.Box)
+		local Functions = require(replicatedStorage.modules.shared.QueueFunctions)
+		local HitboxBox = require(replicatedStorage.modules.shared.Game.Hitbox.Type.Box)
 
 		local MatchmakingElo = 0
 		local ZoneSessionId = 0
@@ -72,7 +72,7 @@ return {
 			RequestInFlight = false
 			CurrentMatch = nil
 
-			ReplicatedStorage.Remotes.Queue.CancelMatchmake:FireServer()
+			replicatedStorage.Remotes.Queue.CancelMatchmake:FireServer()
 	
 			UpdateMatchmakingStatus(nil, MatchmakingElo)
 			DisconnectExitWatch()
@@ -119,7 +119,7 @@ return {
 			MatchmakingScreen.TextBox.TextEditable = false
 			pcall(function()
 				local UserId = Players:GetUserIdFromNameAsync(MatchmakingScreen.TextBox.Text)
-				local Success, ErrorMsg = ReplicatedStorage.Remotes.Queue.PartyRequest:InvokeServer(UserId)
+				local Success, ErrorMsg = replicatedStorage.Remotes.Queue.PartyRequest:InvokeServer(UserId)
 				if not Success then
 					MatchmakingScreen.TextBox.Text = ErrorMsg
 				else
@@ -142,7 +142,7 @@ return {
 			CurrentMatch = Match
 		end
 
-		ReplicatedStorage.Remotes.Queue.UpdateMatchmakingStatus.OnClientEvent:Connect(function(Match, Elo, ServerNow)
+		replicatedStorage.Remotes.Queue.UpdateMatchmakingStatus.OnClientEvent:Connect(function(Match, Elo, ServerNow)
 			print("Received UpdateMatchmakingStatus from server. Match exists:", Match ~= nil)
 	
 			if not IsQueueing and Match ~= nil then
@@ -157,7 +157,7 @@ return {
 			UpdateMatchmakingStatus(Match, Elo)
 		end)
 
-		ReplicatedStorage.Remotes.Queue.UpdatePartyStatus.OnClientEvent:Connect(function(Party, Owner)
+		replicatedStorage.Remotes.Queue.UpdatePartyStatus.OnClientEvent:Connect(function(Party, Owner)
 			for _, Frame in MatchmakingScreen.Party.Body:GetChildren() do
 				if Frame:IsA("ImageLabel") then
 					Frame:Destroy()
@@ -172,7 +172,7 @@ return {
 					Headshot.DisplayName.Text = UserData.Name
 					Headshot.TextButton.Visible = Owner
 					Headshot.TextButton.MouseButton1Up:Connect(function()
-						ReplicatedStorage.Remotes.Queue.KickPlayer:FireServer(UserInfo.UserId)
+						replicatedStorage.Remotes.Queue.KickPlayer:FireServer(UserInfo.UserId)
 					end)
 					Headshot.Parent = MatchmakingScreen.Party.Body
 				end)
@@ -181,9 +181,9 @@ return {
 			MatchmakingScreen.Party.Visible = #Party > 1
 		end)
 
-		ReplicatedStorage.Remotes.Queue.Error.OnClientEvent:Connect(ShowErrorMsg)
+		replicatedStorage.Remotes.Queue.Error.OnClientEvent:Connect(ShowErrorMsg)
 
-		ReplicatedStorage.Remotes.Queue.NotifyPartyRequest.OnClientEvent:Connect(function(Requests)
+		replicatedStorage.Remotes.Queue.NotifyPartyRequest.OnClientEvent:Connect(function(Requests)
 			MatchmakingScreen.Requests.Visible = #Requests > 0
 	
 			for _, Frame in MatchmakingScreen.Requests:GetChildren() do
@@ -207,7 +207,7 @@ return {
 						Waiting = true
 						PartyRequest.TextButton.Text = "..."
 				
-						local CouldJoin, ErrorMsg = ReplicatedStorage.Remotes.Queue.JoinParty:InvokeServer(UserId)
+						local CouldJoin, ErrorMsg = replicatedStorage.Remotes.Queue.JoinParty:InvokeServer(UserId)
 				
 						if ErrorMsg then
 							PartyRequest.TextButton.Text = ErrorMsg
@@ -310,7 +310,7 @@ return {
 
 			RequestInFlight = true
 	
-			local Success, Reason = ReplicatedStorage.Remotes.Queue.StartMatchmake:InvokeServer("1v1_casual")
+			local Success, Reason = replicatedStorage.Remotes.Queue.StartMatchmake:InvokeServer("1v1_casual")
 	
 			RequestInFlight = false
 

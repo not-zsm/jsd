@@ -1,12 +1,12 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local Players = game:GetService("Players")
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local AttributeListener = require( ReplicatedStorage.modules.client.replication.Global.AttributeListener )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local AttributeListener = require( replicatedStorage.modules.client.replication.Global.AttributeListener )
 
-local DashRocks = require( ReplicatedStorage.modules.client.replication.Global.DashRocks )
-local Shockwave = require( ReplicatedStorage.modules.client.replication.Global.Shockwave )
+local DashRocks = require( replicatedStorage.modules.client.replication.Global.DashRocks )
+local Shockwave = require( replicatedStorage.modules.client.replication.Global.Shockwave )
 
 local VFX = {}
 

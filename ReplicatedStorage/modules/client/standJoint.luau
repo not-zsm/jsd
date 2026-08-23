@@ -1,11 +1,11 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 
 --------------------------------------------------------------------------------------------
 
-local Maid = require( ReplicatedStorage.Packages.Maid )
-local CFSpring = require( ReplicatedStorage.Packages.Spring.CFSpring )
+local Maid = require( replicatedStorage.Packages.Maid )
+local CFSpring = require( replicatedStorage.Packages.Spring.CFSpring )
 
 --------------------------------------------------------------------------------------------
 

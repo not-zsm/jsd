@@ -41,14 +41,14 @@
 
 local Chat = game:GetService("Chat")
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
 local IsStudio = RunService:IsStudio()
 
 local LuaPlayerList = require(ServerStorage.modules.LuaPlayerList)
-local JobHandler = require(ReplicatedStorage.modules.shared.Utilities.Job)
+local JobHandler = require(replicatedStorage.modules.shared.Utilities.Job)
 
 local TextForPeople = {
 	[1371497771] = {
@@ -112,8 +112,8 @@ return function(LuaPlayer)
 
 		local VictimCombat = VictimLuaCharacter.Combat
 
-		local UserAnimation : AnimationTrack = LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Attacks.Universal.DummyCounter.User)
-		local VictimAnimation : AnimationTrack = VictimLuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Attacks.Universal.DummyCounter.Victim)
+		local UserAnimation : AnimationTrack = LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Attacks.Universal.DummyCounter.User)
+		local VictimAnimation : AnimationTrack = VictimLuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Attacks.Universal.DummyCounter.Victim)
 
 		UserAnimation:Play()
 		VictimAnimation:Play()

@@ -1,7 +1,7 @@
 -----------------------------
 -- SERVICES --
 -----------------------------
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -10,7 +10,7 @@ local Players = game:GetService("Players")
 -- VARIABLES --
 -----------------------------
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 -----------------------------
 -- TYPES --

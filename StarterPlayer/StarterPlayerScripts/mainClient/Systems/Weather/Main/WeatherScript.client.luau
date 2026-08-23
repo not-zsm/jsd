@@ -1,6 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Weather = require( ReplicatedStorage.modules.client.weather )
+local Weather = require( replicatedStorage.modules.client.weather )
 local NewWeather = Weather.new()
 
 local Actor = script:GetActor()

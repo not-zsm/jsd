@@ -16,8 +16,8 @@ local function cleanup()
 	end
 end
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local EventService = require( ReplicatedStorage.modules.shared.Utilities.EventService )
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 local Setup = EventService.new()
 local Bind

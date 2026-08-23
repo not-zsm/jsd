@@ -1,15 +1,15 @@
 
 
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 local UIRemotes = Remotes.Combat.UI
 
 ----------------------------------------------------------------------------------
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 local Attack = {}
@@ -409,7 +409,7 @@ function Attack:FeralTakedown()
 			self.Thread.Job:Task(self.LuaCharacter:StopAutoRotate())
 
 			local GrabObject = self.Combat:GrabVictim(VictimLuaPlayer, self.LuaCharacter.RootPart, CFrame.new(0, 5, 0), "CharaOnslaughtAerial")
-			local VictimAnimation : AnimationTrack = VictimLuaCharacter.Humanoid.Animator:LoadAnimation(ReplicatedStorage.Animations.Attacks.Chara.Onslaught.AerialVictim)
+			local VictimAnimation : AnimationTrack = VictimLuaCharacter.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Attacks.Chara.Onslaught.AerialVictim)
 			
 			local Ended = false
 			

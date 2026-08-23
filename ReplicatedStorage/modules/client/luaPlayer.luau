@@ -1,18 +1,18 @@
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local ContentProvider = game:GetService("ContentProvider")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
---local Weather = require( ReplicatedStorage.modules.client.weather )
+--local Weather = require( replicatedStorage.modules.client.weather )
 
 local Player = Players.LocalPlayer;
-local Remotes = ReplicatedStorage.Remotes;
+local Remotes = replicatedStorage.Remotes;
 
 ----------------------------------------------------------------------------------
 
-local Animations = ReplicatedStorage.Animations
+local Animations = replicatedStorage.Animations
 
 local Character = require( script.Parent.character )
 local Replication = require( script.Parent.replication )
@@ -54,7 +54,7 @@ end
 ----------------------------------------------------------------------------------
 
 function LuaPlayer:PromptGamepassPurchase(Gamepass : string)
-	ReplicatedStorage.Remotes.PromptGamepassPurchase:FireServer(Gamepass)
+	replicatedStorage.Remotes.PromptGamepassPurchase:FireServer(Gamepass)
 end
 	
 function LuaPlayer:EditPlayerModule()

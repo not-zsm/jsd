@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
@@ -8,29 +8,29 @@ local LocalPlayer = Players.LocalPlayer
 
 ---------------------------------------------------------------------
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = ReplicatedStorage.Animations.Attacks.Chara["Atonement"]
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local Animations = replicatedStorage.Animations.Attacks.Chara["Atonement"]
 
 ---------------------------------------------------------------------
 
-local RockHandler = require( ReplicatedStorage.modules.client.replication.Global.RockHandler )
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local Blood = require( ReplicatedStorage.modules.client.replication.Global.Blood )
+local RockHandler = require( replicatedStorage.modules.client.replication.Global.RockHandler )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local Blood = require( replicatedStorage.modules.client.replication.Global.Blood )
 
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
-local Afterimage = require( ReplicatedStorage.modules.client.replication.Global.Afterimage )
-local ATrainAfterimage = require( ReplicatedStorage.modules.client.replication.Global.ATrainAfterimage )
+local Afterimage = require( replicatedStorage.modules.client.replication.Global.Afterimage )
+local ATrainAfterimage = require( replicatedStorage.modules.client.replication.Global.ATrainAfterimage )
 
-local RunCameraRig = require( ReplicatedStorage.modules.client.replication.Global.RunCameraRig )
+local RunCameraRig = require( replicatedStorage.modules.client.replication.Global.RunCameraRig )
 
 ---------------------------------------------------------------------
 
-local EffectUtility = require( ReplicatedStorage.modules.client.replication.EffectUtility )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
 
 ---------------------------------------------------------------------
 
@@ -75,7 +75,7 @@ return {
 			
 	--		CameraAnimation:Play(0)
 	--		MainJob:Task(RunCameraRig(RootPart, Camera))
-	--		MainJob:Task(Yuki_FOV.AnimateWithMoonFile(ReplicatedStorage.FOVFiles["Death Charge"]))
+	--		MainJob:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["Death Charge"]))
 	--	end
 
 	--	MainJob:Task(Animation:GetMarkerReachedSignal("vfx"):Connect(function(Parameter : string)
@@ -157,7 +157,7 @@ return {
 
 			CameraAnimation:Play(0)
 			MainJob:Task(RunCameraRig(RootPart, Camera))
-			MainJob:Task(Yuki_FOV.AnimateWithMoonFile(ReplicatedStorage.FOVFiles["Death Charge Hit"]))
+			MainJob:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["Death Charge Hit"]))
 			
 			-- cam keeps getting offsynced so
 			MainJob:Task(RunService.PreAnimation:Connect(function()

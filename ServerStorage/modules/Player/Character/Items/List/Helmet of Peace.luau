@@ -1,5 +1,5 @@
 local TextChatService = game:GetService("TextChatService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
@@ -47,7 +47,7 @@ return {
 			self.Combat:StackState("HitboxImmunity", true)
 			self.Combat:DivideSpeed(50)
 			
-			local EquipAnimation = self.LuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Items["Helmet Of Peace"].Use)
+			local EquipAnimation = self.LuaCharacter:LoadAnimation(replicatedStorage.Animations.Items["Helmet Of Peace"].Use)
 			EquipAnimation:Play()
 			
 			local SFX = script.SFX:Clone()

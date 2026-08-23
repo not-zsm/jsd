@@ -1,6 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Settings = require( ReplicatedStorage.modules.shared.movementReplicator.Settings )
+local Settings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
 local sections = {
 	replication = {title = "--- Replicator ---", order = 1,};

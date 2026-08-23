@@ -1,4 +1,3 @@
---- Ported from jjk. Assets are script.assets; the shop GUI carries the keeper.
 local replicatedStorage = game:GetService('ReplicatedStorage')
 local tweenService = game:GetService('TweenService')
 local soundService = game:GetService('SoundService')

@@ -1,12 +1,12 @@
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 
 local LocalPlayer = Players.LocalPlayer
 
 local function Clone(vvv: string)
-	return ReplicatedStorage.modules.effect.assets:FindFirstChild(vvv,true):Clone()
+	return replicatedStorage.modules.effect.assets:FindFirstChild(vvv,true):Clone()
 end
 
 local function Modify(vvv: any?,instances: {any?}) : Instance?

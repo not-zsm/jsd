@@ -1,8 +1,8 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 return function(Position : (Instance | Vector3), StartTransparency : number, StartSize : Vector3, FinalSize : Vector3, Duration : number, RemoveDuration : number)
 	local Part = script.Bubble:Clone()

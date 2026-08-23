@@ -1,7 +1,7 @@
 --!strict
 -- mesh emit module that uses model pivoting without cloning
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Rnd = Random.new();

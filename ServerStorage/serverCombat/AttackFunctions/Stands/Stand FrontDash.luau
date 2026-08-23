@@ -1,11 +1,11 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = replicatedStorage.Remotes
 local CombatRemotes = Remotes.Combat
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
-local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
+local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
 local CustomAttack = {};
 
@@ -59,7 +59,7 @@ function CustomAttack.Activate(self)
 		LoopAnimation = StandDashes.Stand
 		HitAnimation = StandDashes.Hit
 
-		local User = self.LuaCharacter.Animator:LoadAnimation(ReplicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"].Dash.User)
+		local User = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"].Dash.User)
 		User:Play()
 
 		StandHandler.Weld:SetAttribute("Aggression", 0)

@@ -1,15 +1,15 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local CameraShake = require( ReplicatedStorage.modules.client.replication.Global.CameraShake )
-local Vignette = require( ReplicatedStorage.modules.client.replication.Global.Vignette )
-local Yuki_FOV = require( ReplicatedStorage.modules.client.replication.Global.Yuki_FOV )
+local CameraShake = require( replicatedStorage.modules.client.replication.Global.CameraShake )
+local Vignette = require( replicatedStorage.modules.client.replication.Global.Vignette )
+local Yuki_FOV = require( replicatedStorage.modules.client.replication.Global.Yuki_FOV )
 
-local AnimationRetriever = require( ReplicatedStorage.modules.client.replication.VFX.AnimationRetriever )
+local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 
 local VFX = {}
 
 function VFX.MONSTER(Model : Model)
-	local Retrieved = AnimationRetriever.new(Model, ReplicatedStorage.Animations.Emotes["FEEL LIKE A MONSTER"])
+	local Retrieved = AnimationRetriever.new(Model, replicatedStorage.Animations.Emotes["FEEL LIKE A MONSTER"])
 	
 	if Retrieved then
 		Retrieved.Job:Task(task.spawn(function()

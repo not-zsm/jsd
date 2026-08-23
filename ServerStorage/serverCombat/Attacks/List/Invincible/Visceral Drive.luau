@@ -1,13 +1,13 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 ----------------------------------------------------------------------------------
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
-local VelocityUtil = require( ReplicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local VelocityUtil = require( replicatedStorage.modules.shared.Game.Velocity.VelocityUtil )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
 
 local Attack = {}
@@ -77,7 +77,7 @@ function Attack:Activate()
 			
 			local Offset = CFrame.new(0, 0, -1.793) * CFrame.Angles(0, math.pi, 0)
 			local GrabObject = self.Combat:GrabVictim(VictimLuaPlayer, self.LuaCharacter.RootPart, Offset)
-			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Invincible["Visceral Drive"].Victim)
+			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Invincible["Visceral Drive"].Victim)
 			
 			VictimLuaCharacter:StopRespawnTimer()
 			
@@ -138,7 +138,7 @@ function Attack:Activate()
 						self.Animations.Hit:Stop()
 						self.Animations.UserFinisher:Play(0)
 						
-						local FinisherVictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(ReplicatedStorage.Animations.Attacks.Invincible["Visceral Drive"].VictimFinisher)
+						local FinisherVictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.Animations.Attacks.Invincible["Visceral Drive"].VictimFinisher)
 						
 						if FinisherVictimAnimation then
 							FinisherVictimAnimation:Play(0)

@@ -1,9 +1,9 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local ServerStorage = game:GetService("ServerStorage")
 local BaseAttack = require( "./BaseAttack" );
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
+local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local Preloading = require( ServerStorage.modules.preloading )
 
 -- I usually avoid using multi-inheritance but whatever
@@ -65,7 +65,7 @@ end
 function BaseStand:UpdateAnimations()
 	table.clear(self.Animations)
 
-	for _, AttackFolder in ipairs(ReplicatedStorage.Animations.Attacks:GetDescendants()) do
+	for _, AttackFolder in ipairs(replicatedStorage.Animations.Attacks:GetDescendants()) do
 		if AttackFolder:IsA("Folder") and AttackFolder.Name == self.Directory.Name then
 			self.AttackFolder = AttackFolder
 
