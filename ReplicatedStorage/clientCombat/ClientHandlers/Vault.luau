@@ -98,7 +98,7 @@ function VaultHandler:CanActivate()
 		not self.Combat:GetState("M1ing") and 
 		not self.Combat:GetState("Emoting") and 
 		not workspace:GetAttribute("IsRankedLobby") and
-		not self.Vaulting and not self.Combat.ClientHandlers.WallRun.Wallrunning
+		not self.Vaulting and not self.Combat.ClientHandlers.WallRun.WallJumping
 end
 
 

@@ -12,6 +12,11 @@ local Hitbox = require( ReplicatedStorage.Shared.Game.Hitbox.Type.Box )
 
 local LuaPlayerList = require( ServerScriptService.Modules.LuaPlayerList )
 
+-- Temporarily off. Flip this back to true to restore the random cycle; the
+-- /smite command and Weather.Rain still work either way, and so does the
+-- thunder that follows the Rain attribute however it gets set.
+local RANDOM_WEATHER = false
+
 local Weather = {}
 local ThunderThread = nil
 
@@ -94,18 +99,20 @@ function Weather.SmiteAtRandomPosition()
 	Weather.Smite(CFrame.new(x, 200, z).Position)
 end
 
-task.spawn(function()
-	if (math.random(1, 5) == 1) then
-		Weather.Rain()
-	end
-
-	while true do
-		if (math.random(1, 500) == 1) then
+if RANDOM_WEATHER then
+	task.spawn(function()
+		if (math.random(1, 5) == 1) then
 			Weather.Rain()
 		end
 
-		task.wait(1)
-	end
-end)
+		while true do
+			if (math.random(1, 500) == 1) then
+				Weather.Rain()
+			end
+
+			task.wait(1)
+		end
+	end)
+end
 
 return Weather
