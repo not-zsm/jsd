@@ -33,6 +33,7 @@ local Lighting = game:GetService("Lighting")
 local Job = require(ReplicatedStorage.modules.shared.Utilities.Job)
 local clientCombat = require(ReplicatedStorage.clientCombat)
 local info = require(ReplicatedStorage.info)
+local network = require(ReplicatedStorage.modules.network)
 local soundUtil = require(ReplicatedStorage.modules.shared.soundUtil)
 
 local uiConfig = require(script.UI.config)
@@ -386,9 +387,9 @@ function MainClient:CharacterSelect()
 
 	local function commit(entry)
 		if not entry then return end
-		-- TODO(byteNet): switchCharacter(entry)
 		if entry ~= self:CurrentMoveset() then
-			warn(`characterSelect: {entry} -- not wired until byteNet lands`)
+			local moveset = info.movesets[entry]
+			network.switchCharacter.send({ character = entry, icon = moveset and moveset.icon })
 		end
 		self:destroyContainer()
 	end
@@ -599,8 +600,7 @@ function MainClient:Shop(currentShop)
 
 	for _, button in purchaseButtons do
 		container:Task(button.MouseButton1Up:Connect(function()
-			-- TODO(byteNet): purchase { item = button.Name, count = button:GetAttribute("amount") or 1 }
-			warn(`shop: {button.Name} x{button:GetAttribute("amount") or 1} -- not wired until byteNet lands`)
+			network.purchase.send({ item = button.Name, count = button:GetAttribute("amount") or 1 })
 		end))
 	end
 
@@ -645,7 +645,13 @@ function MainClient.Default(): MainClient
 
 	clientCombat.UIFactory = function(Combat)
 		Client.Combat = Combat
-		return require(script.UI).new(Combat)
+
+		-- The topbar icons live with the combat UI but open menus that live here,
+		-- so the UI carries a way back.
+		local UI = require(script.UI).new(Combat)
+		UI.MainClient = Client
+
+		return UI
 	end
 
 	for _, Module in script.Systems:GetChildren() do

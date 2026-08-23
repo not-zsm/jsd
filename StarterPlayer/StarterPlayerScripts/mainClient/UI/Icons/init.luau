@@ -10,6 +10,38 @@ function Icons:_Init()
 
 	self.CharacterIcon = require(script.Characters)(self.LuaPlayer.Player)
 
+	-- The ported menus belong to mainClient, which hands itself to the UI once it
+	-- has built it. Read it at click time rather than here, so the icons do not
+	-- depend on which of the two finished first.
+	self.ShopIcon = self.IconModule.new()
+		:setLeft()
+		:setImage("9405933217")
+		:setLabel("Shop")
+		:setCaption("Opens the shop")
+		:setOrder(4)
+		:oneClick()
+		:bindEvent("selected", function()
+			local Client = self.UI.MainClient
+			if not Client then return end
+
+			SoundService.GUI.BasicOpen:Play()
+			Client:Shop("main shop")
+		end)
+
+	self.CharacterSelectIcon = self.IconModule.new()
+		:setLeft()
+		:setImage("120551654281972")
+		:setLabel("Character Select")
+		:setCaption("Opens character select")
+		:setOrder(5)
+		:oneClick()
+		:bindEvent("selected", function()
+			local Client = self.UI.MainClient
+			if not Client then return end
+
+			SoundService.GUI.BasicOpen:Play()
+			Client:CharacterSelect()
+		end)
 
 	self.InformationIcon = self.IconModule.new()
 		:setLeft()

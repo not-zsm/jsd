@@ -179,127 +179,6 @@ function Combat:_Init()
 				end
 			end
 		end))
-
-		self.Job:Task(CombatRemotes.SwitchCharacter.OnServerEvent:Connect(function(Player2 : Player, Character : string, IconId: string)
-			if self.LuaPlayer.Player ~= Player2 or self.SwitchCooldown then return end
-
-			if (RemoteRateLimiter.Check(CombatRemotes.SwitchCharacter, self.LuaPlayer.Player, 10) == false) then
-				return
-			end
-
-			if shared.IsRankedPlace and IconId then
-				self.LuaPlayer.PendingCharacterName = Character
-
-				if IconId then
-					Remotes.Ranked.UpdateSelectionDisplay:FireAllClients(Player2, IconId)
-				end
-
-				return 
-			end
-
-			local CharacterModule = self:GetCharacterModule(Character);
-
-			if not CharacterModule then
-				-- Invalid character, do nothing.
-				warn(`Unable to switch to character '{Character}' as it does not exist`)
-				return;
-			end;
-
-			local CharacterInfo = require(CharacterModule :: any)
-			local Switched = false
-
-			local Profile = self.LuaPlayer.Data.Profile
-			local CanUse: boolean, FailReason: FailToUseCharacterReason = self:CanUseCharacter(Character);
-
-			if CanUse then
-				if Switched or self.InCombat or self:IsStunned() then 
-					return 
-				end
-
-				Switched = true
-
-				if Profile then
-					Profile.Data.CurrentCharacter = Character
-				end
-
-				self.LuaCharacter:Respawn()
-			else
-				-- Can't use character :(
-				if FailReason == "Early Access" then
-					MarketplaceService:PromptGamePassPurchase(Player2, Gamepasses["Early Access"].ID);
-				end;
-			end;
-
-			--if CharacterInfo.EarlyAccess then
-			--	local OwnsEarlyAccess = self.LuaPlayer.Data:HasGamepass("Early Access") or self:OwnsEarlyAccess()
-
-			--	if OwnsEarlyAccess then
-			--		Switch()
-			--	else
-			--		MarketplaceService:PromptGamePassPurchase(Player2, Gamepasses["Early Access"].ID)
-			--	end
-
-			--elseif CharacterInfo.PrivateServerPlusOnly then
-			--	--local Level = CommandHandler:GetPermission(self.LuaPlayer.Player)
-
-			--	--if Level and Level < 3 then 
-
-			--	local Level = CommandHandler:GetPermission(self.LuaPlayer.Player)
-
-			--	if Level == "PS+" or Level == "Owner" then 
-			--		Switch()
-			--	end
-
-			--elseif CharacterInfo.OwnerOnly then
-			--	if self:IsOwner() then 
-			--		Switch()
-			--	end
-
-			--elseif CharacterInfo.GitHubWhitelist or CharacterInfo.DonatorAccess then
-
-			--	if (CharacterInfo.DonatorAccess and self.LuaPlayer.Player:HasTag("DonationCharacterAccess")) then
-			--		Switch()
-			--	else
-			--		local Permitted = Whitelist.is_permitted(self.LuaPlayer.UserId, CharacterInfo.GitHubWhitelist)
-
-			--		if Permitted then
-			--			Switch()
-			--		end
-			--	end
-
-			--	--elseif CharacterInfo.Whitelist or CharacterInfo.DonatorAccess then
-			--	--	if self:HasAccessToDonatorCharacter(CharacterInfo.Whitelist) then 
-			--	--		Switch()
-			--	--	end 
-
-			--elseif CharacterInfo.Whitelist then
-
-			--	if table.find(CharacterInfo.Whitelist, self.LuaPlayer.UserId) then 
-			--		Switch()
-			--	end 
-
-			--	--elseif CharacterInfo.DonatorAccess and not Switched then
-			--	--	if self.LuaPlayer.Player:HasTag("DonationCharacterAccess") then
-			--	--		print("switch cause of donator access")
-			--	--		Switch()
-			--	--	end
-
-			--elseif CharacterInfo.BossDrop then
-			--	if self:IsOwner() or self.LuaPlayer:HasAccessToBossDrop(CharacterInfo.BossDrop) then
-			--		Switch()
-			--	end
-			--else
-			--	Switch()
-			--end
-
-			if Switched then
-				self.SwitchCooldown = true
-
-				task.delay(1, function()
-					self.SwitchCooldown = false
-				end)
-			end
-		end))
 	end
 
 	task.defer(self.ConnectHumanoidAvailability, self)
@@ -381,6 +260,123 @@ function Combat:SendCharacterInformation()
 end;
 
 type FailToUseCharacterReason = "No Character" | "Early Access" | "Private Servers" | "Owner" | "Whitelist" | "Boss Drop" | "World Event";
+
+function Combat:SwitchCharacter(Character : string, IconId : string?)
+	if self.SwitchCooldown then return end
+
+	if shared.IsRankedPlace and IconId then
+		self.LuaPlayer.PendingCharacterName = Character
+
+		if IconId then
+			Remotes.Ranked.UpdateSelectionDisplay:FireAllClients(self.LuaPlayer.Player, IconId)
+		end
+
+		return 
+	end
+
+	local CharacterModule = self:GetCharacterModule(Character);
+
+	if not CharacterModule then
+		-- Invalid character, do nothing.
+		warn(`Unable to switch to character '{Character}' as it does not exist`)
+		return;
+	end;
+
+	local CharacterInfo = require(CharacterModule :: any)
+	local Switched = false
+
+	local Profile = self.LuaPlayer.Data.Profile
+	local CanUse: boolean, FailReason: FailToUseCharacterReason = self:CanUseCharacter(Character);
+
+	if CanUse then
+		if Switched or self.InCombat or self:IsStunned() then 
+			return 
+		end
+
+		Switched = true
+
+		if Profile then
+			Profile.Data.CurrentCharacter = CharacterModule.Name
+		end
+
+		self.LuaCharacter:Respawn()
+	else
+		-- Can't use character :(
+		if FailReason == "Early Access" then
+			MarketplaceService:PromptGamePassPurchase(self.LuaPlayer.Player, Gamepasses["Early Access"].ID);
+		end;
+	end;
+
+	--if CharacterInfo.EarlyAccess then
+	--	local OwnsEarlyAccess = self.LuaPlayer.Data:HasGamepass("Early Access") or self:OwnsEarlyAccess()
+
+	--	if OwnsEarlyAccess then
+	--		Switch()
+	--	else
+	--		MarketplaceService:PromptGamePassPurchase(self.LuaPlayer.Player, Gamepasses["Early Access"].ID)
+	--	end
+
+	--elseif CharacterInfo.PrivateServerPlusOnly then
+	--	--local Level = CommandHandler:GetPermission(self.LuaPlayer.Player)
+
+	--	--if Level and Level < 3 then 
+
+	--	local Level = CommandHandler:GetPermission(self.LuaPlayer.Player)
+
+	--	if Level == "PS+" or Level == "Owner" then 
+	--		Switch()
+	--	end
+
+	--elseif CharacterInfo.OwnerOnly then
+	--	if self:IsOwner() then 
+	--		Switch()
+	--	end
+
+	--elseif CharacterInfo.GitHubWhitelist or CharacterInfo.DonatorAccess then
+
+	--	if (CharacterInfo.DonatorAccess and self.LuaPlayer.Player:HasTag("DonationCharacterAccess")) then
+	--		Switch()
+	--	else
+	--		local Permitted = Whitelist.is_permitted(self.LuaPlayer.UserId, CharacterInfo.GitHubWhitelist)
+
+	--		if Permitted then
+	--			Switch()
+	--		end
+	--	end
+
+	--	--elseif CharacterInfo.Whitelist or CharacterInfo.DonatorAccess then
+	--	--	if self:HasAccessToDonatorCharacter(CharacterInfo.Whitelist) then 
+	--	--		Switch()
+	--	--	end 
+
+	--elseif CharacterInfo.Whitelist then
+
+	--	if table.find(CharacterInfo.Whitelist, self.LuaPlayer.UserId) then 
+	--		Switch()
+	--	end 
+
+	--	--elseif CharacterInfo.DonatorAccess and not Switched then
+	--	--	if self.LuaPlayer.Player:HasTag("DonationCharacterAccess") then
+	--	--		print("switch cause of donator access")
+	--	--		Switch()
+	--	--	end
+
+	--elseif CharacterInfo.BossDrop then
+	--	if self:IsOwner() or self.LuaPlayer:HasAccessToBossDrop(CharacterInfo.BossDrop) then
+	--		Switch()
+	--	end
+	--else
+	--	Switch()
+	--end
+
+	if Switched then
+		self.SwitchCooldown = true
+
+		task.delay(1, function()
+			self.SwitchCooldown = false
+		end)
+	end
+end
 
 function Combat:CanUseCharacter(Name: string, Settings): (boolean, FailToUseCharacterReason?)
 	local Module = self:GetCharacterModule(Name);
@@ -1136,6 +1132,17 @@ function Combat:GetCharacterModule(CharacterName: string): ModuleScript?
 	for _, Item in CharacterList:GetChildren() do
 		if Item:IsA("ModuleScript") and Item.Name == CharacterName then
 			CharacterModuleCache[Item.Name] = Item;
+			return Item;
+		end;
+	end;
+
+	-- The module names are capitalised, info.movesets is keyed lowercase, and
+	-- the pickers send one or the other. Match either.
+	local Lowered = string.lower(CharacterName);
+
+	for _, Item in CharacterList:GetChildren() do
+		if Item:IsA("ModuleScript") and string.lower(Item.Name) == Lowered then
+			CharacterModuleCache[CharacterName] = Item;
 			return Item;
 		end;
 	end;

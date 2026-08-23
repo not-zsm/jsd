@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
 
-local CombatRemotes = ReplicatedStorage.Remotes.Combat
+local network = require( ReplicatedStorage.modules.network )
 
 local Icon = require( ReplicatedStorage.Packages.Icon )
 local InfoCharacter = require( ReplicatedStorage.modules.client.character.InfoCharacter )
@@ -17,7 +17,7 @@ local function Entry(Name: string, Info: {})
 		:oneClick()
 		:bindEvent("selected", function()
 			SoundService.GUI.BasicOpen:Play()
-			CombatRemotes.SwitchCharacter:FireServer(Name, Image)
+			network.switchCharacter.send({ character = Name, icon = Image })
 		end)
 end
 
