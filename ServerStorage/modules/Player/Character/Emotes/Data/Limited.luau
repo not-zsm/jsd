@@ -1,4 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 
@@ -34,19 +36,19 @@ return {
 						Loading = true
 
 						if not self.LuaPlayer.IsNPC then
-							ReplicatedStorage.Remotes.Notification:FireClient(self.LuaPlayer.Player, {
+							network.notify.sendTo({
 								Title = "Notification",
 								Text = "Loading the Combat Gods emote, this may take a little.",
 								Duration = 1.5
-							})
+							}, self.LuaPlayer.Player)
 						end
 
 						if not TargetCombat.LuaPlayer.IsNPC then
-							ReplicatedStorage.Remotes.Notification:FireClient(TargetCombat.LuaPlayer.Player, {
+							network.notify.sendTo({
 								Title = "Notification",
 								Text = "Loading the Combat Gods emote, this may take a little.",
 								Duration = 1.5
-							})
+							}, TargetCombat.LuaPlayer.Player)
 						end
 					end
 
@@ -307,19 +309,19 @@ return {
 						Loading = true
 
 						if not self.LuaPlayer.IsNPC then
-							ReplicatedStorage.Remotes.Notification:FireClient(self.LuaPlayer.Player, {
+							network.notify.sendTo({
 								Title = "Notification",
 								Text = "Loading the Final Matchup emote, this may take a little.",
 								Duration = 1.5
-							})
+							}, self.LuaPlayer.Player)
 						end
 
 						if not TargetCombat.LuaPlayer.IsNPC then
-							ReplicatedStorage.Remotes.Notification:FireClient(TargetCombat.LuaPlayer.Player, {
+							network.notify.sendTo({
 								Title = "Notification",
 								Text = "Loading the Final Matchups emote, this may take a little.",
 								Duration = 1.5
-							})
+							}, TargetCombat.LuaPlayer.Player)
 						end
 					end
 					

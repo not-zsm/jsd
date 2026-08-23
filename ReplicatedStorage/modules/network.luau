@@ -61,5 +61,17 @@ return byteNet.defineNamespace("game", function()
 				extra = byteNet.optional(byteNet.unknown),
 			}),
 		}),
+
+		--// server -> client
+		--// keys stay capitalised: the client hands this straight to
+		--// StarterGui:SetCore("SendNotification", ...), which names them
+		notify = byteNet.definePacket({
+			value = byteNet.struct({
+				Title = byteNet.string,
+				Text = byteNet.string,
+				Duration = byteNet.optional(byteNet.float32),
+				Icon = byteNet.optional(byteNet.string),
+			}),
+		}),
 	}
 end)

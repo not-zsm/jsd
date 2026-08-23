@@ -1,5 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local MarketplaceService = game:GetService("MarketplaceService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
@@ -1191,11 +1193,11 @@ function Combat:_CreateAttack(Name : string, Key : (Enum.KeyCode | Enum.UserInpu
 		return NewAttack
 	else
 		if not self.LuaPlayer.IsNPC then
-			Remotes.Notification:FireClient(self.LuaPlayer.Player, {
+			network.notify.sendTo({
 				Title = "Notification",
 				Text = `The attack {Name} does not exist`,
 				Duration = 2
-			})
+			}, self.LuaPlayer.Player)
 		end
 
 		warn(`The attack {Name} does not exist`)

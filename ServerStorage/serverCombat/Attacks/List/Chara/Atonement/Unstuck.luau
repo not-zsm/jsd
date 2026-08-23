@@ -1,4 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local UnstuckModule = {}
 UnstuckModule.StepDistance = 3
 UnstuckModule.MaxSteps = 20
@@ -74,11 +76,11 @@ function UnstuckModule:Unstuck(Character, StartCFrame)
 	if workspace:GetAttribute("IsTestPlace") then
 		local Player = Players:GetPlayerFromCharacter(Character)
 		if Player then
-			ReplicatedStorage.Remotes.Notification:FireClient(Player, {
+			network.notify.sendTo({
 				Title = "Unstuck Error",
 				Text = "Unable to find a safe position for a player.",
 				Duration = 2
-			})
+			}, Player)
 		end
 	end
 

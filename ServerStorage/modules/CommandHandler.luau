@@ -4,13 +4,14 @@ local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local MessagingService = game:GetService("MessagingService")
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 
 local ServerStorage = game:GetService("ServerStorage")
 local Remotes = ReplicatedStorage.Remotes
-local SendNotificationEvent = Remotes.Notification
 local Macros = ReplicatedStorage.modules.shared.Commands.Macros;
 
 local Commands = require( ReplicatedStorage.modules.shared.Commands )
@@ -56,12 +57,12 @@ function SendNotification(Player : Player, NotificationTitle : string, Notificat
 
 	local IconString = `rbxassetid://{NotificationIcon}`
 
-	ReplicatedStorage.Remotes.Notification:FireClient(Player, {
+	network.notify.sendTo({
 		Title = NotificationTitle, 
 		Text = NotificationText, 
 		Icon = IconString,
 		Duration = Duration
-	})
+	}, Player)
 end
 
 --local Warned = {}
@@ -384,20 +385,20 @@ function CommandHandler._new()
 				end;
 
 				if not table.find(Command.PermissionsToTrigger, Role.Permission) then
-					return Remotes.Notification:FireClient(Player, {
+					return network.notify.sendTo({
 						Title = "Notification",
 						Text = "You do not have permission to run this command",
 						Duration = 2
-					});
+					}, Player);
 				end;
 
 				return Callback(Player, CommandName, Command, Target, ...);
 			else
-				Remotes.Notification:FireClient(Player, {
+				network.notify.sendTo({
 					Title = "Notification",
 					Text = "You do not have permissions to run commands.",
 					Duration = 2
-				})
+				}, Player)
 			end;
 		end;
 	end;
@@ -532,11 +533,11 @@ function CommandHandler._new()
 		local Success, Reason = self:RunCommand(Command, Player, Target, Parameters)
 
 		if not Success and Reason == "No Target" then
-			Remotes.Notification:FireClient(Player, {
+			network.notify.sendTo({
 				Title = "Notification",
 				Text = "Target not found.",
 				Duration = 2
-			});
+			}, Player);
 		end;
 	end))
 
@@ -657,12 +658,12 @@ end;
 function CommandHandler:InitSlashCommands()
 	self.SlashCommands:Create("serverlock", {"PS+", "Owner"}, false, function(Player)
 		ServerLocked = true
-		SendNotificationEvent:FireClient(Player, "Server Locked", "Server has been locked.")
+		network.notify.sendTo({ Title = "Server Locked", Text = "Server has been locked.", Duration = 5 }, Player)
 	end)
 
 	self.SlashCommands:Create("unserverlock", {"PS+", "Owner"}, false, function(Player)
 		ServerLocked = false
-		SendNotificationEvent:FireClient(Player, "Server Unlocked", "Server has been unlocked.")
+		network.notify.sendTo({ Title = "Server Unlocked", Text = "Server has been unlocked.", Duration = 5 }, Player)
 	end)
 
 	self.SlashCommands:Create("serverannounce", {"PS+", "Owner"}, true, function(Player, Parameters)
@@ -732,12 +733,12 @@ function CommandHandler:InitSlashCommands()
 			if FoundTarget then
 				table.remove(BanList, FoundTarget)
 
-				SendNotificationEvent:FireClient(Player, "Unban", `[{Target}] has been unbanned from the server`)
+				network.notify.sendTo({ Title = "Unban", Text = `[{Target}] has been unbanned from the server`, Duration = 5 }, Player)
 			else
-				SendNotificationEvent:FireClient(Player, "Unban Failed", `[{Target}] is not banned in the server`)
+				network.notify.sendTo({ Title = "Unban Failed", Text = `[{Target}] is not banned in the server`, Duration = 5 }, Player)
 			end
 		else
-			SendNotificationEvent:FireClient(Player, "Unban Failed", `You didn't specify a target.`)
+			network.notify.sendTo({ Title = "Unban Failed", Text = `You didn't specify a target.`, Duration = 5 }, Player)
 		end
 	end)
 end

@@ -1,5 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local MarketplaceService = game:GetService("MarketplaceService")
 local TweenService = game:GetService("TweenService")
 local PolicyService = game:GetService("PolicyService")
@@ -87,11 +89,11 @@ function Emotes:_Init()
 
 	task.spawn(function()
 		if shared.IsTestPlace then
-			Remotes.Notification:FireClient(self.LuaPlayer.Player, {
+			network.notify.sendTo({
 				Title = "Notification",
 				Text = `Since this is the test place, you get all emotes! (Limiteds too) ✌😛`,
 				Duration = 6
-			})
+			}, self.LuaPlayer.Player)
 
 			self:GetAll(true)
 		end
@@ -127,32 +129,32 @@ function Emotes:_Init()
 
 		if (RemoteRateLimiter.Check(self.LuaPlayer.Remotes.Emote.BuyRandom, self.LuaPlayer.Player, 15) == true) then
 			if not RunService:IsStudio() and self.LuaPlayer.Player.Name ~= "swrerm" and shared.IsTestPlace then
-				Remotes.Notification:FireClient(self.LuaPlayer.Player,  {
+				network.notify.sendTo({
 					Title = "Notification",
 					Text = "Not recommended to buy this in the test place",
 					Duration = 3,
-				})
+				}, self.LuaPlayer.Player)
 
 				return
 			end
 
 			if not RunService:IsStudio() and self.LuaPlayer.Player.Name ~= "swrerm" then
 				if (self.LuaPlayer.PolicyInfo == nil) then 
-					Remotes.Notification:FireClient(self.LuaPlayer.Player,  {
+					network.notify.sendTo({
 						Title = "Notification",
 						Text = "Roblox could not load your policy info, please wait or rejoin if this occurs again.",
 						Duration = 3,
-					})
+					}, self.LuaPlayer.Player)
 
 					return
 				end
 
 				if self.LuaPlayer.PolicyInfo.ArePaidRandomItemsRestricted then
-					Remotes.Notification:FireClient(self.LuaPlayer.Player,  {
+					network.notify.sendTo({
 						Title = "Notification",
 						Text = "You are unable to purchase a random emote due to gambling regulations in your region.",
 						Duration = 4,
-					})
+					}, self.LuaPlayer.Player)
 
 					return
 				end
@@ -180,11 +182,11 @@ function Emotes:_Init()
 		end
 
 		if not RunService:IsStudio() and shared.IsTestPlace then
-			Remotes.Notification:FireClient(self.LuaPlayer.Player,  {
+			network.notify.sendTo({
 				Title = "Notification",
 				Text = "Not recommended to buy this in the test place",
 				Duration = 3,
-			})
+			}, self.LuaPlayer.Player)
 
 			return
 		end

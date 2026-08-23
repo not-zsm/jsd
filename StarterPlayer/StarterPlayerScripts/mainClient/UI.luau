@@ -183,15 +183,7 @@ function UI:Init()
 		TextChatService:WaitForChild("TextChannels").RBXGeneral:DisplaySystemMessage(`{Name}'s Activity: {Activity}`)
 	end)
 	
-	Remotes.Notification.OnClientEvent:Connect(function(Data : {})
-		Data = Data or {
-			Title = "Notification",
-			Text = "U are stinky",
-			Duration = 5,
-			Button1 = "Yeah i am",
-			Button2 = "No.",
-		}
-
+	network.notify.listen(function(Data)
 		StarterGui:SetCore("SendNotification", Data)
 	end)
 	

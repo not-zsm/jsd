@@ -1,6 +1,8 @@
 -- Services
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local ServerStorage = game:GetService("ServerStorage")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -64,11 +66,11 @@ function SendNotification(Player : Player, NotificationTitle : string, Notificat
 
 	local IconString = `rbxassetid://{NotificationIcon}`
 
-	ReplicatedStorage.Remotes.Notification:FireClient(Player, {
+	network.notify.sendTo({
 		Title = NotificationTitle, 
 		Text = NotificationText, 
 		Icon = IconString
-	})
+	}, Player)
 end
 
 function ParametersValid(ReceivedParameters : any, Player : Player)

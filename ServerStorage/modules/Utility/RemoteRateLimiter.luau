@@ -3,6 +3,8 @@ local Cooldowns = {}
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local Remotes = ReplicatedStorage.Remotes
 
 function RemoteRateLimiter.Check(Remote : RemoteEvent, Player : Player, Rate : number)
@@ -27,11 +29,11 @@ function RemoteRateLimiter.Check(Remote : RemoteEvent, Player : Player, Rate : n
 				if tick() - Cooldowns[Player][Remote].NotificationTime >= 0.5 then
 					Cooldowns[Player][Remote].NotificationTime = tick()
 					
-					Remotes.Notification:FireClient(Player,  {
+					network.notify.sendTo({
 						Title = "Notification",
 						Text = `You have been rate limited on {Remote.Name}, please slow down your clicks.`,
 						Duration = 1,
-					})
+					}, Player)
 				end
 				
 				return false

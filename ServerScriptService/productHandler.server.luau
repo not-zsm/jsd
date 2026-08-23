@@ -2,6 +2,8 @@ local ServerStorage = game:GetService("ServerStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local network = require( ReplicatedStorage.modules.network )
 local DataStoreService = game:GetService("DataStoreService")
 local PolicyService = game:GetService("PolicyService")
 local Players = game:GetService("Players")
@@ -77,11 +79,11 @@ ReplicatedStorage.Remotes.GiftGamepass.OnServerEvent:Connect(function(PlayerGift
 	end
 
 	if (OwnsGamepass == true) then
-		ReplicatedStorage.Remotes.Notification:FireClient(PlayerGifting,  {
+		network.notify.sendTo({
 			Title = "Gifting Error",
 			Text = `This user already owns {Name}`,
 			Duration = 3
-		})
+		}, PlayerGifting)
 
 	elseif (OwnsGamepass == false) then
 		local OldGiftingToPlayer = PlayerGifting:FindFirstChild("GiftingToPlayer")
@@ -106,11 +108,11 @@ end)
 local function FunctionErrored(Player : Player, Handler)
 	warn(`{Handler.Name} failed for`, Player.Name, "returned false in function")
 
-	ReplicatedStorage.Remotes.Notification:FireClient(Player, {
+	network.notify.sendTo({
 		Title = "Product Error",
 		Text = `Purchasing {Handler.Name} has unexpectedly errored. Rejoining will make it try again. Roblox will automatically refund you if this issue is recurring.`,
 		Duration = 7
-	})
+	}, Player)
 
 	return Enum.ProductPurchaseDecision.NotProcessedYet
 end
@@ -142,11 +144,11 @@ MarketplaceService.ProcessReceipt = function(Info)
 		local ProductInfo = MarketplaceService:GetProductInfo(Info.ProductId, Enum.InfoType.Product)
 		local MessUpText = ProductInfo and ProductInfo.Name or Info.ProductId
 
-		ReplicatedStorage.Remotes.Notification:FireClient(Player, {
+		network.notify.sendTo({
 			Title = "Uh oh",
 			Text = `We have seemed to mess up the {MessUpText} product, Roblox will refund you if this reccurs. If you can, report this error to the Jump Showdown discord server.`,
 			Duration = 7
-		})
+		}, Player)
 
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
@@ -162,11 +164,11 @@ MarketplaceService.ProcessReceipt = function(Info)
 		return FunctionErrored(Player, Handler)
 	end
 
-	ReplicatedStorage.Remotes.Notification:FireClient(Player, {
+	network.notify.sendTo({
 		Title = "Thank you!",
 		Text = Handler.PurchaseText or `You have purchased {Handler.Name}`,
 		Duration = 7
-	})
+	}, Player)
 
 	return Enum.ProductPurchaseDecision.PurchaseGranted
 end
