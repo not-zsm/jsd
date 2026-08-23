@@ -5,7 +5,6 @@ local CollectionService = game:GetService("CollectionService")
 local ServerStorage = game:GetService("ServerStorage")
 local Job = require( ReplicatedStorage.modules.shared.Utilities.Job )
 
-local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 
 local Player = require( ServerStorage.modules.Player )
 local LuaPlayerList = require( ServerStorage.modules.LuaPlayerList )
@@ -35,8 +34,10 @@ function Npcs.Add(NPC : Model)
 	
 	local LuaCharacter : {} = LuaPlayer.Character
 	
-	LuaCharacter.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
-	LuaCharacter.Humanoid.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOff
+	-- health is the humanoid's own bar now; the billboard above a dummy says
+	-- whether it is stunned, nothing else
+	LuaCharacter.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
+	LuaCharacter.Humanoid.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOn
 
 	LuaCharacter.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
 	
@@ -68,23 +69,20 @@ function Npcs.Add(NPC : Model)
 	LuaCharacter:SetOwnership(nil)
 	
 	if not NPC:GetAttribute("DontAddHealthUI") then
-		local Health = NewJob:Task(script.Health:Clone())
-		Health.Parent = NPC.Head
+		local Indicator = NewJob:Task(script.stunIndicator:Clone())
+		local Light = Indicator.stunLight
 
-		NewJob:Task(LuaCharacter.Combat:GetStateChanged("Stunned"):Connect(function(Value : boolean)
-			if (Health ~= nil and Health.Parent ~= nil) then
-				Health.Label.TextColor3 = Value and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(255, 255, 255)
-			end
-		end))
+		local function ShowStun(Stunned : boolean)
+			if (Indicator.Parent == nil) then return end
 
-		local function UpdateHealth(NewHealth : number)
-			if (Health ~= nil and Health.Parent ~= nil) then
-				Health.Label.Text = Utility.DecimalRound(math.max(0, NewHealth), 3) .. "%"
-			end
+			Light.BackgroundColor3 = Stunned and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(0, 255, 0)
+			Light.smile.Text = Stunned and ":(" or ":)"
 		end
 
-		UpdateHealth(LuaCharacter.Humanoid.Health)
-		NewJob:Task(LuaCharacter.Humanoid.HealthChanged:Connect(UpdateHealth))
+		ShowStun(LuaCharacter.Combat:GetState("Stunned") == true)
+		Indicator.Parent = LuaCharacter.RootPart
+
+		NewJob:Task(LuaCharacter.Combat:GetStateChanged("Stunned"):Connect(ShowStun))
 	end
 	
 	if not NPC:GetAttribute("DontRespawn") then

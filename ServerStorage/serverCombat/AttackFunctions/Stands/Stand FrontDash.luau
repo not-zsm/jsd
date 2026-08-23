@@ -15,7 +15,7 @@ function CustomAttack.Activate(self)
 	self.Combat:StackState("Attacking", true)
 	self.Combat:DivideSpeed(10)
 
-	self:AddCertainCooldown("Front&Back Dash", 6)
+	self:AddCertainCooldown("FrontBack Dash", 6)
 
 	self.FrontDashHit = false
 

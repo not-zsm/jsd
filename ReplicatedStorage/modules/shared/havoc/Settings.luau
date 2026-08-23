@@ -4,8 +4,8 @@ local Utility = require( ReplicatedStorage.modules.shared.Utilities.Utility )
 local HavocFolder = workspace:WaitForChild("Havoc", 5);
 assert(HavocFolder, "No Havoc Folder?");
 
-local MapModel = workspace.Map:FindFirstChild("Model")
-local Havocs = MapModel and MapModel:FindFirstChild("Havocs")
+local Map = workspace.Map
+local Havocs = Map and Map:FindFirstChild("Destructible")
 
 local StaticServer = HavocFolder:FindFirstChild("StaticServer")
 local DynamicServer = HavocFolder:FindFirstChild("DynamicServer")

@@ -12,7 +12,7 @@
   {
     "from": "old",
     "src": "ServerScriptService.Scripts.Game.Modules.Player.Character.Combat.Characters.Invincible",
-    "dst": "ServerStorage.serverCombat.Characters"
+    "dst": "ServerStorage.characterData"
   },
   {
     "from": "old",
@@ -50,5 +50,27 @@
     "src": "ReplicatedStorage.ass.GLOBAL.roll",
     "dst": "ReplicatedStorage.Animations.ClientActions",
     "name": "Roll"
+  },
+  {
+    "from": "jjk",
+    "src": "ServerStorage.gameHandler.dummySpawner.dummy.HumanoidRootPart.stunIndicator",
+    "dst": "ServerStorage.modules.Npcs"
+  },
+  {
+    "from": "jjk",
+    "src": "StarterPlayer.StarterPlayerScripts.PlayerScriptsLoader.mainClient.UI.shop",
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient.UI"
+  },
+  {
+    "from": "jjk",
+    "src": "StarterPlayer.StarterPlayerScripts.PlayerScriptsLoader.mainClient.UI.CHARACTERSELECTWHOOOOOOOO",
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient.UI",
+    "name": "characterSelect"
+  },
+  {
+    "from": "jjk",
+    "src": "ReplicatedStorage.ass.GLOBAL.shopkeeper",
+    "dst": "StarterPlayer.StarterPlayerScripts.mainClient.UI.helpers.shopHelper",
+    "name": "assets"
   }
 ]

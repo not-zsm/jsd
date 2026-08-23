@@ -249,8 +249,8 @@ function LuaCharacter:RegisterModel(Model : Model)
 	end
 
 	self.Model = Model
-	self.Model.Parent = workspace.Models :: Folder
-	self.Model:AddTag("Men")
+	self.Model.Parent = workspace.chars :: Model
+	--self.Model:AddTag("Men")
 
 	self.Humanoid = self.Model:WaitForChild("Humanoid") :: Humanoid?
 	self.Humanoid:SetAttribute("PlayerName", self.LuaPlayer.PlayerName)

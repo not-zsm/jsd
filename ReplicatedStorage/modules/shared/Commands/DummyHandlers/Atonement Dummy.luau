@@ -12,7 +12,7 @@ return function(LuaPlayer, NPCJob)
 	local LuaCharacter = LuaPlayer.Character
 	local Combat = LuaCharacter.Combat
 	
-	local Knife = LuaCharacter.Job:Task(ServerStorage.serverCombat.Characters.Chara.Knife:Clone())
+	local Knife = LuaCharacter.Job:Task(ServerStorage.characterData.Chara.Knife:Clone())
 	Knife.Parent = LuaCharacter.Model
 	Knife.Weld.Part0 = LuaCharacter.RightArm
 

@@ -41,12 +41,12 @@ function BaseAttack:Destroy()
 	end
 end
 
-function BaseAttack:_Init()
+function BaseAttack:_Init() --stub
 	
 end
 
-function BaseAttack:Initialise()
-	-- 🥺
+function BaseAttack:Initialise() --stub
+	
 end
 
 function BaseAttack:UpdateAirVariantChecking(Extra : {})

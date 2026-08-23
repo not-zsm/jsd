@@ -125,7 +125,7 @@ return {
 						local Origin : Vector3 = OriginCF.Position
 
 						local Map = workspace:FindFirstChild("Map")
-						local Models = workspace:FindFirstChild("Models")
+						local Models = workspace:FindFirstChild("chars")
 						
 						local MapModel = Map:FindFirstChild("Model")
 						local Props = MapModel:FindFirstChild("Props")

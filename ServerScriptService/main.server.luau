@@ -94,7 +94,7 @@ local AllowContentCreators = false
 
 local function CheckForTester(Player : Player)
 	local Success, Result = pcall(function()
-		return Player:GetRankInGroup(shared.Group)
+		return Player:GetRankInGroupAsync(shared.Group)
 	end)
 
 	if Success then
@@ -140,7 +140,7 @@ local function AddLuaPlayer(Player : Player)
 	task.wait()
 
 	if LuaPlayer:PlayerExists() then
-		Player:LoadCharacter()
+		Player:LoadCharacterAsync()
 	end
 end
 
@@ -165,7 +165,7 @@ task.spawn(function()
 	workspace:SetAttribute("ServerTimeStart", workspace:GetServerTimeNow())
 
 	if RunService:IsStudio() then
-		return warn("didn't show region due to doxxing")
+		--return warn("didn't show region due to doxxing")
 	end
 
 	local URL = "http://ip-api.com/json/?fields=16394"--"http://ip-api.com/json/"

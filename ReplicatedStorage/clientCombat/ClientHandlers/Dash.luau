@@ -37,7 +37,7 @@ local MovementReplicatorSettings = require( ReplicatedStorage.modules.shared.mov
 function DashHandler:_Init()
 	CombatRemotes.EvasiveOutput.OnClientEvent:Connect(function(Direction : string, Was : string)
 		self.Combat:AddCooldown("Evasive")
-		self.Combat:AddCooldown("Front&Back Dash")
+		self.Combat:AddCooldown("FrontBack Dash")
 		self.Combat:AddCooldown("Side Dash")
 
 		if self.CannotDashThread and coroutine.status(self.CannotDashThread) == "suspended" then
@@ -57,7 +57,7 @@ function DashHandler:_Init()
 	end)
 	
 	CombatRemotes.FrontDashOutput.OnClientEvent:Connect(function()
-		self.Combat:AddCooldown("Front&Back Dash")
+		self.Combat:AddCooldown("FrontBack Dash")
 		self:FrontDashFunction()
 	end)
 
@@ -66,7 +66,7 @@ function DashHandler:_Init()
 	end)
 
 	CombatRemotes.WallComboFail.OnClientEvent:Connect(function()
-		if not self.Combat:CooldownExists("Front&Back Dash") then
+		if not self.Combat:CooldownExists("FrontBack Dash") then
 			self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Dash", true, {DashDirection = "Front", WallCombo = nil})
 		end
 	end)
@@ -132,7 +132,7 @@ end;
 function DashHandler:OnHumanoidLoaded()
 	self.Combat:RemoveCooldown("Wall Combo")
 	self.Combat:RemoveCooldown("Evasive")
-	self.Combat:RemoveCooldown("Front&Back Dash")
+	self.Combat:RemoveCooldown("FrontBack Dash")
 	self.Combat:RemoveCooldown("Side Dash")
 
 	self.CannotDash = false
@@ -155,7 +155,7 @@ end
 function DashHandler:DirectionOnCooldown(Direction : string)
 	return 
 		(Direction == "Left" or Direction == "Right") and self.Combat:CooldownExists("Side Dash") or 
-		(Direction == "Front" or Direction == "Back") and self.Combat:CooldownExists("Front&Back Dash")
+		(Direction == "Front" or Direction == "Back") and self.Combat:CooldownExists("FrontBack Dash")
 end
 
 
@@ -276,7 +276,7 @@ function DashHandler:Dash(Direction : string)
 			self.Combat:AddCooldown("Side Dash")
 			
 		elseif (Direction == "Back") then
-			self.Combat:AddCooldown("Front&Back Dash")
+			self.Combat:AddCooldown("FrontBack Dash")
 		end
 
 		self:Fire(Direction)
@@ -302,7 +302,7 @@ function DashHandler:FrontDash()
 		end
 	end
 
-	if not self.Combat:CooldownExists("Front&Back Dash") then
+	if not self.Combat:CooldownExists("FrontBack Dash") then
 		self.SentFrontDashToServer = true -- so you dont accidently waste your side dash as you front dash (happens more often with worse ping)
 		self.LuaPlayer.Remotes.Combat.AttackInput:FireServer("Dash", true, {DashDirection = "Front"})
 

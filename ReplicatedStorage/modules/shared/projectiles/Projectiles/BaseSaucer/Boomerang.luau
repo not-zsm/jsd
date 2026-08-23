@@ -35,7 +35,7 @@ function Projectile.new(projectile)
 	--self.hitbox.shape = "Sphere";
 	--self.hitbox.group = "Part";
 	--self.hitbox.radius = 0;
-	--self.hitbox.ignore = {model, workspace.Visuals, workspace.Models};
+	--self.hitbox.ignore = {model, workspace.Visuals, workspace.chars};
 	
 	--self.hitbox.on_hit:Connect(function(hit, result)
 	--	if not self.hitbox:get_humanoid_from_part(hit) then

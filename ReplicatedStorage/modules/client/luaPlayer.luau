@@ -14,8 +14,8 @@ local Remotes = ReplicatedStorage.Remotes;
 
 local Animations = ReplicatedStorage.Animations
 
-local Character = require( script.Character )
-local Replication = require( script.Replication )
+local Character = require( script.Parent.character )
+local Replication = require( script.Parent.replication )
 
 ----------------------------------------------------------------------------------
 
@@ -25,54 +25,6 @@ LuaPlayer.__index = LuaPlayer
 ----------------------------------------------------------------------------------
 
 function LuaPlayer:_Init()
-
-	--warn([[
-	
-	
-	--"Jump Showdown"
-	
-	--Most recent update log:
-
-	--- NEW MOVE FOR UNWANTED GOD'S ULTIMATE 
-	--  - Rock Throw
-
-	--- FINISHED UNHINGED ESPER'S ULTIMATE
-	--  - Carnal Revolution
-
-	--- NEW LIMITED EMOTE 
-	--  - Love Train
-
-	--- sweep changes
-	--  - damage: 7 - 5
-	--  - red (air variant) damage: 10 - 7
-	--  - patched extending it from normal variant (not ragdolled one)
-
-	--- you can now evasive out of blink strike (tectonic control variant) push back
-
-	--- accelerator cd changes
-	--  - tectonic control: 19 - 21
-	--  - accelerated punishment: 20 - 18
-	--  - soundwave punch: 12: 15
-
-	--- improved welding with effects like arm trails, accelerator's wings, etc (was very jittery before)
-	--- improved universal crater smoke
-	--- added tile destruction setting (since it can lag a little)
-	--- fixed tile's not destructing, having tile split geometry setting off will just do a simple split
-	--- fixed not being able to change emotes on mobile or console
-	--- fixed other glitches
-
-	--(next update will be massive, will include kratos being free and some other character..... 🔪 )
-	
-	--]])
-	
-	--warn([[
-
-
-	--how to report glitches properly
-
-	--step 1:  
-	
-	--]])
 	
 	warn("LOADING CLIENT")
 	
@@ -109,8 +61,8 @@ end
 function LuaPlayer:EditPlayerModule()
 	local PlayerModule = self.PlayerScripts:WaitForChild("PlayerModule")
 
-	local NewPopper = script.Camera:WaitForChild("Popper");
-	local NewCameraInput = script.Camera:WaitForChild("CameraInput");
+	local NewPopper = script.Parent.camera:WaitForChild("Popper");
+	local NewCameraInput = script.Parent.camera:WaitForChild("CameraInput");
 	
 	local CameraInputSwapSuccess, CameraInputSwapResult = pcall(function()
 		local OldCameraInput = PlayerModule

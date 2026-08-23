@@ -23,7 +23,7 @@ local AbbreviateTime = require("./LeaderboardHandler/LeaderboardModule/Abbreviat
 local AbbreviateNumber = require("./LeaderboardHandler/LeaderboardModule/Abbreviate Number")
 local LuaPlayerList = require("./LuaPlayerList")
 
-local CharactersData = ServerStorage.serverCombat
+local CharactersData = ServerStorage.characterData
 
 local DonationRemote = ReplicatedStorage.Remotes.RequestDonation
 

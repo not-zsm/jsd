@@ -203,8 +203,8 @@ function LuaCharacter:RegisterModel(Model : Model)
 	
 	self.Model = Model
 
-	if (self.Model.Parent ~= workspace.Models) then
-		warn("model wasn't in the models folder as this was checked, waiting now")
+	if (self.Model.Parent ~= workspace.chars) then
+		--warn("model wasn't in the models folder as this was checked, waiting now")
 		self.Model.AncestryChanged:Wait()
 	end
 	

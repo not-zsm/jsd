@@ -4,5 +4,6 @@
   "ServerScriptService.Scripts",
   "ServerStorage.Modules",
   "ServerStorage.modules.Weather.Init",
-  "StarterPlayer.StarterPlayerScripts.Scripts"
+  "StarterPlayer.StarterPlayerScripts.Scripts",
+  "ServerStorage.modules.Npcs.Health"
 ]

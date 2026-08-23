@@ -77,7 +77,7 @@ local CharacterModuleCache = {};
 local AttackFunctionModuleCache = {};
 
 local AttackList = script.Attacks.List
-local CharacterList = script.Characters;
+local CharacterList = script.Parent.characterData;
 local AttackFunctionList = script.AttackFunctions;
 
 local XZAxis = Vector3.new(1, 0, 1);
@@ -325,10 +325,10 @@ function Combat:_Init()
 			if not self:CanUseCharacter(self.CurrentCharacter.Name) and not self.IsInvincibleFromWorldEvent and not self.IsMeatyMichaelFromWorldEvent then
 
 				if self.LuaPlayer.Data and self.LuaPlayer.Data.Profile then
-					self.LuaPlayer.Data.Profile.Data.CurrentCharacter = "Chara"
+					self.LuaPlayer.Data.Profile.Data.CurrentCharacter = "Invincible"
 				end
 
-				self:SetCharacter("Chara")
+				self:SetCharacter("Invincible")
 			end;
 		end))
 	end
@@ -708,12 +708,12 @@ function Combat:ConnectHumanoidAvailability()
 			if DataHandler and DataHandler.Profile then
 
 				if not self:CanUseCharacter(DataHandler.Profile.Data.CurrentCharacter) then
-					DataHandler.Profile.Data.CurrentCharacter = "Chara"
+					DataHandler.Profile.Data.CurrentCharacter = "Invincible"
 				end
 
-				self:SetCharacter(DataHandler.Profile.Data.CurrentCharacter or "Chara")
+				self:SetCharacter(DataHandler.Profile.Data.CurrentCharacter or "Invincible")
 			else
-				self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character") or "Chara")
+				self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character") or "Invincible")
 			end
 
 			if not self.LuaPlayer.IsNPC then
@@ -1780,9 +1780,9 @@ function Combat:DealDamage(VictimLuaPlayer, Value : number, DontCountToUltimate 
 			VictimLuaCharacter.Humanoid:TakeDamage(ActualValue)
 		end;
 
-		if self:HasACharacter() and self.CurrentCharacter.Name == "Chara" then
-			self.LuaPlayer.Replication:FireReliableVFX("Chara/Damage Indicator", "Value", VictimLuaCharacter.RootPart, if KeptAlive then 9999 else ActualValue)
-		end
+		--if self:HasACharacter() and self.CurrentCharacter.Name == "Chara" then
+		self.LuaPlayer.Replication:FireReliableVFX("Chara/Damage Indicator", "Value", VictimLuaCharacter.RootPart, if KeptAlive then 9999 else ActualValue) --global effect now
+		--end
 
 		VictimCombat.LastHitBy = self.LuaPlayer.Player
 
@@ -1856,7 +1856,7 @@ function Combat:AwardKillToHighestDamager(Type : string)
 
 	local SortedDamagers = {}
 
-	StudioPrint("player who is awarding a kill:", self.LuaPlayer.PlayerName)
+	StudioPrint("this mfer just killed sumn:", self.LuaPlayer.PlayerName)
 
 	for Player : Player, Damage : number in self.TotalBeenDamaged do
 		if (Player and Player.Parent ~= nil) then

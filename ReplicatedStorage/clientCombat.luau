@@ -5,10 +5,7 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 
-----------------------------------------------------------------------------------
-
 local Remotes = ReplicatedStorage.Remotes
-
 local CombatRemotes = Remotes.Combat
 
 local Shared = ReplicatedStorage.modules.shared
@@ -17,8 +14,6 @@ local SharedUtilities = Shared.Utilities
 local Animations = ReplicatedStorage.Animations
 
 local ClientHandlers = script.ClientHandlers
-
-----------------------------------------------------------------------------------
 
 local Combat = {}
 Combat.__index = Combat
@@ -32,8 +27,6 @@ local NumberStack = require( ReplicatedStorage.modules.shared.Utilities.NumberSt
 local InfoCharacter = require( ReplicatedStorage.modules.client.character.InfoCharacter )
 
 local Velocity = require( ReplicatedStorage.modules.shared.Game.Velocity )
-
-----------------------------------------------------------------------------------
 
 function Combat:_Init()
 	task.spawn(require, script.Quicktime);
@@ -801,7 +794,7 @@ function Combat.new(LuaCharacter)
 
 	self.PresetCooldowns = {
 		["Side Dash"] = 2,
-		["Front&Back Dash"] = 6,
+		["FrontBack Dash"] = 6,
 		["Wall Combo"] = 7.5,
 		["Evasive"] = 35
 	}
@@ -825,15 +818,6 @@ end
 
 ----------------------------------------------------------------------------------
 
-table.freeze(Combat)
+--table.freeze(Combat)
 
 return Combat
-
---local Raycast = workspace:Raycast(self.LuaCharacter.RootPart.Position, Vector3.yAxis * DownwardY, Utility.VisualParams)
---Raycast = Raycast or {Position = self.LuaCharacter.RootPart.Position}
-
---self.LuaCharacter.Model:PivotTo(Utility.VectorToRotation(self.LuaCharacter.RootPart.CFrame.RightVector:Cross(-Vector3.yAxis)) + (self.LuaCharacter.RootPart.Position * Vector3.new(1, 0, 1)) + Vector3.yAxis * (3 + Raycast.Position.Y))
-
---self.Enabled = true
---["Front&Back Dash"] = 5,
---["Evasive"] = 30,

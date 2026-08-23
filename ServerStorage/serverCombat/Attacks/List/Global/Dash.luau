@@ -101,7 +101,7 @@ function Attack:Evasive()
 	if self.LuaPlayer.IsNPC then
 		self:AddCertainCooldown("Evasive", 30)
 		self:AddCertainCooldown("Side Dash", 2)
-		self:AddCertainCooldown("Front&Back Dash", 6)
+		self:AddCertainCooldown("FrontBack Dash", 6)
 	else
 		CombatRemotes.EvasiveOutput:FireClient(self.LuaPlayer.Player, self.Direction, Was)
 	end
@@ -316,7 +316,7 @@ function Attack:Activate()
 
 		if self.LuaPlayer.IsNPC then
 			self.Animations.Back:Play()
-			self:AddCertainCooldown("Front&Back Dash", 6)
+			self:AddCertainCooldown("FrontBack Dash", 6)
 
 			local MaxForce = Vector3.new(1, 0, 1) * 80000
 
@@ -412,7 +412,7 @@ function Attack:FrontDash()
 	self.Combat:StackState("Attacking", true)
 	self.Combat:DivideSpeed(10)
 
-	self:AddCertainCooldown("Front&Back Dash", 6)
+	self:AddCertainCooldown("FrontBack Dash", 6)
 	self.FrontDashHit = false
 
 	local AnimationDirectory = self:GetAnimationDirectory()

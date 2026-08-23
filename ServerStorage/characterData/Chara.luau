@@ -1,5 +1,3 @@
-
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Whitelist = require( ReplicatedStorage.modules.shared.Game.Whitelist )

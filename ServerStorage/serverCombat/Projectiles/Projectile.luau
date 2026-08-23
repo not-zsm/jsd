@@ -148,7 +148,7 @@ function Projectile.new(Projectiles, Name : string, Origin : Vector3, Direction 
 	self.OriginalDirection = Direction
 
 	self.Params = RaycastParams.new()
-	self.Params.FilterDescendantsInstances = {workspace.Visuals, workspace.Models, workspace["NPC's"]}
+	self.Params.FilterDescendantsInstances = {workspace.Visuals, workspace.chars, workspace["NPC's"]}
 	self.Params.FilterType = Enum.RaycastFilterType.Exclude
 
 	self:InitHitbox()

@@ -79,7 +79,7 @@ task.spawn(function()
 end)
 
 local Map = workspace:FindFirstChild("Map")
-local Models = workspace:FindFirstChild("Models")
+local Models = workspace:FindFirstChild("chars")
 local Builds = workspace:FindFirstChild("Builds")
 local Havoc = workspace:FindFirstChild("Havoc")
 local HavocStatic = Havoc and Havoc:FindFirstChild("Static")

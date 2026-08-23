@@ -255,7 +255,7 @@ end
 --	if self.CharacterKeybindsUILoaded then return end
 
 --	for Move : string, Data : {} in self.Combat.Attacks do
---		if Move == "WallRun" or Move == "Vault" then continue end
+--		if Move == "WallJump" or Move == "Vault" then continue end
 
 --		self:CreateKeybind(Move, Data, true)
 --	end

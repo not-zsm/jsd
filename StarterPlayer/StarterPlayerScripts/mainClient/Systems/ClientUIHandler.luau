@@ -240,7 +240,7 @@ return {
 
 		local QueryAll = OverlapParams.new()
 		QueryAll.FilterType = Enum.RaycastFilterType.Include
-		QueryAll.FilterDescendantsInstances = { workspace.Models }
+		QueryAll.FilterDescendantsInstances = { workspace.chars }
 		QueryAll.RespectCanCollide = false
 		QueryAll.MaxParts = 0
 		ZoneParams.OverlapParams = QueryAll
