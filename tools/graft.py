@@ -285,7 +285,8 @@ def main():
     ap.add_argument("--source", action="append", default=[], metavar="NAME=PATH",
                     help="a place to graft subtrees out of; repeatable")
     ap.add_argument("--grafts", required=True,
-                    help="JSON list of {from, src, dst}, paths as dotted strings")
+                    help="JSON list of {from, src, dst, name?}, paths as dotted strings; "
+                         "name renames the subtree as it lands")
     ap.add_argument("--moves", help="JSON list of {src, dst} to reparent within the place")
     ap.add_argument("--deletes", help="JSON list of dotted paths to remove from the place")
     ap.add_argument("--new", required=True, help="place to graft into")
@@ -325,6 +326,7 @@ def main():
     for entry in manifest:
         src = tuple(entry["src"].split("."))
         dst = tuple(entry["dst"].split("."))
+        landed = entry.get("name") or src[-1]
         old_index, old_shared = sources[entry["from"]]
 
         node, parent = old_index.get(src), new_index.get(dst)
@@ -332,10 +334,16 @@ def main():
             print(f"  [missing in {entry['from']}] {'.'.join(src)}"); continue
         if parent is None:
             print(f"  [no destination] {'.'.join(dst)}"); continue
-        if new_index.get(dst + (src[-1],)) is not None:
-            print(f"  [already present] {'.'.join(dst + (src[-1],))}"); continue
+        if new_index.get(dst + (landed,)) is not None:
+            print(f"  [already present] {'.'.join(dst + (landed,))}"); continue
 
         clone = copy.deepcopy(node)
+
+        if landed != src[-1]:
+            for el in clone.find("Properties"):
+                if el.get("name") == "Name":
+                    el.text = landed
+                    break
         refresh_unique_ids(clone, taken_ids)
         outside = refresh_referents(clone)
         if outside:
@@ -356,7 +364,7 @@ def main():
         parent.append(clone)
         new_index = index(new_root)       # a later graft may target this subtree
         size = len(clone.findall(".//Item")) + 1
-        print(f"  grafted {size:>5} instances -> {'.'.join(dst + (src[-1],))}")
+        print(f"  grafted {size:>5} instances -> {'.'.join(dst + (landed,))}")
         grafted += 1
 
     print(f"\ncarried {copied_blobs} shared-string blobs")

@@ -64,6 +64,11 @@ function Hotbar.new(UI)
 	-- not "Hotbar": the tools backpack already clones a ScreenGui by that name
 	-- into PlayerGui, and a FindFirstChild would be a coin flip between them
 	GUI.Name = "CombatHotbar"
+
+	-- the template is authored ResetOnSpawn, which has the PlayerGui destroy it
+	-- every respawn -- and switching character is a respawn, which left this
+	-- module holding references to a destroyed tree. Its life is ours.
+	GUI.ResetOnSpawn = false
 	GUI.Parent = UI.PlayerGui
 
 	self.GUI = GUI

@@ -4,8 +4,9 @@
 	This used to run along walls: stick to one for a second, rotate to face
 	along it, climb, then leap off. It is jjk's bounce now -- a single kick off
 	a wall you are pushing into mid-fall, up to three per airtime, reset when
-	you land. The script keeps the WallRun name because the animation folder,
-	the server-side attack and anyone's saved keybind are all keyed to it.
+	you land. jjk's own jumpL and jumpR are the animations; the ones jsd had
+	were posed for a character already rotated flat against the wall, which is
+	not what happens any more.
 --]]
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
@@ -79,7 +80,8 @@ function WallJumpHandler:NotStunned()
 		not self.Combat:GetState("Dashing") and
 		not self.Combat:GetState("Blocking") and
 		not self.Combat:GetState("M1ing") and
-		not self.Combat.ClientHandlers.Vault.Vaulting
+		not self.Combat.ClientHandlers.Vault.Vaulting and
+		not self.Combat.ClientHandlers.Roll.Rolling
 end
 
 function WallJumpHandler:CanActivate()
@@ -144,7 +146,7 @@ function WallJumpHandler:Fire(Side : number, Forward : Vector3, Right : Vector3,
 		AttackInput:FireServer(script.Name, false)
 	end)
 
-	local Animation : AnimationTrack? = self.Animations[Side == 1 and "JumpRight" or "JumpLeft"]
+	local Animation : AnimationTrack? = self.Animations[Side == 1 and "jumpR" or "jumpL"]
 
 	if Animation then
 		Animation:Play(0.05)

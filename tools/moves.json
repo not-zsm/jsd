@@ -14,5 +14,13 @@
   {
     "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.Weather.Main",
     "dst": "ReplicatedStorage.Client.Main.Systems.Weather"
+  },
+  {
+    "src": "ReplicatedStorage.clientCombat.ClientHandlers.WallRun.Jump",
+    "dst": "ReplicatedStorage.clientCombat.ClientHandlers.WallJump"
+  },
+  {
+    "src": "ReplicatedStorage.clientCombat.ClientHandlers.WallRun.Run",
+    "dst": "ReplicatedStorage.clientCombat.ClientHandlers.WallJump"
   }
 ]

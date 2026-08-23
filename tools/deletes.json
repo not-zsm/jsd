@@ -4,5 +4,6 @@
   "StarterPlayer.StarterPlayerScripts.Scripts.Game.Hotbar",
   "StarterPlayer.StarterPlayerScripts.Scripts.Game.LocalTitleScript",
   "StarterPlayer.StarterPlayerScripts.Scripts.Game.Weather",
-  "StarterPlayer.StarterPlayerScripts.footsteps"
+  "StarterPlayer.StarterPlayerScripts.footsteps",
+  "ReplicatedStorage.clientCombat.ClientHandlers.WallRun"
 ]

@@ -545,7 +545,7 @@ function Attack:Activate()
 	--end
 	
 	local Vault, VaultMatched = self.Combat:MatchAttack("Vault", Enum.KeyCode.W)
-	local WallRun, WallRunMatched = self.Combat:MatchAttack("WallRun", Enum.KeyCode.W)
+	local WallJump, WallJumpMatched = self.Combat:MatchAttack("WallJump", Enum.KeyCode.W)
 	
 	if self.Combat.CurrentCharacter.Name == "Hornet" then
 		local Raycast = workspace:Raycast(self.LuaCharacter.RootPart.Position, Vector3.new(0, -10, 0), Utility.VisualParams)
@@ -559,7 +559,7 @@ function Attack:Activate()
 		end
 	end
 	
-	if ( (VaultMatched and Vault.Active) or (WallRunMatched and WallRun.Active) ) and not self:HasCertainCooldown("AirAttack") then
+	if ( (VaultMatched and Vault.Active) or (WallJumpMatched and WallJump.Active) ) and not self:HasCertainCooldown("AirAttack") then
 		return self:AirAttack()
 	end
 	

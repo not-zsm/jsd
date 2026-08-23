@@ -310,7 +310,7 @@ function Combat:_Init()
 	self:CreateAttack("Ultimate", Enum.KeyCode.G)
 
 	self:CreateAttack("Dash", Enum.KeyCode.Q)
-	self:CreateAttacks({"Vault", "WallRun"}, Enum.KeyCode.W)
+	self:CreateAttacks({"Vault", "WallJump"}, Enum.KeyCode.W)
 
 	if self.LuaPlayer.IsNPC and self.LuaPlayer.Player:GetAttribute("Character") then
 		self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character"))

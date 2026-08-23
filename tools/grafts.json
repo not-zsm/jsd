@@ -38,5 +38,17 @@
     "from": "jjk",
     "src": "StarterPlayer.StarterPlayerScripts.PlayerScriptsLoader.mainClient.UI.hotbar",
     "dst": "ReplicatedStorage.clientCombat.UI.Hotbar"
+  },
+  {
+    "from": "jjk",
+    "src": "ReplicatedStorage.ass.GLOBAL.walljump",
+    "dst": "ReplicatedStorage.Animations.ClientActions",
+    "name": "WallJump"
+  },
+  {
+    "from": "jjk",
+    "src": "ReplicatedStorage.ass.GLOBAL.roll",
+    "dst": "ReplicatedStorage.Animations.ClientActions",
+    "name": "Roll"
   }
 ]
