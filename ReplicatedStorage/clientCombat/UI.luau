@@ -40,9 +40,17 @@ local UI = {}
 UI.__index = UI
 
 function UI:Init()
+	-- Ultimate, Hotbar, DummyHotbar and the two templates are what the hotbar
+	-- used before it moved to its own ScreenGui. Nothing drives them now, so
+	-- they stay hidden until you delete them.
+	local Retired = {
+		SkillTemplate = true, DummySkillTemplate = true,
+		Ultimate = true, Hotbar = true, DummyHotbar = true,
+	}
+
 	for _, GUI : Frame in ipairs(self.MainGUIHolder:GetChildren()) do
-		if GUI:IsA("Frame") and GUI.Name ~= "SkillTemplate" then
-			GUI.Visible = true
+		if GUI:IsA("Frame") then
+			GUI.Visible = not Retired[GUI.Name]
 		end
 	end
 	

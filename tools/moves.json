@@ -1,0 +1,18 @@
+[
+  {
+    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientUIHandler.Headshot",
+    "dst": "ReplicatedStorage.Client.Main.Systems.ClientUIHandler"
+  },
+  {
+    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.ClientUIHandler.PartyRequest",
+    "dst": "ReplicatedStorage.Client.Main.Systems.ClientUIHandler"
+  },
+  {
+    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.Hotbar.Hotbar",
+    "dst": "ReplicatedStorage.Client.Main.Systems.ToolHotbar"
+  },
+  {
+    "src": "StarterPlayer.StarterPlayerScripts.Scripts.Game.Weather.Main",
+    "dst": "ReplicatedStorage.Client.Main.Systems.Weather"
+  }
+]

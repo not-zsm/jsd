@@ -40,6 +40,16 @@ export type System = {
 	--- Lower starts first. Systems without one run at 100, after the essentials.
 	Priority: number?,
 
+	--[[
+		Start on its own thread rather than in line.
+
+		Set it on anything that yields -- a WaitForChild, a Loaded wait, a loop
+		that never returns. These were LocalScripts, which each got a thread for
+		free; starting them in line would let one of them hold up every system
+		behind it.
+	--]]
+	Async: boolean?,
+
 	Start: (self: System, Client: MainClient, Cleanup: any) -> (),
 
 	--- Optional. Called before the system's Job is destroyed.
@@ -115,10 +125,18 @@ function MainClient:Start()
 		local Cleanup = self.Job:Task(Job.new())
 		self.Cleanups[System.Name] = Cleanup
 
-		local Success, Problem = pcall(System.Start, System, self, Cleanup)
+		local function Run()
+			local Success, Problem = pcall(System.Start, System, self, Cleanup)
 
-		if not Success then
-			warn(`[MainClient] system "{System.Name}" failed to start: {Problem}`)
+			if not Success then
+				warn(`[MainClient] system "{System.Name}" failed to start: {Problem}`)
+			end
+		end
+
+		if System.Async then
+			Cleanup:Task(task.spawn(Run))
+		else
+			Run()
 		end
 	end
 end

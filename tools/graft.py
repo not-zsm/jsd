@@ -286,6 +286,8 @@ def main():
                     help="a place to graft subtrees out of; repeatable")
     ap.add_argument("--grafts", required=True,
                     help="JSON list of {from, src, dst}, paths as dotted strings")
+    ap.add_argument("--moves", help="JSON list of {src, dst} to reparent within the place")
+    ap.add_argument("--deletes", help="JSON list of dotted paths to remove from the place")
     ap.add_argument("--new", required=True, help="place to graft into")
     ap.add_argument("--out", required=True)
     ap.add_argument("--repo", default="/home/user/jsd")
@@ -359,8 +361,37 @@ def main():
 
     print(f"\ncarried {copied_blobs} shared-string blobs")
 
+    if args.moves:
+        print("\nmoving:")
+        tree = index(new_root)
+        for entry in json.load(open(args.moves, encoding="utf-8")):
+            src, dst = tuple(entry["src"].split(".")), tuple(entry["dst"].split("."))
+            node, parent = tree.get(src), tree.get(dst)
+            if node is None:
+                print(f"  [not there] {entry['src']}"); continue
+            if parent is None:
+                print(f"  [no destination] {entry['dst']}"); continue
+            # lxml detaches from the old parent on append, so a move keeps the
+            # instance's referent and UniqueId -- nothing is duplicated
+            parent.append(node)
+            print(f"  {entry['src']}  ->  {entry['dst']}.{src[-1]}")
+            tree = index(new_root)
+
     sourced, created = sync_sources(new_root, args.repo)
     print(f"\ngrafted {grafted} subtrees, sourced {sourced}, created {created}")
+
+    if args.deletes:
+        print("\ndeleting:")
+        tree = index(new_root)
+        for dotted in json.load(open(args.deletes, encoding="utf-8")):
+            path = tuple(dotted.split("."))
+            node = tree.get(path)
+            if node is None:
+                print(f"  [not there] {dotted}"); continue
+            size = len(node.findall(".//Item")) + 1
+            node.getparent().remove(node)
+            print(f"  removed {size:>4} instances at {dotted}")
+            tree = index(new_root)
 
     print("\nvalidating:")
     ok = validate(new_root, "output")

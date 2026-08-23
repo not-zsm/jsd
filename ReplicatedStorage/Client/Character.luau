@@ -14,6 +14,7 @@ local EventService = require(SharedUtilities.EventService)
 local Job = require( SharedUtilities.Job )
 local Utility = require( SharedUtilities.Utility )
 local NumberStack = require( SharedUtilities.NumberStack )
+local FollowHead = require( ReplicatedStorage.Client.Camera.FollowHead )
 
 local MovementDegree = math.sqrt(2) / 2
 
@@ -80,8 +81,6 @@ function LuaCharacter.new(LuaPlayer)
 
 	self.CFRootPartToCameraLookVector = false
 
-	self.LastHeadPosition = Vector3.zero
-
 	local ShiftlockOffset = {
 		[true] = CFrame.new(2, 0, 0),
 		[false] = CFrame.identity
@@ -110,12 +109,14 @@ function LuaCharacter.new(LuaPlayer)
 
 		SetHeadMovementAttach.OnClientEvent:Connect(function(NewAttach : BasePart)
 			self.CurrentHeadMovementAttach = NewAttach
+
+			if self.FollowHead then
+				self.FollowHead:SetTarget(NewAttach)
+			end
 		end)
 	end)
 	
-	local SmoothSpeed = 5 -- Higher = Snappier
-	
-	RunService:BindToRenderStep("Shiftlock", Utility.ShiftlockRenderPriority, function(Delta : number)
+	RunService:BindToRenderStep("Shiftlock", Utility.ShiftlockRenderPriority, function()
 		if not self.HumanoidExists then return end
 		
 		if self:ConditionsToShiftlockRoot() then
@@ -132,28 +133,10 @@ function LuaCharacter.new(LuaPlayer)
 		
 		local Zoom : number = self.ZoomController.GetZoomRadius()
 
-		local Attach : BasePart = self.CurrentHeadMovementAttach or self.Head
-		local RootCF : CFrame = self.RootPart.CFrame
-		local ValueOffset = Vector3.zero
-
-		if (self.HeadMovementEnabled and self.HeadMovementSetting and not self.HeadMovementDisabledAttribute) and Zoom > 1 then
-			local HeadDifference = CFrame.new(0, (self.RootPart.Size.Y + Attach.Size.Y) / 2, 0)
-			local HeadOffset = (RootCF * HeadDifference):PointToObjectSpace(Attach.Position)
-			
-			--local Alpha = math.clamp(0.1 * (Delta * 60), 0, 1)
-			--ValueOffset = self.LastHeadPosition:Lerp(HeadOffset, Alpha)
-			
-			ValueOffset = self.LastHeadPosition:Lerp(HeadOffset, 
-				(1 - math.exp(-SmoothSpeed * Delta))
-			)
-		end
-
-		if (self.Combat and self.Combat.LockOn and self.Combat.LockOn.lock_on) or Zoom < 1 then
-			CurrentCamera.CFrame = 
-				(CurrentCamera.CFrame + RootCF.Rotation * ValueOffset)
-		else
-			CurrentCamera.CFrame = 
-				(CurrentCamera.CFrame + RootCF.Rotation * ValueOffset) * ShiftlockOffset[self.InShiftlock]
+		-- the head follow is Humanoid.CameraOffset now, applied by the camera
+		-- module itself, so all that is left here is the shiftlock shoulder
+		if not ((self.Combat and self.Combat.LockOn and self.Combat.LockOn.lock_on) or Zoom < 1) then
+			CurrentCamera.CFrame = CurrentCamera.CFrame * ShiftlockOffset[self.InShiftlock]
 		end
 		
 		if self.InShiftlock then
@@ -178,8 +161,6 @@ function LuaCharacter.new(LuaPlayer)
 		--	end
 			
 		--end
-
-		self.LastHeadPosition = ValueOffset
 	end)
 	
 	local function CharacterAdded(Model : Model)
@@ -241,6 +222,21 @@ function LuaCharacter:RegisterModel(Model : Model)
 	self.Mouth = self.Head:WaitForChild("MouthAttachment") :: Attachment
 	self.MassProperties = self.RootPart.CurrentPhysicalProperties
 
+	self.FollowHead = FollowHead.new(self.Model, function()
+		return self.HeadMovementEnabled
+			and self.HeadMovementSetting
+			and not self.HeadMovementDisabledAttribute
+			and self.ZoomController.GetZoomRadius() > 1
+	end)
+
+	self.FollowHead:SetTarget(self.CurrentHeadMovementAttach)
+	self.FollowHead:Bind()
+
+	self.HumanoidJob:Task(function()
+		self.FollowHead:Destroy()
+		self.FollowHead = nil
+	end)
+
 	self.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
 	self.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
 	self.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming, false)
@@ -255,9 +251,7 @@ function LuaCharacter:RegisterModel(Model : Model)
 	end))
 	
 	self.Model:GetAttributeChangedSignal("HeadMovementDisabled"):Connect(function()
-		self.LastHeadPosition = Vector3.zero
 		self.HeadMovementDisabledAttribute = self.Model:GetAttribute("HeadMovementDisabled")
-		self.LastHeadPosition = Vector3.zero
 	end)
 	
 	self.Model:GetAttributeChangedSignal("BlockShiftlock"):Connect(function()

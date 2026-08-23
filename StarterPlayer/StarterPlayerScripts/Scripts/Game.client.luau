@@ -2,14 +2,6 @@ if not game:IsLoaded() then
 	game.Loaded:Wait()
 end
 
-if workspace:GetAttribute("IsRankedLobby") then
-	script.ClientUIHandler.Enabled = true
-end
-
-if workspace:GetAttribute("IsRankedLobby") or workspace:GetAttribute("IsRankedPlace") then
-	script.Weather.Enabled = false
-end
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Player = ReplicatedStorage.Client
