@@ -18,27 +18,19 @@ local NumberStack = require( replicatedStorage.modules.shared.Utilities.NumberSt
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
 local Colors = require( script.Colors )
-
-local Limited_Emote_Dates = require( replicatedStorage.modules.shared.Game["Limited Emote Dates"])
+local createBGBlur = require( script.Parent.helpers.blur )
 
 ----------------------------------------------------------------------------------
 
 local OPEN = TweenInfo.new(0.7, Enum.EasingStyle.Circular, Enum.EasingDirection.Out)
 
+--- What the server accepts in SetSlot, and what the wheel now always draws.
+local SLOTS = 8
+
 local Emotes = {}
 Emotes.__index = Emotes
 
 function Emotes:Init()
-	network.emoteSlotsLoaded.listen(function(HasGamepass : boolean)
-		if typeof(HasGamepass) ~= "boolean" then return end
-
-		if HasGamepass then
-			self.Holder.SlotsGamepass.Visible = false
-		end
-
-		self:CreateSlotsInCircle(HasGamepass and 8 or 4)
-	end)
-
 	network.emotesUpdated.listen(function(data)
 		local Emotes, Slots = data.emotes, data.slots
 		for Name in Emotes do
@@ -123,78 +115,6 @@ function Emotes:Init()
 		network.buyRandomEmote.send()
 	end)
 
-	self.Holder.SlotsGamepass.Interaction.MouseButton1Click:Connect(function()
-		network.buyEmoteSlots.send()
-	end)
-
-	task.spawn(function()
-		for Emote, EndDate in Limited_Emote_Dates do
-			local UI : Frame = self.Holder.LimitedEmotes:FindFirstChild(Emote)
-
-			if UI == nil then
-				continue
-			end
-
-			local Timer : TextLabel = UI:FindFirstChild("Timer")
-			local Button : ImageButton = UI:FindFirstChild("Button")
-
-			if (Timer == nil or Button == nil) then continue end
-
-			Button.MouseButton1Click:Connect(function()
-				network.buyLimitedEmote.send(Emote)
-			end)
-
-			UI.Visible = false
-
-			task.spawn(function()
-				while true do
-					local Remaining = (EndDate - os.time())
-
-					if (Remaining <= 0) then
-						break
-					end
-
-					if self.GUI.Enabled then
-						local days = math.floor(Remaining / 86400)
-						local hours = math.floor((Remaining % 86400) / 3600)
-						local minutes = math.floor((Remaining % 3600) / 60)
-						local seconds = Remaining % 60
-
-						if (days > 0) then
-							Timer.Text = string.format("For the next %dd %02dh %02dm %02ds", days, hours, minutes, seconds)
-						else
-							Timer.Text = string.format("For the next %02dh %02dm %02ds", hours, minutes, seconds)
-						end
-
-						UI.Visible = true
-					end
-
-					--if (Remaining <= 0) then
-					--	UI.Visible = false
-					--	break
-					--else
-					--	if self.GUI.Enabled then
-					--		local days = math.floor(Remaining / 86400)
-					--		local hours = math.floor((Remaining % 86400) / 3600)
-					--		local minutes = math.floor((Remaining % 3600) / 60)
-					--		local seconds = Remaining % 60
-
-					--		if (days > 0) then
-					--			Timer.Text = string.format("For the next %dd %02dh %02dm %02ds", days, hours, minutes, seconds)
-					--		else
-					--			Timer.Text = string.format("For the next %02dh %02dm %02ds", hours, minutes, seconds)
-					--		end
-
-					--		UI.Visible = true
-					--	end
-					--end
-
-					task.wait(1)
-				end
-			end)
-		end
-	end)
-
 	self.ListHolder.SearchBar.Prompt:GetPropertyChangedSignal("Text"):Connect(function()
 		local Text = self.ListHolder.SearchBar.Prompt.Text
 
@@ -269,9 +189,31 @@ function Emotes:Toggle()
 	if self.WheelOpen then
 		self.GUI.Enabled = true
 
+		--[[
+			What jjk opened the wheel behind: a blurred background with the
+			hotbar out of the way. The job owns both, so closing drops the blur
+			and puts the hotbar back however the close happened.
+		--]]
+		self.WheelJob = Job.new()
+
+		createBGBlur(self.WheelJob, 0.7, 24)
+
+		if self.UI.Hotbar then
+			self.UI.Hotbar:SetHidden(true)
+
+			self.WheelJob:Task(function()
+				self.UI.Hotbar:SetHidden(false)
+			end)
+		end
+
 		self.WheelFade = TweenService:Create(self.Wheel, OPEN, { GroupTransparency = 0 })
 		self.WheelFade:Play()
 	else
+		if self.WheelJob then
+			self.WheelJob:Destroy()
+			self.WheelJob = nil
+		end
+
 		self.WheelFade = TweenService:Create(self.Wheel, OPEN, { GroupTransparency = 1 })
 
 		self.WheelFade.Completed:Once(function(State)
@@ -283,30 +225,24 @@ function Emotes:Toggle()
 		self.WheelFade:Play()
 	end
 
-	--if not self.EmotesOpened then
-	--	self.GUI.Enabled = true
-	--	self.EmotesOpened = true
-
-	--	TweenService:Create(self.Holder.UIScale, TweenInfo.new(0.15), {
-	--		Scale = 1
-	--	}):Play()
-	--else
-	--	self.EmotesOpened = false
-
-	--	local Tween = TweenService:Create(self.Holder.UIScale, TweenInfo.new(0.15), {
-	--		Scale = 0
-	--	})
-
-	--	Tween:Play()
-
-	--	Tween.Completed:Once(function(State)
-	--		if State == Enum.PlaybackState.Completed then
-	--			self.GUI.Enabled = false
-	--		end
-	--	end)
-	--end
-
 	self.OnToggled:Fire()
+end
+
+--- Drops everything opening the wheel put up, without animating it away.
+function Emotes:CloseWheel()
+	self.WheelOpen = false
+
+	if self.WheelFade then
+		self.WheelFade:Cancel()
+		self.WheelFade = nil
+	end
+
+	if self.WheelJob then
+		self.WheelJob:Destroy()
+		self.WheelJob = nil
+	end
+
+	self.Wheel.GroupTransparency = 1
 end
 
 function Emotes:ResetCircle()
@@ -566,20 +502,14 @@ function Emotes.new(UI)
 	self.Holder = self.GUI:WaitForChild("Holder")
 
 	--[[
-		jjk's wheel, hosted inside jsd's emote screen.
+		jjk's wheel replaces jsd's circle rather than covering it.
 
 		The canvas group is what fades on open and the display frame is what the
-		slots live in; the old EmoteCircle stays in the place but is hidden, so
-		everything else on the screen -- the list, the titles, the gamepass
-		prompts -- is untouched.
+		slots live in. It keeps its own geometry -- Holder is full-screen, so
+		that lands it where jjk's did -- and everything jsd's circle brought
+		with it goes, including the upsells that used to sit over the middle.
 	--]]
-	local OldCircle = self.Holder:WaitForChild("EmoteCircle")
-	OldCircle.Visible = false
-
 	self.Wheel = script.Parent.emoteWheel.container:Clone()
-	self.Wheel.Position = OldCircle.Position
-	self.Wheel.Size = OldCircle.Size
-	self.Wheel.AnchorPoint = OldCircle.AnchorPoint
 	self.Wheel.Parent = self.Holder
 
 	self.Circle = self.Wheel:WaitForChild("display")
@@ -588,6 +518,14 @@ function Emotes.new(UI)
 	self.SlotTemplate = self.Circle:WaitForChild("1"):Clone()
 	self.SlotTemplate.Visible = false
 
+	for _, Name in { "EmoteCircle", "EmoteSlotTemplate", "SlotsGamepass", "EmoteGamepass", "LimitedEmotes", "LeftPage", "RightPage" } do
+		local Old = self.Holder:FindFirstChild(Name)
+
+		if Old then
+			Old:Destroy()
+		end
+	end
+
 	self.ListHolder = self.Holder:WaitForChild("ListHolder")
 	self.TitleHolder = self.Holder:WaitForChild("TitleHolder")
 
@@ -595,7 +533,6 @@ function Emotes.new(UI)
 
 	self.Wheel.GroupTransparency = 1
 
-	self.EmotesOpened = false
 	self.WheelOpen = false
 	self.CanOpenEmotes = true
 
@@ -609,9 +546,27 @@ function Emotes.new(UI)
 				GamepadService:DisableGamepadCursor()
 			end
 		end
+
+		--[[
+			Icons:CloseAllExcept disables the screen behind Toggle's back, so
+			the wheel has to notice: otherwise the blur stays up, the hotbar
+			stays hidden, and the next press reads as a close.
+		--]]
+		if not self.GUI.Enabled and self.WheelOpen then
+			self:CloseWheel()
+		end
 	end)
 
 	self.Slots = {}
+
+	--[[
+		Built here rather than off emoteSlotsLoaded.
+
+		The count no longer depends on a gamepass, and hanging the whole wheel
+		on a packet meant a lost one left the four viewports the GUI ships with
+		sitting there unwired.
+	--]]
+	self:CreateSlotsInCircle(SLOTS)
 
 	self:Init()
 

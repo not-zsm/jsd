@@ -29,7 +29,6 @@ local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
-local Lighting = game:GetService("Lighting")
 
 local Job = require(replicatedStorage.modules.shared.Utilities.Job)
 local clientCombat = require(replicatedStorage.clientCombat)
@@ -39,6 +38,7 @@ local soundUtil = require(replicatedStorage.modules.shared.soundUtil)
 
 local uiConfig = require(script.UI.config)
 local shopHelper = require(script.UI.helpers.shopHelper)
+local createBGBlur = require(script.UI.helpers.blur)
 
 --------------------------------------------------------------------------------
 
@@ -230,20 +230,6 @@ function MainClient:CurrentMoveset(): string?
 	local Name = self.Combat and self.Combat.CurrentCharacter
 
 	return Name and string.lower(Name) or nil
-end
-
-local function createBGBlur(container, tweenTime, size)
-	if not container then return end
-	if Lighting:FindFirstChildOfClass('BlurEffect') then return end
-
-	local blur = Instance.new("BlurEffect")
-	blur.Size = 0
-	blur.Parent = Lighting
-	container:Task(blur)
-
-	local blurTween = TweenService:Create(Lighting.Blur, TweenInfo.new(tweenTime + 0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = size})
-	container:Task(blurTween)
-	blurTween:Play()
 end
 
 local NIR_BY_INDEX = { "zsm", "dih", "niki", "pook" }
