@@ -339,11 +339,28 @@ end
 function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 	local World = Emote:WaitForChild("WorldModel")
 
+	--[[
+		The viewport is framed on wherever the model it shipped with stands, and
+		jjk's emoter stands about 180 studs from jsd's dummy. Stand the dummy on
+		that spot rather than re-aim the camera at it, so re-framing the wheel in
+		Studio keeps working.
+	--]]
+	local Pivot
+
 	for _, Old in World:GetChildren() do
+		if Pivot == nil and Old:IsA("PVInstance") then
+			Pivot = Old:GetPivot()
+		end
+
 		Old:Destroy()
 	end
 
 	local Dummy = script.Dummy:Clone()
+
+	if Pivot then
+		Dummy:PivotTo(Pivot)
+	end
+
 	Dummy.Parent = World
 
 	task.spawn(function()
