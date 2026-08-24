@@ -21,7 +21,7 @@ local Remotes = replicatedStorage.remotes
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 local Gamepasses = require( replicatedStorage.modules.shared.Game.Gamepasses )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
-local Table = require( replicatedStorage.Packages.Table )
+local Table = require( replicatedStorage.packages.Table )
 
 
 ---------------------------------------------------------------------------------- 

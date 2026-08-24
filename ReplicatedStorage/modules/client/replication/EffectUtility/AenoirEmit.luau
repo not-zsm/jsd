@@ -4,7 +4,7 @@ local RunService = game:GetService("RunService")
 
 ------------------------------------------------------------------------------------------
 
-local Maid = require( replicatedStorage.Packages.Maid )
+local Maid = require( replicatedStorage.packages.Maid )
 
 ------------------------------------------------------------------------------------------
 

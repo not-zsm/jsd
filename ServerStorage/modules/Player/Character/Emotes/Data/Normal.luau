@@ -12,7 +12,7 @@ local EventService = require( replicatedStorage.modules.shared.Utilities.EventSe
 
 local CharacterTransparency = require( replicatedStorage.modules.client.replication.Global.CharacterTransparency )
 
-local Type = require( replicatedStorage.Packages.Type )
+local Type = require( replicatedStorage.packages.Type )
 
 local function CreateHands(AddRightHand : boolean, AddLeftHand : boolean, LuaCharacter : Model, HandFolder : Folder)
 	HandFolder = HandFolder or script.Natsuki

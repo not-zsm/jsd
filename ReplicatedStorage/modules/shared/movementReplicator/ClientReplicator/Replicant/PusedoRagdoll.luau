@@ -6,7 +6,7 @@ local Visuals = workspace:WaitForChild("Visuals");
 
 ---------------------------------------------------------------------------------
 
-local Packages = replicatedStorage.Packages
+local Packages = replicatedStorage.packages
 
 local Maid = require( Packages.Maid )
 local Debounce = require( Packages.Debounce )

@@ -2,7 +2,7 @@
 -- Was StarterPlayerScripts/Game/UserInterfaceAnimations.client.luau
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
-require(replicatedStorage.Packages.UserInterface)
+require(replicatedStorage.packages.UserInterface)
 
 local Observer = require(replicatedStorage.modules.shared.Utilities.Observer)
 local UserInterfaceAnimations = require(replicatedStorage.modules.shared.Utilities.UserInterfaceAnimations)

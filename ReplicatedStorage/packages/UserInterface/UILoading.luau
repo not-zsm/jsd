@@ -7,8 +7,8 @@ local RunService = game:GetService("RunService")
 
 local Assets = script.Assets;
 
-local Maid = require( replicatedStorage.Packages.Maid )
-local Signal = require( replicatedStorage.Packages.Signal )
+local Maid = require( replicatedStorage.packages.Maid )
+local Signal = require( replicatedStorage.packages.Signal )
 
 -----------------------------------------------------------------------------
 

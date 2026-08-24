@@ -3,7 +3,7 @@ local starterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
-local Observer = require( replicatedStorage.Packages.Observer )
+local Observer = require( replicatedStorage.packages.Observer )
 local info = require(replicatedStorage.info)
 
 local Appearances = {}

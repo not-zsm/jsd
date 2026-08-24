@@ -15,7 +15,7 @@ local HttpService = game:GetService("HttpService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local Base91 = require(script.Base91)
-local BufferUtil = require(replicatedStorage.Packages.BufferUtil)
+local BufferUtil = require(replicatedStorage.packages.BufferUtil)
 
 -----------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@ local Remotes = Shared.Remotes;
 
 ---------------------------------------------------------------------------------
 
-local Packages = replicatedStorage.Packages
+local Packages = replicatedStorage.packages
 
 local Maid = require( Packages.Maid )
 local CFSpring = require( Packages.Spring.CFSpring )

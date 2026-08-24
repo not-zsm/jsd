@@ -17,10 +17,10 @@ local Client = require( script.Styles.Client )
 local Replicated = require( script.Styles.Replicated )
 local Settings = require(Shared.Settings);
 
-local Table = require( replicatedStorage.Packages.Table )
-local BufferUtil = require( replicatedStorage.Packages.BufferUtil )
+local Table = require( replicatedStorage.packages.Table )
+local BufferUtil = require( replicatedStorage.packages.BufferUtil )
 local DebrisPool = require( replicatedStorage.modules.shared.havoc.DebrisPool )
-local Serialise = require( replicatedStorage.Packages.Serialise );
+local Serialise = require( replicatedStorage.packages.Serialise );
 local Module = require( replicatedStorage.modules.shared.Game.Whitelist );
 
 ---------------------------------------------------------------------

@@ -9,7 +9,7 @@ local Assets = replicatedStorage.modules.shared.projectiles.Assets.Projectiles;
 local AenoirEmit = require( replicatedStorage.modules.client.replication.EffectUtility.AenoirEmit )
 local AenoirUtil = require( replicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
-local Signal = require( replicatedStorage.Packages.Signal )
+local Signal = require( replicatedStorage.packages.Signal )
 
 ---------------------------------------------------------
 

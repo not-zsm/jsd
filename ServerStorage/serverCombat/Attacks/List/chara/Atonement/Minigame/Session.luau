@@ -4,7 +4,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 local network = require( replicatedStorage.modules.network )
 local RunService        = game:GetService("RunService")
 
-local Packages = replicatedStorage.Packages.Des
+local Packages = replicatedStorage.packages.Des
 local Trove    = require(Packages.Trove)
 
 

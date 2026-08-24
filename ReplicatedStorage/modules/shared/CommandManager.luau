@@ -11,7 +11,7 @@ local Players = game:GetService("Players")
 local Commands = require( replicatedStorage.modules.shared.Commands )
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 local MultipleChoiceList = require( script.MultipleChoiceList )
-local Stylus = require( replicatedStorage.Packages.Stylus )
+local Stylus = require( replicatedStorage.packages.Stylus )
 
 
 local Macros = replicatedStorage.modules.shared.Commands.Macros;

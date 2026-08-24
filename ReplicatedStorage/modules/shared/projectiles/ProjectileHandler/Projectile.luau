@@ -2,9 +2,9 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 
 ---------------------------------------------------------
 
-local Maid = require( replicatedStorage.Packages.Maid )
+local Maid = require( replicatedStorage.packages.Maid )
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
-local Signal = require( replicatedStorage.Packages.Signal )
+local Signal = require( replicatedStorage.packages.Signal )
 
 ---------------------------------------------------------
 

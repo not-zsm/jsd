@@ -2,7 +2,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local network = require( replicatedStorage.modules.network )
 
-local Signal = require( replicatedStorage.Packages.Signal )
+local Signal = require( replicatedStorage.packages.Signal )
 
 local Characters = {};
 Characters.List = {};

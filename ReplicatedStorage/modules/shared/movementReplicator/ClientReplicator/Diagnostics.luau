@@ -16,7 +16,7 @@ local Assets = MovementReplicatorFolder:WaitForChild("Assets");
 
 ---------------------------------------------------------------------------------
 
-local Packages = replicatedStorage.Packages
+local Packages = replicatedStorage.packages
 
 local Signal = require( Packages.Signal )
 local Maid = require( Packages.Maid )

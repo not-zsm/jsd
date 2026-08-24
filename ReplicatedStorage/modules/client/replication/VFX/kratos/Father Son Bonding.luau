@@ -68,7 +68,7 @@ return {
 			StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, false)
 			
 			task.spawn(function()
-				local IconModule = require(replicatedStorage.Packages.Icon)
+				local IconModule = require(replicatedStorage.packages.Icon)
 
 				for _, Icon in IconModule.getIcons() do
 					if (Icon.name ~= nil and Icon.name ~= "Settings") then
@@ -82,7 +82,7 @@ return {
 				StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 
 				task.spawn(function()
-					local IconModule = require(replicatedStorage.Packages.Icon)
+					local IconModule = require(replicatedStorage.packages.Icon)
 
 					for _, Icon in IconModule.getIcons() do
 						if (Icon.name ~= nil and Icon.name ~= "Settings") then

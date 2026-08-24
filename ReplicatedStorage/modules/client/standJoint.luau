@@ -4,8 +4,8 @@ local RunService = game:GetService("RunService")
 
 --------------------------------------------------------------------------------------------
 
-local Maid = require( replicatedStorage.Packages.Maid )
-local CFSpring = require( replicatedStorage.Packages.Spring.CFSpring )
+local Maid = require( replicatedStorage.packages.Maid )
+local CFSpring = require( replicatedStorage.packages.Spring.CFSpring )
 
 --------------------------------------------------------------------------------------------
 

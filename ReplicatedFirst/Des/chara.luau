@@ -8,7 +8,7 @@ local HttpService       = game:GetService("HttpService")
 local RunService        = game:GetService("RunService")
 local Players           = game:GetService("Players")
 
-local Packages  = replicatedStorage.Packages.Des
+local Packages  = replicatedStorage.packages.Des
 local Signal    = require(Packages.Signal)
 local Trove     = require(Packages.Trove)
 

@@ -5,8 +5,8 @@ local Lighting = game:GetService("Lighting")
 
 -----------------------------------------------------------------------------------------
 
-local Maid = require( replicatedStorage.Packages.Maid )
-local Observer = require( replicatedStorage.Packages.Observer )
+local Maid = require( replicatedStorage.packages.Maid )
+local Observer = require( replicatedStorage.packages.Observer )
 
 -----------------------------------------------------------------------------------------
 

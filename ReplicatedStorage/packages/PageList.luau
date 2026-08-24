@@ -6,7 +6,7 @@
 
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local Maid = require( replicatedStorage.Packages.Maid )
+local Maid = require( replicatedStorage.packages.Maid )
 
 -------------------------------------------------------------------------------------------------
 

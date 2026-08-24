@@ -20,7 +20,7 @@ Replication.__index = Replication
 local EffectUtility = require( script.EffectUtility )
 
 local ReplicationPart = require( replicatedStorage.modules.shared.Utilities.ReplicationPart )
-local Instances = require( replicatedStorage.Packages.Instances )
+local Instances = require( replicatedStorage.packages.Instances )
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 

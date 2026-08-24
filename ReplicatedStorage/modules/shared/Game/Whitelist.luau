@@ -9,9 +9,9 @@ local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 -------------------------------------------------------------
 
-local Table = require( replicatedStorage.Packages.Table )
-local Maid = require( replicatedStorage.Packages.Maid )
-local Signal = require( replicatedStorage.Packages.Signal )
+local Table = require( replicatedStorage.packages.Table )
+local Maid = require( replicatedStorage.packages.Maid )
+local Signal = require( replicatedStorage.packages.Signal )
 local Types = require( script.Types );
 
 -------------------------------------------------------------

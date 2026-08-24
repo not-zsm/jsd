@@ -14,7 +14,7 @@ local network = require( replicatedStorage.modules.network )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 
-local Icon = require( replicatedStorage.Packages.Icon )
+local Icon = require( replicatedStorage.packages.Icon )
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local AenoirUtil = require( replicatedStorage.modules.shared.Utilities.Utility.AenoirUtil )
@@ -26,8 +26,8 @@ local UserInterfaceAnimations = require( replicatedStorage.modules.shared.Utilit
 
 local Whitelist = require( replicatedStorage.modules.shared.Game.Whitelist )
 
-local Maid = require( replicatedStorage.Packages.Maid )
-local Stylus = require( replicatedStorage.Packages.Stylus )
+local Maid = require( replicatedStorage.packages.Maid )
+local Stylus = require( replicatedStorage.packages.Stylus )
 
 
 local LocalPlayer = Players.LocalPlayer

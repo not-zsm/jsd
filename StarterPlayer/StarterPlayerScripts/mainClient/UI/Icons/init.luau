@@ -205,7 +205,7 @@ function Icons.new(UI)
 	self.Combat = UI.Combat
 	self.LuaPlayer = UI.LuaPlayer
 
-	self.IconModule = require( ReplicatedStorage.Packages.Icon )
+	self.IconModule = require( replicatedStorage.packages.Icon )
 	task.delay(1, self._Init, self)
 
 	return self

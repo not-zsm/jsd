@@ -73,7 +73,7 @@ local Utility = require(iconModule.Utility)
 local Themes = require(iconModule.Features.Themes)
 local Gamepad = require(iconModule.Features.Gamepad)
 local Overflow = require(iconModule.Features.Overflow)
-local Observer = require( replicatedStorage.Packages.Observer )
+local Observer = require( replicatedStorage.packages.Observer )
 
 local Icon = {}
 Icon.__index = Icon

@@ -3,7 +3,7 @@ local SoundService = game:GetService("SoundService")
 
 local network = require( replicatedStorage.modules.network )
 
-local Icon = require( replicatedStorage.Packages.Icon )
+local Icon = require( replicatedStorage.packages.Icon )
 local InfoCharacter = require( replicatedStorage.modules.client.character.InfoCharacter )
 
 local FALLBACK_IMAGE = "85316557846229"

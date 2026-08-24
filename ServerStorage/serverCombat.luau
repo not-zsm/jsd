@@ -1109,7 +1109,7 @@ function Combat:GetAttackFunctionModule(AttackDirectory: string): ModuleScript?
 		return CacheHit;
 	end;
 
-	local Instances = require( replicatedStorage.Packages.Instances )
+	local Instances = require( replicatedStorage.packages.Instances )
 	local Item = Instances.find_directory(AttackFunctionList, AttackDirectory, "/");
 
 	if Item then

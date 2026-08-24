@@ -5,7 +5,7 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Debris = game:GetService("Debris")
 
-local Instances = require( replicatedStorage.Packages.Instances )
+local Instances = require( replicatedStorage.packages.Instances )
 
 -------------------------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ local Types = require( script.Types )
 
 local PartCache = require( replicatedStorage.modules.shared.havoc.PartCache );
 local Settings = require( replicatedStorage.modules.shared.havoc.Settings );
-local Signal = require( replicatedStorage.Packages.Signal );
+local Signal = require( replicatedStorage.packages.Signal );
 local DebrisPool = require( replicatedStorage.modules.shared.havoc.DebrisPool )
 
 -------------------------------------------------------------------------------------------

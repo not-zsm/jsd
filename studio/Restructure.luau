@@ -66,7 +66,7 @@ local REPLACEMENTS = {
 	{ "ReplicatedStorage.Modules.Weather",                  "ReplicatedStorage.Client.Weather" },
 	{ "ReplicatedStorage.Modules.Shared",                   "ReplicatedStorage.Shared" },
 	{ "ReplicatedStorage.Modules.Player",                   "ReplicatedStorage.Client" },
-	{ "ReplicatedStorage.Modules.Icon",                     "ReplicatedStorage.Packages.Icon" },
+	{ "ReplicatedStorage.Modules.Icon",                     "replicatedStorage.packages.Icon" },
 
 	-- Through the `local Modules = ReplicatedStorage.Modules` alias.
 	{ "Modules.TekrinnDialogue",                            "ReplicatedStorage.Client.TekrinnDialogue" },
@@ -74,7 +74,7 @@ local REPLACEMENTS = {
 	{ "Modules.Weather",                                    "ReplicatedStorage.Client.Weather" },
 	{ "Modules.Shared",                                     "ReplicatedStorage.Shared" },
 	{ "Modules.Player",                                     "ReplicatedStorage.Client" },
-	{ "Modules.Icon",                                       "ReplicatedStorage.Packages.Icon" },
+	{ "Modules.Icon",                                       "replicatedStorage.packages.Icon" },
 }
 
 --[[

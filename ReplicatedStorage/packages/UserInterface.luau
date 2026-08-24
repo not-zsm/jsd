@@ -24,9 +24,9 @@ TooltipUI.Parent = PlayerGui;
 
 ------------------------------------------------------------------------------------------------
 
-local Observer = require( replicatedStorage.Packages.Observer );
-local Maid = require( replicatedStorage.Packages.Maid );
-local HelpInput = require( replicatedStorage.Packages.HelpInput );
+local Observer = require( replicatedStorage.packages.Observer );
+local Maid = require( replicatedStorage.packages.Maid );
+local HelpInput = require( replicatedStorage.packages.HelpInput );
 
 local UIBlur = require( script.UIBlur )
 local UILoading = require( script.UILoading )

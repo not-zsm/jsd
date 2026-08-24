@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 
 ---------------------------------------------------------------------------------
 
-local Packages = replicatedStorage.Packages
+local Packages = replicatedStorage.packages
 local Maid = require( Packages.Maid )
 local BufferUtil = require( Packages.BufferUtil )
 

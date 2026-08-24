@@ -13,7 +13,7 @@ local Assets = Shared:WaitForChild("Assets");
 
 ---------------------------------------------------------------------------------
 
-local Packages = replicatedStorage.Packages
+local Packages = replicatedStorage.packages
 
 local Maid = require( Packages.Maid )
 local Signal = require( Packages.Signal )

@@ -14,7 +14,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 
-local Table = require(replicatedStorage.Packages.Table)
+local Table = require(replicatedStorage.packages.Table)
 
 return function(Data : Class)
 	Data = Table.reconcile(Data or {}, {

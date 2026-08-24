@@ -13,7 +13,7 @@ local EventService = require( Shared.Utilities.EventService )
 local MovementReplicatorSettings = require( replicatedStorage.modules.shared.movementReplicator.Settings )
 
 local HavocHandler = require( ServerStorage.modules.HavocHandler )
-local Table = require( replicatedStorage.Packages.Table )
+local Table = require( replicatedStorage.packages.Table )
 
 ----------------------------------------------------------------------------------
 

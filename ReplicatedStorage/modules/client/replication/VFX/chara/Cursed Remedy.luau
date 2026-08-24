@@ -352,7 +352,7 @@ return {
 					LocalPlayerGui.Statistics.Enabled = false
 
 					task.spawn(function()
-						local IconModule = require(replicatedStorage.Packages.Icon)
+						local IconModule = require(replicatedStorage.packages.Icon)
 						IconModule.setTopbarEnabled(false)
 					end)
 
@@ -364,7 +364,7 @@ return {
 						LocalPlayerGui.Statistics.Enabled = true
 
 						task.spawn(function()
-							local IconModule = require(replicatedStorage.Packages.Icon)
+							local IconModule = require(replicatedStorage.packages.Icon)
 							IconModule.setTopbarEnabled(true)
 						end)
 						

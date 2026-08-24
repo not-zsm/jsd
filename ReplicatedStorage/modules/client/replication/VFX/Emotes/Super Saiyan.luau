@@ -12,7 +12,7 @@ local BugoVFX = require(replicatedStorage.modules.client.replication.EffectUtili
 local Vignette = require(replicatedStorage.modules.client.replication.Global.Vignette)
 local Yuki_FOV = require(replicatedStorage.modules.client.replication.Global.Yuki_FOV)
 local Utility = require(replicatedStorage.modules.shared.Utilities.Utility)
-local Table = require(replicatedStorage.Packages.Table)
+local Table = require(replicatedStorage.packages.Table)
 
 local EffectFolder = script.Effects
 

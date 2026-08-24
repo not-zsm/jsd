@@ -17,7 +17,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui : PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
-local Reconcile = require(replicatedStorage.Packages.Table).reconcile
+local Reconcile = require(replicatedStorage.packages.Table).reconcile
 
 return function(Data : FadeData) : (() -> ())
 	local fade_data : FadeData = Reconcile(Data or {}, DEFAULT_DATA)

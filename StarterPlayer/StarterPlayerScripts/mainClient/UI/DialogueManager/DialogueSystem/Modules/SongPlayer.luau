@@ -1,5 +1,5 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
-local MaidModule = require( replicatedStorage.Packages.Maid )
+local MaidModule = require( replicatedStorage.packages.Maid )
 
 return function()
 	local Maid = MaidModule.new()

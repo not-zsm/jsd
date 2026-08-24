@@ -173,7 +173,7 @@ return {
 		end)
 
 		local NameColors = require( script.NameColors )
-		--local Observer = require( replicatedStorage.Packages.Observer )
+		--local Observer = require( replicatedStorage.packages.Observer )
 
 		--task.defer(function()
 		--	Observer.observe_tag("Disguise", function(Player : Player)
