@@ -706,14 +706,14 @@ function CommandHandler:InitSlashCommands()
 		end
 
 		if Parameters and Parameters[2] then
-			replicatedStorage.Remotes.WorldEvents.StartEvent:Fire(Parameters[2], Level)
+			replicatedStorage.remotes.WorldEvents.StartEvent:Fire(Parameters[2], Level)
 		else
-			replicatedStorage.Remotes.WorldEvents.StartEvent:Fire(nil, Level);
+			replicatedStorage.remotes.WorldEvents.StartEvent:Fire(nil, Level);
 		end
 	end)
 
 	self.SlashCommands:Create("stop_event", {"PS+", "Owner"}, false, function(Player : Player)
-		replicatedStorage.Remotes.WorldEvents.StopEvent:Fire()
+		replicatedStorage.remotes.WorldEvents.StopEvent:Fire()
 	end)
 
 	self.SlashCommands:Create("removenewdummies", {"PS+", "Owner"}, false, function()

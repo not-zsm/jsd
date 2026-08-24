@@ -9,7 +9,7 @@ local StarterGui = game:GetService("StarterGui")
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
-local Animations = replicatedStorage.Animations
+local Animations = replicatedStorage.animations
 local ass = replicatedStorage.ass
 
 local ClientHandlers = script.ClientHandlers

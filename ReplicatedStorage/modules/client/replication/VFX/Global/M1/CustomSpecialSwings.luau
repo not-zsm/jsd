@@ -14,7 +14,7 @@ local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local BugoVFX = require( replicatedStorage.modules.client.replication.EffectUtility.Bugo )
 
 return {
-	["Chara"] = function(RootPart : BasePart, Type : string)
+	["chara"] = function(RootPart : BasePart, Type : string)
 		local Knife : Model = RootPart.Parent:FindFirstChild("Knife")
 		if (Knife == nil) then return end
 		
@@ -22,11 +22,11 @@ return {
 			Knife.Handle.BladeAttachment.Trail.Enabled = true
 
 			task.delay(10 / 60, function()
-				EffectUtility.EmitEffects(CharacterEffects.Chara.Swing, RootPart)
+				EffectUtility.EmitEffects(CharacterEffects.chara.Swing, RootPart)
 			end)
 				
 			task.delay(20 / 60, function()
-				local Effect = CharacterEffects.Chara.Assets.uppercutslash:Clone()
+				local Effect = CharacterEffects.chara.Assets.uppercutslash:Clone()
 				Effect.Parent = RootPart
 				EffectUtility.Emit(Effect)
 			end)

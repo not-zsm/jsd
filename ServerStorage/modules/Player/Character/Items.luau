@@ -59,7 +59,7 @@ function Items:_UpdateItemAnimations(Item : Table, Equipped : Bolean, AnimSpeed 
 		else
 			local Animator = self.LuaCharacter.Animator
 			if Animator then
-				local AnimInstance = replicatedStorage.Animations.Items.Idle[Item.Name]
+				local AnimInstance = replicatedStorage.animations.Items.Idle[Item.Name]
 				if AnimInstance then
 					if Item.Idle and Item.Idle.IsPlaying then
 						Item.Idle:Stop()

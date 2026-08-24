@@ -65,7 +65,7 @@ end
 function BaseStand:UpdateAnimations()
 	table.clear(self.Animations)
 
-	for _, AttackFolder in ipairs(replicatedStorage.Animations.Attacks:GetDescendants()) do
+	for _, AttackFolder in ipairs(replicatedStorage.animations.Attacks:GetDescendants()) do
 		if AttackFolder:IsA("Folder") and AttackFolder.Name == self.Directory.Name then
 			self.AttackFolder = AttackFolder
 

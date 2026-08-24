@@ -11,11 +11,11 @@ local CameraShake = require( replicatedStorage.modules.client.replication.Global
 local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 
 return {
-	["Chara"] = function(RootPart : BasePart, Type : string, Distance : number)
+	["chara"] = function(RootPart : BasePart, Type : string, Distance : number)
 		if Type == "Up" then
-			EffectUtility.EmitEffects(CharacterEffects.Chara.M1Sounds.Uppercut, RootPart)
+			EffectUtility.EmitEffects(CharacterEffects.chara.M1Sounds.Uppercut, RootPart)
 			
-			local Effect = CharacterEffects.Chara.Assets.slashed:Clone()
+			local Effect = CharacterEffects.chara.Assets.slashed:Clone()
 			Effect.CFrame = Effect.CFrame * CFrame.Angles(0, 0, math.rad(55))
 			Effect.Parent = RootPart
 			EffectUtility.Emit(Effect)

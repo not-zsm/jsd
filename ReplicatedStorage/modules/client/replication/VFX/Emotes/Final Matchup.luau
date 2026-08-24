@@ -30,7 +30,7 @@ local Dialogue = require(replicatedStorage.modules.effect.tekrinnDialogue)
 
 local JobApplication = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local Animations = replicatedStorage.Animations.Emotes["Final Matchup"]
+local Animations = replicatedStorage.animations.Emotes["Final Matchup"]
 
 local AttackerVFX = script.Effects.Attacker
 local VictimVFX = script.Effects.Victim
@@ -328,7 +328,7 @@ return {
 					end))
 				end
 
-				local Track = TabledFriends[FriendName].Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Final Matchup"]:FindFirstChild(FriendName))
+				local Track = TabledFriends[FriendName].Humanoid.Animator:LoadAnimation(replicatedStorage.animations.Emotes["Final Matchup"]:FindFirstChild(FriendName))
 				Track:Play()
 				Track.TimePosition = Animation.TimePosition
 				Job:Task(Track.Stopped:Once(function()
@@ -372,7 +372,7 @@ return {
 			end
 		end))
 
-		local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Final Matchup"].Camera)
+		local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.animations.Emotes["Final Matchup"].Camera)
 		CameraAnimation:Play(0)
 
 		Job:Task(RunService.PreSimulation:Connect(function()
@@ -384,7 +384,7 @@ return {
 			DontSupportCutsceneSetting = true
 		}))
 
-		Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["Final Matchup"]))
+		Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.fovFiles["Final Matchup"]))
 		Job:Task(Camera)
 
 		local ColorCorrection = Job:Task(Instance.new("ColorCorrectionEffect"))

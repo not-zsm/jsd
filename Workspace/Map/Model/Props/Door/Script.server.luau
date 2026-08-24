@@ -20,7 +20,7 @@ prompt.Triggered:Connect(function(player_who_triggered)
 	local luaplayer = LuaPlayerList.LuaPlayers[player_who_triggered]
 	
 	if luaplayer then
-		local kick_anim : AnimationTrack = luaplayer.Character:LoadAnimation(replicatedStorage.Animations.Miscellaneous.KickDoor)
+		local kick_anim : AnimationTrack = luaplayer.Character:LoadAnimation(replicatedStorage.animations.Miscellaneous.KickDoor)
 		if (kick_anim == nil) then return end
 
 		prompt.Enabled = false

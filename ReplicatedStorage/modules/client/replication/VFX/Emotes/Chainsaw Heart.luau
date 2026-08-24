@@ -6,7 +6,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 local MoonUtil = require( replicatedStorage.modules.client.replication.Global.MoonUtil )
-local Animations = replicatedStorage.Animations.Emotes["Chainsaw Heart"]
+local Animations = replicatedStorage.animations.Emotes["Chainsaw Heart"]
 
 local LocalPlayer = Players.LocalPlayer
 
@@ -152,7 +152,7 @@ return {
 				CameraAnimation.TimePosition = Animation.TimePosition
 			end))
 
-			local RemoveFOV = Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["Chainsaw Heart"])
+			local RemoveFOV = Yuki_FOV.AnimateWithMoonFile(replicatedStorage.fovFiles["Chainsaw Heart"])
 			Job:Task(RemoveFOV)
 
 			Job:Task(RunCameraRig(RootPart, Camera, nil, {}))

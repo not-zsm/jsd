@@ -13,7 +13,7 @@ local Players = game:GetService("Players")
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
+local Remotes = replicatedStorage.remotes
 
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
@@ -461,8 +461,8 @@ end
 
 -- it has to use the rig cause roblox makes accessories pixelated on r6 rigs and this puts it on a r15 rig to fix
 function LuaCharacter:AccessoryFix(Description) 
-	local AccessoryRig = ServerStorage.AccessoryRig:Clone()
-	AccessoryRig.Parent = ServerStorage.AccessoryRigFolder
+	local AccessoryRig = ServerStorage.accessoryRig:Clone()
+	AccessoryRig.Parent = ServerStorage.accessoryRigFolder
 
 	local RigHumanoid = AccessoryRig:FindFirstChildOfClass("Humanoid")
 

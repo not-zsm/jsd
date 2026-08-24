@@ -21,7 +21,7 @@ end
 
 ----------------------------------------------------------------------------------
 
-local Remotes = replicatedStorage.Remotes
+local Remotes = replicatedStorage.remotes
 
 
 
@@ -97,7 +97,7 @@ local DefaultAccessibleAttackSettings = {
 
 function Combat:Destroy()
 	StudioPrint("removed combat", self.LuaPlayer.PlayerName)
-	task.spawn(Preloading.Remove, self.LuaPlayer.Player, replicatedStorage.Animations.Global)
+	task.spawn(Preloading.Remove, self.LuaPlayer.Player, replicatedStorage.animations.Global)
 
 	if not self.LuaPlayer.IsNPC then
 		task.spawn(self.AwardKillToHighestDamager, self, "Left")
@@ -148,10 +148,10 @@ function Combat:_Init()
 			if not self:CanUseCharacter(self.CurrentCharacter.Name) and not self.IsInvincibleFromWorldEvent and not self.IsMeatyMichaelFromWorldEvent then
 
 				if self.LuaPlayer.Data and self.LuaPlayer.Data.Profile then
-					self.LuaPlayer.Data.Profile.Data.CurrentCharacter = "Invincible"
+					self.LuaPlayer.Data.Profile.Data.CurrentCharacter = "invincible"
 				end
 
-				self:SetCharacter("Invincible")
+				self:SetCharacter("invincible")
 			end;
 		end))
 	end
@@ -612,7 +612,7 @@ end
 --	local Intruder = false
 
 --	local function Was_Intruding()
---		DataHandler.Profile.Data.CurrentCharacter = "Chara"
+--		DataHandler.Profile.Data.CurrentCharacter = "chara"
 --		Intruder = true
 --	end
 
@@ -718,12 +718,12 @@ function Combat:ConnectHumanoidAvailability()
 			if DataHandler and DataHandler.Profile then
 
 				if not self:CanUseCharacter(DataHandler.Profile.Data.CurrentCharacter) then
-					DataHandler.Profile.Data.CurrentCharacter = "Invincible"
+					DataHandler.Profile.Data.CurrentCharacter = "invincible"
 				end
 
-				self:SetCharacter(DataHandler.Profile.Data.CurrentCharacter or "Invincible")
+				self:SetCharacter(DataHandler.Profile.Data.CurrentCharacter or "invincible")
 			else
-				self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character") or "Invincible")
+				self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character") or "invincible")
 			end
 
 			if not self.LuaPlayer.IsNPC then
@@ -809,7 +809,7 @@ function Combat:FireSpawnAnimation()
 					)
 				else
 					pcall(function()
-						Animation = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.CharacterSpawnAnimations[self.CurrentCharacter.Name].Spawn)
+						Animation = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.animations.CharacterSpawnAnimations[self.CurrentCharacter.Name].Spawn)
 						Animation:Play()
 					end)
 				end
@@ -945,8 +945,8 @@ end;
 function Combat:LoadAnimations()
 	table.clear(self.Animations)
 
-	Preloading.Add(self.LuaPlayer.Player, replicatedStorage.Animations.Global)
-	self:IterateThroughAnimationFolder(self.Animations, replicatedStorage.Animations.Global)
+	Preloading.Add(self.LuaPlayer.Player, replicatedStorage.animations.Global)
+	self:IterateThroughAnimationFolder(self.Animations, replicatedStorage.animations.Global)
 
 	for _, Attack in self.Attacks do
 		Attack:UpdateAnimations()
@@ -1638,7 +1638,7 @@ function Combat:ValidateBlock(VictimLuaPlayer, Arguments : {}) : string
 
 					VictimLuaPlayer.Replication:FireReliableVFX("Global/Block", "Parry", VictimLuaCharacter.RootPart, VictimCombat.CurrentCharacter.Name, math.random(1, 450))
 
-					if VictimCombat.CurrentCharacter.Name == "Chara" then
+					if VictimCombat.CurrentCharacter.Name == "chara" then
 						VictimCombat:GiveOneTriggerMove("Check", Enum.KeyCode.R, 60)
 					end
 
@@ -1804,7 +1804,7 @@ function Combat:DealDamage(VictimLuaPlayer, Value : number, DontCountToUltimate 
 			VictimLuaCharacter.Humanoid:TakeDamage(ActualValue)
 		end;
 
-		--if self:HasACharacter() and self.CurrentCharacter.Name == "Chara" then
+		--if self:HasACharacter() and self.CurrentCharacter.Name == "chara" then
 		self.LuaPlayer.Replication:FireReliableVFX("Chara/Damage Indicator", "Value", VictimLuaCharacter.RootPart, if KeptAlive then 9999 else ActualValue) --global effect now
 		--end
 
@@ -1846,7 +1846,7 @@ function Combat:CanDamageAI()
 		return true;
 	end;
 
-	if (CurrentCharacter == "Invincible" or CurrentCharacter == "Meaty Michael" or CurrentCharacter == "Walter" or CurrentCharacter == "Gebura Red Mist") then
+	if (CurrentCharacter == "invincible" or CurrentCharacter == "Meaty Michael" or CurrentCharacter == "Walter" or CurrentCharacter == "Gebura Red Mist") then
 		return false;
 	end;
 
@@ -1860,7 +1860,7 @@ function Combat:CanGainKills()
 		return true;
 	end;
 
-	if (not self.IsInvincibleFromWorldEvent and CurrentCharacter == "Invincible") then
+	if (not self.IsInvincibleFromWorldEvent and CurrentCharacter == "invincible") then
 		return false;
 	end;
 

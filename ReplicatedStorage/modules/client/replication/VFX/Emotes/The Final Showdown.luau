@@ -27,7 +27,7 @@ local AnimationRetriever = require( replicatedStorage.modules.client.replication
 local CharacterTransparency = require( replicatedStorage.modules.client.replication.Global.CharacterTransparency )
 local Dialogue = require(replicatedStorage.modules.effect.tekrinnDialogue)
 
-local Animations = replicatedStorage.Animations.Emotes["The Final Showdown"]
+local Animations = replicatedStorage.animations.Emotes["The Final Showdown"]
 local MeshEmit = require( script.MeshEmit )
 local CFrameData = require( script.CFrameData )
 
@@ -104,7 +104,7 @@ return {
 			Camera:PivotTo(RootPart.CFrame)
 			Camera.Parent = workspace.Visuals
 
-			local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["The Final Showdown"].Camera)
+			local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.animations.Emotes["The Final Showdown"].Camera)
 			CameraAnimation:Play(0)
 
 			--Job:Task(RunService.PreSimulation:Connect(function()
@@ -402,7 +402,7 @@ return {
 					CameraAnimation.TimePosition = Animation.TimePosition
 				end))
 
-				local Clean = Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles["The Final Showdown"]))
+				local Clean = Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.fovFiles["The Final Showdown"]))
 
 				Job:Task(Animation:GetMarkerReachedSignal("StopFOV"):Connect(function()
 					Clean()

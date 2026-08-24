@@ -11,7 +11,7 @@ local Debris = game:GetService("Debris")
 
 ----------------------------------------------------------------------------------
 
-local Animations = replicatedStorage.Animations
+local Animations = replicatedStorage.animations
 
 ----------------------------------------------------------------------------------
 

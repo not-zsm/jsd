@@ -12,7 +12,7 @@ local RunService = game:GetService("RunService")
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
-local Animations = replicatedStorage.Animations
+local Animations = replicatedStorage.animations
 
 ----------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ local InfoCharacter = require( replicatedStorage.modules.client.character.InfoCh
 local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local Chara_Voicelines = replicatedStorage.modules.client.replication.VFX.Chara.Voicelines
+local Chara_Voicelines = replicatedStorage.modules.client.replication.VFX.chara.Voicelines
 
 local MovementNames = {"Walk", "WalkBack", "WalkLeft", "WalkRight", "Run"};
 local WalkNames = {"Walk", "WalkBack", "WalkLeft", "WalkRight"};
@@ -299,7 +299,7 @@ function MovementHandler:InitStand()
 
 		assert(CharacterInfo, "No character info");
 
-		for _, Item : (Animation | Folder) in ipairs(replicatedStorage.Animations.Attacks[CurrentCharacter][CharacterInfo.StandName]:GetChildren()) do
+		for _, Item : (Animation | Folder) in ipairs(replicatedStorage.animations.Attacks[CurrentCharacter][CharacterInfo.StandName]:GetChildren()) do
 			if Item:IsA("Animation") then
 				local Track = self.StandAnimator:LoadAnimation(Item)
 
@@ -338,7 +338,7 @@ function MovementHandler:InitStand()
 
 	--	RunService.PostSimulation:Wait()
 
-	--	for _, Item : (Animation | Folder) in ipairs(replicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"]:GetChildren()) do
+	--	for _, Item : (Animation | Folder) in ipairs(replicatedStorage.animations.Attacks["Stardust Crusader"]["Star Platinum"]:GetChildren()) do
 	--		if Item:IsA("Animation") then
 	--			local Track = self.StandAnimator:LoadAnimation(Item)
 
@@ -371,7 +371,7 @@ function MovementHandler:InitStand()
 
 	--	RunService.PostSimulation:Wait()
 
-	--	for _, Item : (Animation | Folder) in ipairs(replicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"]:GetChildren()) do
+	--	for _, Item : (Animation | Folder) in ipairs(replicatedStorage.animations.Attacks["Stardust Crusader"]["Star Platinum"]:GetChildren()) do
 	--		if Item:IsA("Animation") then
 	--			local Track = self.StandAnimator:LoadAnimation(Item)
 
@@ -522,7 +522,7 @@ function MovementHandler:PlayIdleAnimation(Fade : number, Weight : number, Speed
 
 			local CurrentCharacter = self.Combat:GetCurrentCharacter()
 
-			if CurrentCharacter == "Chara" then
+			if CurrentCharacter == "chara" then
 				self.IdleJob:Task(Idle:GetMarkerReachedSignal("laugh"):Connect(function()
 					if self.Combat:GetState("Attacking") or self.Combat:GetState("Stunned") or self.Combat:GetState("Ragdolled") then
 						return

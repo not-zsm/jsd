@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 ---------------------------------------------------------------------
 
 local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = replicatedStorage.Animations.Attacks -- put anim folder
+local Animations = replicatedStorage.animations.Attacks -- put anim folder
 
 ---------------------------------------------------------------------
 

@@ -12,7 +12,7 @@ local RunService = game:GetService("RunService")
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
 
-local Animations = replicatedStorage.Animations
+local Animations = replicatedStorage.animations
 
 ----------------------------------------------------------------------------------
 

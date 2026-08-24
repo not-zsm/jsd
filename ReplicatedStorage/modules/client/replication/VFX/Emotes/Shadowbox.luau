@@ -64,7 +64,7 @@ return {
 	end,
 	
 	Setup = function(Character: Model)
-		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.Animations.Emotes.Shadowbox.Start)
+		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.animations.Emotes.Shadowbox.Start)
 		if (Retrieved == nil) then return end
 
 		local Job = Retrieved.Job

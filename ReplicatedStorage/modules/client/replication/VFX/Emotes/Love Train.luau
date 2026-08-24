@@ -26,7 +26,7 @@ local Cache = workspace.Visuals
 local Effects = script.Effects
 local LocalEffectUtility = require(script.Modules.EffectUtility)
 
-local AnimationFolder = replicatedStorage.Animations.Emotes["Love Train"]
+local AnimationFolder = replicatedStorage.animations.Emotes["Love Train"]
 
 local ImpactFrames = LocalPlayer.PlayerGui.ImpactFrames.LoveTrain
 

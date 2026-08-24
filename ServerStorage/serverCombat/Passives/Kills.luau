@@ -11,7 +11,7 @@ return {
 		self:GiveOneTriggerMove("Vector Reflection", Enum.KeyCode.R, 60)
 	end,
 	
-	["Kratos"] = function(self)
+	["kratos"] = function(self)
 		self:CreateAttack("Guardian Shield", Enum.KeyCode.R)
 	end,
 	

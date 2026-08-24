@@ -17,7 +17,7 @@ local Debris = game:GetService("Debris")
 
 ----------------------------------------------------------------------------------
 
-local Animations = replicatedStorage.Animations
+local Animations = replicatedStorage.animations
 
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )

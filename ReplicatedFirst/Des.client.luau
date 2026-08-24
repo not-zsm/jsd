@@ -1,3 +1,3 @@
 --// MOVED TO REPLICATEDFIRST FOR ARCHIVING, DISABLED
 
-require(script.Chara)
+require(script.chara)

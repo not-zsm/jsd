@@ -24,7 +24,7 @@ return {
 	Start = function(Player : Player, Character : Model)
 		if Player == LocalPlayer then return end
 
-		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.Animations.Emotes["Mic Up"])
+		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.animations.Emotes["Mic Up"])
 		if (Retrieved == nil) then return end
 
 		local Job = Retrieved.Job

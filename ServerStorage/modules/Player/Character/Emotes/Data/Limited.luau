@@ -24,8 +24,8 @@ return {
 			StopAnimationWhenPlayerJoins = true,
 
 			Function = function(self, TargetCombat, MainJob, JoinedJob)
-				local attacker : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Combat Gods"].User)
-				local victim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Combat Gods"].Victim)
+				local attacker : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.animations.Emotes["Combat Gods"].User)
+				local victim : AnimationTrack = TargetCombat.LuaCharacter.Animator:LoadAnimation(replicatedStorage.animations.Emotes["Combat Gods"].Victim)
 
 				local thread = coroutine.create(function()
 					local Loading = false
@@ -219,7 +219,7 @@ return {
 					SFX:Destroy()
 				else
 					if FirstTimePLaying then
-						Stand.Controller.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Love Train"].StandIdle):Play(0)
+						Stand.Controller.Animator:LoadAnimation(replicatedStorage.animations.Emotes["Love Train"].StandIdle):Play(0)
 					end
 					
 					if not CollectionService:HasTag(self.LuaCharacter.Model, "LoveTrainBarrier") then
@@ -284,7 +284,7 @@ return {
 
 			Function = function(self, TargetCombat, MainJob, JoinedJob)
 				local ReplicationModule = replicatedStorage.modules.client.replication.VFX.Emotes["Final Matchup"]
-				local Animations = replicatedStorage.Animations.Emotes["Final Matchup"]
+				local Animations = replicatedStorage.animations.Emotes["Final Matchup"]
 				
 				local KeyframelessTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(Animations.Keyframeless)
 				
@@ -391,7 +391,7 @@ return {
 			StopAnimationWhenPlayerJoins = true,
 
 			Function = function(self, TargetCombat, MainJob, JoinedJob)
-				local Animations = replicatedStorage.Animations.Emotes["The Final Showdown"]
+				local Animations = replicatedStorage.animations.Emotes["The Final Showdown"]
 				local KeyframelessTrack : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(Animations.Keyframeless)
 
 				local thread = coroutine.create(function()

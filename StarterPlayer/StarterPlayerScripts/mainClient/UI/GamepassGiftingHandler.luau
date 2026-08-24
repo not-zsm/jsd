@@ -8,8 +8,6 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 local network = require( replicatedStorage.modules.network )
 local UserService = game:GetService("UserService")
 
-local Remotes = replicatedStorage:WaitForChild("Remotes")
-
 local LocalPlayer = Players.LocalPlayer
 
 -- Configuration Module

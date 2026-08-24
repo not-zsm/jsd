@@ -7,7 +7,7 @@ local RunCameraRig = require( replicatedStorage.modules.client.replication.Globa
 
 return {
 	Start = function(Character : Model)
-		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.Animations.Emotes["Lonely Lonely"].Start)
+		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.animations.Emotes["Lonely Lonely"].Start)
 		if (Retrieved == nil) then return end
 
 		local RootPart = Retrieved.RootPart
@@ -19,7 +19,7 @@ return {
 		Camera:PivotTo(RootPart.CFrame * Offset)
 		Camera.Parent = workspace.Visuals
 
-		local Animation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Lonely Lonely"].Camera)
+		local Animation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.animations.Emotes["Lonely Lonely"].Camera)
 		Animation:Play(0)
 
 		--function(Value : boolean)

@@ -14,22 +14,22 @@ local EffectUtility = require( replicatedStorage.modules.client.replication.Effe
 local AnimationRetriever = require(replicatedStorage.modules.client.replication.VFX.AnimationRetriever)
 
 return {
-	["Chara"] = function(RootPart : BasePart, Count : number, Distance : number)
+	["chara"] = function(RootPart : BasePart, Count : number, Distance : number)
 		if Count == 2 or Count == 4 then
 			local Knife : Model = RootPart.Parent:FindFirstChild("Knife")
 			if (Knife == nil) then return end
 
-			EffectUtility.EmitEffects(CharacterEffects.Chara.Swing, RootPart)
+			EffectUtility.EmitEffects(CharacterEffects.chara.Swing, RootPart)
 			Knife.Handle.BladeAttachment.Trail.Enabled = true
 
 			task.delay(0.05, function()
 				if Count == 2 then
-					local Effect = CharacterEffects.Chara.Assets.slash:Clone()
+					local Effect = CharacterEffects.chara.Assets.slash:Clone()
 					Effect.Parent = RootPart
 					EffectUtility.Emit(Effect)
 
 				elseif Count == 4 then
-					local Effect = CharacterEffects.Chara.Assets.finalm1swing:Clone()
+					local Effect = CharacterEffects.chara.Assets.finalm1swing:Clone()
 					Effect.Parent = RootPart
 					EffectUtility.Emit(Effect)
 				end

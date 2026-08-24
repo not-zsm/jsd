@@ -9,7 +9,7 @@ local ServerStorage = game:GetService("ServerStorage")
 
 
 
-local AttackAnimations = replicatedStorage.Animations.Attacks
+local AttackAnimations = replicatedStorage.animations.Attacks
 
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities

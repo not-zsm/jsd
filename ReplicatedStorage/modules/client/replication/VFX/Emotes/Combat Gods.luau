@@ -29,7 +29,7 @@ end
 
 return {
 	Start = function(Attacker : Model, Victim : Model)
-		local Retrieved = AnimationRetriever.new(Attacker, replicatedStorage.Animations.Emotes["Combat Gods"].User)
+		local Retrieved = AnimationRetriever.new(Attacker, replicatedStorage.animations.Emotes["Combat Gods"].User)
 		if (Retrieved == nil) then return end
 
 		local Animation = Retrieved.Animation
@@ -63,7 +63,7 @@ return {
 			Camera:PivotTo(RootPart.CFrame * Offset)
 			Camera.Parent = workspace.Visuals
 
-			local Animation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Combat Gods"].Camera)
+			local Animation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.animations.Emotes["Combat Gods"].Camera)
 			Animation:Play(0)
 		
 			Job:Task(RunCameraRig(RootPart, Camera, Offset, {
@@ -71,7 +71,7 @@ return {
 				DontSupportCutsceneSetting = true
 			}))
 			
-			Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.FOVFiles.CombatGods))
+			Job:Task(Yuki_FOV.AnimateWithMoonFile(replicatedStorage.fovFiles.CombatGods))
 			Job:Task(Camera)
 		end
 

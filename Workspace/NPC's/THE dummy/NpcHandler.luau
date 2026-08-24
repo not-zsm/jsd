@@ -112,8 +112,8 @@ return function(LuaPlayer)
 
 		local VictimCombat = VictimLuaCharacter.Combat
 
-		local UserAnimation : AnimationTrack = LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Attacks.Universal.DummyCounter.User)
-		local VictimAnimation : AnimationTrack = VictimLuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Attacks.Universal.DummyCounter.Victim)
+		local UserAnimation : AnimationTrack = LuaCharacter.Animator:LoadAnimation(replicatedStorage.animations.Attacks.Universal.DummyCounter.User)
+		local VictimAnimation : AnimationTrack = VictimLuaCharacter.Animator:LoadAnimation(replicatedStorage.animations.Attacks.Universal.DummyCounter.Victim)
 
 		UserAnimation:Play()
 		VictimAnimation:Play()

@@ -108,7 +108,7 @@ local Template = {
 	Kills = 0,
 	Elo = 0,
 
-	CurrentCharacter = "Gojo"
+	CurrentCharacter = "chara"
 }
 
 local PlayerStore = ProfileStore.New("PlayerStore", Template)
@@ -155,6 +155,11 @@ function Data:_Init()
 		Profile:AddUserId(Player.UserId)
 		Profile:Reconcile()
 
+		-- character modules are lowercase now, and saves predate that
+		if typeof(Profile.Data.CurrentCharacter) == "string" then
+			Profile.Data.CurrentCharacter = string.lower(Profile.Data.CurrentCharacter)
+		end
+
 		Profile.OnSessionEnd:Connect(function()
 			self.Profile = nil
 			Player:Kick("Profile session end - Please rejoin")
@@ -180,7 +185,7 @@ function Data:DataLoaded()
 	--	self.Profile.Data.ClaimedEmotes = 0
 	--	self.Profile.Data.Kills = 500
 
-	--	self.Profile.Data.Bosses.Chara = {
+	--	self.Profile.Data.Bosses.chara = {
 	--		Awarded = false,
 	--		AwardPityCount = 0,
 	--		Killed = 0,

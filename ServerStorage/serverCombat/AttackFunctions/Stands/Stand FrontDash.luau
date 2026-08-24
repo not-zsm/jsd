@@ -59,7 +59,7 @@ function CustomAttack.Activate(self)
 		LoopAnimation = StandDashes.Stand
 		HitAnimation = StandDashes.Hit
 
-		local User = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.Animations.Attacks["Stardust Crusader"]["Star Platinum"].Dash.User)
+		local User = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.animations.Attacks["Stardust Crusader"]["Star Platinum"].Dash.User)
 		User:Play()
 
 		StandHandler.Weld:SetAttribute("Aggression", 0)

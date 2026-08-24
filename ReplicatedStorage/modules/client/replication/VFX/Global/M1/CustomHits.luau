@@ -19,13 +19,13 @@ local BugoVFX = require(replicatedStorage.modules.client.replication.EffectUtili
 local Sounds = script.Sounds
 
 return {
-	["Chara"] = function(_, RootPart : BasePart, Count : number, Distance : number)
+	["chara"] = function(_, RootPart : BasePart, Count : number, Distance : number)
 		if Count == 2 or Count == 4 then
-			EffectUtility.EmitEffects(CharacterEffects.Chara.M1Sounds[Count], RootPart)
+			EffectUtility.EmitEffects(CharacterEffects.chara.M1Sounds[Count], RootPart)
 		end
 		
 		if Count == 2 then
-			local Effect = CharacterEffects.Chara.Assets.slashed:Clone()
+			local Effect = CharacterEffects.chara.Assets.slashed:Clone()
 			Effect.Parent = RootPart.Parent.Head
 			EffectUtility.Emit(Effect)
 			
@@ -34,7 +34,7 @@ return {
 			end
 			
 		elseif Count ~= 4 then
-			EffectUtility.EmitEffects(CharacterEffects.Chara.Hit, RootPart.Parent.Torso)
+			EffectUtility.EmitEffects(CharacterEffects.chara.Hit, RootPart.Parent.Torso)
 			EffectUtility.EmitEffects(script.Parent.HitSounds[Count], RootPart)
 		end
 	end,

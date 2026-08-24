@@ -31,7 +31,7 @@ return {
 		local titlesList = titleEditor:WaitForChild("TitlesList")
 
 		-- Remotes
-		local remotes = replicatedStorage.Remotes
+		local remotes = replicatedStorage.remotes
 		local groupRank = 0
 
 		local titlesArray = {}

@@ -24,7 +24,7 @@ local AuraTable = {}
 
 return {
 	OnStart = function(Model : Model)
-		local Retrieved = AnimationRetriever.new(Model, replicatedStorage.Animations.Emotes.Isagi.Start)
+		local Retrieved = AnimationRetriever.new(Model, replicatedStorage.animations.Emotes.Isagi.Start)
 
 		if (Retrieved == nil) then return end
 		
@@ -63,7 +63,7 @@ return {
 			Camera.RootPart.CFrame = RootPart.CFrame * CameraOffset
 			Camera.Parent = workspace.Visuals
 
-			local CameraAnimation = Camera.AnimationController.Animator:LoadAnimation(replicatedStorage.Animations.Emotes["Isagi"].Camera)
+			local CameraAnimation = Camera.AnimationController.Animator:LoadAnimation(replicatedStorage.animations.Emotes["Isagi"].Camera)
 			CameraAnimation:Play(0)
 
 			NewJob:Task(RunCameraRig(RootPart, Camera, CameraOffset, {

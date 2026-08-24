@@ -13,7 +13,7 @@ local Player = Players.LocalPlayer;
 
 ----------------------------------------------------------------------------------
 
-local Animations = replicatedStorage.Animations
+local Animations = replicatedStorage.animations
 
 local Character = require( script.Parent.character )
 local Replication = require( script.Parent.replication )

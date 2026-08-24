@@ -47,7 +47,7 @@ return {
 			self.Combat:StackState("HitboxImmunity", true)
 			self.Combat:DivideSpeed(50)
 			
-			local EquipAnimation = self.LuaCharacter:LoadAnimation(replicatedStorage.Animations.Items["Helmet Of Peace"].Use)
+			local EquipAnimation = self.LuaCharacter:LoadAnimation(replicatedStorage.animations.Items["Helmet Of Peace"].Use)
 			EquipAnimation:Play()
 			
 			local SFX = script.SFX:Clone()
