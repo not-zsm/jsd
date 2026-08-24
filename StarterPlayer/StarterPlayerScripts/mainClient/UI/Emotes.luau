@@ -10,7 +10,6 @@ local SoundService = game:GetService("SoundService")
 
 ----------------------------------------------------------------------------------
 
-
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 
@@ -23,9 +22,6 @@ local createBGBlur = require( script.Parent.helpers.blur )
 ----------------------------------------------------------------------------------
 
 local OPEN = TweenInfo.new(0.7, Enum.EasingStyle.Circular, Enum.EasingDirection.Out)
-
---- What the server accepts in SetSlot, and what the wheel now always draws.
-local SLOTS = 8
 
 local Emotes = {}
 Emotes.__index = Emotes
@@ -206,7 +202,7 @@ function Emotes:Toggle()
 			end)
 		end
 
-		self.WheelFade = TweenService:Create(self.Wheel, OPEN, { GroupTransparency = 0 })
+		self.WheelFade = TweenService:Create(self.container, OPEN, { GroupTransparency = 0 })
 		self.WheelFade:Play()
 	else
 		if self.WheelJob then
@@ -214,7 +210,7 @@ function Emotes:Toggle()
 			self.WheelJob = nil
 		end
 
-		self.WheelFade = TweenService:Create(self.Wheel, OPEN, { GroupTransparency = 1 })
+		self.WheelFade = TweenService:Create(self.container, OPEN, { GroupTransparency = 1 })
 
 		self.WheelFade.Completed:Once(function(State)
 			if State == Enum.PlaybackState.Completed and not self.WheelOpen then
@@ -242,7 +238,7 @@ function Emotes:CloseWheel()
 		self.WheelJob = nil
 	end
 
-	self.Wheel.GroupTransparency = 1
+	self.container.GroupTransparency = 1
 end
 
 function Emotes:ResetCircle()
@@ -330,72 +326,72 @@ function Emotes:CreateOnSlot(Slot : string, Name : string)
 end
 
 --[[
-	Builds the preview inside a slot.
+	Dresses the rig a slot was authored with and plays the emote on it.
 
-	The wheel ships with an `emoter` in each viewport; jsd's Dummy replaces it,
-	because the outfit application below is what makes the preview look like a
-	person rather than a grey rig.
+	Each viewport carries its own rotation and its own camera, so the rig that
+	came with it is the one that sits where that camera is looking. Nothing here
+	moves or replaces it -- a dummy is only cloned in if a viewport was left
+	empty, and it will not be standing in the right place.
 --]]
 function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 	local World = Emote:WaitForChild("WorldModel")
+	local Dummy = World:FindFirstChildWhichIsA("Model")
+
+	if Dummy == nil then
+		warn(`emote slot {Emote.Name} was authored with no rig in its WorldModel`)
+
+		Dummy = script.Dummy:Clone()
+		Dummy.Parent = World
+	end
+
+	local Humanoid : Humanoid? = Dummy:FindFirstChildOfClass("Humanoid")
+	if Humanoid == nil then return end
 
 	--[[
-		The viewport is framed on wherever the model it shipped with stands, and
-		jjk's emoter stands about 180 studs from jsd's dummy. Stand the dummy on
-		that spot rather than re-aim the camera at it, so re-framing the wheel in
-		Studio keeps working.
+		Once per viewport, not once per emote: re-rolling on every slot change
+		would swap who the preview is every time the emote on it did.
 	--]]
-	local Pivot
+	if not Emote:GetAttribute("Dressed") then
+		Emote:SetAttribute("Dressed", true)
 
-	for _, Old in World:GetChildren() do
-		if Pivot == nil and Old:IsA("PVInstance") then
-			Pivot = Old:GetPivot()
-		end
+		task.spawn(function()
+			local Appearances = require( replicatedStorage.modules.shared.Game.Appearances )
+			local Developer = Appearances.GetRandomDeveloper()
 
-		Old:Destroy()
-	end
-
-	local Dummy = script.Dummy:Clone()
-	Dummy.Parent = World
-
-	local function Stand()
-		if Pivot then
-			Dummy:PivotTo(Pivot)
-		end
-	end
-
-	Stand()
-
-	task.spawn(function()
-		local Appearances = require( replicatedStorage.modules.shared.Game.Appearances )
-		local Developer = Appearances.GetRandomDeveloper()
-
-		if Developer then
-			local Humanoid = Dummy and Dummy:FindFirstChild("Humanoid")
-
-			if Humanoid then
+			if Developer and Humanoid.Parent then
 				Humanoid:ApplyDescription(Developer)
-
-				-- applying a description rebuilds the rig, so put it back on its mark
-				Stand()
 			end
-		end
-	end)
+		end)
+	end
+
+	-- the rig is reused, so whatever it was playing has to come off it first
+	local Playing : AnimationTrack? = self.SlotTracks[Emote]
+
+	if Playing then
+		Playing:Stop(0)
+		Playing:Destroy()
+
+		self.SlotTracks[Emote] = nil
+	end
 
 	local AnimationObject = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
+	if (AnimationObject == nil) then return end
 
-	if (AnimationObject ~= nil) then
-		AnimationObject = 
-			AnimationObject:IsA("Folder") and 
-			AnimationObject:FindFirstChild("Start") or 
-			AnimationObject
+	AnimationObject =
+		AnimationObject:IsA("Folder") and
+		AnimationObject:FindFirstChild("Start") or
+		AnimationObject
 
-		if (AnimationObject ~= nil) then
-			local Animation = Dummy.Humanoid.Animator:LoadAnimation(AnimationObject)
-			Animation.Looped = true
-			Animation:Play()
-		end
-	end
+	if (AnimationObject == nil) then return end
+
+	local Animator : Animator? = Humanoid:FindFirstChildOfClass("Animator")
+	if Animator == nil then return end
+
+	local Animation = Animator:LoadAnimation(AnimationObject)
+	Animation.Looped = true
+	Animation:Play()
+
+	self.SlotTracks[Emote] = Animation
 end
 
 --[[
@@ -433,23 +429,30 @@ function Emotes:ApplySlot(Slot : string, Name : string)
 	end
 end
 
-function Emotes:CreateSlotsInCircle(Amount : number)
-	for _, Slot in ipairs(self.Circle:GetChildren()) do
-		if Slot:IsA("ViewportFrame") then
-			Slot:Destroy()
+--[[
+	Binds the viewports the wheel was authored with.
+
+	They are found by name rather than cloned and placed, because each one is
+	rotated to its own spot on the dial -- nothing here writes Position,
+	Rotation, AnchorPoint or Parent.
+--]]
+function Emotes:BindSlots()
+	for _, Slot in self.Circle:GetChildren() do
+		if not Slot:IsA("ViewportFrame") then continue end
+
+		local SlotId = Slot.Name
+
+		if tonumber(SlotId) == nil then
+			warn(`emote wheel has a viewport named {SlotId}, which is not a slot number`)
+			continue
 		end
-	end
 
-	for Count = 0, Amount - 1 do
-		local Alpha = (-0.5 + Count / Amount * 2) * math.pi
+		local Button : TextButton? = Slot:FindFirstChild("pick")
 
-		local Slot : ViewportFrame = self.SlotTemplate:Clone()
-		local SlotId = tostring(Count + 1)
-		local Button : TextButton = Slot:WaitForChild("pick")
-
-		Slot.Name = SlotId
-		Slot.AnchorPoint = Vector2.new(0.5, 0.5)
-		Slot.Position = UDim2.fromScale(0.5 + math.cos(Alpha) / 2.25, 0.5 + math.sin(Alpha) / 2.35)
+		if Button == nil then
+			warn(`emote slot {SlotId} has no pick button`)
+			continue
+		end
 
 		local Job = Job.new()
 
@@ -493,9 +496,6 @@ function Emotes:CreateSlotsInCircle(Amount : number)
 
 		self.Combat.OnDeviceChanged:Connect(Connect)
 		Connect(self.Combat.CurrentDevice)
-
-		Slot.Parent = self.Circle
-		Slot.Visible = true
 	end
 end
 
@@ -519,42 +519,22 @@ function Emotes.new(UI)
 	self.LuaPlayer = UI.LuaPlayer
 
 	self.EmoteData = {}
+	self.SlotTracks = {}
 
 	self.GUI = self.LuaPlayer.PlayerGui:WaitForChild("Emotes")
 
-	self.Holder = self.GUI:WaitForChild("Holder")
+	self.container = self.GUI:WaitForChild("container")
+	self.Holder = self.container:WaitForChild("otherOne")
 
-	--[[
-		jjk's wheel replaces jsd's circle rather than covering it.
+	self.Wheel = self.Holder:WaitForChild("wheel")
+	self.Circle = self.Holder:WaitForChild("display")
 
-		The canvas group is what fades on open and the display frame is what the
-		slots live in. It keeps its own geometry -- Holder is full-screen, so
-		that lands it where jjk's did -- and everything jsd's circle brought
-		with it goes, including the upsells that used to sit over the middle.
-	--]]
-	self.Wheel = script.Parent.emoteWheel.container:Clone()
-	self.Wheel.Parent = self.Holder
-
-	self.Circle = self.Wheel:WaitForChild("display")
-
-	-- one viewport ships with the wheel; it becomes the template for the rest
-	self.SlotTemplate = self.Circle:WaitForChild("1"):Clone()
-	self.SlotTemplate.Visible = false
-
-	for _, Name in { "EmoteCircle", "EmoteSlotTemplate", "SlotsGamepass", "EmoteGamepass", "LimitedEmotes", "LeftPage", "RightPage" } do
-		local Old = self.Holder:FindFirstChild(Name)
-
-		if Old then
-			Old:Destroy()
-		end
-	end
-
-	self.ListHolder = self.Holder:WaitForChild("ListHolder")
-	self.TitleHolder = self.Holder:WaitForChild("TitleHolder")
+	self.ListHolder = self.Holder:WaitForChild("listHolder")
+	self.TitleHolder = self.Holder:WaitForChild("titleHolder")
 
 	self.EmoteList = self.ListHolder:WaitForChild("EmoteList")
 
-	self.Wheel.GroupTransparency = 1
+	self.container.GroupTransparency = 1
 
 	self.WheelOpen = false
 	self.CanOpenEmotes = true
@@ -582,14 +562,7 @@ function Emotes.new(UI)
 
 	self.Slots = {}
 
-	--[[
-		Built here rather than off emoteSlotsLoaded.
-
-		The count no longer depends on a gamepass, and hanging the whole wheel
-		on a packet meant a lost one left the four viewports the GUI ships with
-		sitting there unwired.
-	--]]
-	self:CreateSlotsInCircle(SLOTS)
+	self:BindSlots()
 
 	self:Init()
 
