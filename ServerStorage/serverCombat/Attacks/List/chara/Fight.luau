@@ -226,6 +226,7 @@ end
 
 function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
+	self.Properties = { Tip = "[TIMED]" }
 	self.TryToCancelMoves = true
 	self:_Init()
 

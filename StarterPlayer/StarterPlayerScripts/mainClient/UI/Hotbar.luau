@@ -5,7 +5,6 @@ local Players = game:GetService("Players")
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local EventService = require( replicatedStorage.modules.shared.Utilities.EventService )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
-local HotbarData = require( script.Parent.HotbarData )
 
 local LocalPlayer = Players.LocalPlayer
 
@@ -194,12 +193,16 @@ function Hotbar:RefreshKeys()
 	end
 end
 
+--- The tag under a slot's name, declared by the move itself as Properties.Tip.
 function Hotbar:ApplyTip(Name: string)
 	local Slot = self.Slots[Name]
-	local Data = HotbarData[Name]
-	if not (Slot and Data and Data.OnAdded) then return end
+	if not Slot then return end
 
-	Data.OnAdded(Slot)
+	local Attack = self.Combat.Attacks[Name]
+	local Tip = Attack and Attack.Properties and Attack.Properties.Tip
+
+	Slot.Tip.Text = Tip or ""
+	Slot.Tip.Visible = (Tip ~= nil and Tip ~= "")
 end
 
 function Hotbar:SetDisplay(Name: string, Text: string, Tip: string?, FlashColor: Color3?)

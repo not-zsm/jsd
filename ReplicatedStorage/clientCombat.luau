@@ -198,10 +198,10 @@ function Combat:Connect()
 
 		self.OnAttackChanged:Fire(self.Attacks[Name], true);
 
-		if OnCreatedMoves[Name] and OnCreatedMoves[Name].Created then
+		if self.Attacks[Name].Properties.Variant then
 			local NewJob = Job.new()
 			self.CreatedMoveJobs[Name] = NewJob
-			task.spawn(OnCreatedMoves[Name].Created, self, NewJob)
+			task.spawn(OnCreatedMoves, self, Name, NewJob)
 		end
 	end)
 
@@ -212,10 +212,6 @@ function Combat:Connect()
 
 		self.Attacks[Name] = nil
 		self.OnAttackChanged:Fire(Attack, false);
-
-		if OnCreatedMoves[Name] and OnCreatedMoves[Name].Removed then
-			task.spawn(OnCreatedMoves[Name].Removed, self)
-		end
 
 		if self.CreatedMoveJobs[Name] then
 			self.CreatedMoveJobs[Name]:Destroy()

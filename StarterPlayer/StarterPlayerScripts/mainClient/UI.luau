@@ -26,7 +26,6 @@ local HUDMovement = require( replicatedStorage.modules.effect.hudMovement )
 
 local ScaleDescription = require(script:WaitForChild("InformationConfg"):WaitForChild("ScaleDescription"))
 
-local HotbarData = require( script.HotbarData )
 
 local FlashInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
 

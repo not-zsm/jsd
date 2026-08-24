@@ -433,6 +433,9 @@ end -- hi guys whats the meetup -- publishing uh could you gimme like 5 min
 
 function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
+	self.Properties = {
+		Tip = workspace:GetAttribute("DisableAtonement") and "[DISABLED]" or nil,
+	}
 
 	self.Config = {
 		Cooldown = 30,

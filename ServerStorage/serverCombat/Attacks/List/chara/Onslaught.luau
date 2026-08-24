@@ -550,6 +550,13 @@ end
 
 function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
+	self.Properties = {
+		Variant = {
+			Name = "Feral Takedown",
+			Colour = Color3.fromRGB(191, 0, 0),
+			When = "HoldingSpace",
+		},
+	}
 	
 	self.TryToCancelMoves = true
 	--self.Cooldown = 19 -- when bloody mary extended

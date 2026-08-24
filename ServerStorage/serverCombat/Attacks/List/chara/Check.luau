@@ -106,6 +106,7 @@ end
 
 function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
+	self.Properties = { Tip = "[CURSOR AIMED]" }
 	self.TryToCancelMoves = true
 	self.Uncancellable = true
 	self.Debuff_Time = 15

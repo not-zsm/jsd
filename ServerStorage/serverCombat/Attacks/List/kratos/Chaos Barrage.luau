@@ -380,6 +380,15 @@ end
 
 function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
+	self.Properties = {
+		Tip = "[HOLD SPACE]",
+
+		Variant = {
+			Name = "Chaos Blades",
+			Colour = Color3.fromRGB(255, 85, 0),
+			When = "HoldingSpace",
+		},
+	}
 	self.TryToCancelMoves = true
 	self.Cooldown = 21
 	self:_Init()

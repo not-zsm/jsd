@@ -305,6 +305,7 @@ end
 
 function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
+	self.Properties = { Tip = "[COUNTER]" }
 	self.TryToCancelMoves = true
 	--self.AnimationSettings = {Speed = 3}
 	self:_Init()
