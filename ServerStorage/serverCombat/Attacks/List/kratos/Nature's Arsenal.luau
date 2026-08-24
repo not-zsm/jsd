@@ -148,7 +148,7 @@ function Attack:Rock()
 		end)
 		
 		local function Hit(NewRockPosition : Vector3, RaycastPosition : Vector3, RaycastNormal : Vector3)
-			self:FireReliableVFX("Kratos/Nature's Arsenal", "RockHit", self.LuaCharacter.Model, RaycastPosition, RaycastNormal)
+			self:FireReliableVFX("kratos/Nature's Arsenal", "RockHit", self.LuaCharacter.Model, RaycastPosition, RaycastNormal)
 			
 			task.spawn(function() -- cant have this erroring
 				local Hitbox = self:CreateHitbox(true);
@@ -215,11 +215,11 @@ function Attack:Rock()
 		end
 
 		RunKratosRockProjectile()
-		self:FireReliableVFX("Kratos/Nature's Arsenal", "RockThrow", self.LuaCharacter.Model, StartCF, Velocity)
+		self:FireReliableVFX("kratos/Nature's Arsenal", "RockThrow", self.LuaCharacter.Model, StartCF, Velocity)
 	end))
 
 	self.Animations.Rock:Play()
-	self:FireReliableVFX("Kratos/Nature's Arsenal", "RockStart", self.LuaCharacter.Model)--, Rock)
+	self:FireReliableVFX("kratos/Nature's Arsenal", "RockStart", self.LuaCharacter.Model)--, Rock)
 
 	task.wait(4)
 
@@ -259,7 +259,7 @@ function Attack:Tree(Model : Model)
 			})
 			
 			if Validated then
-				self:FireReliableVFX("Kratos/Nature's Arsenal", "TreeHit", NewVictimLuaPlayer.Character.Model)
+				self:FireReliableVFX("kratos/Nature's Arsenal", "TreeHit", NewVictimLuaPlayer.Character.Model)
 			end
 		end)
 
@@ -269,7 +269,7 @@ function Attack:Tree(Model : Model)
 	end))
 	
 	self.Animations.Tree:Play(0, 1, 1.15)
-	self:FireReliableVFX("Kratos/Nature's Arsenal", "TreeStart", self.LuaCharacter.Model)
+	self:FireReliableVFX("kratos/Nature's Arsenal", "TreeStart", self.LuaCharacter.Model)
 	Destruction.Destruct(Model, -1, "Nature's Arsenal")
 	
 	task.wait(2)
@@ -364,7 +364,7 @@ function Attack:StopProjectileRunner()
 		self.RockProjectileHitbox:Destroy()
 	end
 	
-	self:FireReliableVFX("Kratos/Nature's Arsenal", "RockStop", self.LuaCharacter.Model)
+	self:FireReliableVFX("kratos/Nature's Arsenal", "RockStop", self.LuaCharacter.Model)
 
 	self.RockProjectileConnection = nil
 	self.RockProjectileHitbox = nil

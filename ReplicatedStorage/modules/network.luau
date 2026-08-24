@@ -286,7 +286,7 @@ return byteNet.defineNamespace("game", function()
 		--[[
 			Every visual effect in the game.
 
-			directory addresses a module under the VFX folder ("Chara/Onslaught"),
+			directory addresses a module under the VFX folder ("chara/Onslaught"),
 			fn names the method on it, and args is that call's varargs packed with
 			table.pack so a trailing nil still counts. unknown carries them by
 			reference, which is what a RemoteEvent was doing anyway.

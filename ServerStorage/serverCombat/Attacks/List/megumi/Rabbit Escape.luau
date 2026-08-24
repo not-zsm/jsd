@@ -17,7 +17,7 @@ setmetatable(Attack, BaseAttack)
 ----------------------------------------------------------------------------------
 
 function Attack:ConditionToActivate()
-	return self:BasicConditions()
+	return self:BasicConditions() and not self.Combat:GetState("Blocking")
 end
 
 function Attack:Activate()

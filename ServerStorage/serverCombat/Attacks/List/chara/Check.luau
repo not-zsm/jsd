@@ -34,7 +34,7 @@ function Attack:Activate()
 		self.Combat:StackState("Attacking", false)
 	end)
 	
-	self:FireReliableVFX("Chara/Check", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Check", "Start", self.LuaCharacter.Model)
 	
 	self.Thread.Job:Task(self.Animations.Windup:GetMarkerReachedSignal("point"):Connect(function()
 		local TargetLuaPlayer 
@@ -79,7 +79,7 @@ function Attack:Activate()
 		
 		if Success then
 			self.Animations.Success:Play(0.1, 1, 1.35)
-			self:FireReliableVFX("Chara/Check", "Target", self.LuaCharacter.Model, TargetLuaCharacter.Model, self.Debuff_Time)
+			self:FireReliableVFX("chara/Check", "Target", self.LuaCharacter.Model, TargetLuaCharacter.Model, self.Debuff_Time)
 			
 			self.Combat:Afflict(TargetLuaPlayer, {
 				DontCheckBlock = true,

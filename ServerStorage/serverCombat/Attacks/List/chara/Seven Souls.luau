@@ -223,7 +223,7 @@ function Attack:Activate()
 				VictimAnimation:Play(0) -- Looks weird on 0.1.
 			end
 
-			self:FireReliableVFX("Chara/Seven Souls", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("chara/Seven Souls", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 		end
 	end)
 	
@@ -266,7 +266,7 @@ function Attack:Activate()
 	end))
 
 	self.Thread.Job:Task(self.Animations.Windup:GetMarkerReachedSignal("hit"):Once(function()
-		self:FireReliableVFX("Chara/Seven Souls", "Slash", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("chara/Seven Souls", "Slash", self.LuaCharacter.RootPart)
 		HitHitbox:BeginCast(0.1)
 	end))
 	
@@ -303,7 +303,7 @@ function Attack:Activate()
 		self.Thread.Job:Task(Velocity)
 	end))
 	
-	self:FireReliableVFX("Chara/Seven Souls", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Seven Souls", "Start", self.LuaCharacter.Model)
 end
 
 function Attack:ConditionToActivate()

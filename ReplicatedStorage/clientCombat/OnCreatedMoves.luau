@@ -129,6 +129,12 @@ return {
 		end,
 	},
 	
+	["Lethal Wound"] = {
+		Created = function(self : Combat, NewJob : Job.object)
+			AirVariant_HoldingSpace("Lethal Wound", "Spiralling Cascade", Color3.fromRGB(191, 0, 0), self, NewJob)
+		end,
+	},
+	
 	["Helping Hand"] = {
 		Created = function(self : Combat, NewJob : Job.object)
 			AirVariant_HoldingSpace("Helping Hand", "Heed My Call", Color3.fromRGB(191, 0, 0), self, NewJob)

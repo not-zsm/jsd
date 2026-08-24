@@ -203,7 +203,7 @@ function Attack:Activate()
 
 			local Friend = self.LuaPlayer:GetRandomFriend(true);
 			
-			self:FireReliableVFX("Kratos/Father Son Bonding", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model, Friend)
+			self:FireReliableVFX("kratos/Father Son Bonding", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model, Friend)
 		end
 	end)
 
@@ -256,7 +256,7 @@ function Attack:Activate()
 	--	end
 	--end))
 	
-	self:FireReliableVFX("Kratos/Father Son Bonding", "Startup", self.LuaCharacter.Model)
+	self:FireReliableVFX("kratos/Father Son Bonding", "Startup", self.LuaCharacter.Model)
 end
 
 function Attack.new(...)

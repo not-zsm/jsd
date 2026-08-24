@@ -125,7 +125,7 @@ function Attack:Activate()
 		self.Thread.Job:Task(task.delay(self.Config.Endlag, self.Close, self)) 
 	end))
 
-	self:FireReliableVFX("Chara/Atonement", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Atonement", "Start", self.LuaCharacter.Model)
 	if self.LuaPlayer.IsNPC then
 		NPCSupport(self.LuaCharacter, self.Animations.Windup)
 	end
@@ -173,7 +173,7 @@ function Attack:StartGrab(VictimLuaPlayer)
 		end)
 	end
 
-	self:FireReliableVFX("Chara/Atonement", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+	self:FireReliableVFX("chara/Atonement", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 
 	self.Thread.OnClosed:Connect(function()
 		if not self.Ended then
@@ -347,7 +347,7 @@ function Attack:StartGrab(VictimLuaPlayer)
 				VictimLoseAnimation:Play(0)
 			end
 			
-			self:FireReliableVFX("Chara/Atonement", "Lose", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("chara/Atonement", "Lose", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 		else
 			local VictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.animations.Attacks.chara["Atonement"].WinEtc.Victim)
 			
@@ -426,7 +426,7 @@ function Attack:StartGrab(VictimLuaPlayer)
 				})
 			end))
 
-			self:FireReliableVFX("Chara/Death Charge", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("chara/Death Charge", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 		end		
 	end))
 end -- hi guys whats the meetup -- publishing uh could you gimme like 5 min

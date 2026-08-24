@@ -230,8 +230,8 @@ return {
 			self.LuaPlayer.Replication.Attributes:SetAttribute("KratosWallComboCamera", true)
 			VictimLuaPlayer.Replication.Attributes:SetAttribute("KratosWallComboCamera", true)
 
-			self:FireReliableVFXToSelf("Kratos/Wall Combo", "Camera", self.LuaCharacter.RootPart)
-			VictimLuaPlayer.Replication:FireReliableVFXToSelf("Kratos/Wall Combo", "Camera", self.LuaCharacter.RootPart)
+			self:FireReliableVFXToSelf("kratos/Wall Combo", "Camera", self.LuaCharacter.RootPart)
+			VictimLuaPlayer.Replication:FireReliableVFXToSelf("kratos/Wall Combo", "Camera", self.LuaCharacter.RootPart)
 
 			self.Combat:HideUI(true)
 			VictimCombat:HideUI(true)
@@ -245,15 +245,15 @@ return {
 			end)
 			
 			self.Thread.Job:Task(AttackerAnimation:GetMarkerReachedSignal("hit"):Connect(function(Count : string)
-				self:FireReliableVFX("Kratos/Wall Combo Finisher", "Hit", VictimLuaCharacter.Torso)
+				self:FireReliableVFX("kratos/Wall Combo Finisher", "Hit", VictimLuaCharacter.Torso)
 			end))
 			
 			self.Thread.Job:Task(AttackerAnimation:GetMarkerReachedSignal("hit2"):Connect(function(Count : string)
-				self:FireReliableVFX("Kratos/Wall Combo Finisher", "HeadHit", VictimLuaCharacter.Torso)
+				self:FireReliableVFX("kratos/Wall Combo Finisher", "HeadHit", VictimLuaCharacter.Torso)
 			end))
 			
 			self.Thread.Job:Task(AttackerAnimation:GetMarkerReachedSignal("slam"):Connect(function()
-				self:FireReliableVFX("Kratos/Wall Combo", "Smash", self.LuaCharacter.RootPart)
+				self:FireReliableVFX("kratos/Wall Combo", "Smash", self.LuaCharacter.RootPart)
 			end))
 
 			AttackerAnimation:GetMarkerReachedSignal("finalhit"):Wait()
@@ -360,7 +360,7 @@ return {
 					Damage = 2
 				})
 
-				self:FireReliableVFX("Kratos/Wall Combo", "Smash", self.LuaCharacter.RootPart)
+				self:FireReliableVFX("kratos/Wall Combo", "Smash", self.LuaCharacter.RootPart)
 			end))
 
 			self.Thread.Job:Task(AttackerAnimation:GetMarkerReachedSignal("hit"):Connect(function(Count : string)
@@ -369,7 +369,7 @@ return {
 					Damage = 0.5
 				})
 
-				self:FireReliableVFX("Kratos/Wall Combo", "Hit", VictimLuaCharacter.Torso, Count)
+				self:FireReliableVFX("kratos/Wall Combo", "Hit", VictimLuaCharacter.Torso, Count)
 			end))
 			
 			AttackerAnimation:GetMarkerReachedSignal("final"):Wait()
@@ -383,7 +383,7 @@ return {
 					Ragdoll = 2.1;
 				})
 
-				self:FireReliableVFX("Kratos/Wall Combo", "Uppercut", self.LuaCharacter.RootPart)
+				self:FireReliableVFX("kratos/Wall Combo", "Uppercut", self.LuaCharacter.RootPart)
 
 				if VictimAnimation then
 					VictimAnimation:Stop(0)
@@ -543,7 +543,7 @@ return {
 			end))
 			
 			Animation:Play()
-			self:FireReliableVFX("Kratos/Ultimate", "Start", self.LuaCharacter.Model)
+			self:FireReliableVFX("kratos/Ultimate", "Start", self.LuaCharacter.Model)
 			
 			
 			self.Thread.OnClosed:Connect(function()

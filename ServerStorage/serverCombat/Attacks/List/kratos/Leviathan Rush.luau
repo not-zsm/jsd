@@ -167,7 +167,7 @@ function Attack:Beatdown()
 					VictimAnimation:Stop(0)
 					FinisherVictimAnimation:Play(0)
 
-					self:FireReliableVFX("Kratos/Beatdown", "OnFinisher", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+					self:FireReliableVFX("kratos/Beatdown", "OnFinisher", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 
 					self.Thread.Job:Task(self.Animations.BeatdownFinisher.Ended:Connect(function()
 						self:Close()
@@ -236,7 +236,7 @@ function Attack:Beatdown()
 			self.Animations.BeatdownHit:Play(0)
 			VictimAnimation:Play(0)
 
-			self:FireReliableVFX("Kratos/Beatdown", "OnHit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("kratos/Beatdown", "OnHit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 			self.Thread.CancelJob:Task(self:CreateMoveSFX("kratos", "Beatdown", "HitSFX"))
 
 			OnHit()
@@ -248,7 +248,7 @@ function Attack:Beatdown()
 	end))
 
 	self.Animations.BeatdownWindup:Play(0.2)
-	self:FireReliableVFX("Kratos/Beatdown", "OnStart", self.LuaCharacter.Model)
+	self:FireReliableVFX("kratos/Beatdown", "OnStart", self.LuaCharacter.Model)
 	self.Thread.CancelJob:Task(self:CreateMoveSFX("kratos", "Beatdown", "SFX"))
 
 	task.wait(1)
@@ -370,7 +370,7 @@ function Attack:Rush()
 						self:Close()
 					end))
 
-					self:FireReliableVFX("Kratos/Leviathan Slam Finisher", "OnStart", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+					self:FireReliableVFX("kratos/Leviathan Slam Finisher", "OnStart", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 					
 				elseif not Finisher then
 					self:Afflict(VictimLuaPlayer, {
@@ -391,11 +391,11 @@ function Attack:Rush()
 
 		if not self.FinisherActivated then
 			self.Thread.Job:Task(self.Animations.Slam1:GetMarkerReachedSignal("smoke"):Connect(function()
-				self:FireReliableVFX("Kratos/Leviathan Rush", "Smoke", self.LuaCharacter.RootPart)
+				self:FireReliableVFX("kratos/Leviathan Rush", "Smoke", self.LuaCharacter.RootPart)
 			end))
 
 			self.Thread.Job:Task(self.Animations.Slam1:GetMarkerReachedSignal("slam"):Connect(function()
-				self:FireReliableVFX("Kratos/Leviathan Rush", "Slam", self.LuaCharacter.RootPart)
+				self:FireReliableVFX("kratos/Leviathan Rush", "Slam", self.LuaCharacter.RootPart)
 				
 				Hitbox:Detect()
 				
@@ -457,7 +457,7 @@ function Attack:Rush()
 			if Validated then
 				VictimCombat:StackState("ForceDashPush", true, 2)
 				
-				self:FireReliableVFX("Kratos/Leviathan Rush", "SlashHit", VictimLuaCharacter.RootPart, self.CurrentSlash)
+				self:FireReliableVFX("kratos/Leviathan Rush", "SlashHit", VictimLuaCharacter.RootPart, self.CurrentSlash)
 				VictimCombat:PlayRandomHitReaction()
 			end
 		end)
@@ -484,7 +484,7 @@ function Attack:Rush()
 
 			self.Thread.Job:Task(VelocityObject)
 
-			self:FireReliableVFX("Kratos/Leviathan Rush", "Slash", self.LuaCharacter.RootPart, self.CurrentSlash)
+			self:FireReliableVFX("kratos/Leviathan Rush", "Slash", self.LuaCharacter.RootPart, self.CurrentSlash)
 			Hitbox:BeginCast(0.1)
 		end))
 

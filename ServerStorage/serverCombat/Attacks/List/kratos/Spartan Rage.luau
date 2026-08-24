@@ -235,7 +235,7 @@ function Attack:Activate()
 				self.Animations.Finisher:Play(0)
 				FinisherVictimAnimation:Play(0)
 				
-				self:FireReliableVFX("Kratos/Spartan Rage Finisher", "Start", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+				self:FireReliableVFX("kratos/Spartan Rage Finisher", "Start", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 			end
 
 			self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("hit"):Connect(function(Parameter : string)
@@ -344,7 +344,7 @@ function Attack:Activate()
 				self:CreateMoveSFX("kratos", "Spartan Rage", "Land")
 			)
 
-			self:FireReliableVFX("Kratos/Spartan Rage", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("kratos/Spartan Rage", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 
 			local VelocityObject = self.Combat:Velocity()
 			VelocityObject.Settings.Duration = 0.65

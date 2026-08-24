@@ -171,7 +171,7 @@ function Attack:Activate()
 				end))
 				
 				self.Thread.Job:Task(AttackerAnimation:GetMarkerReachedSignal("hit"):Connect(function()
-					self:FireReliableVFX("Chara/Fight", "Slash", self.LuaCharacter.Model, Success)
+					self:FireReliableVFX("chara/Fight", "Slash", self.LuaCharacter.Model, Success)
 
 					GrabObject.Destroy(2)
 					VictimAnimation:Stop(0)
@@ -190,9 +190,9 @@ function Attack:Activate()
 			--end
 
 			--if Is_Finisher then
-				--self:FireReliableVFX("Chara/Fight", "Finisher", self.LuaCharacter.Model)
+				--self:FireReliableVFX("chara/Fight", "Finisher", self.LuaCharacter.Model)
 			--else
-				self:FireReliableVFX("Chara/Fight", "Hit", self.LuaCharacter.Model)
+				self:FireReliableVFX("chara/Fight", "Hit", self.LuaCharacter.Model)
 			--end
 		end
 	end)
@@ -221,7 +221,7 @@ function Attack:Activate()
 		end
 	end))
 
-	self:FireReliableVFX("Chara/Fight", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Fight", "Start", self.LuaCharacter.Model)
 end
 
 function Attack.new(...)

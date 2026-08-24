@@ -13,7 +13,7 @@ return {
 		--"Death Charge",
 	};
 	VaultedAttacks = {
-		"Death Charge",
+		--"Death Charge",
 	};
 	
 	Stats = {
@@ -91,10 +91,10 @@ return {
 				local Animation : AnimationTrack = self.Animations[self.Combat.CurrentCharacter.Name].Alt.Start
 				Animation:Play(0)
 
-				self:FireReliableVFX("Chara/Ultimate_Alt", "Start", self.LuaCharacter.Model)
+				self:FireReliableVFX("chara/Ultimate_Alt", "Start", self.LuaCharacter.Model)
 
 				self.Thread.OnClosed:Connect(function()
-					self:FireReliableVFX(`Chara/Ultimate`, "OnUltimateStart", self.LuaCharacter.Model)
+					self:FireReliableVFX(`chara/Ultimate`, "OnUltimateStart", self.LuaCharacter.Model)
 				end)
 				
 				self.Thread.Job:Task(Animation:GetMarkerReachedSignal("pause"):Once(function()
@@ -118,12 +118,12 @@ return {
 				Animation:Play(0)
 
 				self.Thread.Job:Task(Animation:GetMarkerReachedSignal("transition"):Once(function()
-					self:FireReliableVFX(`Chara/Ultimate`, "OnUltimateStart", self.LuaCharacter.Model)
+					self:FireReliableVFX(`chara/Ultimate`, "OnUltimateStart", self.LuaCharacter.Model)
 					self.LuaCharacter:Anchor(false)
 					Animation:AdjustSpeed(1.1)
 				end))
 
-				self:FireReliableVFX("Chara/Ultimate", "Start", self.LuaCharacter.Model)
+				self:FireReliableVFX("chara/Ultimate", "Start", self.LuaCharacter.Model)
 
 				self.Thread.Job:Task(Animation.Stopped:Once(function()
 					self:Close()
@@ -137,7 +137,7 @@ return {
 		--	local Animation : AnimationTrack = self.Animations[self.Combat.CurrentCharacter.Name].Alt.Start
 		--	Animation:Play(0)
 
-		--	self:FireReliableVFX("Chara/Ultimate_Alt", "Start", self.LuaCharacter.Model)
+		--	self:FireReliableVFX("chara/Ultimate_Alt", "Start", self.LuaCharacter.Model)
 
 		--	--self.Thread.Job:Task(Animation:GetMarkerReachedSignal("pause"):Once(function()
 		--	--	task.wait(0.75)
@@ -156,7 +156,7 @@ return {
 		--	local Animation2 : AnimationTrack = self.Animations[self.Combat.CurrentCharacter.Name].Alt.Start
 		--	Animation2:Play(0, 0.001, 0.001)
 
-		--	self:FireReliableVFX("Chara/Ultimate_Alt", "Start", self.LuaCharacter.Model)
+		--	self:FireReliableVFX("chara/Ultimate_Alt", "Start", self.LuaCharacter.Model)
 			
 		--	self.Thread.Job:Task(task.delay(10, function()
 		--		self:Close()
@@ -175,7 +175,7 @@ return {
 			["Reset"] = Enum.KeyCode.Two,
 			["Atonement"] = Enum.KeyCode.Three,
 			["Seven Souls"] = Enum.KeyCode.Four,
-			["Special Hell"] = Enum.KeyCode.Five,
+			["Death Charge"] = Enum.KeyCode.Five,
 		},
 	},
 
@@ -191,7 +191,7 @@ return {
 		local Animation : AnimationTrack = LuaPlayer.Character.Animator:LoadAnimation(replicatedStorage.animations.CharacterSpawnAnimations.chara.Spawn)
 
 		Animation:Play()
-		LuaPlayer.Replication:FireReliableVFX("Chara/Spawn", "Start", LuaPlayer.Character.Model)
+		LuaPlayer.Replication:FireReliableVFX("chara/Spawn", "Start", LuaPlayer.Character.Model)
 
 		return Animation
 	end,

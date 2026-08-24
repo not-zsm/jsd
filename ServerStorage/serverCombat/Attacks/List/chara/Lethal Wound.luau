@@ -1,5 +1,3 @@
-
-
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
@@ -21,7 +19,7 @@ function Attack:ConditionToActivate()
 	return self:BasicConditions() and not self.Combat:GetState("Blocking")
 end
 
-function Attack:Activate()
+function Attack:LethalWound()
 	self.Combat:StackState("Attacking", true)
 	self.Combat:DivideSpeed(50)
 
@@ -58,7 +56,7 @@ function Attack:Activate()
 			local SFX : Sound = self.Thread.CancelJob:Task(self:CreateMoveSFX("chara", "Lethal Wound"))
 			
 			--self.LuaPlayer.Replication.Attributes:SetAttribute("LethalWoundHit", true)
-			--self:FireReliableVFX("Chara/Lethal Wound", "Tackle", self.LuaCharacter.RootPart)
+			--self:FireReliableVFX("chara/Lethal Wound", "Tackle", self.LuaCharacter.RootPart)
 			
 			--self.Thread.OnClosed:Connect(function()
 			--	self.LuaPlayer.Replication.Attributes:SetAttribute("LethalWoundHit", nil)
@@ -73,7 +71,7 @@ function Attack:Activate()
 				VictimLuaCharacter:StopRespawnTimer()
 
 				self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("stab"):Connect(function()
-					self:FireReliableVFX("Chara/Lethal Wound Finisher", "Stab", VictimLuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Lethal Wound Finisher", "Stab", VictimLuaCharacter.RootPart)
 
 					self:Afflict(VictimLuaPlayer, {
 						ExcludeAttempts = true,
@@ -86,25 +84,25 @@ function Attack:Activate()
 				end))
 
 				self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("stabtoleft"):Connect(function()
-					self:FireReliableVFX("Chara/Lethal Wound Finisher", "StabToLeft", VictimLuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Lethal Wound Finisher", "StabToLeft", VictimLuaCharacter.RootPart)
 				end))
 
 				self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("throwleft"):Connect(function()
-					self:FireReliableVFX("Chara/Lethal Wound Finisher", "ThrowLeft", VictimLuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Lethal Wound Finisher", "ThrowLeft", VictimLuaCharacter.RootPart)
 				end))
 
 				self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("throwback"):Connect(function()
-					self:FireReliableVFX("Chara/Lethal Wound Finisher", "ThrowBack", VictimLuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Lethal Wound Finisher", "ThrowBack", VictimLuaCharacter.RootPart)
 				end))
 
 				self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("sliceemit"):Connect(function()
-					self:FireReliableVFX("Chara/Lethal Wound Finisher", "Slice", VictimLuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Lethal Wound Finisher", "Slice", VictimLuaCharacter.RootPart)
 				end))
 
 				self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("slicing"):Connect(function(Enable : string)
 					local Enabled = (Enable == "Enable")
 
-					self:FireReliableVFX("Chara/Lethal Wound Finisher", "Slicing", VictimLuaCharacter.RootPart, Enabled)
+					self:FireReliableVFX("chara/Lethal Wound Finisher", "Slicing", VictimLuaCharacter.RootPart, Enabled)
 
 					if Enabled then
 						task.spawn(function()
@@ -123,13 +121,13 @@ function Attack:Activate()
 						end)
 
 						self.Thread.OnClosed:Connect(function()
-							self:FireReliableVFX("Chara/Lethal Wound Finisher", "StopSlicing", VictimLuaCharacter.RootPart)
+							self:FireReliableVFX("chara/Lethal Wound Finisher", "StopSlicing", VictimLuaCharacter.RootPart)
 						end)
 					end
 				end))
 
 				self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("sliced"):Connect(function()
-					self:FireReliableVFX("Chara/Lethal Wound Finisher", "Sliced", VictimLuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Lethal Wound Finisher", "Sliced", VictimLuaCharacter.RootPart)
 
 					Ended = true
 
@@ -188,12 +186,12 @@ function Attack:Activate()
 				if IsFinisher then
 					Finisher()
 				else
-					--self:FireReliableVFX("Chara/Lethal Wound", "Stab", self.LuaCharacter.RootPart, VictimLuaCharacter.Head, tonumber(Type))
+					--self:FireReliableVFX("chara/Lethal Wound", "Stab", self.LuaCharacter.RootPart, VictimLuaCharacter.Head, tonumber(Type))
 					
 					if Type == "3" then
 						Ended = true
 						
-						self:FireReliableVFX("Chara/Lethal Wound", "Stab", self.LuaCharacter.RootPart, VictimLuaCharacter.Head, Type)
+						self:FireReliableVFX("chara/Lethal Wound", "Stab", self.LuaCharacter.RootPart, VictimLuaCharacter.Head, Type)
 
 						if VictimAnimation then
 							VictimAnimation:Stop(0)
@@ -243,7 +241,7 @@ function Attack:Activate()
 			self.Animations.Windup:Stop(); self.Animations.Hit:Play()
 			VictimAnimation:Play(0)
 			
-			self:FireReliableVFX("Chara/Lethal Wound", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("chara/Lethal Wound", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 			
 			self.Thread.OnClosed:Connect(function()
 				if not Ended then
@@ -308,7 +306,7 @@ function Attack:Activate()
 		VelocityObject:Fire()
 
 		--self.LuaPlayer.Replication.Attributes:SetAttribute("LethalWoundSlide", true)
-		--self:FireReliableVFX("Chara/Lethal Wound", "Slide", self.LuaCharacter.RootPart)
+		--self:FireReliableVFX("chara/Lethal Wound", "Slide", self.LuaCharacter.RootPart)
 		
 		--self.Thread.OnClosed:Connect(function()
 		--	self.LuaPlayer.Replication.Attributes:SetAttribute("LethalWoundSlide", nil)
@@ -341,12 +339,74 @@ function Attack:Activate()
 		self.LuaCharacter.RootPart.CanCollide = false
 	end))
 	
-	self:FireReliableVFX("Chara/Lethal Wound", "Windup", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Lethal Wound", "Windup", self.LuaCharacter.Model)
 	
 	task.wait(1.85)
 
 	if not self.Hit then
 		self:Close()
+	end
+end
+
+function Attack:SpiralingCascade()
+	self.Combat:StackState("Attacking", true)
+	self.Combat:DivideSpeed(15)
+
+	self.GroundHit = false
+
+	local Hitbox = self:CreateHitbox(false, true);
+	Hitbox.Params.Offset = CFrame.new(0, -1, self.LuaPlayer.IsNPC and 2 or -4 - self.LuaPlayer:GetPing())
+	Hitbox.Params.Size = Vector3.new(7, 3, 10)
+	Hitbox.Params.MaxTargets = 1
+	Hitbox.Params.DestroyOnEndCast = false
+
+	Hitbox.Events.OnLuaPlayerHit:Connect(function(VictimLuaPlayer)
+		local VictimLuaCharacter = VictimLuaPlayer.Character
+		local VictimCombat = VictimLuaCharacter.Combat
+
+		local Validated = self:Afflict(VictimLuaPlayer, {
+			BreakBlock = true,
+		})
+
+		if Validated then
+			self.GroundHit = true
+			Hitbox:EndCast()
+		end
+	end)
+
+	self.Thread.Job:Task(self.Animations.GroundWindup:GetMarkerReachedSignal("jump"):Once(function()
+		self.Animations.GroundWindup:AdjustSpeed(1)
+
+		self.LuaCharacter.Torso.CanCollide = false
+		self.LuaCharacter.RootPart.CanCollide = true
+
+		self.Thread.OnClosed:Connect(function()
+			self.LuaCharacter.Torso.CanCollide = true
+			self.LuaCharacter.RootPart.CanCollide = false
+		end)
+
+		local VelocityObject = self.Combat:Velocity()
+		VelocityObject.Settings.Duration = 1
+		VelocityObject.Settings.MaxForce = Vector3.new(1, 0, 1) * 80000
+		VelocityObject.Settings.Controllable = true
+		VelocityObject.Settings.Z = 105
+		VelocityObject:Fire()
+
+		self.Thread.Job:Task(VelocityObject)
+	end))
+
+	self.Thread.Job:Task(self.Animations.GroundWindup:GetMarkerReachedSignal("hit"):Once(function()
+		Hitbox:BeginCast()
+	end))
+
+	self.Animations.GroundWindup:Play(0.1, 1, 1.4)
+end
+
+function Attack:Activate()
+	if (self.VariantsEnabled and self.HoldingJump) or self.ForceVariant then
+		self:SpiralingCascade()
+	else
+		self:LethalWound()
 	end
 end
 
