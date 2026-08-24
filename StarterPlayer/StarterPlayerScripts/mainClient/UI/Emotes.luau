@@ -18,10 +18,12 @@ local EventService = require( replicatedStorage.modules.shared.Utilities.EventSe
 
 local Colors = require( script.Colors )
 local createBGBlur = require( script.Parent.helpers.blur )
+local Appearances = require( replicatedStorage.modules.shared.Game.Appearances )
 
 ----------------------------------------------------------------------------------
 
 local OPEN = TweenInfo.new(0.7, Enum.EasingStyle.Circular, Enum.EasingDirection.Out)
+local SLOTS = 8
 
 local Emotes = {}
 Emotes.__index = Emotes
@@ -173,8 +175,6 @@ function Emotes:Toggle()
 		self.UI.Icons:CloseAllExcept(self.GUI)
 	end
 
-	-- tracked rather than read off Enabled: the close fade leaves Enabled true
-	-- for its whole run, so a quick re-press would read as a second close
 	self.WheelOpen = not self.WheelOpen
 
 	if self.WheelFade then
@@ -185,11 +185,6 @@ function Emotes:Toggle()
 	if self.WheelOpen then
 		self.GUI.Enabled = true
 
-		--[[
-			What jjk opened the wheel behind: a blurred background with the
-			hotbar out of the way. The job owns both, so closing drops the blur
-			and puts the hotbar back however the close happened.
-		--]]
 		self.WheelJob = Job.new()
 
 		createBGBlur(self.WheelJob, 0.7, 24)
@@ -224,7 +219,6 @@ function Emotes:Toggle()
 	self.OnToggled:Fire()
 end
 
---- Drops everything opening the wheel put up, without animating it away.
 function Emotes:CloseWheel()
 	self.WheelOpen = false
 
@@ -238,6 +232,7 @@ function Emotes:CloseWheel()
 		self.WheelJob = nil
 	end
 
+	-- container is the canvas group Toggle fades; wheel is a frame inside it
 	self.container.GroupTransparency = 1
 end
 
@@ -326,45 +321,51 @@ function Emotes:CreateOnSlot(Slot : string, Name : string)
 end
 
 --[[
-	Dresses the rig a slot was authored with and plays the emote on it.
+	Puts an outfit and an emote on the rig a slot was authored with.
 
-	Each viewport carries its own rotation and its own camera, so the rig that
-	came with it is the one that sits where that camera is looking. Nothing here
-	moves or replaces it -- a dummy is only cloned in if a viewport was left
-	empty, and it will not be standing in the right place.
+	Yields on the first pass for a slot, so call it spawned.
 --]]
 function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 	local World = Emote:WaitForChild("WorldModel")
-	local Dummy = World:FindFirstChildWhichIsA("Model")
 
-	if Dummy == nil then
-		warn(`emote slot {Emote.Name} was authored with no rig in its WorldModel`)
+	local Camera = Emote:FindFirstChildWhichIsA("Camera")
 
-		Dummy = script.Dummy:Clone()
-		Dummy.Parent = World
+	if Camera then
+		Emote.CurrentCamera = Camera
 	end
 
-	local Humanoid : Humanoid? = Dummy:FindFirstChildOfClass("Humanoid")
-	if Humanoid == nil then return end
+	local Dummy = World:FindFirstChild("emoter") or World:FindFirstChildOfClass("Model")
+
+	if not Dummy then
+		warn("Could not find existing 'emoter' dummy in WorldModel for:", Emote.Name)
+		return
+	end
 
 	--[[
+		ApplyDescription is server-only, so the outfit cannot be put on this rig
+		from here -- it arrives as a rig the server dressed already. Stand the
+		copy exactly where the authored one was, because that spot is what this
+		viewport's camera is framed on, and retire the authored one behind it.
+
 		Once per viewport, not once per emote: re-rolling on every slot change
-		would swap who the preview is every time the emote on it did.
+		would swap who is standing in a slot every time its emote did.
 	--]]
 	if not Emote:GetAttribute("Dressed") then
-		Emote:SetAttribute("Dressed", true)
+		local Dressed = Appearances.GetRandomDeveloperRig()
 
-		task.spawn(function()
-			local Appearances = require( replicatedStorage.modules.shared.Game.Appearances )
-			local Developer = Appearances.GetRandomDeveloper()
+		if Dressed then
+			Emote:SetAttribute("Dressed", true)
 
-			if Developer and Humanoid.Parent then
-				Humanoid:ApplyDescription(Developer)
-			end
-		end)
+			Dressed.Name = Dummy.Name
+			Dressed:PivotTo(Dummy:GetPivot())
+			Dressed.Parent = World
+
+			Dummy:Destroy()
+			Dummy = Dressed
+		end
 	end
 
-	-- the rig is reused, so whatever it was playing has to come off it first
+	-- the rig outlives the emote on it, so take the last one off before playing
 	local Playing : AnimationTrack? = self.SlotTracks[Emote]
 
 	if Playing then
@@ -375,32 +376,26 @@ function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 	end
 
 	local AnimationObject = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
-	if (AnimationObject == nil) then return end
 
-	AnimationObject =
-		AnimationObject:IsA("Folder") and
-		AnimationObject:FindFirstChild("Start") or
-		AnimationObject
+	if (AnimationObject ~= nil) then
+		AnimationObject = 
+			AnimationObject:IsA("Folder") and 
+			AnimationObject:FindFirstChild("Start") or 
+			AnimationObject
 
-	if (AnimationObject == nil) then return end
+		if (AnimationObject ~= nil) then
+			local Animator = Dummy:FindFirstChildOfClass("Humanoid")
+			if (Animator == nil) then return end
 
-	local Animator : Animator? = Humanoid:FindFirstChildOfClass("Animator")
-	if Animator == nil then return end
+			local Animation = Animator:LoadAnimation(AnimationObject)
+			Animation.Looped = true
+			Animation:Play()
 
-	local Animation = Animator:LoadAnimation(AnimationObject)
-	Animation.Looped = true
-	Animation:Play()
-
-	self.SlotTracks[Emote] = Animation
+			self.SlotTracks[Emote] = Animation
+		end
+	end
 end
 
---[[
-	Asks the server to put an emote in the focused slot.
-
-	This was a RemoteFunction the client waited on before repainting. byteNet
-	does not do round trips, so the ask and the answer are two packets and the
-	repaint happens in ApplySlot when the server confirms.
---]]
 function Emotes:ChangeFocusedEmoteSlot(Name : string)
 	if not self.FocusingOnSlot then return end
 
@@ -414,7 +409,7 @@ function Emotes:ApplySlot(Slot : string, Name : string)
 	local Emote : ViewportFrame = self.Circle:FindFirstChild(Slot)
 	if not Emote then return end
 
-	self:MakeViewportOnSlot(Emote, Name)
+	task.spawn(self.MakeViewportOnSlot, self, Emote, Name)
 
 	Emote.emoteName.Text = Name
 
@@ -429,66 +424,47 @@ function Emotes:ApplySlot(Slot : string, Name : string)
 	end
 end
 
---[[
-	Binds the viewports the wheel was authored with.
+function Emotes:CreateSlotsInCircle(Amount : number)
+	for Count = 1, Amount do
+		local SlotId = tostring(Count)
+		local Slot : ViewportFrame = self.Circle:WaitForChild(SlotId)
+		local Button : TextButton = Slot:WaitForChild("pick")
 
-	They are found by name rather than cloned and placed, because each one is
-	rotated to its own spot on the dial -- nothing here writes Position,
-	Rotation, AnchorPoint or Parent.
---]]
-function Emotes:BindSlots()
-	for _, Slot in self.Circle:GetChildren() do
-		if not Slot:IsA("ViewportFrame") then continue end
-
-		local SlotId = Slot.Name
-
-		if tonumber(SlotId) == nil then
-			warn(`emote wheel has a viewport named {SlotId}, which is not a slot number`)
-			continue
-		end
-
-		local Button : TextButton? = Slot:FindFirstChild("pick")
-
-		if Button == nil then
-			warn(`emote slot {SlotId} has no pick button`)
-			continue
-		end
-
-		local Job = Job.new()
+		local slotJob = Job.new()
 
 		local function Connect(NewDevice : string)
-			Job:Clean()
+			slotJob:Clean()
 
 			local TimedClick : boolean = (
 				(NewDevice == "Touch" or NewDevice == "Controller")
 			)
 
 			if TimedClick then
-				Job:Task(Button.MouseButton1Down:Connect(function()
+				slotJob:Task(Button.MouseButton1Down:Connect(function()
 					self.SelectSlotThread = task.delay(0.3, function()
 						self.SelectSlotThread = nil
 						self:SelectSlot(SlotId)
 					end)
 				end))
 
-				Job:Task(Button.MouseButton1Click:Connect(function()
+				slotJob:Task(Button.MouseButton1Click:Connect(function()
 					if not self.FocusingOnSlot then
 						self:PressedSlotWithEmote(SlotId)
 					end
 				end))
 
-				Job:Task(Button.MouseButton1Up:Connect(function()
+				slotJob:Task(Button.MouseButton1Up:Connect(function()
 					if self.SelectSlotThread then
 						task.cancel(self.SelectSlotThread)
 						self.SelectSlotThread = nil
 					end
 				end))
 			else
-				Job:Task(Button.MouseButton1Down:Connect(function()
+				slotJob:Task(Button.MouseButton1Down:Connect(function()
 					self:PressedSlotWithEmote(SlotId)
 				end))
 
-				Job:Task(Button.MouseButton2Down:Connect(function()
+				slotJob:Task(Button.MouseButton2Down:Connect(function()
 					self:SelectSlot(SlotId)
 				end))
 			end
@@ -496,16 +472,28 @@ function Emotes:BindSlots()
 
 		self.Combat.OnDeviceChanged:Connect(Connect)
 		Connect(self.Combat.CurrentDevice)
+
+		Slot.Visible = true
 	end
 end
 
 function Emotes:SelectSlot(Slot : string)
 	self.FocusingOnSlot = Slot
 
+	local SelectedEmote = nil
 	for _, Emote in ipairs(self.Circle:GetChildren()) do
-		if Emote:IsA("ViewportFrame") and Emote.Name ~= Slot then
-			Emote.Visible = false
+		if Emote:IsA("ViewportFrame") then
+			if Emote.Name ~= Slot then
+				Emote.Visible = false
+			else
+				SelectedEmote = Emote
+			end
 		end
+	end
+
+	-- Move the list holder over to the selected slot's position
+	if SelectedEmote then
+		self.ListHolder.Position = SelectedEmote.Position
 	end
 
 	self.ListHolder.Visible = true
@@ -524,9 +512,9 @@ function Emotes.new(UI)
 	self.GUI = self.LuaPlayer.PlayerGui:WaitForChild("Emotes")
 
 	self.container = self.GUI:WaitForChild("container")
-	self.Holder = self.container:WaitForChild("otherOne")
+	self.Holder = self.container:WaitForChild('otherOne')
 
-	self.Wheel = self.Holder:WaitForChild("wheel")
+	self.Wheel = self.Holder:WaitForChild('wheel')
 	self.Circle = self.Holder:WaitForChild("display")
 
 	self.ListHolder = self.Holder:WaitForChild("listHolder")
@@ -550,11 +538,6 @@ function Emotes.new(UI)
 			end
 		end
 
-		--[[
-			Icons:CloseAllExcept disables the screen behind Toggle's back, so
-			the wheel has to notice: otherwise the blur stays up, the hotbar
-			stays hidden, and the next press reads as a close.
-		--]]
 		if not self.GUI.Enabled and self.WheelOpen then
 			self:CloseWheel()
 		end
@@ -562,7 +545,7 @@ function Emotes.new(UI)
 
 	self.Slots = {}
 
-	self:BindSlots()
+	self:CreateSlotsInCircle(SLOTS)
 
 	self:Init()
 

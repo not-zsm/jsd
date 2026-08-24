@@ -1,14 +1,42 @@
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local Appearances = {}
 local DeveloperDescriptions = {} :: {HumanoidDescription}
+
+--- Where the server leaves the rigs it has dressed, for the client to copy.
+local RIGS = "DeveloperRigs"
 
 --- nil until the outfits land: math.random(1, 0) raises rather than returning nothing.
 function Appearances.GetRandomDeveloper() : HumanoidDescription?
 	if (#DeveloperDescriptions == 0) then return nil end
 
 	return DeveloperDescriptions[math.random(1, #DeveloperDescriptions)]
+end
+
+--[[
+	A copy of a rig the server has already dressed, or nil if none turn up.
+
+	ApplyDescription only runs on the server, so this is the only way a
+	LocalScript gets an outfit onto a preview: take a copy of one the server
+	built. Yields, because the rigs sit behind three web calls.
+--]]
+function Appearances.GetRandomDeveloperRig() : Model?
+	local Folder = ReplicatedStorage:FindFirstChild(RIGS) or ReplicatedStorage:WaitForChild(RIGS, 10)
+	if (Folder == nil) then return nil end
+
+	for _ = 1, 20 do
+		local Rigs = Folder:GetChildren()
+
+		if (#Rigs > 0) then
+			return Rigs[math.random(1, #Rigs)]:Clone()
+		end
+
+		task.wait(0.5)
+	end
+
+	return nil
 end
 
 local RandomOutfits = {
@@ -57,17 +85,64 @@ local function AddDescriptions()
 	DeveloperDescriptions = NewDescriptions
 end
 
-AddDescriptions()
-
-task.spawn(function()
-	while task.wait(30) do
-		AddDescriptions()
-	end
-end)
-
+--[[
+	Only the server fetches. A description is no use to a LocalScript -- it
+	cannot apply one -- so the client waits for the rigs below instead of
+	spending three web calls every thirty seconds on data it cannot use.
+--]]
 if RunService:IsServer() then
-	local replicatedStorage = game:GetService("ReplicatedStorage")
-	local Observer = require( replicatedStorage.Packages.Observer )
+	local Observer = require( ReplicatedStorage.Packages.Observer )
+
+	--[[
+		One dressed rig per outfit, built once. Only outfits that have no rig
+		yet get built, so a web call that failed the first time gets another go
+		without churning the ones that landed.
+	--]]
+	local function BuildRigs()
+		local Folder = ReplicatedStorage:FindFirstChild(RIGS)
+
+		if (Folder == nil) then
+			Folder = Instance.new("Folder")
+			Folder.Name = RIGS
+			Folder.Parent = ReplicatedStorage
+		end
+
+		for Index, Description in DeveloperDescriptions do
+			local Name = tostring(Index)
+
+			if Folder:FindFirstChild(Name) then continue end
+
+			local Success, Rig = pcall(
+				Players.CreateHumanoidModelFromDescription,
+				Players, Description, Enum.HumanoidRigType.R6
+			)
+
+			if not Success then
+				warn(`could not build a developer rig: {Rig}`)
+				continue
+			end
+
+			local Humanoid : Humanoid? = Rig:FindFirstChildOfClass("Humanoid")
+
+			if Humanoid then
+				Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+				Humanoid.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOff
+			end
+
+			Rig.Name = Name
+			Rig.Parent = Folder
+		end
+	end
+
+	AddDescriptions()
+	BuildRigs()
+
+	task.spawn(function()
+		while task.wait(30) do
+			AddDescriptions()
+			BuildRigs()
+		end
+	end)
 
 	Observer.observe_tag("Random_Developer_Outfit", function(Model : Model)
 		local Developer : HumanoidDescription = Appearances.GetRandomDeveloper()
