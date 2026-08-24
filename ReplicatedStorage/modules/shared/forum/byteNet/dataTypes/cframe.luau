@@ -18,16 +18,28 @@ local cframe = {
 		local axis = Vector3.new(rx, ry, rz)
 		local angle = axis.Magnitude
 
+		-- an identity rotation leaves no axis to normalise, and fromAxisAngle
+		-- hands back a NaN CFrame rather than the identity it was given
+		if (angle == 0) then
+			return CFrame.new(x, y, z), 24
+		end
+
 		return CFrame.fromAxisAngle(axis, angle) + Vector3.new(x, y, z), 24
 	end,
 	write = function(value: CFrame)
 		-- Convert the CFrame to an axis-angle representation
 		local x, y, z = value.X, value.Y, value.Z
 
-		-- the reader takes the angle back off the magnitude, so scale before splitting
+		-- the reader takes the angle back off the magnitude, so scale before
+		-- splitting. An identity rotation has no meaningful axis, so zero it
+		-- rather than trust whatever ToAxisAngle picked to stand in for one
 		local axis, angle = value:ToAxisAngle()
-		axis = axis * angle
-		local rx, ry, rz = axis.X, axis.Y, axis.Z
+		local rx, ry, rz = 0, 0, 0
+
+		if (angle ~= 0) and (angle == angle) then
+			axis = axis * angle
+			rx, ry, rz = axis.X, axis.Y, axis.Z
+		end
 
 		-- Math done, write it now
 		alloc(24)
