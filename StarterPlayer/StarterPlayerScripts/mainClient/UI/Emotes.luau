@@ -356,12 +356,15 @@ function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 	end
 
 	local Dummy = script.Dummy:Clone()
+	Dummy.Parent = World
 
-	if Pivot then
-		Dummy:PivotTo(Pivot)
+	local function Stand()
+		if Pivot then
+			Dummy:PivotTo(Pivot)
+		end
 	end
 
-	Dummy.Parent = World
+	Stand()
 
 	task.spawn(function()
 		local Appearances = require( replicatedStorage.modules.shared.Game.Appearances )
@@ -372,6 +375,9 @@ function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 
 			if Humanoid then
 				Humanoid:ApplyDescription(Developer)
+
+				-- applying a description rebuilds the rig, so put it back on its mark
+				Stand()
 			end
 		end
 	end)

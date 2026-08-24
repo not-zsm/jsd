@@ -203,7 +203,14 @@ network.clientReady.listen(function(_, player)
 	if not rateLimiter.check(player, "clientReady", 5) then return end
 
 	local Combat = getCombat(player)
-	if not Combat then return end
 
-	Combat:ResendState()
+	if Combat then
+		Combat:ResendState()
+	end
+
+	local Emotes = getEmotes(player)
+
+	if Emotes then
+		Emotes:ResendState()
+	end
 end)

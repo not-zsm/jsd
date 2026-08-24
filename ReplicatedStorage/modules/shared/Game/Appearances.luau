@@ -4,7 +4,10 @@ local Players = game:GetService("Players")
 local Appearances = {}
 local DeveloperDescriptions = {} :: {HumanoidDescription}
 
-function Appearances.GetRandomDeveloper() : HumanoidDescription
+--- nil until the outfits land: math.random(1, 0) raises rather than returning nothing.
+function Appearances.GetRandomDeveloper() : HumanoidDescription?
+	if (#DeveloperDescriptions == 0) then return nil end
+
 	return DeveloperDescriptions[math.random(1, #DeveloperDescriptions)]
 end
 

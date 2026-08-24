@@ -61,16 +61,7 @@ end
 function Emotes:_Init()
 	if self.LuaPlayer.IsNPC or not self.LuaPlayer:PlayerExists() then return end
 
-	local HasExtraSlots = self.LuaPlayer.Data:HasGamepass("Extra Emote Slots") -- yields
-	
-	network.emoteSlotsLoaded.sendTo(HasExtraSlots, self.LuaPlayer.Player)
-
-	network.emotesUpdated.sendTo({
-		emotes = self.LuaPlayer.Data.Profile.Data.Emotes,
-		slots = self.LuaPlayer.Data.Profile.Data.CurrentEmoteSlots,
-	}, self.LuaPlayer.Player)
-
-	self:UpdateEmoteKillClaim()
+	self:ResendState()
 
 	for Name in self.LuaPlayer.Data.Profile.Data.Emotes do
 		local Animation = replicatedStorage.Animations.Emotes:FindFirstChild(Name)
@@ -879,6 +870,27 @@ function Emotes:CalculateKillsToClaim()
 	end
 
 	return 0
+end
+
+--[[
+	Hands the client everything it needs to draw the wheel and the picker.
+
+	_Init runs once when the player's character object is built, which can be
+	before the client's UI has finished requiring byteNet and registering its
+	listeners -- and a packet sent to a client that isn't listening yet is just
+	gone. The client says clientReady when its listeners are up, and this runs
+	again for it.
+--]]
+function Emotes:ResendState()
+	if self.LuaPlayer.IsNPC or not self.LuaPlayer:PlayerExists() then return end
+	if not (self.LuaPlayer.Data and self.LuaPlayer.Data.Profile) then return end
+
+	network.emotesUpdated.sendTo({
+		emotes = self.LuaPlayer.Data.Profile.Data.Emotes,
+		slots = self.LuaPlayer.Data.Profile.Data.CurrentEmoteSlots,
+	}, self.LuaPlayer.Player)
+
+	self:UpdateEmoteKillClaim()
 end
 
 function Emotes:UpdateEmoteKillClaim()
