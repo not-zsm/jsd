@@ -43,17 +43,17 @@ function Attack:Activate()
 	end)
 
 	self.Thread.Job:Task(self.Animations.Startup:GetMarkerReachedSignal("left"):Once(function()
-		self:FireReliableVFX("Kratos/Chaos Run", "LeftStartup", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("kratos/Chaos Run", "LeftStartup", self.LuaCharacter.RootPart)
 	end))
 
 	self.Thread.Job:Task(self.Animations.Startup:GetMarkerReachedSignal("right"):Once(function()
-		self:FireReliableVFX("Kratos/Chaos Run", "RightStartup", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("kratos/Chaos Run", "RightStartup", self.LuaCharacter.RootPart)
 	end))
 
 	self.Thread.Job:Task(self.Animations.Startup:GetMarkerReachedSignal("hit"):Once(function()
 		self.Animations.Startup:AdjustSpeed(1)
 		
-		self:FireReliableVFX("Kratos/Chaos Run", "FrontStartup", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("kratos/Chaos Run", "FrontStartup", self.LuaCharacter.RootPart)
 
 		local Hitbox = self:CreateHitbox(false);
 		Hitbox.Params.Offset = CFrame.new(0, 0, -7)
@@ -80,10 +80,10 @@ function Attack:Activate()
 					VictimCombat:Unstun()
 				end)
 
-				self:FireReliableVFX("Kratos/Chaos Run", "EnableFlames", self.LuaCharacter.RootPart, Weapons.Blades.Objects)
+				self:FireReliableVFX("kratos/Chaos Run", "EnableFlames", self.LuaCharacter.RootPart, Weapons.Blades.Objects)
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("spinslash"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "SpinSlash", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "SpinSlash", self.LuaCharacter.RootPart)
 
 					local VelocityObject = self.Combat:Velocity()
 					VelocityObject.Settings.Duration =  0.75
@@ -105,7 +105,7 @@ function Attack:Activate()
 				end))
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("startrun"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "DisableFlames", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "DisableFlames", self.LuaCharacter.RootPart)
 
 					local VelocityObject = self.Combat:Velocity()
 					VelocityObject.Settings.Duration = 2.2
@@ -119,16 +119,16 @@ function Attack:Activate()
 				end))
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("sparksstart"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "SparksStart", Weapons.Blades.Objects)
+					self:FireReliableVFX("kratos/Chaos Run", "SparksStart", Weapons.Blades.Objects)
 				end))
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("sparksend"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "SparksEnd", Weapons.Blades.Objects)
-					self:FireReliableVFX("Kratos/Chaos Run", "EnableFlames", self.LuaCharacter.RootPart, Weapons.Blades.Objects)
+					self:FireReliableVFX("kratos/Chaos Run", "SparksEnd", Weapons.Blades.Objects)
+					self:FireReliableVFX("kratos/Chaos Run", "EnableFlames", self.LuaCharacter.RootPart, Weapons.Blades.Objects)
 				end))
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("startspin"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "StartSpin", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "StartSpin", self.LuaCharacter.RootPart)
 
 					local SpinVelocity = self.Combat:Velocity()
 					SpinVelocity.Settings.Duration = 1.5 
@@ -142,7 +142,7 @@ function Attack:Activate()
 
 					self.Thread.Job:Task(task.spawn(function()
 						for Index = 1, 10 do
-							self:FireReliableVFX("Kratos/Chaos Run", "Hit", self.LuaCharacter.RootPart)
+							self:FireReliableVFX("kratos/Chaos Run", "Hit", self.LuaCharacter.RootPart)
 							
 							self:Afflict(VictimLuaPlayer, {
 								ExcludeAttempts = true,
@@ -157,17 +157,17 @@ function Attack:Activate()
 					end))
 
 					self.Thread.OnClosed:Connect(function() -- so it doesn't keep vfx on forever if attacker leaves mid spin o thx
-						self:FireReliableVFX("Kratos/Chaos Run", "StopSpin", self.LuaCharacter.RootPart)
-						self:FireReliableVFX("Kratos/Chaos Run", "DisableFlames", self.LuaCharacter.RootPart)
+						self:FireReliableVFX("kratos/Chaos Run", "StopSpin", self.LuaCharacter.RootPart)
+						self:FireReliableVFX("kratos/Chaos Run", "DisableFlames", self.LuaCharacter.RootPart)
 					end)
 				end))
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("stopspin"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "StopSpin", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "StopSpin", self.LuaCharacter.RootPart)
 				end))
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("slash"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "Slash", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "Slash", self.LuaCharacter.RootPart)
 
 					local VelocityObject = self.Combat:Velocity()
 					VelocityObject.Settings.Duration =  0.75
@@ -189,7 +189,7 @@ function Attack:Activate()
 				end))
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("uppercut"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "Uppercut", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "Uppercut", self.LuaCharacter.RootPart)
 
 					local VelocityObject = self.Combat:Velocity()
 					VelocityObject.Settings.Duration = 1.6
@@ -211,14 +211,14 @@ function Attack:Activate()
 				end))
 				
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("jump"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "Jump", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "Jump", self.LuaCharacter.RootPart)
 				end))
 
 				local Endlag = 0.25
 
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("slam"):Once(function()
-					self:FireReliableVFX("Kratos/Chaos Run", "Slam", self.LuaCharacter.RootPart)
-					self:FireReliableVFX("Kratos/Chaos Run", "DisableFlames", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "Slam", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("kratos/Chaos Run", "DisableFlames", self.LuaCharacter.RootPart)
 
 					VictimCombat.Animations.GrabVictims.ChaosRun:Stop(0)
 					GrabObject.Destroy(Endlag)

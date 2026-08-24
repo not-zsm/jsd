@@ -136,7 +136,7 @@ function Attack:Activate()
 						FinisherVictimAnimation:Play(0) -- Looks weird on 0.1.
 					end
 					
-					self:FireReliableVFX("Chara/Bloody Mary Finisher", "Start", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+					self:FireReliableVFX("chara/Bloody Mary Finisher", "Start", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 				end
 			end))
 			
@@ -199,7 +199,7 @@ function Attack:Activate()
 				self:Close()
 			end))
 				
-			self:FireReliableVFX("Chara/Bloody Mary", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("chara/Bloody Mary", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 		end
 	end)
 	
@@ -212,7 +212,7 @@ function Attack:Activate()
 		})
 		
 		if Validated then
-			self:FireReliableVFX("Chara/Bloody Mary", "Dropkick", VictimLuaPlayer.Character.Model)
+			self:FireReliableVFX("chara/Bloody Mary", "Dropkick", VictimLuaPlayer.Character.Model)
 		end
 	end)
 	
@@ -292,7 +292,7 @@ function Attack:Activate()
 		end
 	end))
 	
-	self:FireReliableVFX("Chara/Bloody Mary", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Bloody Mary", "Start", self.LuaCharacter.Model)
 end
 
 function Attack.new(...)

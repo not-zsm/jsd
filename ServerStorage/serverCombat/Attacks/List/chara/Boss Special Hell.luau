@@ -118,7 +118,7 @@ function Attack:Activate()
 		self:Close()
 	end))
 	
-	self:FireReliableVFX("Chara/Special Hell", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Special Hell", "Start", self.LuaCharacter.Model)
 end
 
 

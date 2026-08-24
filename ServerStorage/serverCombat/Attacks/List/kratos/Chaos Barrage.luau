@@ -50,7 +50,7 @@ function Attack:SpaceVariant()
 
 		if self.BarrageHit then
 			VictimCombat:PlayRandomHitReaction()
-			self:FireReliableVFX("Kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
+			self:FireReliableVFX("kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
 		end
 
 		task.delay(0.15, function()
@@ -79,7 +79,7 @@ function Attack:SpaceVariant()
 			Weapons:ToggleChainedBladeTrails(true)
 		end
 	
-		self:FireReliableVFX("Kratos/Chaos Blades", "Start", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("kratos/Chaos Blades", "Start", self.LuaCharacter.RootPart)
 		BarrageHitbox:BeginCast()
 	end))
 
@@ -96,7 +96,7 @@ function Attack:SpaceVariant()
 			end)
 		end
 
-		self:FireReliableVFX("Kratos/Chaos Blades", "SwingUp2", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("kratos/Chaos Blades", "SwingUp2", self.LuaCharacter.RootPart)
 		
 		local Hitbox = self:CreateHitbox(false);
 		Hitbox.Params.Offset = SwingOffset
@@ -130,7 +130,7 @@ function Attack:SpaceVariant()
 			})
 
 			if Validated then
-				self:FireReliableVFX("Kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
+				self:FireReliableVFX("kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
 				
 				--if VictimCombat:GetState("Ragdolled") then
 				--	self.Combat:PushSkidVictim(VictimLuaPlayer, {
@@ -152,7 +152,7 @@ function Attack:SpaceVariant()
 
 	self.Animations.SpaceVariant:GetMarkerReachedSignal("swingup1"):Wait()
 
-	self:FireReliableVFX("Kratos/Chaos Blades", "SwingUp1", self.LuaCharacter.RootPart)
+	self:FireReliableVFX("kratos/Chaos Blades", "SwingUp1", self.LuaCharacter.RootPart)
 	
 	local Hitbox = self:CreateHitbox(false);
 	Hitbox.Params.Offset = SwingOffset
@@ -192,7 +192,7 @@ function Attack:SpaceVariant()
 				VictimCombat:StackState("CannotDash", false)
 			end)
 			
-			self:FireReliableVFX("Kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
+			self:FireReliableVFX("kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
 		end
 	end)
 
@@ -245,7 +245,7 @@ function Attack:Activate()
 
 		if self.BarrageHit then
 			VictimCombat:PlayRandomHitReaction()
-			self:FireReliableVFX("Kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
+			self:FireReliableVFX("kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
 		end
 
 		task.delay(0.15, function()
@@ -317,15 +317,15 @@ function Attack:Activate()
 
 	self.Thread.Job:Task(self.Animations.Normal:GetMarkerReachedSignal("spin"):Connect(function()
 		SpinningPart = true
-		self:FireReliableVFX("Kratos/Barrage", "Spin", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("kratos/Barrage", "Spin", self.LuaCharacter.RootPart)
 	end))
 
 	self.Thread.Job:Task(self.Animations.Normal:GetMarkerReachedSignal("startspin"):Connect(function()
-		self:FireReliableVFX("Kratos/Barrage", "StartSpin", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("kratos/Barrage", "StartSpin", self.LuaCharacter.RootPart)
 	end))
 
 	self.Thread.Job:Task(self.Animations.Normal:GetMarkerReachedSignal("finalhit"):Once(function()
-		self:FireReliableVFX("Kratos/Barrage", "FinalHit", self.LuaCharacter.RootPart)
+		self:FireReliableVFX("kratos/Barrage", "FinalHit", self.LuaCharacter.RootPart)
 		
 		local Hitbox = self:CreateHitbox(false);
 		Hitbox.Params.Offset = CFrame.new(-0.5, 2.5, -7.25)
@@ -362,7 +362,7 @@ function Attack:Activate()
 			})
 
 			if Validated then
-				self:FireReliableVFX("Kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
+				self:FireReliableVFX("kratos/Chaos Blades", "Hit", VictimLuaCharacter.RootPart)
 				
 				if Finisher then
 					self:FireReliableVFX("Global/Elemental", "Burn", VictimLuaCharacter.Model)

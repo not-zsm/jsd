@@ -184,7 +184,7 @@ function Attack:Activate()
 					VictimAnimation:Play(0)
 				end
 				
-				self:FireReliableVFX("Chara/Cursed Remedy", "Finisher", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+				self:FireReliableVFX("chara/Cursed Remedy", "Finisher", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 			else
 				self.Thread.Job:Task(self.Animations.Hit:GetMarkerReachedSignal("end"):Once(function()
 					self:Close()
@@ -220,7 +220,7 @@ function Attack:Activate()
 					VictimAnimation:Play(0) -- Looks weird on 0.1.
 				end
 
-				self:FireReliableVFX("Chara/Cursed Remedy", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+				self:FireReliableVFX("chara/Cursed Remedy", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 			end
 
 			--local function Finisher()
@@ -274,7 +274,7 @@ function Attack:Activate()
 			--	self.Animations.Finisher:Play(0)
 			--	FinisherVictimAnimation:Play(0)
 
-			--	self:FireReliableVFX("Chara/Cursed Remedy Finisher", "Start", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			--	self:FireReliableVFX("chara/Cursed Remedy Finisher", "Start", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 			--end
 			
 			--local Activate_Finisher = false
@@ -322,7 +322,7 @@ function Attack:Activate()
 			--	VictimAnimation:Play(0) -- Looks weird on 0.1.
 			--end
 
-			--self:FireReliableVFX("Chara/Cursed Remedy", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			--self:FireReliableVFX("chara/Cursed Remedy", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 		end
 	end)
 	
@@ -411,7 +411,7 @@ function Attack:Activate()
 		HitHitbox:BeginCast(0.15)
 	end))
 	
-	self:FireReliableVFX("Chara/Cursed Remedy", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Cursed Remedy", "Start", self.LuaCharacter.Model)
 end
 
 

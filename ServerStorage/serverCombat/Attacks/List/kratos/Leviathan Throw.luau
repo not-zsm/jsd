@@ -140,7 +140,7 @@ function Attack:Activate()
 							})
 
 							self:StopProjectileRunner()
-							self:FireReliableVFX("Kratos/Axe Throw", "StickToVictim", self.LuaCharacter.Model, VictimLuaCharacter.Head, CFrame.new(0, -1, -2) * CFrame.Angles(math.rad(45), 0, 0))
+							self:FireReliableVFX("kratos/Axe Throw", "StickToVictim", self.LuaCharacter.Model, VictimLuaCharacter.Head, CFrame.new(0, -1, -2) * CFrame.Angles(math.rad(45), 0, 0))
 
 							local Ended = false
 							local FinisherVictimAnimation : AnimationTrack = VictimLuaCharacter:LoadAnimation(replicatedStorage.animations.Attacks.kratos["Leviathan Throw"].CloseVictimFinisher)
@@ -193,7 +193,7 @@ function Attack:Activate()
 
 							self.Thread.Job:Task(self.Animations.CloseUserFinisher:GetMarkerReachedSignal("pullaxe"):Once(function()
 								self:StopProjectileRunner()
-								self:FireReliableVFX("Kratos/Axe Throw", "Remove", self.LuaCharacter.Model) 
+								self:FireReliableVFX("kratos/Axe Throw", "Remove", self.LuaCharacter.Model) 
 
 								if Weapons then
 									Weapons:ThrowAxe(false)
@@ -227,7 +227,7 @@ function Attack:Activate()
 								self:Close()
 							end))
 
-							self:FireReliableVFX("Kratos/Axe Close Finisher", "OnStart", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+							self:FireReliableVFX("kratos/Axe Close Finisher", "OnStart", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 						else
 							self.Combat:DealDamage(VictimLuaPlayer, 5)
 							self.AxeVictim = VictimLuaPlayer
@@ -266,7 +266,7 @@ function Attack:Activate()
 
 					if (Torso ~= nil) then
 						self:StopProjectileRunner("Stick")
-						self:FireReliableVFX("Kratos/Axe Throw", "StickToVictim", self.LuaCharacter.Model, Torso)
+						self:FireReliableVFX("kratos/Axe Throw", "StickToVictim", self.LuaCharacter.Model, Torso)
 
 						return
 					end
@@ -284,7 +284,7 @@ function Attack:Activate()
 					self.AxeCF = AxeCF + Velocity * Delta
 				end))
 
-				self:FireReliableVFX("Kratos/Axe Throw", "Create", self.LuaCharacter.Model, StartCF, Velocity)
+				self:FireReliableVFX("kratos/Axe Throw", "Create", self.LuaCharacter.Model, StartCF, Velocity)
 			end
 
 			RunKratosAxeProjectile()
@@ -328,7 +328,7 @@ function Attack:StopProjectileRunner(Type : string)
 		self.AxeProjectileHitbox:Destroy()
 	end
 
-	--self:FireReliableVFX("Kratos/Axe Throw", "Obstruct", self.LuaCharacter.Model, Type)
+	--self:FireReliableVFX("kratos/Axe Throw", "Obstruct", self.LuaCharacter.Model, Type)
 
 	self.AxeProjectileConnection = nil
 	self.AxeProjectileHitbox = nil
@@ -395,7 +395,7 @@ function Attack:Recall()
 	local Seconds = 0.35
 	local Time = math.clamp(Magnitude / (100 / Seconds), Seconds / 2, 1)
 
-	self:FireReliableVFX("Kratos/Axe Throw", "Recall", self.LuaCharacter.Model, Magnitude, Time, Trajectory)
+	self:FireReliableVFX("kratos/Axe Throw", "Recall", self.LuaCharacter.Model, Magnitude, Time, Trajectory)
 
 	if self.AntiRecallOnRespawn then
 		if self.AntiRecallOnRespawn.Connected then
@@ -468,13 +468,13 @@ function Attack:Recall()
 				})
 
 				if Validated then
-					self:FireReliableVFX("Kratos/Recall Assault", "SlashHit", VictimLuaCharacter.RootPart, cur)
+					self:FireReliableVFX("kratos/Recall Assault", "SlashHit", VictimLuaCharacter.RootPart, cur)
 					VictimCombat:PlayRandomHitReaction()
 				end
 			end)
 
 			Hitbox:Detect()
-			self:FireReliableVFX("Kratos/Recall Assault", "Slash", self.LuaCharacter.RootPart, cur)
+			self:FireReliableVFX("kratos/Recall Assault", "Slash", self.LuaCharacter.RootPart, cur)
 
 			local AttackerVelocityObject = self.Combat:Velocity()
 			AttackerVelocityObject.Settings.Z = 20
@@ -536,7 +536,7 @@ function Attack:Recall()
 	--	local Waypoints : {PathWaypoint} = Path:GetWaypoints()
 	--	local Time = 0.01
 
-	--	self:FireReliableVFX("Kratos/Axe Throw", "Recall", self.LuaCharacter.Model, Waypoints, Target, Time)
+	--	self:FireReliableVFX("kratos/Axe Throw", "Recall", self.LuaCharacter.Model, Waypoints, Target, Time)
 
 	--	task.wait(Utility.TableCount(Waypoints) * Time)
 

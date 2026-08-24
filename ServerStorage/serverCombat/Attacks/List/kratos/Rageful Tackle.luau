@@ -42,7 +42,7 @@ function Attack:Activate()
 		self.Combat:StackState("HitboxImmunity", false)
 	end)
 
-	self:FireReliableVFX("Kratos/Rageful Tackle", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("kratos/Rageful Tackle", "Start", self.LuaCharacter.Model)
 	
 	self.Thread.CancelJob:Task(self:CreateMoveSFX("kratos", "Rageful Tackle", "Windup"))
 
@@ -250,7 +250,7 @@ function Attack:Activate()
 					self:Close()
 				end))
 
-				self:FireReliableVFX("Kratos/Rageful Tackle", "Hit", self.LuaCharacter.Model)
+				self:FireReliableVFX("kratos/Rageful Tackle", "Hit", self.LuaCharacter.Model)
 			end
 		end)
 

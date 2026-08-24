@@ -46,7 +46,7 @@ function Attack:Activate()
 		self:CreateMoveSFX("kratos", "Draupnir Spin")
 	)
 
-	self:FireReliableVFX("Kratos/Draupnir Spin", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("kratos/Draupnir Spin", "Start", self.LuaCharacter.Model)
 
 	self.Thread.Job:Task(self.Animations.Windup:GetMarkerReachedSignal("spin"):Connect(function(Index : string)
 		Index = tonumber(Index)
@@ -233,7 +233,7 @@ function Attack:Activate()
 		end)
 
 		Hitbox:BeginCast(Duration / 1.25)
-		self:FireReliableVFX("Kratos/Draupnir Spin", "Slash", self.LuaCharacter.Model, StartCFrame, EndCFrame, Duration)
+		self:FireReliableVFX("kratos/Draupnir Spin", "Slash", self.LuaCharacter.Model, StartCFrame, EndCFrame, Duration)
 
 		self.Animations.Windup:AdjustSpeed(1.2)
 	end))

@@ -1570,7 +1570,7 @@ function Combat:ValidateBlock(VictimLuaPlayer, Arguments : {}) : string
 					BlockAnimationDirectory.ShieldParry:Play()
 				end
 
-				self.LuaPlayer.Replication:FireReliableVFX("Kratos/Guardian Shield", "Parry", VictimLuaCharacter.Model, self.LuaCharacter.Model)
+				self.LuaPlayer.Replication:FireReliableVFX("kratos/Guardian Shield", "Parry", VictimLuaCharacter.Model, self.LuaCharacter.Model)
 
 				task.spawn(function()
 					local ReflectedDamage = 0
@@ -1804,9 +1804,11 @@ function Combat:DealDamage(VictimLuaPlayer, Value : number, DontCountToUltimate 
 			VictimLuaCharacter.Humanoid:TakeDamage(ActualValue)
 		end;
 
-		--if self:HasACharacter() and self.CurrentCharacter.Name == "chara" then
-		self.LuaPlayer.Replication:FireReliableVFX("Chara/Damage Indicator", "Value", VictimLuaCharacter.RootPart, if KeptAlive then 9999 else ActualValue) --global effect now
-		--end
+		if self:HasACharacter() and self.CurrentCharacter.Name == "chara" then
+			self.LuaPlayer.Replication:FireReliableVFX("chara/Damage Indicator", "Value", VictimLuaCharacter.RootPart, if KeptAlive then 9999 else ActualValue)
+		else
+			self.LuaPlayer.Replication:FireReliableVFX("Global/damageIndicator", "doTheThing", VictimLuaCharacter.RootPart, if KeptAlive then 9999 else ActualValue)
+		end
 
 		VictimCombat.LastHitBy = self.LuaPlayer.Player
 

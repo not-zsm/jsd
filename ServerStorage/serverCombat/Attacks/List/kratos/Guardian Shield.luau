@@ -40,7 +40,7 @@ function Attack:RemoveShield()
 	local NewJob = Job.new()
 	
 	NewJob:Task(self.Animations.Leash:GetMarkerReachedSignal("shrink"):Connect(function()
-		self:FireReliableVFX("Kratos/Guardian Shield", "Unform", self.LuaCharacter.Model)
+		self:FireReliableVFX("kratos/Guardian Shield", "Unform", self.LuaCharacter.Model)
 	end))
 	
 	NewJob:Task(self.Animations.Leash:GetMarkerReachedSignal("end"):Connect(function()
@@ -101,7 +101,7 @@ function Attack:Activate()
 			})
 
 			if Validated then
-				self:FireReliableVFX("Kratos/Guardian Bash", "Hit", VictimLuaCharacter.Model)
+				self:FireReliableVFX("kratos/Guardian Bash", "Hit", VictimLuaCharacter.Model)
 			end
 		end)
 
@@ -119,7 +119,7 @@ function Attack:Activate()
 		end))
 		
 		self.Animations.Rush:Play()
-		self:FireReliableVFX("Kratos/Guardian Bash", "Start", self.LuaCharacter.Model)
+		self:FireReliableVFX("kratos/Guardian Bash", "Start", self.LuaCharacter.Model)
 		
 		if self.LuaPlayer.IsNPC then
 			local VelocityObject = self.Combat:Velocity()
@@ -141,7 +141,7 @@ function Attack:Activate()
 		self.Animations.Unleash:Play()
 		--self.Animations.Idle:Play(0.1, 1, 1)
 
-		self:FireReliableVFX("Kratos/Guardian Shield", "Form", self.LuaCharacter.Model)
+		self:FireReliableVFX("kratos/Guardian Shield", "Form", self.LuaCharacter.Model)
 		self.ShieldRemoveThread = task.delay(30, self.RemoveShield, self)
 		
 		task.delay(0.5, function()

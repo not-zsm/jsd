@@ -65,7 +65,7 @@ function Attack:Activate()
 				self:Close()
 			end))
 
-			self:FireReliableVFX("Chara/Death Charge", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("chara/Death Charge", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 		end
 	end)
 	
@@ -96,7 +96,7 @@ function Attack:Activate()
 		self:Close()
 	end))
 
-	self:FireReliableVFX("Chara/Death Charge", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Death Charge", "Start", self.LuaCharacter.Model)
 end
 
 function Attack.new(...)

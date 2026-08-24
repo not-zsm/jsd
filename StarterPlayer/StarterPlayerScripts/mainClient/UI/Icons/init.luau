@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 
@@ -6,11 +6,6 @@ local Icons = {}
 Icons.__index = Icons
 
 function Icons:_Init() 
-	-- in order
-
-	-- The ported menus belong to mainClient, which hands itself to the UI once it
-	-- has built it. Read it at click time rather than here, so the icons do not
-	-- depend on which of the two finished first.
 	self.ShopIcon = self.IconModule.new()
 		:setLeft()
 		:setImage("9405933217")
@@ -108,9 +103,9 @@ function Icons:_Init()
 		end)
 
 	task.spawn(function()
-		self.CommandManager = require( ReplicatedStorage.modules.shared.CommandManager ).new(self.UI)
+		self.CommandManager = require( replicatedStorage.modules.shared.CommandManager ).new(self.UI)
 
-		local Resize = require( ReplicatedStorage.modules.shared.Utilities.GUIResize )
+		local Resize = require( replicatedStorage.modules.shared.Utilities.GUIResize )
 
 		local OpenedBefore = false
 

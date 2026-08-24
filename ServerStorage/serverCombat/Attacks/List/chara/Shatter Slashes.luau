@@ -198,7 +198,7 @@ function Attack:Activate()
 		self:Close()
 	end))
 	
-	self:FireReliableVFX("Chara/Shatter Slashes", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Shatter Slashes", "Start", self.LuaCharacter.Model)
 end
 
 

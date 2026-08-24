@@ -72,8 +72,8 @@ end
 --				self.Combat:HideUI(true)
 --				VictimCombat:HideUI(true)
 
---				self:FireReliableVFXToSelf("Chara/Reset", "Counter", self.LuaCharacter.Model)
---				VictimLuaPlayer.Replication:FireReliableVFXToSelf("Chara/Reset", "Counter", self.LuaCharacter.Model)
+--				self:FireReliableVFXToSelf("chara/Reset", "Counter", self.LuaCharacter.Model)
+--				VictimLuaPlayer.Replication:FireReliableVFXToSelf("chara/Reset", "Counter", self.LuaCharacter.Model)
 
 --				self.Thread.OnClosed:Connect(function()
 --					self.Combat:HideUI(false)
@@ -107,7 +107,7 @@ end
 --				end)
 
 --				--self.Thread.Job:Task(task.delay(710, function()
---				--	self:FireReliableVFX("Chara/Reset", "MiniExplosion", Position)
+--				--	self:FireReliableVFX("chara/Reset", "MiniExplosion", Position)
 --				--end))
 
 --				task.wait(780 / 60)
@@ -115,7 +115,7 @@ end
 --				Hitbox:Detect()
 --				task.defer(Hitbox.Destroy, Hitbox)
 				
---				self:FireReliableVFX("Chara/Reset", "Explosion", Position)
+--				self:FireReliableVFX("chara/Reset", "Explosion", Position)
 	
 --				self.Combat.Hitbox:CreateHavocReplicated({
 --					parameters = {
@@ -160,7 +160,7 @@ end
 --		end
 --	end))
 	
---	self:FireReliableVFX("Chara/Reset", "Start", self.LuaCharacter.Model)
+--	self:FireReliableVFX("chara/Reset", "Start", self.LuaCharacter.Model)
 --end
 
 function Attack:Activate()
@@ -205,8 +205,8 @@ function Attack:Activate()
 		self.Combat:HideUI(true)
 		VictimCombat:HideUI(true)
 
-		self:FireReliableVFXToSelf("Chara/Reset", "Counter", self.LuaCharacter.Model)
-		VictimLuaPlayer.Replication:FireReliableVFXToSelf("Chara/Reset", "Counter", self.LuaCharacter.Model)
+		self:FireReliableVFXToSelf("chara/Reset", "Counter", self.LuaCharacter.Model)
+		VictimLuaPlayer.Replication:FireReliableVFXToSelf("chara/Reset", "Counter", self.LuaCharacter.Model)
 
 		self.Thread.OnClosed:Connect(function()
 			self.Combat:HideUI(false)
@@ -240,7 +240,7 @@ function Attack:Activate()
 		end)
 
 		--self.Thread.Job:Task(task.delay(710, function()
-		--	self:FireReliableVFX("Chara/Reset", "MiniExplosion", Position)
+		--	self:FireReliableVFX("chara/Reset", "MiniExplosion", Position)
 		--end))
 
 		task.wait(780 / 60)
@@ -248,7 +248,7 @@ function Attack:Activate()
 		Hitbox:Detect()
 		task.defer(Hitbox.Destroy, Hitbox)
 
-		self:FireReliableVFX("Chara/Reset", "Explosion", Position)
+		self:FireReliableVFX("chara/Reset", "Explosion", Position)
 
 		self.Combat.Hitbox:CreateHavocReplicated({
 			parameters = {
@@ -300,7 +300,7 @@ function Attack:Activate()
 		end
 	end))
 
-	self:FireReliableVFX("Chara/Reset", "Start", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Reset", "Start", self.LuaCharacter.Model)
 end
 
 function Attack.new(...)

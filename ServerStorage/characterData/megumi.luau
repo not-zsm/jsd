@@ -6,12 +6,15 @@ return {
 	DisplayName = "Potential Man",
 	
 	Attacks = {
-		--none
+		Toad = Enum.KeyCode.One,
+		['Rabbit Escape'] = Enum.KeyCode.Two,
+		['Dark Shadow'] = Enum.KeyCode.Three,
+		Nue = Enum.KeyCode.Four,
 	},
 	
 	Stats = {
 		M1 = {
-		Speed = 0.85,
+			Speed = 0.85,
 			EndlagAfterSwing = 0.08,
 			
 			Hitbox = {
@@ -25,7 +28,7 @@ return {
 				[3] = { Limb = "Right Arm", Colour = colour, Duration = 0.35 },
 				[4] = { Limb = "Left Arm", Colour = colour, Duration = 0.4 },
 
-				Up = { Limb = "Right Leg", Colour = colour, Duration = 0.4 },
+				Up = { Limb = "Right Arm", Colour = colour, Duration = 0.4 },
 				Down = { Limb = "Right Arm", Colour = colour, Duration = 0.4 },
 			},
 		}
@@ -157,7 +160,7 @@ return {
 			end))
 			
 			Animation:Play()
-			self:FireReliableVFX("Kratos/Ultimate", "Start", self.LuaCharacter.Model)
+			self:FireReliableVFX("kratos/Ultimate", "Start", self.LuaCharacter.Model)
 			
 			
 			self.Thread.OnClosed:Connect(function()

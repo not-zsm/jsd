@@ -1,5 +1,3 @@
-
-
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
@@ -47,7 +45,7 @@ function Attack:Onslaught()
 			self.NormalHit = true
 
 			if (WasRagdolled or Hitbox.HitCount > 1) then
-				self:FireReliableVFX("Chara/Onslaught Normal", "Smack", VictimLuaPlayer.Character.Torso, "1")
+				self:FireReliableVFX("chara/Onslaught Normal", "Smack", VictimLuaPlayer.Character.Torso, "1")
 				
 				if WasRagdolled then
 					self.Combat:TSBPushVictim(VictimLuaPlayer, {
@@ -82,13 +80,13 @@ function Attack:Onslaught()
 					local NewVictimCombat = NewVictimLuaCharacter.Combat
 
 					if (Name == "Hit") then
-						self:FireReliableVFX("Chara/Onslaught Normal", "Smack", NewVictimLuaCharacter.Torso, SFX)
+						self:FireReliableVFX("chara/Onslaught Normal", "Smack", NewVictimLuaCharacter.Torso, SFX)
 
 					elseif (Name == "Stab") then
-						self:FireReliableVFX("Chara/Onslaught Normal", "StabHit", NewVictimLuaCharacter.RootPart, SFX)
+						self:FireReliableVFX("chara/Onslaught Normal", "StabHit", NewVictimLuaCharacter.RootPart, SFX)
 
 					elseif (Name == "Slash") then
-						self:FireReliableVFX("Chara/Onslaught Normal", "SlashHit", NewVictimLuaCharacter.RootPart, SFX)
+						self:FireReliableVFX("chara/Onslaught Normal", "SlashHit", NewVictimLuaCharacter.RootPart, SFX)
 					end
 
 					NewVictimCombat:PlayRandomHitReaction()
@@ -162,14 +160,14 @@ function Attack:Onslaught()
 				local Count = 0
 
 				self.Thread.Job:Task(self.Animations.NormalHit:GetMarkerReachedSignal("stab"):Connect(function()
-					self:FireReliableVFX("Chara/Onslaught Normal", "Stab", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Onslaught Normal", "Stab", self.LuaCharacter.RootPart)
 
 					Count += 1
 					Hitbox(1.5, "Stab", tostring(Count))
 				end))
 
 				self.Thread.Job:Task(self.Animations.NormalHit:GetMarkerReachedSignal("kick"):Connect(function(Type : string)
-					self:FireReliableVFX("Chara/Onslaught Normal", "Kick", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Onslaught Normal", "Kick", self.LuaCharacter.RootPart)
 
 					if Type == "last" then
 						Ended = true
@@ -198,7 +196,7 @@ function Attack:Onslaught()
 									LandedRollDuration = 0.785
 								})
 								
-								self:FireReliableVFX("Chara/Onslaught Normal", "Smack", NewVictimLuaPlayer.Character.Torso, "Last")
+								self:FireReliableVFX("chara/Onslaught Normal", "Smack", NewVictimLuaPlayer.Character.Torso, "Last")
 							end
 						end)
 
@@ -237,27 +235,27 @@ function Attack:Onslaught()
 				end))
 	
 				self.Thread.Job:Task(self.Animations.NormalHit:GetMarkerReachedSignal("kickswing"):Connect(function(Type : string)
-					self:FireReliableVFX("Chara/Onslaught Normal", "KickSwing", self.LuaCharacter.RootPart, tonumber(Type))
+					self:FireReliableVFX("chara/Onslaught Normal", "KickSwing", self.LuaCharacter.RootPart, tonumber(Type))
 					
 					Count += 1
 					Hitbox(0.75, "Hit", tostring(Count))
 				end))
 
 				self.Thread.Job:Task(self.Animations.NormalHit:GetMarkerReachedSignal("slash"):Connect(function(Type : string)
-					self:FireReliableVFX("Chara/Onslaught Normal", "Slash", self.LuaCharacter.RootPart, tonumber(Type))
+					self:FireReliableVFX("chara/Onslaught Normal", "Slash", self.LuaCharacter.RootPart, tonumber(Type))
 					
 					Count += 1
 					Hitbox(1.75, "Slash", tostring(Count))
 				end))
 
 				self.Thread.Job:Task(self.Animations.NormalHit:GetMarkerReachedSignal("slam"):Connect(function()
-					self:FireReliableVFX("Chara/Onslaught Normal", "Slam", self.LuaCharacter.RootPart)
+					self:FireReliableVFX("chara/Onslaught Normal", "Slam", self.LuaCharacter.RootPart)
 				end))
 
 				self.Animations.NormalWindup:Stop()
 				self.Animations.NormalHit:Play()
 				
-				self:FireReliableVFX("Chara/Onslaught Normal", "Hit", self.LuaCharacter.Model)
+				self:FireReliableVFX("chara/Onslaught Normal", "Hit", self.LuaCharacter.Model)
 
 				Count += 1
 				Hit(VictimLuaPlayer, "Hit", tostring(Count))
@@ -266,7 +264,7 @@ function Attack:Onslaught()
 	end)
 
 	--self.LuaPlayer.Replication.Attributes:SetAttribute("OnslaughtNormal", true)
-	--self:FireReliableVFX("Chara/Onslaught Normal", "Start", self.LuaCharacter.RootPart)
+	--self:FireReliableVFX("chara/Onslaught Normal", "Start", self.LuaCharacter.RootPart)
 
 	self.Thread.OnClosed:Connect(function()
 		self.LuaPlayer.Replication.Attributes:SetAttribute("OnslaughtNormal", nil)
@@ -303,7 +301,7 @@ function Attack:Onslaught()
 
 	self.Thread.Job:Task(self.Animations.NormalWindup:GetMarkerReachedSignal("hit"):Once(function()
 		self.Animations.NormalWindup:AdjustSpeed(1)
-		--self:FireReliableVFX("Chara/Onslaught Normal", "Swing", self.LuaCharacter.RootPart)
+		--self:FireReliableVFX("chara/Onslaught Normal", "Swing", self.LuaCharacter.RootPart)
 		
 		Hitbox:BeginCast(0.1)
 		
@@ -315,67 +313,13 @@ function Attack:Onslaught()
 	end))
 	
 	self.Animations.NormalWindup:Play(0.1, 1, 1.3)
-	self:FireReliableVFX("Chara/Onslaught Normal", "Windup", self.LuaCharacter.Model)
+	self:FireReliableVFX("chara/Onslaught Normal", "Windup", self.LuaCharacter.Model)
 
 	task.wait(1.75)
 
 	if not self.NormalHit then
 		self:Close()
 	end
-end
-
-function Attack:SpiralingCascade()
-	self.Combat:StackState("Attacking", true)
-	self.Combat:DivideSpeed(15)
-
-	self.GroundHit = false
-	
-	local Hitbox = self:CreateHitbox(false, true);
-	Hitbox.Params.Offset = CFrame.new(0, -1, self.LuaPlayer.IsNPC and 2 or -4 - self.LuaPlayer:GetPing())
-	Hitbox.Params.Size = Vector3.new(7, 3, 10)
-	Hitbox.Params.MaxTargets = 1
-	Hitbox.Params.DestroyOnEndCast = false
-
-	Hitbox.Events.OnLuaPlayerHit:Connect(function(VictimLuaPlayer)
-		local VictimLuaCharacter = VictimLuaPlayer.Character
-		local VictimCombat = VictimLuaCharacter.Combat
-
-		local Validated = self:Afflict(VictimLuaPlayer, {
-			BreakBlock = true,
-		})
-
-		if Validated then
-			self.GroundHit = true
-			Hitbox:EndCast()
-		end
-	end)
-	
-	self.Thread.Job:Task(self.Animations.GroundWindup:GetMarkerReachedSignal("jump"):Once(function()
-		self.Animations.GroundWindup:AdjustSpeed(1)
-
-		self.LuaCharacter.Torso.CanCollide = false
-		self.LuaCharacter.RootPart.CanCollide = true
-
-		self.Thread.OnClosed:Connect(function()
-			self.LuaCharacter.Torso.CanCollide = true
-			self.LuaCharacter.RootPart.CanCollide = false
-		end)
-
-		local VelocityObject = self.Combat:Velocity()
-		VelocityObject.Settings.Duration = 1
-		VelocityObject.Settings.MaxForce = Vector3.new(1, 0, 1) * 80000
-		VelocityObject.Settings.Controllable = true
-		VelocityObject.Settings.Z = 105
-		VelocityObject:Fire()
-		
-		self.Thread.Job:Task(VelocityObject)
-	end))
-	
-	self.Thread.Job:Task(self.Animations.GroundWindup:GetMarkerReachedSignal("hit"):Once(function()
-		Hitbox:BeginCast()
-	end))
-	
-	self.Animations.GroundWindup:Play(0.1, 1, 1.4)
 end
 
 function Attack:FeralTakedown()
@@ -419,7 +363,7 @@ function Attack:FeralTakedown()
 				VelocityObject.Settings.Y = 27.5
 				VelocityObject:Fire()
 
-				self:FireReliableVFX("Chara/Onslaught Aerial", "Drop", self.LuaCharacter.RootPart, VictimLuaCharacter.RootPart)
+				self:FireReliableVFX("chara/Onslaught Aerial", "Drop", self.LuaCharacter.RootPart, VictimLuaCharacter.RootPart)
 
 				--task.wait(0.6)
 				
@@ -445,7 +389,7 @@ function Attack:FeralTakedown()
 					Velocity = {Vector3.yAxis * 55, 0.15}
 				})
 				
-				self:FireReliableVFX("Chara/Onslaught Aerial", "Drop", self.LuaCharacter.RootPart, VictimLuaCharacter.RootPart)
+				self:FireReliableVFX("chara/Onslaught Aerial", "Drop", self.LuaCharacter.RootPart, VictimLuaCharacter.RootPart)
 				
 				local VelocityObject = self.Combat:Velocity()
 				VelocityObject.Settings.RemoveTime = 0.15
@@ -468,7 +412,7 @@ function Attack:FeralTakedown()
 					}
 				})
 				
-				self:FireReliableVFX("Chara/Onslaught Aerial", "Stab", self.LuaCharacter.RootPart, VictimLuaCharacter.RootPart)
+				self:FireReliableVFX("chara/Onslaught Aerial", "Stab", self.LuaCharacter.RootPart, VictimLuaCharacter.RootPart)
 			end))
 
 			self.Animations.AerialWindup:Stop(0)
@@ -485,7 +429,7 @@ function Attack:FeralTakedown()
 				VictimCombat:Unstun()
 			end)
 			
-			self:FireReliableVFX("Chara/Onslaught Aerial", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
+			self:FireReliableVFX("chara/Onslaught Aerial", "Hit", self.LuaCharacter.Model, VictimLuaCharacter.Model)
 		end
 	end)
 	
@@ -504,7 +448,7 @@ function Attack:FeralTakedown()
 	end))
 	
 	self.Thread.Job:Task(self.Animations.AerialWindup:GetMarkerReachedSignal("spin"):Once(function()
-		self:FireReliableVFX("Chara/Onslaught Aerial", "Spin", self.LuaCharacter.Model)
+		self:FireReliableVFX("chara/Onslaught Aerial", "Spin", self.LuaCharacter.Model)
 	end))
 	
 	self.Thread.Job:Task(self.Animations.AerialWindup:GetMarkerReachedSignal("lunge"):Once(function()
@@ -527,7 +471,7 @@ function Attack:FeralTakedown()
 		self.Combat:StackState("Attacking", false)
 	end)
 	
-	self:FireReliableVFX("Chara/Onslaught Aerial", "Start", self.LuaCharacter.RootPart)
+	self:FireReliableVFX("chara/Onslaught Aerial", "Start", self.LuaCharacter.RootPart)
 	
 	task.wait(1.5)
 
@@ -537,10 +481,6 @@ function Attack:FeralTakedown()
 end
 
 function Attack:Activate()
-	if (self.VariantsEnabled and self.GroundVariant) or self.ForceSpecialVariant then
-		return self:SpiralingCascade()
-	end
-	
 	if (self.VariantsEnabled and self.HoldingJump) or self.ForceVariant then
 		self:FeralTakedown()
 	else
