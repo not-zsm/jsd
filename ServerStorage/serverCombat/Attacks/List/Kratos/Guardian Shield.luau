@@ -4,8 +4,6 @@ local RunService = game:GetService("RunService")
 local Debris = game:GetService("Debris")
 
 local ServerStorage = game:GetService("ServerStorage")
-local Remotes = replicatedStorage.Remotes
-local HotbarRemotes = Remotes.Combat.UI.Hotbar
 
 ----------------------------------------------------------------------------------
 

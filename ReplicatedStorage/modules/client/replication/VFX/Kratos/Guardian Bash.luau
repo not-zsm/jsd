@@ -146,7 +146,7 @@ return {
 				local Head : BasePart = VictimModel:FindFirstChild("Head")
 
 				if Head then
-					EffectUtility.EmitEffects(replicatedStorage.Effects.Blood.Splash, Head)
+					EffectUtility.EmitEffects(replicatedStorage.modules.effect.assets.Blood.Splash, Head)
 
 					Blood.BloodRaysWithoutPreset(Head, {
 						Face = Enum.NormalId.Front,

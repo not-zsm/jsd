@@ -50,6 +50,4 @@ return {
 		emotePage = nil,
 		ultOutfit = nil,
 	},
-
-	movesets = require(script.movesets),
 }

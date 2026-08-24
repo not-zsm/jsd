@@ -48,9 +48,6 @@ local function firstColour(colour)
 	return nil
 end
 
--- The speaker's moveset entry, when there is one. Anything can speak here —
--- NPCs, dummies, a plain string — so every step of the lookup can come back
--- empty and none of them may throw.
 local function getMoveset(speaker)
 	if typeof(speaker) ~= "Instance" then
 		return nil
@@ -65,7 +62,9 @@ local function getMoveset(speaker)
 	local current = replication and replication:GetAttribute("CurrentCharacter")
 		or player:GetAttribute("Character")
 
-	return typeof(current) == "string" and info.movesets[string.lower(current)] or nil
+	local movesets = info.movesets
+
+	return (movesets and typeof(current) == "string") and movesets[string.lower(current)] or nil
 end
 
 local function getName(speaker)
@@ -75,7 +74,7 @@ local function getName(speaker)
 
 	local player = Players:GetPlayerFromCharacter(speaker)
 	if player then
-		return player:GetAttribute("Name") or player.DisplayName
+			return player:GetAttribute("Name") or player.DisplayName
 	end
 
 	local humanoid = speaker:FindFirstChildWhichIsA("Humanoid")

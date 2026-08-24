@@ -1,7 +1,6 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local ServerStorage = game:GetService("ServerStorage")
-local HotbarRemotes = replicatedStorage.Remotes.Combat.UI.Hotbar
 
 ----------------------------------------------------------------------------------
 
@@ -424,7 +423,7 @@ function Attack:Rush()
 			end))
 
 			self.Thread.OnClosed:Connect(function()
-				HotbarRemotes.ImportantChangeDisplay:FireClient(self.LuaPlayer.Player, self.Name, self.DisplayName, nil, Color3.fromRGB(49, 176, 255))
+				self.Combat:ChangeAttackDisplay(self.Name, self.DisplayName, { FlashColor = Color3.fromRGB(49, 176, 255) })
 				self:AddCooldown(self.Cooldown)
 			end)
 

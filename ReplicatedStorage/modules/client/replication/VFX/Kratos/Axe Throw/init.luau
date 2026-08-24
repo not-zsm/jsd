@@ -162,7 +162,7 @@ function VFX.StickToVictim(Model : Model, Torso : BasePart, CustomOffset : CFram
 			Axe["Victim Hit"]:Play()
 		end
 
-		EffectUtility.EmitEffects(replicatedStorage.Effects.Blood.SmallSplash, Axe)
+		EffectUtility.EmitEffects(replicatedStorage.modules.effect.assets.Blood.SmallSplash, Axe)
 		Blood.BloodRays("SpitOut", Axe)
 	end
 end
@@ -195,7 +195,7 @@ function VFX.Recall(Model : Model, Magnitude : number, Time : number, Trajectory
 
 		if AxeTable.Sticked then
 			Axe["Victim Hit"]:Play()
-			EffectUtility.EmitEffects(replicatedStorage.Effects.Blood.SmallSplash, workspace.Terrain, Axe.Position)
+			EffectUtility.EmitEffects(replicatedStorage.modules.effect.assets.Blood.SmallSplash, workspace.Terrain, Axe.Position)
 			Blood.BloodRays("SpitOut", Axe)
 		end
 

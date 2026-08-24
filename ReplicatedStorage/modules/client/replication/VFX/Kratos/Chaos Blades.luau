@@ -96,7 +96,7 @@ function VFX.Start(RootPart : BasePart)
 			
 			while os.clock() - Start < 1.38 do
 				MeshVFX.new({ -- big mesh to show how powerful hes swinging
-					MeshPart = replicatedStorage.Effects.Parts.MeshVFX.Start, 
+					MeshPart = replicatedStorage.modules.effect.assets.Parts.MeshVFX.Start, 
 					CFrame = RootPart.CFrame * CFrame.new(0, -2.5, 0),
 
 					TweenDuration = 0.45,

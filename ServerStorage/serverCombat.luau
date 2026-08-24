@@ -1150,8 +1150,6 @@ function Combat:GetCharacterModule(CharacterName: string): ModuleScript?
 		end;
 	end;
 
-	-- The module names are capitalised, info.movesets is keyed lowercase, and
-	-- the pickers send one or the other. Match either.
 	local Lowered = string.lower(CharacterName);
 
 	for _, Item in CharacterList:GetChildren() do

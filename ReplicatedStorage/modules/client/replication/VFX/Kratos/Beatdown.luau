@@ -209,7 +209,7 @@ return {
 				Yuki_FOV.Tween(85, {1})
 				Yuki_FOV.Immune = true
 
-				local Camera = replicatedStorage.Effects["Camera's"].MJJBA:Clone()
+				local Camera = replicatedStorage.modules.effect.assets["Camera's"].MJJBA:Clone()
 				local DestroyCameraRunner = NewJob:Task(RunCameraRig(RootPart, Camera, CFrame.new(0, -2, -2)))
 				Camera.Parent = workspace.Visuals
 

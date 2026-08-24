@@ -163,7 +163,6 @@ function MainClient:SetHotbarVisible(Visible: boolean)
 	end
 end
 
---- The key the menus and info.movesets share, which is the character lowercased.
 function MainClient:CurrentMoveset(): string?
 	local Name = self.Combat and self.Combat.CurrentCharacter
 

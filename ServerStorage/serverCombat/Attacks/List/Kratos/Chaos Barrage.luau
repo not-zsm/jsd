@@ -3,9 +3,6 @@ local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
 local ServerStorage = game:GetService("ServerStorage")
-local Remotes = replicatedStorage.Remotes
-local HotbarRemotes = Remotes.Combat.UI.Hotbar
-
 ----------------------------------------------------------------------------------
 
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )

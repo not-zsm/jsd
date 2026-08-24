@@ -187,12 +187,6 @@ function Attack:M1()
 	local CharacterInfo : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Info or nil
 	local CharacterStats : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Stats or nil
 
-	--[[
-		The moveset's arm flash for this swing, keyed by the air finisher when
-		there is one and the punch number otherwise. A false entry is a punch
-		that opts out -- a weapon swing with no bare limb to light up -- and is
-		not the same as a moveset that forgot to define the table at all.
-	--]]
 	local ArmFlashes = CharacterStats and CharacterStats.M1 and CharacterStats.M1.ArmFlashes
 	local Flash = ArmFlashes and ArmFlashes[self.Condition or self.Count]
 

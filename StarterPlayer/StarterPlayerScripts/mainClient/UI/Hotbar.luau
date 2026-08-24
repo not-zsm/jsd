@@ -393,10 +393,6 @@ function Hotbar:AddExtraCooldown(Name: string, Duration: number)
 	end
 end
 
-----------------------------------------------------------------------------------
-
--- Toggled, not moved: the sway writes Position every frame, so anything that
--- slides the HUD away is dragged straight back. TekrinnDialogue watches this.
 function Hotbar:SetHidden(Hidden: boolean)
 	self.GUI.Enabled = not Hidden
 end
@@ -421,8 +417,6 @@ function Hotbar:SetUltColor(Color)
 
 	self.UltBar.prog.progressContainer.mask.ImageColor3 = self.Color
 
-	-- cooldowns are the ult colour, so a character switch repaints the ones
-	-- already built as well as the ones still to come
 	for _, Slot in self.Slots do
 		Slot.Cooldown.BackgroundColor3 = self.Color
 	end

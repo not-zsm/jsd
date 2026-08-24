@@ -42,7 +42,7 @@ function VFX.Spin(RootPart : BasePart)
 		local F1 : Attachment = Holder["1"]:Clone()
 		F1.WorldCFrame = CF
 
-		local Mesh = replicatedStorage.Effects.Parts.MeshVFX.Start:Clone()
+		local Mesh = replicatedStorage.modules.effect.assets.Parts.MeshVFX.Start:Clone()
 		Mesh.Transparency = 0.875
 		Mesh.CFrame = CF + Vector3.yAxis * 1.25
 		

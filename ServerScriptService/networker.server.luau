@@ -23,9 +23,7 @@ end
 
 --// CLIENT -> SERVER
 network.switchCharacter.listen(function(data, player)
-	-- The icon picker sends the module name ("Chara"), the select screen sends the
-	-- moveset key ("chara"). info.movesets is keyed by the latter.
-	if not info.movesets[string.lower(data.character)] then return end
+	--if not info.movesets[string.lower(data.character)] then return end
 	if not rateLimiter.check(player, "switchCharacter", 10) then return end
 
 	local Combat = getCombat(player)

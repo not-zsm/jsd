@@ -161,7 +161,7 @@ return {
 	
 	Hit = function(Victim : Model)
 		if (Victim and Victim.Parent) then
-			EffectUtility.EmitEffects(replicatedStorage.Effects.Blood.SmallSplash, Victim.Head)
+			EffectUtility.EmitEffects(replicatedStorage.modules.effect.assets.Blood.SmallSplash, Victim.Head)
 			
 			Blood.BloodRaysWithoutPreset(Victim.Head, {
 				Face = Enum.NormalId.Front,
