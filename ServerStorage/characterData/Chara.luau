@@ -21,22 +21,14 @@ return {
 			Speed = 1.3,
 			EndlagAfterSwing = 0.1,
 
-			--[[
-				Which limb glows on each punch, and on the air finishers.
-
-				Every moveset has to have this table -- the M1 warns if it is
-				missing. An entry set to false is a punch that deliberately has no
-				flash: Chara's second and fourth swing the knife, so there is no
-				bare arm to light up. Limb takes a list to flash both.
-			--]]
 			ArmFlashes = {
-				[1] = { Limb = "Right Arm", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.35 },
+				[1] = { Limb = "Left Arm", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.35 },
 				[2] = false,
-				[3] = { Limb = "Left Arm", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.35 },
+				[3] = { Limb = "Right Leg", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.35 },
 				[4] = false,
 
-				Up = { Limb = "Right Leg", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.4 },
-				Down = { Limb = "Right Arm", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.4 },
+				Up = { Limb = "Right Arm", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.4 },
+				Down = { Limb = "Right Leg", Colour = Color3.fromRGB(255, 60, 60), Duration = 0.4 },
 			},
 		},
 	},

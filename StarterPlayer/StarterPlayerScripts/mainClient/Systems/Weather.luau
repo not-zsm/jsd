@@ -67,9 +67,6 @@ return {
 			end
 		end
 
-		-- this module lives in replicatedStorage now, where a LocalScript will
-		-- not run, so the actors have to be parented into PlayerScripts. The
-		-- template stays put rather than being destroyed, since it is shared.
 		local Holder = Instance.new("Folder")
 		Holder.Name = "WeatherThreads"
 		Holder.Parent = Player:WaitForChild("PlayerScripts")
@@ -77,7 +74,7 @@ return {
 		for Index = 1, ACTOR_THREADS do
 			local Actor = script.Main:Clone()
 			Actor.Name = "Thread" .. Index
-			Actor.Script.Enabled = true
+			Actor.WeatherScript.Enabled = true
 			Actor.Parent = Holder
 
 			table.insert(Threads, Actor)

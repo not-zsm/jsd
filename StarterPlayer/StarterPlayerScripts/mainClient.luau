@@ -1,28 +1,4 @@
 --!strict
---[[
-	mainClient
-
-	One owner for everything the client starts, and for the UI.
-
-	Before this there were fifteen LocalScripts under StarterPlayerScripts, most
-	of them four lines of require-and-go, each deciding for itself when to run
-	and none of them able to see the others. Startup order was whatever Roblox
-	picked, nothing could be restarted, and there was no type to hold on to.
-
-	A system is a table with a name and a Start. mainClient owns the list, starts
-	them in order, isolates their failures, and hands back a typed object.
-
-		local mainClient = require(script.Parent.mainClient)
-		mainClient.Default():Start()
-
-	The UI lives here too, as script.UI. clientCombat asks for one through
-	UIFactory rather than reaching for a child of its own, so the menus sit with
-	the rest of the client and combat holds a reference it was handed.
-
-	Everything is typed and exported, so `Client:` autocompletes and a misspelled
-	system is a type error rather than a silent no-op.
---]]
-
 local Players = game:GetService("Players")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
@@ -40,34 +16,15 @@ local uiConfig = require(script.UI.config)
 local shopHelper = require(script.UI.helpers.shopHelper)
 local createBGBlur = require(script.UI.helpers.blur)
 
---------------------------------------------------------------------------------
+local nirs = { "zsm", "dih", "niki", "pook" }
 
---[[
-	One startable piece of the client.
-
-	`Start` receives the MainClient so a system can reach its siblings without a
-	global. Anything it returns that needs cleaning up should go on the Job it is
-	given -- MainClient destroys those on Stop.
---]]
 export type System = {
 	Name: string,
 
-	--- Lower starts first. Systems without one run at 100, after the essentials.
 	Priority: number?,
-
-	--[[
-		Start on its own thread rather than in line.
-
-		Set it on anything that yields -- a WaitForChild, a Loaded wait, a loop
-		that never returns. These were LocalScripts, which each got a thread for
-		free; starting them in line would let one of them hold up every system
-		behind it.
-	--]]
 	Async: boolean?,
 
 	Start: (self: System, Client: MainClient, Cleanup: any) -> (),
-
-	--- Optional. Called before the system's Job is destroyed.
 	Stop: ((self: System) -> ())?,
 }
 
@@ -106,13 +63,6 @@ function MainClient:Get(Name: string): System?
 	return self.Systems[Name]
 end
 
---[[
-	Starts every registered system, lowest priority first.
-
-	A system that throws is reported and skipped rather than taking the rest of
-	the client down with it -- which is the one thing the old LocalScripts got
-	right by accident, since a script that errors does not stop its siblings.
---]]
 function MainClient:Start()
 	if self.Started then
 		return
@@ -156,7 +106,7 @@ function MainClient:Start()
 			local Success, Problem = pcall(System.Start, System, self, Cleanup)
 
 			if not Success then
-				warn(`[MainClient] system "{System.Name}" failed to start: {Problem}`)
+				warn(`[mainClient] system "{System.Name}" failed to start: {Problem}`)
 			end
 		end
 
@@ -168,11 +118,6 @@ function MainClient:Start()
 	end
 end
 
---[[
-	Builds the player object, which builds the character, which builds combat --
-	and combat asks UIFactory for the UI on the way. Was a second entry
-	LocalScript sitting beside this one deciding its own startup order.
---]]
 function MainClient:StartPlayer()
 	local Replicator = replicatedStorage.modules.shared.movementReplicator
 	require(Replicator:WaitForChild("ClientReplicator", 100))
@@ -210,13 +155,6 @@ end
 
 --------------------------------------------------------------------------------
 
---[[
-	What the ported menus need from the rest of the client.
-
-	jjk's mainClient held the hotbar and the equipped moveset itself. Here the
-	combat UI owns the hotbar and the server tells combat which character is
-	equipped, so these two read through to it.
---]]
 function MainClient:SetHotbarVisible(Visible: boolean)
 	local UI = self.Combat and self.Combat.UI
 
@@ -232,17 +170,11 @@ function MainClient:CurrentMoveset(): string?
 	return Name and string.lower(Name) or nil
 end
 
-local NIR_BY_INDEX = { "zsm", "dih", "niki", "pook" }
-
 local function applyOutfit(container, char: Model)
 	local pick = math.random(1, #info.theBigFour)
 
-	-- Who the keeper is decides which poke lines they answer with, so set it
-	-- whether or not the avatar itself arrives.
-	char:SetAttribute("nir", NIR_BY_INDEX[pick])
-
-	-- A failed web call used to take the rest of Shop with it, poke button and
-	-- purchase buttons included.
+	char:SetAttribute("nir", nirs[pick])
+	
 	local got, desc = pcall(Players.GetHumanoidDescriptionFromUserIdAsync, Players, info.theBigFour[pick])
 	if not got then
 		warn(`shop: could not fetch the keeper's outfit: {desc}`)
@@ -261,13 +193,6 @@ function MainClient:destroyContainer()
 	if self.Container then self.Container:Destroy() self.Container = nil end
 end
 
---[[
-	Shuts a container menu for something else to open.
-
-	destroyContainer on its own leaves PreviousMenu set, which is what makes the
-	icons toggle -- so closing the shop that way would cost you a click to get it
-	back. Clearing it means the next press opens.
---]]
 function MainClient:CloseMenus()
 	self.PreviousMenu = nil
 	self:destroyContainer()
@@ -414,11 +339,6 @@ function MainClient.new(): MainClient
 	return (self :: any) :: MainClient
 end
 
---[[
-	Every system shipped with the framework, in one place.
-
-	A game adds its own with `Client:Add(require(...))` before calling Start.
---]]
 function MainClient.Default(): MainClient
 	local Client = MainClient.new()
 

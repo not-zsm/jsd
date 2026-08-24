@@ -60,4 +60,29 @@ return {
 			{ name = 'Death Leap',        key = Enum.KeyCode.Four },
 		},
 	},
+	kratos = {
+		displayName = 'Kratos',
+
+		ultName = 'The Rage of War',
+
+		colour = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 115, 15)),
+			ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 124, 64)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 115, 15)),
+		}),
+
+		moveset = {
+			{ name = 'Chaos Barrage',  key = Enum.KeyCode.One },
+			{ name = 'Leviathan Rush', key = Enum.KeyCode.Two },
+			{ name = 'Leviathan Throw', key = Enum.KeyCode.Three },
+			{ name = 'Draupnir Spin',  key = Enum.KeyCode.Four },
+		},
+
+		ultMoveset = {
+			{ name = 'Spartan Rage',       key = Enum.KeyCode.One },
+			{ name = "Nature's Arsenal",   key = Enum.KeyCode.Two },
+			{ name = 'Rageful Tackle',     key = Enum.KeyCode.Three },
+			{ name = 'Father Son Bonding', key = Enum.KeyCode.Four },
+		},
+	},
 }

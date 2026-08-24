@@ -1,5 +1,5 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
-local StarterGui = game:GetService("StarterGui")
+local starterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
@@ -66,18 +66,7 @@ end)
 
 if RunService:IsServer() then
 	Observer.observe_tag("RandomDevOutfit", function(Model : Model)
-		--[[
-			A rig tagged inside StarterGui exists twice as far as the server is
-			concerned: the copy sitting there, and the clone PlayerGui takes of
-			it per player, tag and all. Dressing both is what shows up as the
-			outfit being applied twice, with the second roll landing on top of
-			the first.
-
-			The clone is the one anyone actually looks at, so skip the template
-			and let each player get their own roll.
-		--]]
-		if Model:IsDescendantOf(StarterGui) then return end
-
+		if Model:IsDescendantOf(starterGui) then return end
 		local Developer : HumanoidDescription = Appearances.GetRandomDeveloper()
 
 		if Developer then
