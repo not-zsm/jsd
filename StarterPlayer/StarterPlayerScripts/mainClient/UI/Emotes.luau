@@ -18,7 +18,6 @@ local EventService = require( replicatedStorage.modules.shared.Utilities.EventSe
 
 local Colors = require( script.Colors )
 local createBGBlur = require( script.Parent.helpers.blur )
-local Appearances = require( replicatedStorage.modules.shared.Game.Appearances )
 
 ----------------------------------------------------------------------------------
 
@@ -320,11 +319,6 @@ function Emotes:CreateOnSlot(Slot : string, Name : string)
 	end
 end
 
---[[
-	Puts an outfit and an emote on the rig a slot was authored with.
-
-	Yields on the first pass for a slot, so call it spawned.
---]]
 function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 	local World = Emote:WaitForChild("WorldModel")
 
@@ -339,30 +333,6 @@ function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 	if not Dummy then
 		warn("Could not find existing 'emoter' dummy in WorldModel for:", Emote.Name)
 		return
-	end
-
-	--[[
-		ApplyDescription is server-only, so the outfit cannot be put on this rig
-		from here -- it arrives as a rig the server dressed already. Stand the
-		copy exactly where the authored one was, because that spot is what this
-		viewport's camera is framed on, and retire the authored one behind it.
-
-		Once per viewport, not once per emote: re-rolling on every slot change
-		would swap who is standing in a slot every time its emote did.
-	--]]
-	if not Emote:GetAttribute("Dressed") then
-		local Dressed = Appearances.GetRandomDeveloperRig()
-
-		if Dressed then
-			Emote:SetAttribute("Dressed", true)
-
-			Dressed.Name = Dummy.Name
-			Dressed:PivotTo(Dummy:GetPivot())
-			Dressed.Parent = World
-
-			Dummy:Destroy()
-			Dummy = Dressed
-		end
 	end
 
 	-- the rig outlives the emote on it, so take the last one off before playing

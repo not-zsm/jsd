@@ -545,7 +545,7 @@ local Commands = {
 
 			task.wait(1 / 60)
 
-			Dummy:AddTag("Random_Developer_Outfit")
+			Dummy:AddTag("RandomDevOutfit")
 			Dummy:AddTag("NPC")
 			Dummy:AddTag("SpawnedNPC")
 		end},
