@@ -444,7 +444,7 @@ function Attack:FrontDash()
 		ProximityOffset = CFrame.new(0, -0.5, -1) -- -2
 
 		SwingSize = Vector3.new(5.35, 3.5, 7.5)  -- Vector3.new(5.35, 6.5, 7.5)
-		SwingOffset =  CFrame.new(0, -0.5, -2.3)
+		SwingOffset =  CFrame.new(0, -0.5, -3)
 	else
 		ProximitySize = Vector3.new(5.35, 4, 8.1) -- Vector3.new(5.35, 7, 8.1)
 		ProximityOffset = CFrame.new(0, -0.5, -2.85)
@@ -661,10 +661,22 @@ function Attack:FrontDash()
 		network.frontDashOutput.sendTo(nil, self.LuaPlayer.Player)
 	else
 		local VelocityObject = self.Combat:Velocity()
-		VelocityObject.Settings.Duration = 0.895
 		VelocityObject.Settings.MaxForce = Vector3.new(1, 0, 1) * 80000
 		VelocityObject.Settings.Controllable = true
-		VelocityObject.Settings.Z = 150
+
+		--[[
+			Full speed for the first 60%, then off a cliff.
+
+			Z is the peak now rather than 84.5% of it, so 144/1.67 x 0.845 keeps
+			the launch exactly as it was. Duration comes down because it has to:
+			this shape over the old 0.845 would have carried 55 studs against the
+			26 it does now.
+		--]]
+		VelocityObject.Settings.Duration = 0.4
+		VelocityObject.Settings.Hold = 0.6
+		VelocityObject.Settings.Falloff = 3
+		VelocityObject.Settings.Z = (144/1.67) * 0.845
+
 		VelocityObject:Fire()
 
 		NewJob:Task(VelocityObject)

@@ -30,9 +30,9 @@ local WALL_RANGE = 3     -- studs sideways to find a wall
 local OVERHEAD = 4       -- no bounce with this much geometry above you
 
 local KICK_IN = 50       -- shove into the wall, so the animation has something to plant against
-local KICK_AWAY = 40     -- push off it
-local KICK_UP = 20
-local KICK_FORWARD = 30
+local KICK_AWAY = 18     -- enough to clear the wall, no more
+local KICK_UP = 22
+local KICK_FORWARD = 45  -- along where you are looking, the one that decides the bounce
 
 local FLAT = Vector3.new(1, 0, 1)
 
@@ -133,22 +133,32 @@ function WallJumpHandler:TryJump()
 	local Normal = Wall.Normal * FLAT
 	if (Normal.Magnitude < 1e-3) then return end
 
-	local Into = -Normal.Unit
+	local Away = Normal.Unit
+	local Into = -Away
 
 	-- the animations are posed per side, so this still asks which side of the
 	-- character the wall is on, it just no longer decides whether to bounce
 	local Side = (RootPart.CFrame.RightVector:Dot(Into) >= 0) and 1 or -1
 
-	-- carry only the part of the facing that runs along the wall, so the push
-	-- off it is not cancelled by looking straight at it
-	local Look = RootPart.CFrame.LookVector * FLAT
-	local Along = Look - Into * Look:Dot(Into)
-	local Forward = (Along.Magnitude > 1e-3) and Along.Unit or Vector3.zero
+	--[[
+		Where you go is where you are looking.
 
-	self:Fire(Side, Forward, Into, Vector3.yAxis)
+		Projecting the look onto the wall and using that left the wall normal
+		deciding everything -- look straight at it and the along-wall component
+		is zero, so every bounce off a given wall went the same way regardless of
+		the camera. Reflecting instead keeps the look axis meaningful: face the
+		wall and you come off it backwards, which is what a bounce should do.
+	--]]
+	local Look = RootPart.CFrame.LookVector * FLAT
+	local Facing = (Look.Magnitude > 1e-3) and Look.Unit or Away
+
+	local Dot = Facing:Dot(Away)
+	local Travel = (Dot < 0) and (Facing - Away * (2 * Dot)).Unit or Facing
+
+	self:Fire(Side, Travel, Away, Vector3.yAxis)
 end
 
-function WallJumpHandler:Fire(Side : number, Forward : Vector3, Into : Vector3, Up : Vector3)
+function WallJumpHandler:Fire(Side : number, Travel : Vector3, Away : Vector3, Up : Vector3)
 	local RootPart : BasePart = self.LuaCharacter.RootPart
 
 	local Velocity : BodyVelocity = self.Combat:CreateBodyVelocity("WallJump")
@@ -182,11 +192,13 @@ function WallJumpHandler:Fire(Side : number, Forward : Vector3, Into : Vector3, 
 
 	Velocity.MaxForce = Vector3.one * 40000
 	Velocity.P = 40000
-	Velocity.Velocity = RootPart.AssemblyLinearVelocity + Into * KICK_IN
+	Velocity.Velocity = RootPart.AssemblyLinearVelocity - Away * KICK_IN
 	Velocity.Parent = RootPart
 
+	--- Travel is the dominant term now; the wall only has to push far enough to
+	--- clear it, which is why KICK_AWAY came down and KICK_FORWARD went up.
 	TweenService:Create(Velocity, TweenInfo.new(DURATION), {
-		Velocity = Up * KICK_UP - Into * KICK_AWAY + Forward * KICK_FORWARD
+		Velocity = Up * KICK_UP + Away * KICK_AWAY + Travel * KICK_FORWARD
 	}):Play()
 
 	Debris:AddItem(Velocity, DURATION)

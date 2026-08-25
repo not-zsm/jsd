@@ -42,8 +42,30 @@ function Velocity:Create()
 			local DurationTaper = 1;
 
 			if not self.Settings.DontScale and self.Settings.Duration then
-				-- It was bugged 💔 and i cant apply the fix globally without breaking everything
-				if self.Settings.FixScale then
+				--[[
+					Hold opts in, the same way FixScale does, and for the same
+					reason: the branch at the bottom is what every other move in
+					the game is tuned against.
+
+					Hold is the fraction of Duration spent at full speed. What is
+					left falls on a curve rather than a ramp, so the stop reads as
+					a stop instead of a long glide. Falloff sets how sharp -- 1 is
+					a ramp, higher holds longer and drops harder.
+
+					Note this one starts at 1, where the bugged branch starts at
+					Duration, so Z is the peak speed rather than Duration x Z.
+				--]]
+				if self.Settings.Hold then
+					local Hold = math.clamp(self.Settings.Hold, 0, 0.95)
+					local Alpha = math.clamp((os.clock() - Start) / self.Settings.Duration, 0, 1)
+
+					if (Alpha <= Hold) then
+						DurationTaper = 1
+					else
+						DurationTaper = 1 - ((Alpha - Hold) / (1 - Hold)) ^ (self.Settings.Falloff or 3)
+					end
+
+				elseif self.Settings.FixScale then
 					DurationTaper = math.max(0, 1 - (os.clock() - Start) / self.Settings.Duration)
 				else
 					DurationTaper = math.max(0, self.Settings.Duration - (os.clock() - Start) / self.Settings.Duration)
