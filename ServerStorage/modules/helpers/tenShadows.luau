@@ -2,13 +2,6 @@ local Shikigami = require(script.shikigami)
 
 ----------------------------------------------------------------------------------
 
---[[
-	One of these per ten shadows user. It owns which shikigami are out and
-	nothing else -- how they move is shikigami's problem.
-
-	Every name here is a key into the specs table over there, so adding the toad
-	is a spec and a rig, not a branch in summon.
---]]
 local tenShadows = {}
 tenShadows.__index = tenShadows
 

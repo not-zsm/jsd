@@ -13,20 +13,6 @@ local FLAT = Vector3.new(1, 0, 1)
 
 ----------------------------------------------------------------------------------
 
---[[
-	One summoned shikigami: its rig, its animation tracks, and the loop that
-	decides where it wants to be.
-
-	The rigs are AnimationController models with no Humanoid, so none of
-	modules/AI applies -- that one drives everything through Humanoid:MoveTo and
-	needs a whole LuaCharacter with a Combat object behind it. Movement here is
-	the root part stepped by hand along the ground, which is also what keeps a
-	pet from shoving players around.
-
-	Following steers at the player every frame rather than walking a path to
-	where they used to be. Pathfinding is for roaming, and for the moment a wall
-	gets between the two of them.
---]]
 local Specs = {
 	bunny = {
 		Animations = Extra.bunny,
@@ -34,22 +20,16 @@ local Specs = {
 
 		Speed = 16,
 
-		--- A player sprints at about 28. Without this it can never close the gap
-		--- and just trails at leash range forever.
 		CatchUp = 2.25,
 		TurnSpeed = 11,
 
-		--- Half the root's height, so it sits on the floor rather than in it.
 		HipHeight = 0.45,
 		GroundSnap = 10,
 
-		--- Starts following past Follow, settles at Stop. Past Leash it gives up
-		--- on walking and reappears next to its summoner.
 		FollowDistance = 7,
-		StopDistance = 4,
+		StopDistance = 3,
 		LeashDistance = 100,
-
-		--- Kept inside FollowDistance, or every wander ends in being called back.
+		
 		RoamRange = 5.5,
 		RoamIdle = NumberRange.new(1.5, 4),
 
@@ -57,31 +37,19 @@ local Specs = {
 		Reached = 1.5,
 		WalkTimeout = 6,
 
-		--- A frame or two between waypoints is not standing still.
 		StillBeforeIdle = 0.2,
 
-		--- Ground covered per tick below which it counts as blocked, and how many
-		--- ticks of that before the pathfinder takes over.
 		StuckStep = 0.35,
 		StuckTicks = 6,
 
 		AgentParams = {
 			AgentRadius = 1.5,
 			AgentHeight = 2,
-			AgentCanJump = false,
-			AgentCanClimb = false,
+			AgentCanJump = true,
+			AgentCanClimb = true,
 			WaypointSpacing = 6,
 		},
-
-		--[[
-			Range has to sit under the roam ring or the prompt is up permanently,
-			which is the whole complaint. It wanders 1.9 to 5.5 studs out and
-			trails at 4, so 3.5 means it shows when the bunny is pottering about
-			near you and never while it is following -- you walk to it.
-
-			Line of sight off on purpose: something this small is occluded
-			constantly and the prompt would flicker.
-		--]]
+		
 		Prompt = {
 			Part = "head",
 			ActionText = "Pet",
