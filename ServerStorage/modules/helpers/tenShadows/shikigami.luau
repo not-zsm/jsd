@@ -22,30 +22,48 @@ local FLAT = Vector3.new(1, 0, 1)
 	needs a whole LuaCharacter with a Combat object behind it. Movement here is
 	the root part stepped by hand along the ground, which is also what keeps a
 	pet from shoving players around.
+
+	Following steers at the player every frame rather than walking a path to
+	where they used to be. Pathfinding is for roaming, and for the moment a wall
+	gets between the two of them.
 --]]
 local Specs = {
 	bunny = {
 		Animations = Extra.bunny,
 		Offset = CFrame.new(0, -2.5, -5),
 
-		Speed = 15,
-		TurnSpeed = 9,
+		Speed = 16,
+
+		--- A player sprints at about 28. Without this it can never close the gap
+		--- and just trails at leash range forever.
+		CatchUp = 2.25,
+		TurnSpeed = 11,
 
 		--- Half the root's height, so it sits on the floor rather than in it.
 		HipHeight = 0.45,
 		GroundSnap = 10,
 
-		--- Closer than Follow and it wanders instead. Past Leash it gives up on
-		--- walking and reappears next to its summoner.
-		FollowDistance = 14,
-		LeashDistance = 120,
+		--- Starts following past Follow, settles at Stop. Past Leash it gives up
+		--- on walking and reappears next to its summoner.
+		FollowDistance = 7,
+		StopDistance = 4,
+		LeashDistance = 100,
 
-		RoamRange = 20,
-		RoamIdle = NumberRange.new(1.5, 5),
+		--- Kept inside FollowDistance, or every wander ends in being called back.
+		RoamRange = 5.5,
+		RoamIdle = NumberRange.new(1.5, 4),
 
-		RepathDelay = 0.55,
-		Reached = 2.5,
+		Tick = 0.12,
+		Reached = 1.5,
 		WalkTimeout = 6,
+
+		--- A frame or two between waypoints is not standing still.
+		StillBeforeIdle = 0.2,
+
+		--- Ground covered per tick below which it counts as blocked, and how many
+		--- ticks of that before the pathfinder takes over.
+		StuckStep = 0.35,
+		StuckTicks = 6,
 
 		AgentParams = {
 			AgentRadius = 1.5,
@@ -83,8 +101,12 @@ function Shikigami.new(Name : string, Owner : {}, Model : Model)
 	self.Job = Job.new()
 	self.Active = true
 
+	--- Goal is a fixed point, Chase is something to keep steering at. Chase wins.
 	self.Goal = nil :: Vector3?
+	self.Chase = nil :: BasePart?
+
 	self.Moving = false
+	self.Still = 0
 	self.Busy = false
 
 	self.Root = Model:FindFirstChild("HumanoidRootPart")
@@ -157,11 +179,34 @@ function Shikigami:_LoadAnimations()
 	if self.Tracks.walk then
 		self.Tracks.walk.Looped = true
 	end
+
+	--- Above the other two, or it plays underneath them and reads as a twitch.
+	if self.Tracks.pet then
+		self.Tracks.pet.Priority = Enum.AnimationPriority.Action
+	end
 end
 
 ----------------------------------------------------------------------------------
 
-function Shikigami:_SetMoving(Value : boolean)
+--[[
+	Held on the walk for StillBeforeIdle after it stops moving.
+
+	Pathing hands off one waypoint at a time, and there are always a couple of
+	frames between arriving at one and being given the next. Reacting to those
+	restarted the walk cycle from the top every few studs, which is what made it
+	look like the loop was broken.
+--]]
+function Shikigami:_SetMoving(Value : boolean, DeltaTime : number)
+	if Value then
+		self.Still = 0
+	else
+		self.Still += DeltaTime
+
+		if (self.Still < self.Spec.StillBeforeIdle) then
+			return
+		end
+	end
+
 	if (self.Moving == Value) then return end
 
 	self.Moving = Value
@@ -190,13 +235,29 @@ function Shikigami:_GroundAt(Position : Vector3) : number?
 	return Hit and (Hit.Position.Y + self.Spec.HipHeight) or nil
 end
 
+--- Read fresh every frame, so chasing tracks the player rather than the spot
+--- they were standing on when the path was drawn.
+function Shikigami:_Destination() : (Vector3?, number)
+	if self.Busy then
+		return nil, 0
+	end
+
+	local Chase = self.Chase
+
+	if Chase and Chase.Parent then
+		return Chase.Position, self.Spec.StopDistance
+	end
+
+	return self.Goal, self.Spec.Reached
+end
+
 function Shikigami:_Step(DeltaTime : number)
 	if not self.Active then return end
 
-	local Goal = self.Goal
+	local Goal, Stop = self:_Destination()
 
 	if (Goal == nil) then
-		self:_SetMoving(false)
+		self:_SetMoving(false, DeltaTime)
 		return
 	end
 
@@ -206,16 +267,27 @@ function Shikigami:_Step(DeltaTime : number)
 	local Flat = (Goal - Position) * FLAT
 	local Distance = Flat.Magnitude
 
-	if (Distance <= self.Spec.Reached) then
+	if (Distance <= Stop) then
 		self.Goal = nil
-		self:_SetMoving(false)
+		self:_SetMoving(false, DeltaTime)
 		return
 	end
 
-	self:_SetMoving(true)
+	self:_SetMoving(true, DeltaTime)
+
+	--- Ramped rather than switched: a hard step at FollowDistance means it
+	--- crosses the line, slows, falls behind, and surges again.
+	local Over = (Distance - self.Spec.StopDistance) / self.Spec.FollowDistance
+	local Speed = self.Spec.Speed * (1 + math.clamp(Over, 0, 1) * (self.Spec.CatchUp - 1))
+
+	local Walk = self.Tracks.walk
+
+	if Walk and Walk.IsPlaying then
+		Walk:AdjustSpeed(Speed / self.Spec.Speed)
+	end
 
 	local Direction = Flat.Unit
-	local Target = Position + Direction * math.min(self.Spec.Speed * DeltaTime, Distance)
+	local Target = Position + Direction * math.min(Speed * DeltaTime, Distance)
 	local Height = self:_GroundAt(Target) or Position.Y
 
 	local Turn = math.min(self.Spec.TurnSpeed * DeltaTime, 1)
@@ -240,6 +312,7 @@ end
 function Shikigami:WalkTo(Position : Vector3, Timeout : number?) : boolean
 	if not self.Active then return false end
 
+	self.Chase = nil
 	self.Goal = Position
 
 	local Deadline = os.clock() + (Timeout or self.Spec.WalkTimeout)
@@ -257,9 +330,11 @@ function Shikigami:WalkTo(Position : Vector3, Timeout : number?) : boolean
 end
 
 --- Around whatever is in the way. Falls back to walking straight at it when
---- there is no path, which is usually the sky or a ledge rather than a wall.
+--- there is no path, which off a ledge is usually the honest answer.
 function Shikigami:PathTo(Position : Vector3) : boolean
 	if not self.Active then return false end
+
+	self.Chase = nil
 
 	local Path = PathfindingService:CreatePath(self.Spec.AgentParams)
 	local Ok = pcall(Path.ComputeAsync, Path, self.Root.Position, Position)
@@ -269,7 +344,7 @@ function Shikigami:PathTo(Position : Vector3) : boolean
 	end
 
 	for Index, Waypoint in Path:GetWaypoints() do
-		if not self.Active then return false end
+		if not self.Active or (self.Chase ~= nil) then return false end
 
 		--- The first waypoint is where it already is.
 		if (Index == 1) then continue end
@@ -284,10 +359,11 @@ end
 
 function Shikigami:Stop()
 	self.Goal = nil
+	self.Chase = nil
 end
 
 function Shikigami:Teleport(Coordinate : CFrame)
-	self.Goal = nil
+	self:Stop()
 
 	local Height = self:_GroundAt(Coordinate.Position)
 	local Position = Height and Vector3.new(Coordinate.X, Height, Coordinate.Z) or Coordinate.Position
@@ -315,12 +391,55 @@ function Shikigami:Roam()
 	end
 end
 
+--[[
+	Steers at the player until it is close enough, rather than pathing to where
+	they stood a moment ago and stopping there.
+
+	Steering is a straight line, which is right in the open and useless against a
+	wall, so losing ground for long enough hands one leg to the pathfinder and
+	the loop picks it back up after.
+--]]
 function Shikigami:FollowOwner() : boolean
-	local Root = self:GetOwnerRoot()
+	local Owner = self:GetOwnerRoot()
 
-	if (Root == nil) then return false end
+	if (Owner == nil) then return false end
 
-	return self:PathTo(Root.Position)
+	self.Goal = nil
+	self.Chase = Owner
+
+	local Last = self.Root.Position
+	local Stuck = 0
+
+	while self.Active and (self.Chase == Owner) and not self.Busy do
+		local Root = self:GetOwnerRoot()
+
+		if (Root ~= Owner) then break end
+
+		local Position = self.Root.Position
+		local Distance = ((Owner.Position - Position) * FLAT).Magnitude
+
+		if (Distance <= self.Spec.StopDistance) then break end
+
+		if ((Position - Last).Magnitude < self.Spec.StuckStep) then
+			Stuck += 1
+
+			if (Stuck >= self.Spec.StuckTicks) then
+				self:PathTo(Owner.Position)
+				return true
+			end
+		else
+			Stuck = 0
+		end
+
+		Last = Position
+		task.wait(self.Spec.Tick)
+	end
+
+	if (self.Chase == Owner) then
+		self.Chase = nil
+	end
+
+	return true
 end
 
 --- Plays through and holds the loop still until it finishes.
@@ -333,7 +452,6 @@ function Shikigami:Pet() : boolean
 
 	self.Busy = true
 	self:Stop()
-	self:_SetMoving(false)
 
 	local Owner = self:GetOwnerRoot()
 
@@ -372,6 +490,7 @@ function Shikigami:_Behaviour()
 		local Owner = self:GetOwnerRoot()
 
 		if (Owner == nil) or self.Busy then
+			self.Chase = nil
 			task.wait(0.25)
 			continue
 		end
@@ -384,11 +503,12 @@ function Shikigami:_Behaviour()
 		elseif (Distance > self.Spec.FollowDistance) then
 			self:FollowOwner()
 		else
+			self.Chase = nil
 			self:Roam()
 		end
 
 		if self.Active then
-			task.wait(self.Spec.RepathDelay)
+			task.wait(self.Spec.Tick)
 		end
 	end
 end
@@ -398,6 +518,7 @@ function Shikigami:Destroy()
 
 	self.Active = false
 	self.Goal = nil
+	self.Chase = nil
 
 	self.Job:Destroy()
 
