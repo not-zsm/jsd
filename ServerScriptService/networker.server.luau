@@ -211,4 +211,10 @@ network.clientReady.listen(function(_, player)
 	if Emotes then
 		Emotes:ResendState()
 	end
+
+	local Data = getData(player)
+
+	if Data then
+		Data:ResendState()
+	end
 end)

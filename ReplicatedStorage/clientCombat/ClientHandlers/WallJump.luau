@@ -34,6 +34,8 @@ local KICK_AWAY = 40     -- push off it
 local KICK_UP = 20
 local KICK_FORWARD = 30
 
+local FLAT = Vector3.new(1, 0, 1)
+
 ----------------------------------------------------------------------------------
 
 local WallJumpHandler = {}
@@ -104,30 +106,49 @@ function WallJumpHandler:TryJump()
 	local RootPart : BasePart = self.LuaCharacter.RootPart
 	local Humanoid : Humanoid = self.LuaCharacter.Humanoid
 
-	-- you have to be pushing into the wall, not just falling past it
-	local Side = math.round(Humanoid.MoveDirection:Dot(RootPart.CFrame.RightVector))
-	if (Side == 0) then return end
+	--[[
+		You have to be pushing into the wall, not just falling past it.
+
+		This used to read the move direction against the character's own right
+		vector and round it, so it only passed within about 60 degrees of straight
+		sideways -- and then only cast sideways to find the wall. With autorotate
+		on, which is the default, the character turns to face where it is going,
+		so that dot sits near zero and the bounce silently refused. It worked in
+		the cases where facing and movement had come apart: shift lock, mid-turn,
+		or a move that had stopped autorotate. Hence "sometimes".
+
+		Cast along the movement instead, and take the kick off the wall's normal
+		rather than off the character's facing.
+	--]]
+	local Move = Humanoid.MoveDirection * FLAT
+	if (Move.Magnitude < 0.1) then return end
 
 	if workspace:Raycast(RootPart.Position, Vector3.yAxis * OVERHEAD, Utility.VisualParams) then
 		return
 	end
 
-	-- flatten the facing so a bounce off a wall while looking up or down still
-	-- sends you along the ground plane
-	local Look = RootPart.CFrame.LookVector
-	local Flat = Vector3.new(Look.X, 0, Look.Z)
-	if (Flat.Magnitude < 1e-3) then return end
-
-	local Facing = CFrame.lookAt(RootPart.Position, RootPart.Position + Flat)
-	local Forward, Right, Up = Facing.LookVector, Facing.RightVector, Facing.UpVector
-
-	local Wall = workspace:Raycast(RootPart.Position, Right * (Side * WALL_RANGE), Utility.VisualParams)
+	local Wall = workspace:Raycast(RootPart.Position, Move.Unit * WALL_RANGE, Utility.VisualParams)
 	if (Wall == nil) or not Wall.Instance.CanCollide then return end
 
-	self:Fire(Side, Forward, Right, Up)
+	local Normal = Wall.Normal * FLAT
+	if (Normal.Magnitude < 1e-3) then return end
+
+	local Into = -Normal.Unit
+
+	-- the animations are posed per side, so this still asks which side of the
+	-- character the wall is on, it just no longer decides whether to bounce
+	local Side = (RootPart.CFrame.RightVector:Dot(Into) >= 0) and 1 or -1
+
+	-- carry only the part of the facing that runs along the wall, so the push
+	-- off it is not cancelled by looking straight at it
+	local Look = RootPart.CFrame.LookVector * FLAT
+	local Along = Look - Into * Look:Dot(Into)
+	local Forward = (Along.Magnitude > 1e-3) and Along.Unit or Vector3.zero
+
+	self:Fire(Side, Forward, Into, Vector3.yAxis)
 end
 
-function WallJumpHandler:Fire(Side : number, Forward : Vector3, Right : Vector3, Up : Vector3)
+function WallJumpHandler:Fire(Side : number, Forward : Vector3, Into : Vector3, Up : Vector3)
 	local RootPart : BasePart = self.LuaCharacter.RootPart
 
 	local Velocity : BodyVelocity = self.Combat:CreateBodyVelocity("WallJump")
@@ -161,11 +182,11 @@ function WallJumpHandler:Fire(Side : number, Forward : Vector3, Right : Vector3,
 
 	Velocity.MaxForce = Vector3.one * 40000
 	Velocity.P = 40000
-	Velocity.Velocity = RootPart.AssemblyLinearVelocity + Right * (Side * KICK_IN)
+	Velocity.Velocity = RootPart.AssemblyLinearVelocity + Into * KICK_IN
 	Velocity.Parent = RootPart
 
 	TweenService:Create(Velocity, TweenInfo.new(DURATION), {
-		Velocity = Up * KICK_UP - Right * (Side * KICK_AWAY) + Forward * KICK_FORWARD
+		Velocity = Up * KICK_UP - Into * KICK_AWAY + Forward * KICK_FORWARD
 	}):Play()
 
 	Debris:AddItem(Velocity, DURATION)

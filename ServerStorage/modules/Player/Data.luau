@@ -360,8 +360,22 @@ function Data:InitSettings()
 		self.LuaPlayer.Player:SetAttribute(Setting, self.Profile.Data.Settings[Setting])
 	end
 
-	network.loadSettings.sendTo(self.Profile.Data.Settings, self.LuaPlayer.Player)
+	self:ResendState()
+end
 
+--[[
+	Settings went out once, from InitSettings, the moment the profile loaded.
+
+	require(network) yields on the client until the server publishes the
+	namespace, so a profile that loads first sends loadSettings into nothing and
+	the settings menu is built from a packet that never arrives -- empty, with no
+	error. The client says clientReady when its listeners are up and this runs
+	again; whichever of the two happens last wins.
+--]]
+function Data:ResendState()
+	if not (self.Profile and self.Profile.Data) then return end
+
+	network.loadSettings.sendTo(self.Profile.Data.Settings, self.LuaPlayer.Player)
 end
 
 --[[

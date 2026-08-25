@@ -56,6 +56,10 @@ function Settings:Init()
 	
 	network.loadSettings.listen(function(Settings : {[string] : boolean})
 		self.SettingsData = Settings
+
+		--- Sent twice on purpose, from InitSettings and again on clientReady,
+		--- because either can be the one that lands. The rows are built once.
+		if self.Loaded then return end
 		
 		--self.DeviceKeybinds = DeviceKeybinds
 

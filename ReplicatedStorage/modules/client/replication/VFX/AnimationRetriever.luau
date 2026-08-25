@@ -48,10 +48,12 @@ function AnimationRetriever.new(Model : Model, Animation : Animation) : (Retriev
 		return error("animation retriever: failed to get model children")
 	end
 	
-	local Animation : AnimationTrack = AenoirUtil.WaitForAnimation(Animator, Animation.AnimationId, 3)
+	local Track : AnimationTrack = AenoirUtil.WaitForAnimation(Animator, Animation.AnimationId, 3)
 	
-	if (Animation == nil) then
-		return error("animation retriever: failed to get server animation on client with the name " .. Animation.Name .. ", probably isn't playing")
+	--- Shadowing this as Animation made the message itself a nil index, so the
+	--- one case worth diagnosing reported as something else entirely.
+	if (Track == nil) then
+		return error(`animation retriever: {AnimName} never played on this client, waited 3s`)
 	end
 
 	local MainJob = Job.new()
@@ -71,7 +73,7 @@ function AnimationRetriever.new(Model : Model, Animation : Animation) : (Retriev
 		end
 	end))
 
-	MainJob:Task(Animation.Stopped:Connect(function()
+	MainJob:Task(Track.Stopped:Connect(function()
 		AnimationRetriever.RemoveActive(Model, AnimName)
 	end))
 
@@ -80,7 +82,7 @@ function AnimationRetriever.new(Model : Model, Animation : Animation) : (Retriev
 	-------------------------------------------------------------------
 	
 	return {
-		Animation = Animation,
+		Animation = Track,
 		
 		MainJob = MainJob,
 		Job = AnimationJob,

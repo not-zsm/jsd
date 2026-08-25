@@ -4,7 +4,6 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 local network = require( replicatedStorage.modules.network )
 local ContentProvider = game:GetService("ContentProvider")
 local ProximityPromptService = game:GetService("ProximityPromptService")
-local RunService = game:GetService("RunService")
 
 ----------------------------------------------------------------------------------
 
@@ -197,19 +196,34 @@ function Replication:FireEffect(Name : string, Function : string, ...)
 			return warn(Result, Module.Name)
 		end
 
-		if RunService:IsStudio() or shared.IsTestPlace then
-			local Fn = Result[Function]
+		local Fn = Result[Function]
 
-			if (Fn == nil) then
-				return warn(`The function {Function} does not exist in {Module.Name} module inside of {Module.Parent.Name}`)
-			end
-
-			task.spawn(Fn, ...)
-		else
-			if Result[Function] then
-				pcall(Result[Function], ...)
-			end
+		if (Fn == nil) then
+			return warn(`The function {Function} does not exist in {Module.Name} module inside of {Module.Parent.Name}`)
 		end
+
+		--[[
+			Every effect gets its own thread, in live as well as in Studio.
+
+			AnimationRetriever waits up to three seconds for a track to replicate,
+			and the source of an effect never waits -- they already have the track
+			playing. Run inline on the listener thread and one observer's wait
+			stalls every effect queued behind it, which is why a combo's worth of
+			effects would land for the player using it and almost none of it for
+			anyone watching.
+
+			The pcall keeps a broken effect from killing the thread, but it warns
+			now rather than swallowing the error whole.
+		--]]
+		local Arguments = table.pack(...)
+
+		task.spawn(function()
+			local Ok, Error = pcall(Fn, table.unpack(Arguments, 1, Arguments.n))
+
+			if not Ok then
+				warn(`{Name}.{Function}: {Error}`)
+			end
+		end)
 	end
 end
 
