@@ -72,6 +72,26 @@ local Specs = {
 			AgentCanClimb = false,
 			WaypointSpacing = 6,
 		},
+
+		--[[
+			Range has to sit under the roam ring or the prompt is up permanently,
+			which is the whole complaint. It wanders 1.9 to 5.5 studs out and
+			trails at 4, so 3.5 means it shows when the bunny is pottering about
+			near you and never while it is following -- you walk to it.
+
+			Line of sight off on purpose: something this small is occluded
+			constantly and the prompt would flicker.
+		--]]
+		Prompt = {
+			Part = "head",
+			ActionText = "Pet",
+			ObjectText = "Bunny",
+			KeyCode = Enum.KeyCode.E,
+			HoldDuration = 0.35,
+			MaxActivationDistance = 3.5,
+			RequiresLineOfSight = false,
+			OwnerOnly = false,
+		},
 	},
 }
 
@@ -118,6 +138,7 @@ function Shikigami.new(Name : string, Owner : {}, Model : Model)
 
 	self:_PrepareRig()
 	self:_LoadAnimations()
+	self:_CreatePrompt()
 
 	self.Job:Task(RunService.PostSimulation:Connect(function(DeltaTime : number)
 		self:_Step(DeltaTime)
@@ -184,6 +205,41 @@ function Shikigami:_LoadAnimations()
 	if self.Tracks.pet then
 		self.Tracks.pet.Priority = Enum.AnimationPriority.Action
 	end
+end
+
+function Shikigami:_CreatePrompt()
+	local Info = self.Spec.Prompt
+
+	if (Info == nil) then return end
+
+	local Part = self.Model:FindFirstChild(Info.Part, true)
+
+	if not (Part and Part:IsA("BasePart")) then
+		return warn(`shikigami: {self.Name} has no {Info.Part} to hang a prompt on`)
+	end
+
+	local Prompt = Instance.new("ProximityPrompt")
+	Prompt.ActionText = Info.ActionText
+	Prompt.ObjectText = Info.ObjectText
+	Prompt.KeyboardKeyCode = Info.KeyCode
+	Prompt.HoldDuration = Info.HoldDuration
+	Prompt.MaxActivationDistance = Info.MaxActivationDistance
+	Prompt.RequiresLineOfSight = Info.RequiresLineOfSight
+	Prompt.Parent = Part
+
+	self.Prompt = self.Job:Task(Prompt)
+
+	self.Job:Task(Prompt.Triggered:Connect(function(Player : Player)
+		if Info.OwnerOnly then
+			local LuaPlayer = self.Owner and self.Owner.LuaPlayer
+
+			if (Player ~= (LuaPlayer and LuaPlayer.Player)) then
+				return
+			end
+		end
+
+		self:Pet(Player)
+	end))
 end
 
 ----------------------------------------------------------------------------------
@@ -442,8 +498,9 @@ function Shikigami:FollowOwner() : boolean
 	return true
 end
 
---- Plays through and holds the loop still until it finishes.
-function Shikigami:Pet() : boolean
+--- Plays through and holds the loop still until it finishes. Turns to whoever
+--- is doing the petting, which is not always the summoner.
+function Shikigami:Pet(Player : Player?) : boolean
 	local Track = self.Tracks.pet
 
 	if not (Track and self.Active) or self.Busy then
@@ -453,10 +510,15 @@ function Shikigami:Pet() : boolean
 	self.Busy = true
 	self:Stop()
 
-	local Owner = self:GetOwnerRoot()
+	if self.Prompt then
+		self.Prompt.Enabled = false
+	end
 
-	if Owner then
-		local Flat = (Owner.Position - self.Root.Position) * FLAT
+	local Character = Player and Player.Character
+	local Toward = (Character and Character:FindFirstChild("HumanoidRootPart")) or self:GetOwnerRoot()
+
+	if Toward then
+		local Flat = (Toward.Position - self.Root.Position) * FLAT
 
 		if (Flat.Magnitude > 1e-3) then
 			self.Root.CFrame = CFrame.lookAt(self.Root.Position, self.Root.Position + Flat.Unit)
@@ -479,6 +541,10 @@ function Shikigami:Pet() : boolean
 	end
 
 	self.Busy = false
+
+	if self.Prompt and self.Active then
+		self.Prompt.Enabled = true
+	end
 
 	return Finished
 end
