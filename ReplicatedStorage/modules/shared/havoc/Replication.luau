@@ -218,10 +218,10 @@ function Replication:create_replicated_debris(instances: {Instance}, debris: {bu
 	
 	local size_payload = BufferUtil.new(debris[1]);
 	local vector_sizes: {[number]: Vector3} = {};
-	local vector_unit_size = BufferUtil.u8.size + BufferUtil.small_vector3.size;
+	local vector_unit_size = BufferUtil.u16.size + BufferUtil.small_vector3.size;
 	
 	while size_payload.cursor + vector_unit_size <= size_payload.size do
-		local id = BufferUtil.read_u8(size_payload);
+		local id = BufferUtil.read_u16(size_payload);
 		local size = BufferUtil.read_small_vector3(size_payload);
 		
 		vector_sizes[id] = size;
@@ -258,8 +258,8 @@ function Replication:create_replicated_debris(instances: {Instance}, debris: {bu
 			return part;
 		end;
 
-		local size1 = BufferUtil.u16.size + BufferUtil.small_cframe.size + BufferUtil.u8.size;
-		local size2 = BufferUtil.small_cframe.size + BufferUtil.u8.size;
+		local size1 = BufferUtil.u16.size + BufferUtil.small_cframe.size + BufferUtil.u16.size;
+		local size2 = BufferUtil.small_cframe.size + BufferUtil.u16.size;
 		
 		local array_part_offset = BufferUtil.u16.size + BufferUtil.alpha8.size;
 		local to_array_part = math.min(array_part_offset + client_debris_start * size1, debris_payload.size);
@@ -267,7 +267,7 @@ function Replication:create_replicated_debris(instances: {Instance}, debris: {bu
 		while debris_payload.cursor + size1 <= to_array_part do
 			local id = BufferUtil.read_u16(debris_payload);
 			local coordinate = BufferUtil.read_small_cframe(debris_payload);
-			local size_id = BufferUtil.read_u8(debris_payload);
+			local size_id = BufferUtil.read_u16(debris_payload);
 			
 			local part = create_part(coordinate, vector_sizes[size_id]);
 			part.Anchored = true;
@@ -278,7 +278,7 @@ function Replication:create_replicated_debris(instances: {Instance}, debris: {bu
 		
 		while debris_payload.cursor + size2 <= debris_payload.size do
 			local coordinate = BufferUtil.read_small_cframe(debris_payload);
-			local size_id = BufferUtil.read_u8(debris_payload);
+			local size_id = BufferUtil.read_u16(debris_payload);
 			
 			local part = create_part(coordinate, vector_sizes[size_id]);
 			part.Anchored = false;

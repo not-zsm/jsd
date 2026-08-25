@@ -279,7 +279,7 @@ function HavocHandler:give_active_debris(base_map: {[BasePart]: {coordinate: CFr
 				
 				BufferUtil.write_u16(debris.buffer, id);
 				BufferUtil.write_small_cframe(debris.buffer, slice.coordinate);
-				BufferUtil.write_u8(debris.buffer, vectors[slice.size]);
+				BufferUtil.write_u16(debris.buffer, vectors[slice.size]);
 				
 				slice.part.Anchored = false;
 				slice.part.Parent = Havoc.folder.DynamicServer;
@@ -303,7 +303,7 @@ function HavocHandler:give_active_debris(base_map: {[BasePart]: {coordinate: CFr
 	local vector_buffer = BufferUtil.create(128);
 	
 	for size, id in vectors do
-		BufferUtil.write_u8(vector_buffer, id);
+		BufferUtil.write_u16(vector_buffer, id);
 		BufferUtil.write_small_vector3(vector_buffer, size);
 	end
 	
@@ -312,7 +312,7 @@ function HavocHandler:give_active_debris(base_map: {[BasePart]: {coordinate: CFr
 	for part, debris in create_debris do
 		for index, slice in debris.client do
 			BufferUtil.write_small_cframe(debris.buffer, slice.coordinate);
-			BufferUtil.write_u8(debris.buffer, vectors[slice.size]);
+			BufferUtil.write_u16(debris.buffer, vectors[slice.size]);
 		end;
 		
 		BufferUtil.move(debris.buffer, 0);
