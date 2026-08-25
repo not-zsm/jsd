@@ -188,6 +188,13 @@ function Attack:M1()
 	local CharacterStats : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Stats or nil
 
 	local ArmFlashes = CharacterStats and CharacterStats.M1 and CharacterStats.M1.ArmFlashes
+
+	--- A moveset with more than one M1 set declares this as a function instead, the
+	--- same shape as M1.AnimationDirectory, and picks the table itself.
+	if typeof(ArmFlashes) == "function" then
+		ArmFlashes = ArmFlashes(self)
+	end
+
 	local Flash = ArmFlashes and ArmFlashes[self.Condition or self.Count]
 
 	if ArmFlashes == nil and CharacterName and not Warned[CharacterName] then

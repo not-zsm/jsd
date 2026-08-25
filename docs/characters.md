@@ -105,6 +105,29 @@ table, which is an authoring mistake and warns.
 
 `Limb` takes a string, or a list to flash both.
 
+#### More than one M1 set
+
+A moveset that swaps its M1 animations per weapon — kratos, via
+`M1.AnimationDirectory` — declares `ArmFlashes` as a **function** instead, the same
+shape, and picks the table itself:
+
+```lua
+ArmFlashes = function(self)
+    local Weapons = self.Combat.Attacks.Weapons
+
+    return FlashSets[Weapons and Weapons.CurrentlyUsing] or FlashSets.Fists
+end,
+```
+
+It is called once per swing, before conditions, so it sees the weapon that is
+actually equipped. Return a table in the format above; returning `nil` counts as
+missing and warns.
+
+> Don't try to do this from `StartFunction`. It runs at `M1.luau:224` and is
+> spawned, while the flash is resolved at `:191` — you would be editing the next
+> punch, not this one. That is why the hitbox swap in kratos's `StartFunction`
+> works and a flash swap there would not.
+
 ### Ultimate
 
 ```lua
