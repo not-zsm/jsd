@@ -92,6 +92,7 @@ local Parts = PartCache.new(CachePart);
 Parts:expand(100);
 
 local Rnd = Random.new();
+local WedgeFlip = CFrame.Angles(0, math.pi, 0);
 
 -- Reduces memory usage for saving properties of parts during destruction
 local PartDestructionIndexer = {};
@@ -206,7 +207,7 @@ end
 			local half = math.max(size.X, size.Y, size.Z) * 0.5;
 
 			if half < minimum_axis then
-				table.insert(next_source, info);
+				table.insert(next_source, {coordinate = info.coordinate, size = size});
 				continue;
 			end;
 
@@ -218,6 +219,20 @@ end
 		end;
 
 		source = next_source;
+	end;
+
+	local wedge_chance = Settings.ShardWedgeChance;
+
+	for _, info in source do
+		if Rnd:NextNumber() >= wedge_chance then
+			continue;
+		end;
+
+		info.wedge = true;
+
+		if Rnd:NextNumber() < 0.5 then
+			info.coordinate *= WedgeFlip;
+		end;
 	end;
 
 	table.move(source, 1, #source, #destination + 1, destination);
@@ -1392,7 +1407,7 @@ function Destruction.create_debris(self: Destruction, info: MakeDebrisInfo?): {B
 		cube.Material = base.Material;
 		cube.MaterialVariant = base.MaterialVariant;
 		cube.CustomPhysicalProperties = physical_properties;
-		cube.Shape = Enum.PartType.Block;
+		cube.Shape = if slice.wedge then Enum.PartType.Wedge else Enum.PartType.Block;
 		cube.Size = slice.size * scale;
 		cube.Anchored = false;
 		cube.Massless = true;

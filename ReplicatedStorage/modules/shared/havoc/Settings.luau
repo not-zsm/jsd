@@ -42,6 +42,7 @@ return {
 	ShardMaximumLevels = 4; -- Hard cap on 'subdivide'. Each level doubles the debris count.
 	ShardJitter = 0.35; -- How far off centre a split may land. 0 gives even halves, 1 gives slivers.
 	ShardMinimumAxis = 0.35; -- A slice is left whole if splitting would take its largest axis below this.
+	ShardWedgeChance = 0.35; -- Chance a shard is a wedge rather than a block, to break up the silhouette.
 	
 	EffectsLifetime = 10; -- Maximum lifetime of effects created with Destruction:create_effects()
 	

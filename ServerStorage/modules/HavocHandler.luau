@@ -32,6 +32,16 @@ local Boulder = Serialise.decompress("8?c&0s1kswc^@M&~j");
 
 local RepSettings = Settings.ReplicationSettings;
 
+-- The top bit of a debris size id carries the wedge flag, leaving 32767 sizes per blast.
+local WedgeFlag = 0x8000;
+local WedgeMask = 0x7FFF;
+
+local function packed_size_id(vectors, slice): number
+	local id = vectors[slice.size];
+
+	return if slice.wedge then bit32.bor(id, WedgeFlag) else id;
+end
+
 ---------------------------------------------------------------------
 
 type NetDebrisData = {
@@ -253,7 +263,10 @@ function HavocHandler:give_active_debris(base_map: {[BasePart]: {coordinate: CFr
 			local small_axis = (size.X * size.Y * size.Z) / math.min(size.X, size.Y, size.Z); -- Multiplies the two largest axes.
 			
 			if not vectors[slice.size] then
-				vector_id += 1;
+				if vector_id < WedgeMask then
+					vector_id += 1;
+				end;
+				
 				vectors[slice.size] = vector_id;
 			end;
 			
@@ -279,7 +292,7 @@ function HavocHandler:give_active_debris(base_map: {[BasePart]: {coordinate: CFr
 				
 				BufferUtil.write_u16(debris.buffer, id);
 				BufferUtil.write_small_cframe(debris.buffer, slice.coordinate);
-				BufferUtil.write_u16(debris.buffer, vectors[slice.size]);
+				BufferUtil.write_u16(debris.buffer, packed_size_id(vectors, slice));
 				
 				slice.part.Anchored = false;
 				slice.part.Parent = Havoc.folder.DynamicServer;
@@ -312,7 +325,7 @@ function HavocHandler:give_active_debris(base_map: {[BasePart]: {coordinate: CFr
 	for part, debris in create_debris do
 		for index, slice in debris.client do
 			BufferUtil.write_small_cframe(debris.buffer, slice.coordinate);
-			BufferUtil.write_u16(debris.buffer, vectors[slice.size]);
+			BufferUtil.write_u16(debris.buffer, packed_size_id(vectors, slice));
 		end;
 		
 		BufferUtil.move(debris.buffer, 0);

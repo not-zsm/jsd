@@ -28,6 +28,10 @@ local Settings = require("./Settings");
 local RepSettings = Settings.ReplicationSettings;
 local Cache = PartCache.new(Instance.new("Part"));
 
+-- The top bit of a debris size id carries the wedge flag, leaving 32767 sizes per blast.
+local WedgeFlag = 0x8000;
+local WedgeMask = 0x7FFF;
+
 local function get_havoc()
 	if Havoc:FindFirstChild("Havoc") then
 		return require("./Havoc");
@@ -237,12 +241,17 @@ function Replication:create_replicated_debris(instances: {Instance}, debris: {bu
 		local client_debris_start: number = BufferUtil.read_u16(debris_payload);
 		local transparency: number = BufferUtil.read_alpha8(debris_payload);
 		
-		local function create_part(coordinate: CFrame, size: Vector3)
+		local function create_part(coordinate: CFrame, size: Vector3, wedge: boolean?)
 			local part = Instance.fromExisting(instance);
 			part.CFrame = coordinate;
 			part.Size = size;
 			part.Transparency = transparency;
 			part.CanCollide = true;
+			
+			if part:IsA("Part") then
+				part.Shape = if wedge then Enum.PartType.Wedge else Enum.PartType.Block;
+			end;
+			
 			part.AssemblyLinearVelocity = Vector3.zero;
 			part.AssemblyAngularVelocity = Vector3.zero;
 			
@@ -267,9 +276,9 @@ function Replication:create_replicated_debris(instances: {Instance}, debris: {bu
 		while debris_payload.cursor + size1 <= to_array_part do
 			local id = BufferUtil.read_u16(debris_payload);
 			local coordinate = BufferUtil.read_small_cframe(debris_payload);
-			local size_id = BufferUtil.read_u16(debris_payload);
+			local packed = BufferUtil.read_u16(debris_payload);
 			
-			local part = create_part(coordinate, vector_sizes[size_id]);
+			local part = create_part(coordinate, vector_sizes[bit32.band(packed, WedgeMask)], bit32.btest(packed, WedgeFlag));
 			part.Anchored = true;
 			
 			table.insert(replicated_parts, part);
@@ -278,9 +287,9 @@ function Replication:create_replicated_debris(instances: {Instance}, debris: {bu
 		
 		while debris_payload.cursor + size2 <= debris_payload.size do
 			local coordinate = BufferUtil.read_small_cframe(debris_payload);
-			local size_id = BufferUtil.read_u16(debris_payload);
+			local packed = BufferUtil.read_u16(debris_payload);
 			
-			local part = create_part(coordinate, vector_sizes[size_id]);
+			local part = create_part(coordinate, vector_sizes[bit32.band(packed, WedgeMask)], bit32.btest(packed, WedgeFlag));
 			part.Anchored = false;
 			
 			table.insert(client_parts, part);

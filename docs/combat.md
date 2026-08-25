@@ -78,11 +78,17 @@ its original voxels, so the hole costs the same either way.
 Shards below `Settings.ShardMinimumAxis` stop splitting, and `Settings.ShardJitter`
 controls how uneven the cuts are (`0` gives clean halves).
 
+`Settings.ShardWedgeChance` turns that fraction of shards into wedges rather than
+blocks, with the ramp facing either way, so the rubble does not read as a pile of
+boxes. The flag rides in the top bit of the debris size id, so it costs no extra
+bandwidth — at the price of capping a blast at 32767 distinct debris sizes, which
+nothing comes close to.
+
 Smaller debris falls into Havoc's client-mimic path automatically
 (`ReplicationSettings.SmallestSurfaceForClientMimic`), so shards mostly cost client
 frames rather than server simulation and per-frame replication.
 
-> Shards are still boxes, just uneven ones. The tile shatter uses
+> Shards are boxes and wedges, not arbitrary geometry. The tile shatter uses
 > `GeometryService:SubtractAsync` for real angular pieces, which is far too slow to
 > run per voxel.
 

@@ -4,7 +4,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local Signal = require( replicatedStorage.packages.Signal )
 
-export type SliceInfo = {coordinate: CFrame, size: Vector3};
+export type SliceInfo = {coordinate: CFrame, size: Vector3, wedge: boolean?};
 
 export type SlicePartMap = {[BasePart]: {SliceInfo}};
 
