@@ -163,6 +163,79 @@ end
 		{coordinate = coordinate + coordinate:VectorToWorldSpace(half_size_part * -vector_direction), size = slice_size};
 end
 
+@native local function shard_part(coordinate: CFrame, size: Vector3, ratio: number): (SliceInfo, SliceInfo)
+	local vector_direction: Vector3;
+	local axis_length: number;
+	local size_x, size_y, size_z = size.X, size.Y, size.Z;
+	local max_axis = math.max(size_x, size_y, size_z);
+
+	if max_axis == size_x then
+		vector_direction, axis_length = Vector3.xAxis, size_x;
+
+	elseif max_axis == size_y then
+		vector_direction, axis_length = Vector3.yAxis, size_y;
+	else
+		vector_direction, axis_length = Vector3.zAxis, size_z;
+	end;
+
+	local first_length = axis_length * ratio;
+	local second_length = axis_length - first_length;
+
+	return
+		{
+			coordinate = coordinate + coordinate:VectorToWorldSpace(vector_direction * (first_length - axis_length) * 0.5),
+			size = size - vector_direction * second_length
+		},
+		{
+			coordinate = coordinate + coordinate:VectorToWorldSpace(vector_direction * (axis_length - second_length) * 0.5),
+			size = size - vector_direction * first_length
+		};
+end
+
+@native local function shard_slice_list(cube_list: {SliceInfo}, levels: number, destination: {SliceInfo}): ()
+	local jitter = Settings.ShardJitter * 0.5;
+	local minimum_axis = Settings.ShardMinimumAxis;
+
+	local source = cube_list;
+
+	for level = 1, levels do
+		local next_source = table.create(#source * 2);
+
+		for _, info in source do
+			local size = info.size;
+			local half = math.max(size.X, size.Y, size.Z) * 0.5;
+
+			if half < minimum_axis then
+				table.insert(next_source, info);
+				continue;
+			end;
+
+			local limit = math.min(jitter, 0.5 - minimum_axis / (half * 2));
+			local first, second = shard_part(info.coordinate, size, 0.5 + Rnd:NextNumber(-limit, limit));
+
+			table.insert(next_source, first);
+			table.insert(next_source, second);
+		end;
+
+		source = next_source;
+	end;
+
+	table.move(source, 1, #source, #destination + 1, destination);
+end
+
+@native local function shard_part_map(part_map: SlicePartMap, levels: number): SlicePartMap
+	local sharded: SlicePartMap = {};
+
+	for part, cube_list in part_map do
+		local destination = table.create(#cube_list * bit32.lshift(1, levels));
+
+		shard_slice_list(cube_list, levels, destination);
+		sharded[part] = destination;
+	end;
+
+	return sharded;
+end
+
 @native local function slice_part_subdivide(coordinate: CFrame, slice_size: Vector3, vertices: {Vector3}, destination: {SliceInfo}): ()
 	local half_size_part = slice_size * 0.5;
 
@@ -1305,7 +1378,14 @@ function Destruction.create_debris(self: Destruction, info: MakeDebrisInfo?): {B
 
 	local physical_properties = PhysicalProperties.new(Enum.Material.Plastic);
 	
-	local parts = Destruction.create_slices(self._intersecting, function(base: BasePart, slice: SliceInfo)
+	local shards = if info.subdivide ~= nil then info.subdivide else self.subdivide;
+	local intersecting = self._intersecting;
+	
+	if shards and shards > 0 then
+		intersecting = shard_part_map(intersecting, math.min(shards, Settings.ShardMaximumLevels));
+	end;
+	
+	local parts = Destruction.create_slices(intersecting, function(base: BasePart, slice: SliceInfo)
 		local cube = get_part(base, slice);
 		cube.TopSurface = base.TopSurface;
 		cube.BottomSurface = base.BottomSurface;

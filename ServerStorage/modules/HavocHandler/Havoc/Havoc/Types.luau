@@ -20,6 +20,8 @@ export type HavocParameters = {
 	greedy_meshing: boolean;
 	greedy_batch_size: number;
 	greedy_opportunistic_batch_size: number;
+	seperate_islands: boolean;
+	subdivide: number;
 };
 
 export type DestructInfo = {
@@ -41,6 +43,7 @@ export type MakeCraterInfo = {
 
 export type MakeDebrisInfo = {
 	scale: number?,
+	subdivide: number?,
 	velocity: Vector3?,
 	velocity_duration: number?,
 	velocity_power: number?,
@@ -105,6 +108,7 @@ export type ClassDestruction = {
 		   • overlap - (Optional) The overlap pertaining to what can be voxelized
 		   • greedy_meshing - (Optional) Whether to use greedy meshing, Not recommended if your destruction is very large (>30 radius)
 		   • mesh_threshold - (Optional) The maximum number of slices before greedy meshing is aborted. (Recommend 250)
+		   • subdivide - (Optional) How many times each debris voxel is split into shards. Each level doubles the debris count.
 	]]
 	havoc: typeof(function(parameters: HavocParameters): (SlicePartMap, SlicePartMap, PartMap) end);
 	

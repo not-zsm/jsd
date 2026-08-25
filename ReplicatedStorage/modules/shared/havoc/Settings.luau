@@ -38,6 +38,11 @@ return {
 	SubdivideRectangleThreshold = 1.33; -- Maximum difference between largest axis and smallest axis. 
 	TimeToReset = Utility.DestructionRespawnTime;
 	
+	-- Shard settings, used by the 'subdivide' parameter. Debris only, craters are never subdivided.
+	ShardMaximumLevels = 4; -- Hard cap on 'subdivide'. Each level doubles the debris count.
+	ShardJitter = 0.35; -- How far off centre a split may land. 0 gives even halves, 1 gives slivers.
+	ShardMinimumAxis = 0.35; -- A slice is left whole if splitting would take its largest axis below this.
+	
 	EffectsLifetime = 10; -- Maximum lifetime of effects created with Destruction:create_effects()
 	
 	DefaultParameters = table.freeze {
@@ -52,6 +57,7 @@ return {
 		greedy_batch_size = 75;
 		greedy_opportunistic_batch_size = 200;
 		seperate_islands = false;
+		subdivide = 0; -- How many times each debris voxel is split into shards. 0 leaves them as cubes.
 	};
 	
 	DefaultBreakOverlap = DefaultBreakOverlap;

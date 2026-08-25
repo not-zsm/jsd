@@ -34,9 +34,67 @@ over the default box.
 
 ### Terrain and extras
 
-- `Hitbox:CreateHavocReplicated{ parameters = ..., debris = ... }` — replicated debris.
+- `Hitbox:CreateHavocReplicated{ parameters = ..., crater = ..., debris = ... }` — voxel
+  destruction. See [Havoc](#havoc) below.
 - `Hitbox:Destruction(offset, size, radius)` and `Hitbox:SphereDestruction(...)`.
 - `Hitbox:AoeHitboxForGrabs(...)` — for moves that grab.
+
+## Havoc
+
+```lua
+self.Combat.Hitbox:CreateHavocReplicated({
+    parameters = { origin = CF, size = Vector3.new(20, 10, 20), shape = "Box", block_size = 4 },
+    crater = {},
+    debris = { scale = 0.9, velocity = VelocityFn },
+})
+```
+
+`parameters` carves the voxels, `crater` is the hole left behind, `debris` is the
+rubble that flies. Defaults for `parameters` live in
+`ReplicatedStorage/modules/shared/havoc/Settings.luau`.
+
+| Parameter | Meaning |
+| --- | --- |
+| `origin` / `size` / `radius` / `shape` | The volume to destroy. `radius` is spheres only. |
+| `block_size` | Voxel size. Smaller means more parts, for the crater **and** the debris. |
+| `greedy_meshing` | Merge adjacent voxels. Off for blasts above ~30 radius. |
+| `seperate_islands` | Flood-fill for unsupported chunks and drop them. Expensive; see below. |
+| `subdivide` | How many times each debris voxel splits into shards. |
+
+### subdivide
+
+Debris voxels are cubes. `subdivide` splits each one along its longest axis, off
+centre, so the rubble comes apart into uneven slabs instead of a grid of blocks —
+the same read as the tile shatter in `replication/Destruction/Tile.luau`.
+
+```lua
+parameters = { ..., subdivide = 2 },
+```
+
+Each level **doubles** the debris count, so `2` is 4× the parts and `3` is 8×.
+Capped at `Settings.ShardMaximumLevels`. It only touches debris — the crater keeps
+its original voxels, so the hole costs the same either way.
+
+Shards below `Settings.ShardMinimumAxis` stop splitting, and `Settings.ShardJitter`
+controls how uneven the cuts are (`0` gives clean halves).
+
+Smaller debris falls into Havoc's client-mimic path automatically
+(`ReplicationSettings.SmallestSurfaceForClientMimic`), so shards mostly cost client
+frames rather than server simulation and per-frame replication.
+
+> Shards are still boxes, just uneven ones. The tile shatter uses
+> `GeometryService:SubtractAsync` for real angular pieces, which is far too slow to
+> run per voxel.
+
+### seperate_islands
+
+Off by default. When on, `create_crater` flood-fills outward from the hole; if the
+flood never reaches a non-destructible part it decides the chunk is floating,
+welds it into one body and **unanchors it**. That is the whole structure toppling,
+not a bug.
+
+Anything `is_destructable` returns false for acts as structural support and stops
+the flood.
 
 ## Afflict
 
