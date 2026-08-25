@@ -24,7 +24,11 @@ local Specs = {
 		TurnSpeed = 11,
 
 		HipHeight = 0.45,
-		GroundSnap = 10,
+
+		StepHeight = 2.5,
+		GroundReach = 500,
+		ClimbSpeed = 30,
+		FallSpeed = 60,
 
 		FollowDistance = 7,
 		StopDistance = 3,
@@ -251,13 +255,13 @@ function Shikigami:_SetMoving(Value : boolean, DeltaTime : number)
 	end
 end
 
---- Where the ground is under a point, or nil if there is nothing to stand on.
+--- Where the ground is under a point, or nil if there is nothing at all below.
+--- Starts a step above so a kerb reads as ground, and reaches far enough down
+--- that being high up is never mistaken for having nowhere to land.
 function Shikigami:_GroundAt(Position : Vector3) : number?
-	local Snap = self.Spec.GroundSnap
-
 	local Hit = workspace:Raycast(
-		Position + Vector3.yAxis * Snap,
-		Vector3.yAxis * -(Snap * 2),
+		Position + Vector3.yAxis * self.Spec.StepHeight,
+		Vector3.yAxis * -self.Spec.GroundReach,
 		Utility.VisualParams
 	)
 
@@ -353,7 +357,22 @@ function Shikigami:_Step(DeltaTime : number)
 
 	local Direction = Flat.Unit
 	local Target = Position + Direction * math.min(Speed * DeltaTime, Distance)
-	local Height = self:_GroundAt(Target) or Position.Y
+
+	--[[
+		It falls when there is nothing under it.
+
+		This used to hold whatever height it already had whenever the cast came
+		back empty, so one landing that missed left it hanging there for good --
+		and the cast only reached ten studs down, which anything airborne clears.
+	--]]
+	local Ground = self:_GroundAt(Target)
+	local Height = Position.Y
+
+	if Ground and (Ground > Height) then
+		Height = math.min(Ground, Height + self.Spec.ClimbSpeed * DeltaTime)
+	else
+		Height = math.max(Ground or -math.huge, Height - self.Spec.FallSpeed * DeltaTime)
+	end
 
 	local Turn = math.min(self.Spec.TurnSpeed * DeltaTime, 1)
 	local Facing = Root.CFrame.Rotation:Lerp(CFrame.lookAt(Vector3.zero, Direction), Turn)
@@ -479,7 +498,11 @@ function Shikigami:Roam()
 
 	local Point = Origin + Offset.Unit * (self.Spec.RoamRange * Utility.Seed:NextNumber(0.35, 1))
 
-	if (self:_GroundAt(Point) == nil) then return end
+	--- Somewhere it could actually stand, not a rooftop or the floor of a pit
+	--- that happens to be under the point.
+	local Ground = self:_GroundAt(Point)
+
+	if (Ground == nil) or (math.abs(Ground - self.Root.Position.Y) > self.Spec.RoamRange) then return end
 
 	self:PathTo(Point)
 
