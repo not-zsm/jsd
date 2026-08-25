@@ -42,6 +42,10 @@ local Specs = {
 		StuckStep = 0.35,
 		StuckTicks = 6,
 
+		HopHeight = 3,
+		HopMinTime = 0.28,
+		HopMaxTime = 0.7,
+
 		AgentParams = {
 			AgentRadius = 1.5,
 			AgentHeight = 2,
@@ -92,6 +96,7 @@ function Shikigami.new(Name : string, Owner : {}, Model : Model)
 	--- Goal is a fixed point, Chase is something to keep steering at. Chase wins.
 	self.Goal = nil :: Vector3?
 	self.Chase = nil :: BasePart?
+	self.Hop = nil :: {}?
 
 	self.Moving = false
 	self.Still = 0
@@ -275,8 +280,44 @@ function Shikigami:_Destination() : (Vector3?, number)
 	return self.Goal, self.Spec.Reached
 end
 
+--- An arc between two points, ignoring the ground until it lands. Nothing else
+--- takes the wheel while one is in the air.
+function Shikigami:_StepHop(DeltaTime : number)
+	local Hop = self.Hop
+
+	Hop.Elapsed += DeltaTime
+
+	local Alpha = math.min(Hop.Elapsed / Hop.Duration, 1)
+	local Position = Hop.From:Lerp(Hop.To, Alpha)
+
+	local Facing = self.Root.CFrame.Rotation
+	local Flat = (Hop.To - Hop.From) * FLAT
+
+	if (Flat.Magnitude > 1e-3) then
+		local Turn = math.min(self.Spec.TurnSpeed * DeltaTime, 1)
+		Facing = Facing:Lerp(CFrame.lookAt(Vector3.zero, Flat.Unit), Turn)
+	end
+
+	self.Root.CFrame = CFrame.new(Position.X, Position.Y + Hop.Height * 4 * Alpha * (1 - Alpha), Position.Z) * Facing
+
+	if (Alpha >= 1) then
+		local Height = self:_GroundAt(Hop.To)
+
+		if Height then
+			self.Root.CFrame = CFrame.new(Hop.To.X, Height, Hop.To.Z) * Facing
+		end
+
+		self.Hop = nil
+	end
+end
+
 function Shikigami:_Step(DeltaTime : number)
 	if not self.Active then return end
+
+	if self.Hop then
+		self:_StepHop(DeltaTime)
+		return
+	end
 
 	local Goal, Stop = self:_Destination()
 
@@ -353,6 +394,32 @@ function Shikigami:WalkTo(Position : Vector3, Timeout : number?) : boolean
 	return self.Active
 end
 
+function Shikigami:HopTo(Position : Vector3) : boolean
+	if not self.Active then return false end
+
+	self.Chase = nil
+	self.Goal = nil
+
+	local From = self.Root.Position
+	local Distance = ((Position - From) * FLAT).Magnitude
+
+	self.Hop = {
+		From = From,
+		To = Position,
+		Elapsed = 0,
+		Height = self.Spec.HopHeight + math.max(0, Position.Y - From.Y) * 0.35,
+		Duration = math.clamp(Distance / self.Spec.Speed, self.Spec.HopMinTime, self.Spec.HopMaxTime),
+	}
+
+	self:_SetMoving(true, 0)
+
+	while self.Active and self.Hop do
+		task.wait()
+	end
+
+	return self.Active
+end
+
 --- Around whatever is in the way. Falls back to walking straight at it when
 --- there is no path, which off a ledge is usually the honest answer.
 function Shikigami:PathTo(Position : Vector3) : boolean
@@ -373,7 +440,12 @@ function Shikigami:PathTo(Position : Vector3) : boolean
 		--- The first waypoint is where it already is.
 		if (Index == 1) then continue end
 
-		if not self:WalkTo(Waypoint.Position) then
+		--- Jump marks the waypoint to reach by jumping, not the one to jump from.
+		local Reached = if (Waypoint.Action == Enum.PathWaypointAction.Jump)
+			then self:HopTo(Waypoint.Position)
+			else self:WalkTo(Waypoint.Position)
+
+		if not Reached then
 			return false
 		end
 	end
@@ -388,6 +460,7 @@ end
 
 function Shikigami:Teleport(Coordinate : CFrame)
 	self:Stop()
+	self.Hop = nil
 
 	local Height = self:_GroundAt(Coordinate.Position)
 	local Position = Height and Vector3.new(Coordinate.X, Height, Coordinate.Z) or Coordinate.Position
@@ -553,6 +626,7 @@ function Shikigami:Destroy()
 	self.Active = false
 	self.Goal = nil
 	self.Chase = nil
+	self.Hop = nil
 
 	self.Job:Destroy()
 
