@@ -1,26 +1,10 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
-local function flashSet(Colour : Color3)
-	return {
-		[1] = { Limb = "Right Arm", Colour = Colour, Duration = 0.35 },
-		[2] = { Limb = "Left Arm", Colour = Colour, Duration = 0.35 },
-		[3] = { Limb = "Right Arm", Colour = Colour, Duration = 0.35 },
-		[4] = { Limb = { "Left Arm", "Right Arm" }, Colour = Colour, Duration = 0.4 },
-
-		Up = { Limb = "Right Leg", Colour = Colour, Duration = 0.4 },
-		Down = { Limb = "Right Arm", Colour = Colour, Duration = 0.4 },
-	}
-end
-
-local FlashSets = {
-	Fists = flashSet(Color3.fromRGB(255, 115, 15)),
-	Axe = flashSet(Color3.fromRGB(120, 210, 255)),
-	["Chained Blades"] = flashSet(Color3.fromRGB(255, 60, 20)),
-	Spear = flashSet(Color3.fromRGB(255, 205, 80)),
-}
+local flashSet = require(script.armFlash)
 
 return {
 	DisplayName = "kratos",
+	DevOnly = true,
 
 	UsingAttacks = {
 		--"Chaos Run",
@@ -36,12 +20,6 @@ return {
 				Offset = CFrame.new(0, 0, -2.65),
 				Size = Vector3.new(6, 6, 6.8),
 			},
-
-			ArmFlashes = function(self)
-				local Weapons = self.Combat.Attacks.Weapons
-
-				return FlashSets[Weapons and Weapons.CurrentlyUsing] or FlashSets.Fists
-			end,
 		}
 	},
 	
@@ -99,6 +77,12 @@ return {
 					Weapons:ToggleIceAxe(false)
 				end
 			end
+		end,
+		
+		ArmFlashes = function(self)
+			local Weapons = self.Combat.Attacks.Weapons
+
+			return flashSet[Weapons and Weapons.CurrentlyUsing] or flashSet.Fists
 		end,
 	},
 

@@ -187,10 +187,13 @@ function Attack:M1()
 	local CharacterInfo : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Info or nil
 	local CharacterStats : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Stats or nil
 
-	local ArmFlashes = CharacterStats and CharacterStats.M1 and CharacterStats.M1.ArmFlashes
+	--- Info.M1 is where the rest of the M1 hooks live, so a moveset with more than
+	--- one M1 set declares this there as a function, the same shape as
+	--- M1.AnimationDirectory, and picks the table itself. Stats.M1 still works for
+	--- the movesets that only ever need the one.
+	local ArmFlashes = (CharacterInfo and CharacterInfo.M1 and CharacterInfo.M1.ArmFlashes)
+		or (CharacterStats and CharacterStats.M1 and CharacterStats.M1.ArmFlashes)
 
-	--- A moveset with more than one M1 set declares this as a function instead, the
-	--- same shape as M1.AnimationDirectory, and picks the table itself.
 	if typeof(ArmFlashes) == "function" then
 		ArmFlashes = ArmFlashes(self)
 	end
@@ -417,10 +420,6 @@ function Attack:M1()
 
 	if (self.Condition ~= nil) then
 		self:FireReliableVFX("Global/M1", "SpecialSwing", self.LuaCharacter.RootPart, self.Condition, CharacterName)
-
-		if Flash then
-			self:FireReliableVFX("Global/PunchFlash", "Arm", self.LuaCharacter.Model, Flash.Limb, Flash.Colour, Flash.Duration)
-		end
 	else
 		self.Thread.Job:Task(Animation:GetMarkerReachedSignal("swing"):Once(function()
 			if self.Combat.Attacks.Weapons then
@@ -428,11 +427,11 @@ function Attack:M1()
 			else
 				self:FireReliableVFX("Global/M1", "Swing", self.LuaCharacter.RootPart, self.Count, CharacterName, AttackingWith)
 			end
-
-			if Flash then
-				self:FireReliableVFX("Global/PunchFlash", "Arm", self.LuaCharacter.Model, Flash.Limb, Flash.Colour, Flash.Duration)
-			end
 		end))
+	end
+
+	if Flash then
+		self:FireReliableVFX("Global/PunchFlash", "Arm", self.LuaCharacter.Model, Flash.Limb, Flash.Colour, Flash.Duration)
 	end
 	
 	local StopAnimConnection : RBXScriptConnection; StopAnimConnection = self.Combat.OnStateUpdated:Connect(function(State : string, Value : boolean)
@@ -481,7 +480,7 @@ function Attack:M1()
 						size = Hitbox.Params.Size, 
 						shape = "Box", 
 						block_size = 4, 
-						seperate_islands = true,
+						--seperate_islands = true,
 					},
 					crater = {},
 					debris = {

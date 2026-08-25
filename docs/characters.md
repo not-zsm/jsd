@@ -109,15 +109,27 @@ table, which is an authoring mistake and warns.
 
 A moveset that swaps its M1 animations per weapon — kratos, via
 `M1.AnimationDirectory` — declares `ArmFlashes` as a **function** instead, the same
-shape, and picks the table itself:
+shape, and picks the table itself. Put it in the top-level `M1` table, beside the
+other hooks, not in `Stats.M1`:
 
 ```lua
-ArmFlashes = function(self)
-    local Weapons = self.Combat.Attacks.Weapons
+M1 = {
+    AnimationDirectory = function(self) ... end,
 
-    return FlashSets[Weapons and Weapons.CurrentlyUsing] or FlashSets.Fists
-end,
+    ArmFlashes = function(self)
+        local Weapons = self.Combat.Attacks.Weapons
+
+        return flashSet[Weapons and Weapons.CurrentlyUsing] or flashSet.Fists
+    end,
+},
 ```
+
+Both locations are read — `M1.ArmFlashes` first, then `Stats.M1.ArmFlashes` — so a
+moveset that only needs one set can leave it in `Stats` with the speed and hitbox.
+They are genuinely different tables, though: `serverCombat.luau:1046` builds `Stats`
+as a deep copy of `Info.Stats` at character switch, while `Info` is the module
+itself. Declaring it in one and reading the other is silent — you get the
+"no ArmFlashes" warning and no flashes at all.
 
 It is called once per swing, before conditions, so it sees the weapon that is
 actually equipped. Return a table in the format above; returning `nil` counts as
