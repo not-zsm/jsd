@@ -134,26 +134,27 @@ function WallJumpHandler:TryJump()
 	if (Normal.Magnitude < 1e-3) then return end
 
 	local Away = Normal.Unit
-	local Into = -Away
-
-	-- the animations are posed per side, so this still asks which side of the
-	-- character the wall is on, it just no longer decides whether to bounce
-	local Side = (RootPart.CFrame.RightVector:Dot(Into) >= 0) and 1 or -1
 
 	--[[
-		Where you go is where you are looking.
+		Where you go is where the camera is looking, and it has to be the camera.
 
-		Projecting the look onto the wall and using that left the wall normal
-		deciding everything -- look straight at it and the along-wall component
-		is zero, so every bounce off a given wall went the same way regardless of
-		the camera. Reflecting instead keeps the look axis meaningful: face the
-		wall and you come off it backwards, which is what a bounce should do.
+		AutoRotate is on, so the root part faces wherever the character is
+		moving, and TryJump only fires when that is into the wall -- read the
+		root's look vector here and it always points at the wall, so reflecting
+		it sent you straight back out along the normal. The same direction every
+		time, whatever the camera was doing.
 	--]]
-	local Look = RootPart.CFrame.LookVector * FLAT
+	local Camera = workspace.CurrentCamera
+	local Look = ((Camera and Camera.CFrame.LookVector) or RootPart.CFrame.LookVector) * FLAT
 	local Facing = (Look.Magnitude > 1e-3) and Look.Unit or Away
 
 	local Dot = Facing:Dot(Away)
 	local Travel = (Dot < 0) and (Facing - Away * (2 * Dot)).Unit or Facing
+
+	--- Which way the bounce actually throws you, so the per-side animation
+	--- matches. Asking which side the wall was on gave the same answer every
+	--- time, for the same reason the direction did.
+	local Side = (RootPart.CFrame.RightVector:Dot(Travel) >= 0) and 1 or -1
 
 	self:Fire(Side, Travel, Away, Vector3.yAxis)
 end
