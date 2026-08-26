@@ -384,14 +384,6 @@ function BaseAttack:UpdateAnimations()
 		self:_LoadMoveAnimations()
 	end
 
-	--- Lets a move keep the keys its body already indexes while the folders use
-	--- whatever names they use. M1 asks for "1", the animation is called neh1.
-	if self.AnimationAliases then
-		for Key, Source in self.AnimationAliases do
-			self.Animations[Key] = self.Animations[Source]
-		end
-	end
-
 	self:SetSpeedMultiplier(self.SpeedMultiplier)
 end
 

@@ -417,8 +417,8 @@ function Attack:FrontDash()
 
 	local AnimationDirectory = self:GetAnimationDirectory()
 
-	local LoopAnimation : AnimationTrack = AnimationDirectory.Loop
-	local HitAnimation : AnimationTrack = AnimationDirectory.Hit
+	local LoopAnimation : AnimationTrack = AnimationDirectory.CMERE
+	local HitAnimation : AnimationTrack = AnimationDirectory.CMEREhit
 
 	local FrontDashInfo = self.Combat.CurrentCharacter.Info.FrontDash
 
@@ -736,12 +736,6 @@ function Attack.new(...)
 	self.DontBuffer = true
 
 	self.AnimationSource = "combat"
-
-	--- Back, Finisher and WallCombo have no animation under ass yet.
-	self.AnimationAliases = {
-		Loop = "CMERE",
-		Hit = "CMEREhit",
-	}
 
 	self.FrontDashHit = false
 	self.FrontDashLength = 0.825

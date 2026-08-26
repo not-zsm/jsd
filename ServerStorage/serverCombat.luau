@@ -1549,7 +1549,7 @@ function Combat:ValidateBlock(VictimLuaPlayer, Arguments : {}) : string
 
 	if Arguments.CanPerfectBlock and BlockAttack.PerfectBlockWindow then
 
-		if VictimLuaPlayer.IsNPC then
+		if VictimLuaPlayer.IsNPC and self.Animations.Parried then
 			self.Animations.Parried:Play(0.1, 0.65, 0.7)
 		else
 			if IsKratosShieldState then
@@ -1640,8 +1640,8 @@ function Combat:ValidateBlock(VictimLuaPlayer, Arguments : {}) : string
 						VictimCombat:GiveOneTriggerMove("Check", Enum.KeyCode.R, 60)
 					end
 
-					if BlockAnimationDirectory.Parried then
-						BlockAnimationDirectory.Parried:Play()
+					if BlockAnimationDirectory.blockParried then
+						BlockAnimationDirectory.blockParried:Play()
 					end
 				end
 			end
@@ -1691,9 +1691,9 @@ function Combat:ValidateBlock(VictimLuaPlayer, Arguments : {}) : string
 				end)
 			end
 		else
-			local Reactions = BlockAnimationDirectory.Reactions or BlockAttack.Animations.Default.Reactions
-			local Hold = BlockAnimationDirectory.Hold or BlockAttack.Animations.Default.Hold
-			local Windup = BlockAnimationDirectory.Windup or BlockAttack.Animations.Default.Windup
+			local Reactions = BlockAnimationDirectory.blockReactions
+			local Hold = BlockAnimationDirectory.blockHold
+			local Windup = BlockAnimationDirectory.block
 
 			if Reactions then
 				if Windup then

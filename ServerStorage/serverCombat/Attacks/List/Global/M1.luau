@@ -21,6 +21,10 @@ local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
 local Warned = {}
 
+--- The air variants. Punches are neh1 through neh4 and neither is up for
+--- renaming, so they are indexed straight rather than aliased.
+local AirSwing = { Up = "uppercut", Down = "downslam" }
+
 local Attack = {}
 Attack.__index = Attack
 
@@ -79,18 +83,20 @@ end
 
 function Attack:AirAttack()
 	--- No AirAttack under ass yet, and half of one is worse than none.
-	if (self.Animations.AirAttack == nil) then
+	local AirAttack = self.Animations.airAttack
+
+	if (AirAttack == nil) then
 		return self:Close()
 	end
 
 	self.Combat:StackState("Attacking", true)
-	self.Animations.AirAttack:Play(0.1, 1, 1.275)
-	self.Animations.AirAttack.TimePosition = 0.15
+	AirAttack:Play(0.1, 1, 1.275)
+	AirAttack.TimePosition = 0.15
 
 	self.Thread.OnClosed:Connect(function()
 		self:AddCertainCooldown("AirAttack", 4, nil, true)
 
-		self.Animations.AirAttack:Stop(0.15)
+		AirAttack:Stop(0.15)
 		self.Combat:StackState("Attacking", false)
 	end)
 
@@ -206,7 +212,7 @@ function Attack:M1()
 	end
 
 	local AnimationDirectory = self:GetAnimationDirectory()
-	local Animation : AnimationTrack = (self.Condition ~= nil and AnimationDirectory[self.Condition] or AnimationDirectory[tostring(self.Count)])
+	local Animation : AnimationTrack = (self.Condition ~= nil and AnimationDirectory[AirSwing[self.Condition]]) or AnimationDirectory[`neh{self.Count}`]
 
 	local AttackingWith = nil
 	
@@ -621,17 +627,6 @@ function Attack.new(...)
 	self.Count = 0
 
 	self.AnimationSource = "combat"
-
-	--- The bodies still index "1" through "4", Up and Down.
-	self.AnimationAliases = {
-		["1"] = "neh1",
-		["2"] = "neh2",
-		["3"] = "neh3",
-		["4"] = "neh4",
-
-		Up = "uppercut",
-		Down = "downslam",
-	}
 
 	self.ResetTime = -1
 	self.HitTime = -1

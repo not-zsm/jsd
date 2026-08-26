@@ -54,7 +54,7 @@ function Attack:RemoveShield()
 			end
 			
 			if self.Combat:GetState("Blocking") then
-				local Hold = Animations.Hold or BlockAttack.Animations.Default.Hold
+				local Hold = Animations.blockHold or Animations.block
 
 				if Hold then
 					Hold:Play()
