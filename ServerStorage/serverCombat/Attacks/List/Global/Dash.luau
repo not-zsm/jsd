@@ -408,6 +408,23 @@ function Attack:Activate()
 	end
 end
 
+--[[
+	The jump cancel. It arrives as a release on useMove, which Actions routes
+	to Deactivate.
+
+	It has to come over the network. Replication.Attributes is a Configuration
+	the server makes and parents to the Player, so a client writing ForwardDash
+	on it changes that client's copy and nothing else -- the server never hears,
+	and the hitbox it owns keeps casting. That is why the cancel looked like it
+	worked: the client's own listener saw its own write and stopped the velocity.
+--]]
+function Attack:Deactivate()
+	if (self.Direction ~= "Front") then return end
+	if not self:ThreadAvailable() then return end
+
+	self:Cancel()
+end
+
 function Attack:FrontDash()
 	self.Combat:StackState("Attacking", true)
 	self.Combat:DivideSpeed(10)
