@@ -7,9 +7,17 @@ local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 ----------------------------------------------------------------------------------
 
+local assFolder = replicatedStorage.ass
+local GlobalFolder = assFolder:FindFirstChild("GLOBAL")
 
+local Warned = {}
 
-local AttackAnimations = replicatedStorage.animations.Attacks
+local function WarnOnce(Message : string)
+	if Warned[Message] then return end
+
+	Warned[Message] = true
+	warn(Message)
+end
 
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
@@ -348,22 +356,87 @@ end
 
 BaseAttack.CertainCooldownExists = BaseAttack.HasCertainCooldown
 
+--[[
+	ass.<character>.moves.<move> for a character's own moves, and for the Global
+	ones a merge of ass.GLOBAL.<source> with ass.<character>.<source> on top.
+
+	Directory is the attack's own ModuleScript, so Directory.Name is the move --
+	"Vault", "Dash", "Atonement". The character is DirectoryParent, the folder it
+	sits in under Attacks/List. Reading Directory.Name as the character is what
+	made ass.Vault come back nil.
+
+	The Global merge is per animation rather than per folder because the
+	character folders only carry what they override: chara has no
+	blockReactions, jjsyuji no CMEREhit, and both need GLOBAL's.
+
+	Nothing here asserts. The move is part done, so anything with nowhere to read
+	from warns once and carries on without animations rather than taking the
+	character down with it.
+--]]
 function BaseAttack:UpdateAnimations()
 	table.clear(self.Animations)
-	
-	for _, AttackFolder in ipairs(AttackAnimations:GetDescendants()) do
-		if AttackFolder:IsA("Folder") and AttackFolder.Name == self.Directory.Name then
-			self.AttackFolder = AttackFolder
 
-			Preloading.Add(self.LuaPlayer.Player, AttackFolder)
-			self.Combat:IterateThroughAnimationFolder(self.Animations, AttackFolder)
+	self.AttackFolder = nil
 
-			break
-		end;
-	end;
-	
-	self:SetSpeedMultiplier(self.SpeedMultiplier);
-end;
+	if (self.DirectoryParent == "Global") then
+		self:_LoadGlobalAnimations()
+	else
+		self:_LoadMoveAnimations()
+	end
+
+	--- Lets a move keep the keys its body already indexes while the folders use
+	--- whatever names they use. M1 asks for "1", the animation is called neh1.
+	if self.AnimationAliases then
+		for Key, Source in self.AnimationAliases do
+			self.Animations[Key] = self.Animations[Source]
+		end
+	end
+
+	self:SetSpeedMultiplier(self.SpeedMultiplier)
+end
+
+function BaseAttack:_LoadMoveAnimations()
+	local Character = assFolder:FindFirstChild(self.DirectoryParent)
+	local Moves = Character and Character:FindFirstChild("moves")
+	local Folder = Moves and Moves:FindFirstChild(self.Directory.Name)
+
+	if (Folder == nil) then
+		return WarnOnce(`no animations at ass.{self.DirectoryParent}.moves.{self.Directory.Name}`)
+	end
+
+	self.AttackFolder = Folder
+
+	Preloading.Add(self.LuaPlayer.Player, Folder)
+	self.Combat:IterateThroughAnimationFolder(self.Animations, Folder)
+end
+
+function BaseAttack:_LoadGlobalAnimations()
+	local Source = self.AnimationSource
+
+	if (Source == nil) then return end
+
+	local Name = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Name or nil
+
+	local Shared = GlobalFolder and GlobalFolder:FindFirstChild(Source)
+	local Character = Name and assFolder:FindFirstChild(Name)
+	local Owned = Character and Character:FindFirstChild(Source)
+
+	if Shared then
+		Preloading.Add(self.LuaPlayer.Player, Shared)
+		self.Combat:IterateThroughAnimationFolder(self.Animations, Shared)
+	end
+
+	if Owned then
+		Preloading.Add(self.LuaPlayer.Player, Owned)
+		self.Combat:IterateThroughAnimationFolder(self.Animations, Owned)
+	end
+
+	self.AttackFolder = Owned or Shared
+
+	if (self.AttackFolder == nil) then
+		WarnOnce(`no animations at ass.GLOBAL.{Source} or ass.{Name or "?"}.{Source}`)
+	end
+end
 
 function BaseAttack:SetSpeedMultiplier(Speed: number)
 	self.SpeedMultiplier = Speed;

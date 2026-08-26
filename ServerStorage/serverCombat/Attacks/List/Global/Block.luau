@@ -24,9 +24,9 @@ function Attack:Activate()
 	local Ultimate = self.Combat:GetFirstAttack("Ultimate");
 	local PlayUltimateBlock = (Ultimate and Ultimate.InUltimate and AnimationDirectory.Ult)
 
-	local Reactions = AnimationDirectory.Reactions or self.Animations.Default.Reactions
-	local Hold = AnimationDirectory.Hold or self.Animations.Default.Hold
-	local Windup = AnimationDirectory.Windup or self.Animations.Default.Windup
+	local Reactions = AnimationDirectory.Reactions
+	local Hold = AnimationDirectory.Hold
+	local Windup = AnimationDirectory.Windup
 
 	local ShieldAttack = self.Combat.Attacks["Guardian Shield"]
 	local IsKratosShieldState = (ShieldAttack and ShieldAttack.InShield)
@@ -36,7 +36,7 @@ function Attack:Activate()
 			AnimationDirectory.Ult.Hold:Play(0.05)
 		end
 	else
-		if IsKratosShieldState then -- didn't want to do this but im too lazy
+		if IsKratosShieldState and AnimationDirectory.ShieldHold then -- didn't want to do this but im too lazy
 			AnimationDirectory.ShieldHold:Play()
 		else
 			if Windup then
@@ -53,7 +53,7 @@ function Attack:Activate()
 	if (DashAttackMatched) then
 		local DashAnimationDirectory = DashAttack:GetAnimationDirectory()
 
-		if DashAnimationDirectory then
+		if DashAnimationDirectory and DashAnimationDirectory.Hit then
 			DashAnimationDirectory.Hit:Stop()
 		end
 	end
@@ -66,10 +66,11 @@ function Attack:Activate()
 		end)
 	end
 
-	if not PlayUltimateBlock and not IsKratosShieldState then
+	if not PlayUltimateBlock and not IsKratosShieldState and Windup then
 		self.Thread.Job:Task(task.delay(Windup.Length - 0.2, function()
 			Windup:Stop()
-			Hold:Play(0.001)
+
+			if Hold then Hold:Play(0.001) end
 		end))
 	end
 	
@@ -89,22 +90,24 @@ function Attack:Activate()
 		end
 		
 		if not IsKratosShieldState then
-			for _, Animation : AnimationTrack in Reactions do
+			for _, Animation : AnimationTrack in Reactions or {} do
 				if Animation.IsPlaying then
 					Animation:Stop(0.001)
 				end
 			end
 
-			Windup:Stop(0.001)
-			Hold:Stop()
+			if Windup then Windup:Stop(0.001) end
+			if Hold then Hold:Stop() end
 		else
-			for _, Animation : AnimationTrack in AnimationDirectory.ShieldBlocks do
+			for _, Animation : AnimationTrack in AnimationDirectory.ShieldBlocks or {} do
 				if Animation.IsPlaying then
 					Animation:Stop(0.001)
 				end
 			end
-			
-			AnimationDirectory.ShieldHold:Stop()
+
+			if AnimationDirectory.ShieldHold then
+				AnimationDirectory.ShieldHold:Stop()
+			end
 		end
 	end)
 	
@@ -129,18 +132,18 @@ function Attack:Deactivate()
 	end
 	
 	if not (ShieldAttack and ShieldAttack.InShield) then
-		local Reactions = AnimationDirectory.Reactions or self.Animations.Default.Reactions
-		local Hold = AnimationDirectory.Hold or self.Animations.Default.Hold
-		local Windup = AnimationDirectory.Windup or self.Animations.Default.Windup
+		local Reactions = AnimationDirectory.Reactions
+		local Hold = AnimationDirectory.Hold
+		local Windup = AnimationDirectory.Windup
 
-		for _, Animation : AnimationTrack in Reactions do
+		for _, Animation : AnimationTrack in Reactions or {} do
 			if Animation.IsPlaying then
 				Animation:Stop(0)
 			end
 		end
 
-		Windup:Stop(0)
-		Hold:Stop()
+		if Windup then Windup:Stop(0) end
+		if Hold then Hold:Stop() end
 	end
 	
 	self:Close()
@@ -150,6 +153,16 @@ function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
 
 	self.ActivateOnInputEnded = true
+
+	self.AnimationSource = "combat"
+
+	--- Windup, Ult, ShieldHold and ShieldBlocks have no animation under ass yet,
+	--- so they stay nil and the code that reads them skips.
+	self.AnimationAliases = {
+		Hold = "block",
+		Hit = "blockHit",
+		Reactions = "blockReactions",
+	}
 	self.BlockAngle = math.rad(90)
 	
 	self.PerfectBlockWindow = false

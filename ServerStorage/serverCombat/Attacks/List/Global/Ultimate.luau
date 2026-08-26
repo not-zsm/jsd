@@ -343,6 +343,8 @@ function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
 
 	self.Value = 0;
+
+	self.AnimationSource = "ult"
 	
 	self.UltimateDrainTime = 0.1
 	self.UltimateTime = 45

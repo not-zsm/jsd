@@ -1,8 +1,5 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
-
-local network = require( replicatedStorage.modules.network )
-local key = require( replicatedStorage.modules.network.key )
 local MarketplaceService = game:GetService("MarketplaceService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
@@ -13,6 +10,9 @@ local ServerStorage = game:GetService("ServerStorage")
 local IsStudio = RunService:IsStudio()
 print("is studio:", IsStudio)
 
+local network = require( replicatedStorage.modules.network )
+local key = require( replicatedStorage.modules.network.key )
+
 local function StudioPrint(...)
 	if IsStudio then
 		print(...)
@@ -22,8 +22,6 @@ end
 ----------------------------------------------------------------------------------
 
 local Remotes = replicatedStorage.remotes
-
-
 
 local Shared = replicatedStorage.modules.shared
 local SharedUtilities = Shared.Utilities
@@ -97,7 +95,7 @@ local DefaultAccessibleAttackSettings = {
 
 function Combat:Destroy()
 	StudioPrint("removed combat", self.LuaPlayer.PlayerName)
-	task.spawn(Preloading.Remove, self.LuaPlayer.Player, replicatedStorage.animations.Global)
+	task.spawn(Preloading.Remove, self.LuaPlayer.Player, replicatedStorage.ass.GLOBAL)
 
 	if not self.LuaPlayer.IsNPC then
 		task.spawn(self.AwardKillToHighestDamager, self, "Left")
@@ -148,10 +146,10 @@ function Combat:_Init()
 			if not self:CanUseCharacter(self.CurrentCharacter.Name) and not self.IsInvincibleFromWorldEvent and not self.IsMeatyMichaelFromWorldEvent then
 
 				if self.LuaPlayer.Data and self.LuaPlayer.Data.Profile then
-					self.LuaPlayer.Data.Profile.Data.CurrentCharacter = "invincible"
+					self.LuaPlayer.Data.Profile.Data.CurrentCharacter = "megumi"
 				end
 
-				self:SetCharacter("invincible")
+				self:SetCharacter("megumi")
 			end;
 		end))
 	end
@@ -718,12 +716,12 @@ function Combat:ConnectHumanoidAvailability()
 			if DataHandler and DataHandler.Profile then
 
 				if not self:CanUseCharacter(DataHandler.Profile.Data.CurrentCharacter) then
-					DataHandler.Profile.Data.CurrentCharacter = "invincible"
+					DataHandler.Profile.Data.CurrentCharacter = "megumi"
 				end
 
-				self:SetCharacter(DataHandler.Profile.Data.CurrentCharacter or "invincible")
+				self:SetCharacter(DataHandler.Profile.Data.CurrentCharacter or "megumi")
 			else
-				self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character") or "invincible")
+				self:SetCharacter(self.LuaPlayer.Player:GetAttribute("Character") or "megumi")
 			end
 
 			if not self.LuaPlayer.IsNPC then
@@ -809,7 +807,7 @@ function Combat:FireSpawnAnimation()
 					)
 				else
 					pcall(function()
-						Animation = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.animations.CharacterSpawnAnimations[self.CurrentCharacter.Name].Spawn)
+						Animation = self.LuaCharacter.Animator:LoadAnimation(replicatedStorage.ass.CharacterSpawnAnimations[self.CurrentCharacter.Name].Spawn)
 						Animation:Play()
 					end)
 				end
@@ -945,8 +943,8 @@ end;
 function Combat:LoadAnimations()
 	table.clear(self.Animations)
 
-	Preloading.Add(self.LuaPlayer.Player, replicatedStorage.animations.Global)
-	self:IterateThroughAnimationFolder(self.Animations, replicatedStorage.animations.Global)
+	Preloading.Add(self.LuaPlayer.Player, replicatedStorage.ass.GLOBAL)
+	self:IterateThroughAnimationFolder(self.Animations, replicatedStorage.ass.GLOBAL)
 
 	for _, Attack in self.Attacks do
 		Attack:UpdateAnimations()
@@ -1934,7 +1932,7 @@ function Combat:AwardKillToHighestDamager(Type : string)
 				end
 
 				if (LuaPlayer == nil or LuaPlayer.Character == nil or LuaPlayer.Character.Combat == nil) then
-					print("idk why this is still erroring")
+					--print("idk why this is still erroring")
 					continue
 				end
 
@@ -1978,114 +1976,6 @@ function Combat:AwardKillToHighestDamager(Type : string)
 	table.clear(self.TotalBeenDamaged)
 end
 
---function Combat:GetHighestDamager()
---	local ReceiveKillData
-
---	for Player : Player, Damage : number in self.TotalBeenDamaged do
---		if (Player.Parent == nil) then
---			self.TotalBeenDamaged[Player] = nil
---			continue
---		end
-
---		if (ReceiveKillData == nil) then 
---			ReceiveKillData = {Player, Damage} 
---			continue 
---		end
-
---		if Damage > ReceiveKillData[2] then
---			ReceiveKillData = {Player, Damage}
---		end
---	end
-
---	if (ReceiveKillData ~= nil) then
---		local PlayerWhoKilled = ReceiveKillData[1]
-
---		if (PlayerWhoKilled ~= nil) then
---			return ReceiveKillData, LuaPlayerList.LuaPlayers[PlayerWhoKilled]
---		end
---	end
-
---	return ReceiveKillData
---end
-
---function Combat:AwardKillToHighestDamager(Type : string)
---	if not self:CanAwardKills() then return end
-
---	local ReceiveData, AwardedLuaPlayer = self:GetHighestDamager()
-
---	if ReceiveData and AwardedLuaPlayer then
---		if (Type == "Left" and ReceiveData[2] < 50) then
---			return
---		end
-
---		self.AwardedToSomeoneAsKill = true
-
---		local AwardedLuaCharacter = AwardedLuaPlayer.Character
---		local AwardedCombat = AwardedLuaCharacter.Combat
-
---		if not AwardedLuaPlayer.IsNPC then
---			if game.PrivateServerId == "" then
---				AwardedLuaPlayer.Data:AddKill(self.LuaPlayer.Player, Type)
---			end
-
---			if self.LuaPlayer:PlayerExists() and AwardedLuaPlayer:PlayerExists() then
---				if Type == "Attacked" and self.LuaCharacter.HumanoidExists then
---					task.spawn(AwardedCombat.PlayKillSound, AwardedCombat, self.LuaCharacter.Model)
---				end
-
---				if AwardedCombat:HasACharacter() then
---					if Passives.Kills[AwardedCombat.CurrentCharacter.Name] then
---						task.spawn(Passives.Kills[AwardedCombat.CurrentCharacter.Name], AwardedCombat)
---					end
---				end
---			end
-
---			--if game.PrivateServerId == "" and not self.LuaPlayer.IsNPC then
---			--	AwardedLuaPlayer.Data:AddKill(self.LuaPlayer.Player, Type)
---			--end
-
---			--if self.LuaPlayer:PlayerExists() and AwardedLuaPlayer:PlayerExists() then
---			--	if Type == "Attacked" and self.LuaCharacter.HumanoidExists then
---			--		task.spawn(AwardedCombat.PlayKillSound, AwardedCombat, self.LuaCharacter.Model)
---			--	end
-
---			--	if AwardedCombat:HasACharacter() and (not self.LuaPlayer.IsNPC or game.PrivateServerId ~= "") then
---			--		if Passives.Kills[AwardedCombat.CurrentCharacter.Name] then
---			--			task.spawn(Passives.Kills[AwardedCombat.CurrentCharacter.Name], AwardedCombat)
---			--		end
---			--	end
---			--end
---		end
-
---		AwardedCombat.CurrentStreak += 1
-
---		task.spawn(function()
---			local AwardedKillStreak = nil
-
---			for Player : Player, LuaPlayer in LuaPlayerList.LuaPlayers do
---				if Player.Parent ~= Players then
---					continue
---				end
-
---				if (LuaPlayer == nil or LuaPlayer.Character == nil or LuaPlayer.Character.Combat == nil) then
---					print("idk why this is still erroring")
---					continue
---				end
-
---				LuaPlayer.Character.Combat:DisableKillStreak()
-
---				if not LuaPlayer.Character.Combat.HideKillStreak and (not AwardedKillStreak or LuaPlayer.Character.Combat.CurrentStreak > AwardedKillStreak.Character.Combat.CurrentStreak) then
---					AwardedKillStreak = LuaPlayer
---				end
---			end
-
---			if AwardedKillStreak and AwardedKillStreak.Character.Combat.CurrentStreak >= 10 then
---				AwardedKillStreak.Character.Combat:EnableKillStreak()
---			end
---		end)
---	end
---end
-
 function Combat:EnableKillStreak()
 	if not self.LuaCharacter.HumanoidExists then return end
 
@@ -2120,23 +2010,6 @@ function Combat:DisableKillStreak()
 		self.LuaCharacter.Model.KillStreakHighlight.Enabled = false
 	end
 end
-
---function Combat:CombatTag()
---	self:ResetCombatTagThread()
---	self.InCombat = true
-
---	if not self.LuaPlayer.IsNPC then
---		self.AttributeValues:SetAttribute("InCombat", true)
---	end
-
---	self.InCombatReset = task.delay(10, function()
---		self.InCombat = false
-
---		if not self.LuaPlayer.IsNPC then
---			self.AttributeValues:SetAttribute("InCombat", false)
---		end
---	end)
---end
 
 function Combat:CombatTag()
 	self:ResetCombatTagThread()
@@ -2958,7 +2831,7 @@ function Combat:TSBPushVictim(VictimLuaPlayer, Settings : {})
 					origin = CF,
 					size = Vector3.new(6.5, 4, 12), 
 					shape = "Box", 
-					block_size = 4, 
+					--block_size = 4, 
 				},
 				crater = {},
 				debris = {

@@ -314,7 +314,7 @@ function Attack:Activate()
 
 		local BackdashLength = 1.1
 
-		if self.LuaPlayer.IsNPC then
+		if self.LuaPlayer.IsNPC and self.Animations.Back then
 			self.Animations.Back:Play()
 			self:AddCertainCooldown("FrontBack Dash", 6)
 
@@ -534,6 +534,9 @@ function Attack:FrontDash()
 
 				if self.ActivatedFinisher then
 					HitAnimation:Stop(0.3)
+
+					if (self.Animations.Finisher == nil) then return end
+
 					self.Animations.Finisher:Play(0.3)
 
 					self.Thread.Job:Task(self.Animations.Finisher:GetMarkerReachedSignal("throw"):Connect(function()
@@ -601,7 +604,7 @@ function Attack:FrontDash()
 				origin = CF,
 				size = SwingSize, 
 				shape = "Box", 
-				block_size = 4, 
+				--block_size = 4, 
 			},
 			crater = {},
 			debris = {
@@ -731,6 +734,14 @@ end
 function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
 	self.DontBuffer = true
+
+	self.AnimationSource = "combat"
+
+	--- Back, Finisher and WallCombo have no animation under ass yet.
+	self.AnimationAliases = {
+		Loop = "CMERE",
+		Hit = "CMEREhit",
+	}
 
 	self.FrontDashHit = false
 	self.FrontDashLength = 0.825

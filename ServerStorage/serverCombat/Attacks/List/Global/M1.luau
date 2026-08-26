@@ -19,7 +19,6 @@ local Table = require( replicatedStorage.packages.Table )
 
 local BaseAttack = require( ServerStorage.serverCombat.Attacks.BaseAttack )
 
---- Movesets missing an ArmFlashes table, so the warning stays a one-off.
 local Warned = {}
 
 local Attack = {}
@@ -79,6 +78,11 @@ function Attack:AntiM1ResetTech()
 end
 
 function Attack:AirAttack()
+	--- No AirAttack under ass yet, and half of one is worse than none.
+	if (self.Animations.AirAttack == nil) then
+		return self:Close()
+	end
+
 	self.Combat:StackState("Attacking", true)
 	self.Animations.AirAttack:Play(0.1, 1, 1.275)
 	self.Animations.AirAttack.TimePosition = 0.15
@@ -135,7 +139,7 @@ function Attack:AirAttack()
 			origin = CF,
 			size = Hitbox.Params.Size, 
 			shape = "Box", 
-			block_size = 4, 
+			--block_size = 4, 
 		},
 		crater = {},
 		debris = {
@@ -187,10 +191,6 @@ function Attack:M1()
 	local CharacterInfo : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Info or nil
 	local CharacterStats : {} = self.Combat:HasACharacter() and self.Combat.CurrentCharacter.Stats or nil
 
-	--- Info.M1 is where the rest of the M1 hooks live, so a moveset with more than
-	--- one M1 set declares this there as a function, the same shape as
-	--- M1.AnimationDirectory, and picks the table itself. Stats.M1 still works for
-	--- the movesets that only ever need the one.
 	local ArmFlashes = (CharacterInfo and CharacterInfo.M1 and CharacterInfo.M1.ArmFlashes)
 		or (CharacterStats and CharacterStats.M1 and CharacterStats.M1.ArmFlashes)
 
@@ -199,7 +199,7 @@ function Attack:M1()
 	end
 
 	local Flash = ArmFlashes and ArmFlashes[self.Condition or self.Count]
-
+	
 	if ArmFlashes == nil and CharacterName and not Warned[CharacterName] then
 		Warned[CharacterName] = true
 		warn(`{CharacterName} has no Stats.M1.ArmFlashes; every moveset needs one`)
@@ -238,12 +238,12 @@ function Attack:M1()
 	Hitbox.Params.DestroyOnEndCast = false
 
 	if self.Condition == "Up" then
-		Hitbox.Params.Offset = CFrame.new(0, 0, -2.65)
+		Hitbox.Params.Offset = CFrame.new(0, 1, -2.65)
 		Hitbox.Params.Size = Vector3.new(6, 10, 6.8)
 
 	elseif self.Condition == "Down" then
-		Hitbox.Params.Offset = CFrame.new(0, -3.5, -2.65)
-		Hitbox.Params.Size = Vector3.new(5.35, 25, 6.8)
+		Hitbox.Params.Offset = CFrame.new(0, -2.5, -2.65)
+		Hitbox.Params.Size = Vector3.new(5.35, 5, 6.8)
 	else
 		if (CharacterStats and CharacterStats.M1 and CharacterStats.M1.LastHitbox) and not Is_Normal_M1 then
 			Hitbox.Params.Offset = CharacterStats.M1.LastHitbox.Offset
@@ -293,7 +293,7 @@ function Attack:M1()
 			if (self.Count == 4) then
 				self.WallComboVictim = VictimLuaPlayer
 				
-				task.delay(0.4, function()
+				task.delay(1, function()
 					self.WallComboVictim = nil
 				end)
 			end
@@ -349,8 +349,6 @@ function Attack:M1()
 						self:FireReliableVFX("Global/M1", "Hit", self.LuaCharacter.RootPart, VictimLuaCharacter.RootPart, self.Count, CharacterName) 
 					end
 
-					-- the victim lights up in the attacker's colour, whether or not
-					-- this punch had an arm flash of its own
 					if Flash or ArmFlashes then
 						local Colour = Flash and Flash.Colour or (ArmFlashes[1] and ArmFlashes[1].Colour)
 
@@ -429,7 +427,7 @@ function Attack:M1()
 			end
 		end))
 	end
-
+	
 	if Flash then
 		self:FireReliableVFX("Global/PunchFlash", "Arm", self.LuaCharacter.Model, Flash.Limb, Flash.Colour, Flash.Duration)
 	end
@@ -445,7 +443,7 @@ function Attack:M1()
 		StopAnimConnection:Disconnect()
 	end)
 	
-	self.Thread.Job:Task(Animation:GetMarkerReachedSignal("hit"):Connect(function(Parameter : string?)
+	self.Thread.Job:Task(Animation:GetMarkerReachedSignal(`hit` or `Hit` or 'Function'):Connect(function(Parameter : string?)
 		self.InWindup = false
 		Hitbox:BeginCast(0.1)
 		
@@ -466,7 +464,7 @@ function Attack:M1()
 					
 				elseif Condition == "Down" then
 					function VelocityFn(cube)
-						return (CF.UpVector * (Power + cube:GetMass() / MassDivide)) + Seed:NextUnitVector() * 5;
+						return Vector3.new(0, 0, 0) --(CF.UpVector * (Power + cube:GetMass() / MassDivide)) + Seed:NextUnitVector() * 5;
 					end
 				else
 					function VelocityFn(cube)
@@ -479,7 +477,7 @@ function Attack:M1()
 						origin = CF,
 						size = Hitbox.Params.Size, 
 						shape = "Box", 
-						block_size = 4, 
+						--block_size = 4, 
 						--seperate_islands = true,
 					},
 					crater = {},
@@ -622,6 +620,19 @@ function Attack.new(...)
 	local self = setmetatable(BaseAttack.new(...), Attack)
 	self.Count = 0
 
+	self.AnimationSource = "combat"
+
+	--- The bodies still index "1" through "4", Up and Down.
+	self.AnimationAliases = {
+		["1"] = "neh1",
+		["2"] = "neh2",
+		["3"] = "neh3",
+		["4"] = "neh4",
+
+		Up = "uppercut",
+		Down = "downslam",
+	}
+
 	self.ResetTime = -1
 	self.HitTime = -1
 
@@ -637,9 +648,9 @@ function Attack.new(...)
 	
 	self.Damage = {
 		[1] = 2,
-		[2] = 2,
+		[2] = 3,
 		[3] = 2,
-		[4] = 4,
+		[4] = 5,
 	}
 
 	self:_Init()
