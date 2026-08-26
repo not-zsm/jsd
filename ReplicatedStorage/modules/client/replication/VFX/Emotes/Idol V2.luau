@@ -18,7 +18,7 @@ local EffectUtility = require(replicatedStorage.modules.client.replication.Effec
 local BugoVFX = require(replicatedStorage.modules.client.replication.EffectUtility.Bugo)
 local Yuki_FOV = require(replicatedStorage.modules.client.replication.Global.Yuki_FOV)
 
-local Animation = replicatedStorage.animations.Emotes["Idol V2"]
+local Animation = replicatedStorage.ass.emotes["Idol V2"]
 local Emit = require( script.Emit )
 
 return { 

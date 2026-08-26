@@ -27,7 +27,7 @@ local AnimationRetriever = require( replicatedStorage.modules.client.replication
 local CharacterTransparency = require( replicatedStorage.modules.client.replication.Global.CharacterTransparency )
 local Dialogue = require(replicatedStorage.modules.effect.tekrinnDialogue)
 
-local Animations = replicatedStorage.animations.Emotes["The Final Showdown"]
+local Animations = replicatedStorage.ass.emotes["The Final Showdown"]
 local MeshEmit = require( script.MeshEmit )
 local CFrameData = require( script.CFrameData )
 
@@ -104,7 +104,7 @@ return {
 			Camera:PivotTo(RootPart.CFrame)
 			Camera.Parent = workspace.Visuals
 
-			local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.animations.Emotes["The Final Showdown"].Camera)
+			local CameraAnimation = Camera.Humanoid.Animator:LoadAnimation(replicatedStorage.ass.emotes["The Final Showdown"].Camera)
 			CameraAnimation:Play(0)
 
 			--Job:Task(RunService.PreSimulation:Connect(function()

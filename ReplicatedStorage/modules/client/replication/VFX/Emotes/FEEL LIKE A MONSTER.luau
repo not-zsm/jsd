@@ -9,7 +9,7 @@ local AnimationRetriever = require( replicatedStorage.modules.client.replication
 local VFX = {}
 
 function VFX.MONSTER(Model : Model)
-	local Retrieved = AnimationRetriever.new(Model, replicatedStorage.animations.Emotes["FEEL LIKE A MONSTER"])
+	local Retrieved = AnimationRetriever.new(Model, replicatedStorage.ass.emotes["FEEL LIKE A MONSTER"])
 	
 	if Retrieved then
 		Retrieved.Job:Task(task.spawn(function()

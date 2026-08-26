@@ -150,7 +150,7 @@ return {
 		--end
 
 		--function(self)
-		--	local Animation : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(game.replicatedStorage.animations.Emotes["Tuff Floss Boi"])
+		--	local Animation : AnimationTrack = self.LuaCharacter.Animator:LoadAnimation(game.replicatedStorage.ass.emotes["Tuff Floss Boi"])
 		--	Animation:Play(0)
 			
 		--	local Animation2 : AnimationTrack = self.Animations[self.Combat.CurrentCharacter.Name].Alt.Start

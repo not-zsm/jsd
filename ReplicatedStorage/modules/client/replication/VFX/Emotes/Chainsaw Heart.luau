@@ -6,7 +6,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
 local MoonUtil = require( replicatedStorage.modules.client.replication.Global.MoonUtil )
-local Animations = replicatedStorage.animations.Emotes["Chainsaw Heart"]
+local Animations = replicatedStorage.ass.emotes["Chainsaw Heart"]
 
 local LocalPlayer = Players.LocalPlayer
 

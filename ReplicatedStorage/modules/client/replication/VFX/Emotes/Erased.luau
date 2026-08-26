@@ -1,7 +1,7 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animations = replicatedStorage.animations.Emotes.Erased
+local Animations = replicatedStorage.ass.emotes.Erased
 
 local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )

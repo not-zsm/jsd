@@ -4,7 +4,7 @@ local TweenService = game:GetService 'TweenService'
 local Debris = game:GetService 'Debris'
 
 local AnimationRetriever = require( replicatedStorage.modules.client.replication.VFX.AnimationRetriever )
-local Animation = replicatedStorage.animations.Emotes["I'm A Mystery"]
+local Animation = replicatedStorage.ass.emotes["I'm A Mystery"]
 
 local EffectUtility = require( replicatedStorage.modules.client.replication.EffectUtility )
 

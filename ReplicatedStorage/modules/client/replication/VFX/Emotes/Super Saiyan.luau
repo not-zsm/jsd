@@ -54,7 +54,7 @@ end
 
 return {
 	Start = function(character : Model)
-		local retrieved = AnimationRetriever.new(character, replicatedStorage.animations.Emotes["Super Saiyan"])
+		local retrieved = AnimationRetriever.new(character, replicatedStorage.ass.emotes["Super Saiyan"])
 		if (retrieved == nil) then return end
 		
 		local root_part = retrieved.RootPart

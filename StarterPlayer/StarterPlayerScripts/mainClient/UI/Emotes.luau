@@ -345,7 +345,7 @@ function Emotes:MakeViewportOnSlot(Emote : ViewportFrame, Name : string)
 		self.SlotTracks[Emote] = nil
 	end
 
-	local AnimationObject = replicatedStorage.animations.Emotes:FindFirstChild(Name)
+	local AnimationObject = replicatedStorage.ass.emotes:FindFirstChild(Name)
 
 	if (AnimationObject ~= nil) then
 		AnimationObject = 

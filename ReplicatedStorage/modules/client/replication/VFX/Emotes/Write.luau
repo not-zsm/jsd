@@ -14,7 +14,7 @@ local LoopAnim = nil
 
 return {
 	Start = function(Character : Model)
-		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.animations.Emotes.Write.Loop)
+		local Retrieved = AnimationRetriever.new(Character, replicatedStorage.ass.emotes.Write.Loop)
 		if (Retrieved == nil) then return end
 
 		local Job = Retrieved.Job
