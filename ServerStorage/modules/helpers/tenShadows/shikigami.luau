@@ -7,7 +7,7 @@ local RunService = game:GetService("RunService")
 local Utility = require( replicatedStorage.modules.shared.Utilities.Utility )
 local Job = require( replicatedStorage.modules.shared.Utilities.Job )
 
-local Extra = replicatedStorage.ass.megumi.extra
+local Extra = replicatedStorage.ass_sets.Miscellaneous
 
 local FLAT = Vector3.new(1, 0, 1)
 
@@ -33,7 +33,7 @@ local Specs = {
 		FollowDistance = 7,
 		StopDistance = 3,
 		LeashDistance = 100,
-		
+
 		RoamRange = 5.5,
 		RoamIdle = NumberRange.new(1.5, 4),
 
@@ -57,7 +57,7 @@ local Specs = {
 			AgentCanClimb = true,
 			WaypointSpacing = 6,
 		},
-		
+
 		Prompt = {
 			Part = "head",
 			ActionText = "Pet",
@@ -97,7 +97,6 @@ function Shikigami.new(Name : string, Owner : {}, Model : Model)
 	self.Job = Job.new()
 	self.Active = true
 
-	--- Goal is a fixed point, Chase is something to keep steering at. Chase wins.
 	self.Goal = nil :: Vector3?
 	self.Chase = nil :: BasePart?
 	self.Hop = nil :: {}?
@@ -105,6 +104,7 @@ function Shikigami.new(Name : string, Owner : {}, Model : Model)
 	self.Moving = false
 	self.Still = 0
 	self.Busy = false
+	self.Emoting = false
 
 	self.Root = Model:FindFirstChild("HumanoidRootPart")
 
@@ -116,6 +116,7 @@ function Shikigami.new(Name : string, Owner : {}, Model : Model)
 	self:_PrepareRig()
 	self:_LoadAnimations()
 	self:_CreatePrompt()
+	self:_BindOwnerEmoting()
 
 	self.Job:Task(RunService.PostSimulation:Connect(function(DeltaTime : number)
 		self:_Step(DeltaTime)
@@ -141,9 +142,6 @@ function Shikigami:_PrepareRig()
 		Part.CanCollide = false
 		Part.CanTouch = false
 
-		--- Every world raycast in the game filters to the Map on an include
-		--- list, so this is belt and braces -- but a summon should never be
-		--- something a hitbox or a wall check can find.
 		Part.CanQuery = false
 	end
 
@@ -178,9 +176,22 @@ function Shikigami:_LoadAnimations()
 		self.Tracks.walk.Looped = true
 	end
 
-	--- Above the other two, or it plays underneath them and reads as a twitch.
 	if self.Tracks.pet then
 		self.Tracks.pet.Priority = Enum.AnimationPriority.Action
+		self.Tracks.pet.Looped = false
+	end
+
+	if self.Tracks.dance then
+		local Dance = self.Tracks.dance
+
+		Dance.Priority = Enum.AnimationPriority.Action
+		Dance.Looped = true
+
+		self.Job:Task(Dance.Stopped:Connect(function()
+			if self.Active and self.Emoting and not self.Busy then
+				Dance:Play(0.1)
+			end
+		end))
 	end
 end
 
@@ -219,16 +230,42 @@ function Shikigami:_CreatePrompt()
 	end))
 end
 
+function Shikigami:_BindOwnerEmoting()
+	local Combat = self.Owner and self.Owner.Combat
+
+	if (Combat == nil) then return end
+
+	self.Job:Task(Combat:GetStateChanged("Emoting"):Connect(function(Value : boolean)
+		self:_SetOwnerEmoting(Value)
+	end))
+
+	self:_SetOwnerEmoting(Combat:GetState("Emoting"))
+end
+
+function Shikigami:_SetOwnerEmoting(Value : boolean)
+	if (self.Emoting == Value) then return end
+
+	self.Emoting = Value
+
+	local Dance = self.Tracks.dance
+
+	if Value then
+		self:Stop()
+
+		if Dance and not self.Busy then
+			Dance:Play(0.2)
+		end
+	elseif Dance and Dance.IsPlaying then
+		Dance:Stop(0.2)
+	end
+
+	if self.Prompt and self.Active and not self.Busy then
+		self.Prompt.Enabled = not Value
+	end
+end
+
 ----------------------------------------------------------------------------------
 
---[[
-	Held on the walk for StillBeforeIdle after it stops moving.
-
-	Pathing hands off one waypoint at a time, and there are always a couple of
-	frames between arriving at one and being given the next. Reacting to those
-	restarted the walk cycle from the top every few studs, which is what made it
-	look like the loop was broken.
---]]
 function Shikigami:_SetMoving(Value : boolean, DeltaTime : number)
 	if Value then
 		self.Still = 0
@@ -255,9 +292,6 @@ function Shikigami:_SetMoving(Value : boolean, DeltaTime : number)
 	end
 end
 
---- Where the ground is under a point, or nil if there is nothing at all below.
---- Starts a step above so a kerb reads as ground, and reaches far enough down
---- that being high up is never mistaken for having nowhere to land.
 function Shikigami:_GroundAt(Position : Vector3) : number?
 	local Hit = workspace:Raycast(
 		Position + Vector3.yAxis * self.Spec.StepHeight,
@@ -268,10 +302,12 @@ function Shikigami:_GroundAt(Position : Vector3) : number?
 	return Hit and (Hit.Position.Y + self.Spec.HipHeight) or nil
 end
 
---- Read fresh every frame, so chasing tracks the player rather than the spot
---- they were standing on when the path was drawn.
+function Shikigami:_Suspended() : boolean
+	return self.Busy or self.Emoting
+end
+
 function Shikigami:_Destination() : (Vector3?, number)
-	if self.Busy then
+	if self:_Suspended() then
 		return nil, 0
 	end
 
@@ -284,8 +320,6 @@ function Shikigami:_Destination() : (Vector3?, number)
 	return self.Goal, self.Spec.Reached
 end
 
---- An arc between two points, ignoring the ground until it lands. Nothing else
---- takes the wheel while one is in the air.
 function Shikigami:_StepHop(DeltaTime : number)
 	local Hop = self.Hop
 
@@ -344,8 +378,6 @@ function Shikigami:_Step(DeltaTime : number)
 
 	self:_SetMoving(true, DeltaTime)
 
-	--- Ramped rather than switched: a hard step at FollowDistance means it
-	--- crosses the line, slows, falls behind, and surges again.
 	local Over = (Distance - self.Spec.StopDistance) / self.Spec.FollowDistance
 	local Speed = self.Spec.Speed * (1 + math.clamp(Over, 0, 1) * (self.Spec.CatchUp - 1))
 
@@ -358,13 +390,6 @@ function Shikigami:_Step(DeltaTime : number)
 	local Direction = Flat.Unit
 	local Target = Position + Direction * math.min(Speed * DeltaTime, Distance)
 
-	--[[
-		It falls when there is nothing under it.
-
-		This used to hold whatever height it already had whenever the cast came
-		back empty, so one landing that missed left it hanging there for good --
-		and the cast only reached ten studs down, which anything airborne clears.
-	--]]
 	local Ground = self:_GroundAt(Target)
 	local Height = Position.Y
 
@@ -392,7 +417,6 @@ function Shikigami:GetOwnerRoot() : BasePart?
 	return Owner.RootPart
 end
 
---- Straight at a point, no pathing. Returns false if it gave up or was stopped.
 function Shikigami:WalkTo(Position : Vector3, Timeout : number?) : boolean
 	if not self.Active then return false end
 
@@ -439,8 +463,6 @@ function Shikigami:HopTo(Position : Vector3) : boolean
 	return self.Active
 end
 
---- Around whatever is in the way. Falls back to walking straight at it when
---- there is no path, which off a ledge is usually the honest answer.
 function Shikigami:PathTo(Position : Vector3) : boolean
 	if not self.Active then return false end
 
@@ -456,10 +478,8 @@ function Shikigami:PathTo(Position : Vector3) : boolean
 	for Index, Waypoint in Path:GetWaypoints() do
 		if not self.Active or (self.Chase ~= nil) then return false end
 
-		--- The first waypoint is where it already is.
 		if (Index == 1) then continue end
 
-		--- Jump marks the waypoint to reach by jumping, not the one to jump from.
 		local Reached = if (Waypoint.Action == Enum.PathWaypointAction.Jump)
 			then self:HopTo(Waypoint.Position)
 			else self:WalkTo(Waypoint.Position)
@@ -487,7 +507,6 @@ function Shikigami:Teleport(Coordinate : CFrame)
 	self.Root.CFrame = CFrame.new(Position) * Coordinate.Rotation
 end
 
---- One wander: somewhere near the summoner, then a breather.
 function Shikigami:Roam()
 	local Anchor = self:GetOwnerRoot()
 	local Origin = Anchor and Anchor.Position or self.Root.Position
@@ -497,9 +516,6 @@ function Shikigami:Roam()
 	if (Offset.Magnitude < 1e-3) then return end
 
 	local Point = Origin + Offset.Unit * (self.Spec.RoamRange * Utility.Seed:NextNumber(0.35, 1))
-
-	--- Somewhere it could actually stand, not a rooftop or the floor of a pit
-	--- that happens to be under the point.
 	local Ground = self:_GroundAt(Point)
 
 	if (Ground == nil) or (math.abs(Ground - self.Root.Position.Y) > self.Spec.RoamRange) then return end
@@ -511,14 +527,6 @@ function Shikigami:Roam()
 	end
 end
 
---[[
-	Steers at the player until it is close enough, rather than pathing to where
-	they stood a moment ago and stopping there.
-
-	Steering is a straight line, which is right in the open and useless against a
-	wall, so losing ground for long enough hands one leg to the pathfinder and
-	the loop picks it back up after.
---]]
 function Shikigami:FollowOwner() : boolean
 	local Owner = self:GetOwnerRoot()
 
@@ -530,7 +538,7 @@ function Shikigami:FollowOwner() : boolean
 	local Last = self.Root.Position
 	local Stuck = 0
 
-	while self.Active and (self.Chase == Owner) and not self.Busy do
+	while self.Active and (self.Chase == Owner) and not self:_Suspended() do
 		local Root = self:GetOwnerRoot()
 
 		if (Root ~= Owner) then break end
@@ -562,8 +570,6 @@ function Shikigami:FollowOwner() : boolean
 	return true
 end
 
---- Plays through and holds the loop still until it finishes. Turns to whoever
---- is doing the petting, which is not always the summoner.
 function Shikigami:Pet(Player : Player?) : boolean
 	local Track = self.Tracks.pet
 
@@ -576,6 +582,12 @@ function Shikigami:Pet(Player : Player?) : boolean
 
 	if self.Prompt then
 		self.Prompt.Enabled = false
+	end
+
+	local Dance = self.Tracks.dance
+
+	if Dance and Dance.IsPlaying then
+		Dance:Stop(0.15)
 	end
 
 	local Character = Player and Player.Character
@@ -591,8 +603,6 @@ function Shikigami:Pet(Player : Player?) : boolean
 
 	Track:Play(0.15)
 
-	--- Not Stopped:Wait(): Destroy takes the track with it, and a wait that
-	--- never returns would strand whoever called this.
 	local Finished = false
 	local Deadline = os.clock() + 10
 
@@ -606,8 +616,12 @@ function Shikigami:Pet(Player : Player?) : boolean
 
 	self.Busy = false
 
+	if self.Active and self.Emoting and Dance then
+		Dance:Play(0.2)
+	end
+
 	if self.Prompt and self.Active then
-		self.Prompt.Enabled = true
+		self.Prompt.Enabled = not self.Emoting
 	end
 
 	return Finished
@@ -629,6 +643,9 @@ function Shikigami:_Behaviour()
 
 		if (Distance > self.Spec.LeashDistance) then
 			self:Teleport(Owner.CFrame * self.Spec.Offset)
+
+		elseif self.Emoting then
+			self.Chase = nil
 
 		elseif (Distance > self.Spec.FollowDistance) then
 			self:FollowOwner()
